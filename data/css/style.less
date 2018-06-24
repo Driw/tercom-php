@@ -1,0 +1,416 @@
+// out: style.css, sourcemap: true, compress: true
+
+@import "constants.less";
+@import (reference) "bootstrap.min.less";
+@import (reference) "bootstrap-grid.less";
+@import (reference) "bootstrap-dialog.min.less";
+
+/* Configurações Gerais */
+
+body {
+    background: @color-light;
+}
+
+.checkbox label {
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+/* Menu de Navegação Superior */
+
+.navbar-topbar {
+	&:extend(.navbar-dark);
+	color: @navbar-color;
+    background: @navbar-bg-color;
+
+    a.navbar-brand {
+        color: @navbar-brand-color;
+        transition-duration: 0.25s;
+        transition-property: color;
+
+        &:hover {
+            color: @navbar-brand-color-hover;
+        }
+    }
+
+    .navbar-toggler {
+		.icon-bar {
+			width: 22px;
+			height: 2px;
+			display: block;
+			border-radius: 1px;
+			background: @navbar-toggler-color;
+
+			&+ {
+				margin-top: 2px;
+                margin-bottom: 2px;
+			}
+		}
+	}
+
+    .navbar-collapse {
+        ul.navbar-nav {
+            li.nav-text {
+                color: @navbar-color;
+                padding: 10px 15px;
+            }
+
+            li.nav-item {
+                color: @navbar-color;
+                transition-duration: 0.25s;
+                transition-property: background-color;
+
+                a {
+                    color: inherit;
+                    text-align: center;
+
+                    &:hover,
+                    &:focus {
+                        color: inherit;
+                    }
+                }
+
+                &:hover,
+                &:focus {
+                    color: @navbar-color-hover;
+                    background-color: @navbar-bg-color;
+                }
+
+                &.dropdown {
+                    .dropdown-menu {
+                    	background-color: @navbar-bg-color;
+
+                        .dropdown-item {
+		                    color: @navbar-color;
+
+                            &:hover {
+			                    color: @navbar-color-hover;
+					            background: @navbar-bg-color-hover;
+                            }
+                        }
+                    }
+                }
+            }
+
+			/*
+            &.navbar-login {
+                .nav-item {
+                    &.dropdown {
+                        .dropdown-menu {
+                            color: @color-light;
+                            min-width: 300px;
+                            overflow: hidden;
+                            padding-bottom: 0px;
+                            margin-bottom: 0px;
+
+                            form {
+                                padding: 10px;
+                            }
+
+                            .login-row {
+                                margin-top: 10px;
+                            }
+
+                            .social-buttons {
+                                .btn {
+                                    width: 49%;
+
+                                    &.btn-fb {
+                                        color: #fff;
+                                        float: left;
+                                        background-color:#3b5998;
+
+                                        &:hover {
+                                            color: #fff;
+                                            background-color:#496ebc
+                                        }
+                                    }
+
+                                    &.btn-tw {
+                                        color: #fff;
+                                        float: right;
+                                        background-color:#55acee;
+
+                                        &:hover {
+                                            color: #fff;
+                                            background-color:#59b5fa;
+                                        }
+                                    }
+                                }
+                            }
+
+                            .help-block {
+                                font-size: 12px
+                            }
+
+                            .bottom {
+                                clear: both;
+                                padding: 14px;
+                                border-top: 1px solid #ddd;
+                                background-color: @color-gray;
+
+                                a:hover {
+                                    color: @color-success;
+                                    text-decoration: none;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+			*/
+        }
+    }
+}
+
+/* Breadcrumb */
+
+.breadcrumb-pages {
+    &:extend(.bg-dark);
+    &:extend(.text-light);
+    &:extend(.breadcrumb);
+
+    .btn-breadcrumb {
+        &:extend(.mx-auto);
+
+        .btn {
+            padding: 6px 12px 6px 24px;
+            transition: all 0.25s;
+
+            &:not(:last-child):after,
+            &:not(:last-child):before {
+                top: 0px;
+                left: 100%;
+                width: 0px;
+                height: 100%;
+            	content: " ";
+            	display: block;
+            	position: absolute;
+            	border-top: 18px solid transparent;
+            	border-bottom: 18px solid transparent;
+                transition: all 0.25s;
+            	z-index: 3;
+            }
+
+            &:not(:last-child):after {
+                margin-left: -1px;
+            	border-left: 10px solid white;
+            }
+
+            &:not(:last-child):before {
+                margin-left: 0px;
+            	border-left: 10px solid rgb(173, 173, 173);
+            }
+
+            &:first-child {
+            	padding: 6px 6px 6px 10px;
+            }
+
+            &:last-child {
+            	padding: 6px 18px 6px 24px;
+            }
+
+            &.btn-primary {
+                &:not(:last-child) {
+                	&:after { border-left: 10px solid @color-primary; }
+                    &:before { border-left: 10px solid @color-primary-hover; }
+                }
+
+                &:hover,
+                &:active {
+                    &:after { border-left: 10px solid @color-primary-hover; }
+                    &:before { border-left: 10px solid @color-primary-border; }
+                }
+            }
+
+            &.btn-secondary {
+                &:not(:last-child) {
+                	&:after { border-left: 10px solid @color-secondary; }
+                    &:before { border-left: 10px solid @color-secondary-hover; }
+                }
+
+                &:hover,
+                &:active {
+                    &:after { border-left: 10px solid @color-secondary-hover; }
+                    &:before { border-left: 10px solid @color-secondary-border; }
+                }
+            }
+
+            &.btn-success {
+                &:not(:last-child) {
+                	&:after { border-left: 10px solid @color-success; }
+                    &:before { border-left: 10px solid @color-success-hover; }
+                }
+
+                &:hover,
+                &:active {
+                    &:after { border-left: 10px solid @color-success-hover; }
+                    &:before { border-left: 10px solid @color-success-border; }
+                }
+            }
+
+            &.btn-danger {
+                &:not(:last-child) {
+                	&:after { border-left: 10px solid @color-danger; }
+                    &:before { border-left: 10px solid @color-danger-hover; }
+                }
+
+                &:hover,
+                &:active {
+                    &:after { border-left: 10px solid @color-danger-hover; }
+                    &:before { border-left: 10px solid @color-danger-border; }
+                }
+            }
+
+            &.btn-warning {
+                &:not(:last-child) {
+                	&:after { border-left: 10px solid @color-warning; }
+                    &:before { border-left: 10px solid @color-warning-hover; }
+                }
+
+                &:hover,
+                &:active {
+                    &:after { border-left: 10px solid @color-warning-hover; }
+                    &:before { border-left: 10px solid @color-warning-border; }
+                }
+            }
+
+            &.btn-info {
+                &:not(:last-child) {
+                	&:after { border-left: 10px solid @color-info; }
+                    &:before { border-left: 10px solid @color-info-hover; }
+                }
+
+                &:hover,
+                &:active {
+                    &:after { border-left: 10px solid @color-info-hover; }
+                    &:before { border-left: 10px solid @color-info-border; }
+                }
+            }
+
+            &.btn-light {
+                &:not(:last-child) {
+                	&:after { border-left: 10px solid @color-light; }
+                    &:before { border-left: 10px solid @color-light-hover; }
+                }
+
+                &:hover,
+                &:active {
+                    &:after { border-left: 10px solid @color-light-hover; }
+                    &:before { border-left: 10px solid @color-light-border; }
+                }
+            }
+
+            &.btn-dark {
+                &:not(:last-child) {
+                	&:after { border-left: 10px solid @color-dark; }
+                    &:before { border-left: 10px solid @color-dark-hover; }
+                }
+
+                &:hover,
+                &:active {
+                    &:after { border-left: 10px solid @color-dark-hover; }
+                    &:before { border-left: 10px solid @color-dark-border; }
+                }
+            }
+        }
+    }
+}
+
+/* Bootstrap Modal */
+
+.modal-dialog {
+    .modal-content {
+        .modal-header {
+            text-align: center;
+
+            .modal-title {
+                margin: 0px;
+                text-align: center;
+            }
+        }
+    }
+}
+
+#modalKillPage {
+    .modal-dialog {
+        .modal-content {
+            &:extend(.bg-white);
+            &:extend(.text-dark);
+        }
+    }
+}
+
+/* Formulários */
+
+.tercom-form
+{
+    &:extend(.mx-auto);
+}
+
+.tercom-form
+{
+    .input-group-text {
+        .oi,
+        .fas {
+            margin-right: 10px;
+        }
+    }
+
+    .dp-submit {
+        text-align: center;
+
+        input[type='submit'] {
+            min-width: 120px;
+        }
+    }
+
+    label.error {
+        &:extend(.invalid-tooltip);
+    }
+}
+
+@media @screen-min-lg
+{
+    .tercom-form {
+        &.tercom-form-xl { max-width: 1080px; }
+        &.tercom-form-lg { max-width: 960px; }
+        &.tercom-form-md { max-width: 720px; }
+        &.tercom-form-sm { max-width: 480px; }
+        &.tercom-form-xs { max-width: 320px; }
+    }
+}
+
+@media @screen-md
+{
+    .tercom-form {
+        &.tercom-form-xl { max-width: 720px; }
+        &.tercom-form-lg { max-width: 720px; }
+        &.tercom-form-md { max-width: 720px; }
+        &.tercom-form-sm { max-width: 480px; }
+        &.tercom-form-xs { max-width: 320px; }
+    }
+}
+
+@media @screen-sm
+{
+    .tercom-form {
+        &.tercom-form-xl { max-width: 480px; }
+        &.tercom-form-lg { max-width: 480px; }
+        &.tercom-form-md { max-width: 480px; }
+        &.tercom-form-sm { max-width: 480px; }
+        &.tercom-form-xs { max-width: 320px; }
+    }
+}
+
+@media @screen-xs
+{
+    .tercom-form {
+        &.tercom-form-xl { max-width: 320px; }
+        &.tercom-form-lg { max-width: 320px; }
+        &.tercom-form-md { max-width: 320px; }
+        &.tercom-form-sm { max-width: 320px; }
+        &.tercom-form-xs { max-width: 320px; }
+    }
+}

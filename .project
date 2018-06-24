@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>TERCOM1</name>
+	<name>TERCOM</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -27,12 +27,12 @@
 	</natures>
 	<filteredResources>
 		<filter>
-			<id>1529863886490</id>
+			<id>1529865671294</id>
 			<name></name>
 			<type>26</type>
 			<matcher>
 				<id>org.eclipse.ui.ide.multiFilter</id>
-				<arguments>1.0-name-matches-false-true-docs|logs</arguments>
+				<arguments>1.0-name-matches-false-true-3rdparty|docs|logs</arguments>
 			</matcher>
 		</filter>
 	</filteredResources>

@@ -20,6 +20,11 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+24.06.2018 - 0.0.0.3
+- Adicionado à lista de ignorados alguns diretórios/arquivos desnecessários (binários/gerados).
+- Enviando arquivos de base para funcionamento do sistema:
+	- Conexão com banco de dados, FriendlyPage, CSS, JS, Bootstrap e outros.
+
 24.06.2018 - 0.0.0.2
 - Subindo configurações do projeto para a IDE do Eclipse PHP.
 

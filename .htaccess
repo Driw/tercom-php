@@ -1,0 +1,13 @@
+RewriteEngine On
+
+# URL Amigável - Web Service
+RewriteRule ^api/(.*)$ api/index.php?$1 [L]
+
+# URL Amigável - Site
+RewriteCond %{REQUEST_URI} !/data/?
+RewriteRule !\.(js|ico|gif|jpg|png|css|pdf|swf|flv|map)$ index.php [QSA]
+
+# Redirecionamento de Arquivos comuns para /data
+RedirectMatch ^/css/(.*) /data/css/$1
+RedirectMatch ^/img/(.*) /data/img/$1
+RedirectMatch ^/js/(.*) /data/js/$1
