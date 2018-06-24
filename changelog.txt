@@ -1,0 +1,28 @@
+//==================================================================================================
+//
+//== Descrição =====================================================================================
+// Registro de Mudanças
+//== Formatação ====================================================================================
+// {DATA} - (VERSÃO)
+// {DESCRIÇÃO}
+//== Manual ========================================================================================
+// DATA: Dia em que foi feito a mudança no seguinte formato: {DIA}.{MÊS}.{ANO}
+//
+// VERSÃO: Número da versão respectiva a mudança feita: {SEASON}.{EPISÓDIO}.{PATCH}.{REVISÃO}
+//			- SEASON: número da temporada em que o projeto está (anual).
+//			- EPISÓDIO: grande conjunto de mudanças contendo várias novidades (mensal).
+//			- PATCH: pequeno conjunto de mudanças completas pré-planejadas (semanal).
+//			- REVISÃO: quantidade de modificações feitas no projeto (revisão SVN).
+//
+// DESCRIÇÃO: Deve conter todas as informações respectivas as mudanças ocorridas na revisão.
+//				Acompanhando o seguinte formato: {INDENTAÇÃO}- {MENSAGEM}
+//			- INDENTAÇÃO: Deve ser feito através de espaços largos (tabs).
+//			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
+//==================================================================================================
+
+24.06.2018 - 0.0.0.2
+- Subindo configurações do projeto para a IDE do Eclipse PHP.
+
+24.06.2018 - 0.0.0.1
+- Especificando informações básicas do sistema.
+- Definindo formado recomendável para configurar o servidor.
