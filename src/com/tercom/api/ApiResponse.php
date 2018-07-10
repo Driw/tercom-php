@@ -17,6 +17,7 @@ class ApiResponse
 
 	public function __construct()
 	{
+		$this->time = 0;
 		$this->status = self::API_FAILURE;
 		$this->message = null;
 		$this->result = [];

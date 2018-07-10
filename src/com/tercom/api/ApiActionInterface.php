@@ -4,6 +4,9 @@ namespace tercom\api;
 
 use ReflectionClass;
 use dProject\Primitive\AdvancedObject;
+use dProject\MySQL\MySQL;
+use dProject\Primitive\ArrayData;
+use tercom\Core\System;
 
 class ApiActionInterface extends AdvancedObject
 {
@@ -32,7 +35,12 @@ class ApiActionInterface extends AdvancedObject
 
 	protected function get($index): string
 	{
-		return isset($this->vars[$index]) ? $this->vars[$index] : null;
+		return isset($this->vars[$index]) ? $this->vars[$index] : '';
+	}
+
+	protected function getMySQL(): MySQL
+	{
+		return System::getWebConnection();
 	}
 
 	public function execute(): ApiResult
@@ -48,7 +56,12 @@ class ApiActionInterface extends AdvancedObject
 		$method_name = sprintf('action%s', ucfirst($this->get(0)));
 
 		if (method_exists($this, $method_name))
-			return $this->$method_name(array_splice($this->vars, 1));
+		{
+			$array = array_splice($this->vars, 1);
+			$data = new ArrayData($array);
+
+			return $this->$method_name($data);
+		}
 
 		$class = new ReflectionClass(get_class($this));
 		$classname = sprintf('%s\%s\Api%s', $class->getNamespaceName(), $this->addon, ucfirst($this->get(0)));

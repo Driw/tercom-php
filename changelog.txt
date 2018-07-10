@@ -20,6 +20,18 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+10.07.2018 - 0.0.0.6
+- Ajustado ApiResponse para considerar valor inicial de time em zero.
+- Modificado jsonFatalError() para que possa ser informado time em ApiResponse, ApiConnection.
+- Modificado ApiActionInterface para que as actions não recebam um array mas sim ArrayData.
+	- Deste modo é possível obter exceptions caso valores não definidos ou inválidos.
+
+10.07.2018 - 0.0.0.5
+- Implementação dos webservices para gerenciamento de dados relacionados aos fornecedores:
+	- Adicionar novos fornecedores e atualizar dados de fornecedores existentes.
+	- Adicionar novos contados, atualizar dados de contatos e remover contatos do fornecedor.
+	- Por consequência adicionar novos telefones, alterar dados de telefone e apagar telefones.
+
 10.07.2018 - 0.0.0.4
 - Configurações de projeto: não alterar formato de arquivos, remover espaços em brancos ao salvar.
 	- Adicionado alguns diretórios para serem ignorados (diretórios de teste 3rdparty).

@@ -63,12 +63,12 @@ class ApiConnection
 	public function jsonException(Exception $e, int $code)
 	{
 		if ($e instanceof ApiException)
-			self::jsonFatalError(ApiResponse::API_ERROR_API_EXCEPTION, $e->getMessage(), $e->getCode(), $e->getLine(), $e->getFile());
+			$this->jsonFatalError(ApiResponse::API_ERROR_API_EXCEPTION, $e->getMessage(), $e->getCode(), $e->getLine(), $e->getFile());
 		else
-			self::jsonFatalError(ApiResponse::API_ERROR_EXCEPTION, $e->getMessage(), $e->getCode(), $e->getLine(), $e->getFile());
+			$this->jsonFatalError(ApiResponse::API_ERROR_EXCEPTION, $e->getMessage(), $e->getCode(), $e->getLine(), $e->getFile());
 	}
 
-	public static function jsonFatalError(int $status, string $message, int $errorCode, int $target, string $source)
+	private function jsonFatalError(int $status, string $message, int $errorCode, int $target, string $source)
 	{
 		$encryption = new Encryption();
 		$result = [
@@ -81,6 +81,7 @@ class ApiConnection
 		$response->setStatus($status);
 		$response->setMessage($message);
 		$response->setResult($result);
+		$response->setTime(now() - $this->timeup);
 
 		echo $response->toApiJSON();
 	}
