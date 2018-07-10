@@ -37,6 +37,13 @@ define('TIME_BR_FORMAT',		'H:i:s');
 define('MAIL_ADDRESS_NO_REPLY',	'noreply@diverproject.org');
 define('MAIL_ADDRESS_LOG',		'noreply-log@diverproject.org');
 
+/* CÓDIGOS DE ERRO */
+
+define('HTTP_BAD_REQUEST', 400);
+define('HTTP_UNAUTHORIZED', 401);
+define('HTTP_NOT_FOUND', 404);
+define('HTTP_METHOD_NOT_ALLOWED', 405);
+
 /* BANCO DE DADOS */
 
 /* OUTROS */

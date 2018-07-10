@@ -27,12 +27,21 @@
 	</natures>
 	<filteredResources>
 		<filter>
-			<id>1529865671294</id>
+			<id>1529974415063</id>
 			<name></name>
 			<type>26</type>
 			<matcher>
 				<id>org.eclipse.ui.ide.multiFilter</id>
-				<arguments>1.0-name-matches-false-true-3rdparty|docs|logs</arguments>
+				<arguments>1.0-name-matches-false-true-3rdparty|logs</arguments>
+			</matcher>
+		</filter>
+		<filter>
+			<id>1530934059038</id>
+			<name>vendor/phpmailer/phpmailer</name>
+			<type>10</type>
+			<matcher>
+				<id>org.eclipse.ui.ide.multiFilter</id>
+				<arguments>1.0-name-matches-false-true-examples|test</arguments>
 			</matcher>
 		</filter>
 	</filteredResources>

@@ -20,6 +20,22 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+10.07.2018 - 0.0.0.4
+- Configurações de projeto: não alterar formato de arquivos, remover espaços em brancos ao salvar.
+	- Adicionado alguns diretórios para serem ignorados (diretórios de teste 3rdparty).
+- Corrigido problema no htaccess que inutilizou os métodos POST e GET.
+- Implementação da estrutura do funcionamento dos webservices (API).
+- Constantes globais movidas de ApiConnection para ApiResponse.
+- Adicionado novas classes para funcionamento em OO de ApiConnection ao invés de vetores.
+- Todas as Exceptions criadas dentro do projeto agora serão uma TercomException.
+- Renomeado ApiInterface para ApiActionInterface.
+- Adicionado exceptions com mensagens e códigos de erro de acesso:
+	- Bad request; Method not allowed; Not found; Unauthorized.
+- Quando houver algum erro o nome do arquivo de origem será encriptado com Encrypt.
+- Adicionado ApiResponse para informar a estrutura (vetor) que era informado nas respostas da API.
+- Adicionado ApiResult para especificar um tipo de retorno OO nos métodos ao invés de vetor.
+	- Isso nos permite no futuro adicionar outros possíveis métodos para influenciar na resposta.
+
 24.06.2018 - 0.0.0.3
 - Adicionado à lista de ignorados alguns diretórios/arquivos desnecessários (binários/gerados).
 - Enviando arquivos de base para funcionamento do sistema:

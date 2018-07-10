@@ -1,8 +1,10 @@
 <?php
 
-use dProject\api\ApiConnection;
-use dProject\api\ApiException;
-use dProject\Core\System;
+use tercom\api\ApiConnection;
+use tercom\api\ApiException;
+use tercom\api\ApiResponse;
+use tercom\Core\System;
+use dProject\Primitive\PostService;
 
 require_once '../constants.php';
 require_once '../globalFunctions.php';
@@ -14,6 +16,8 @@ error_reporting(0);
 
 try {
 
+	$POST = PostService::getInstance();
+
 	System::init();
 
 	$apiConnection = new ApiConnection();
@@ -23,9 +27,9 @@ try {
 	System::shutdown();
 
 } catch (ApiException $e) {
-	$apiConnection->jsonException($e, API_ERROR_API_EXCEPTION);
+	$apiConnection->jsonException($e, ApiResponse::API_ERROR_API_EXCEPTION);
 } catch (Exception $e) {
-	$apiConnection->jsonException($e, API_ERROR_EXCEPTION);
+	$apiConnection->jsonException($e, ApiResponse::API_ERROR_EXCEPTION);
 }
 
 ?>

@@ -1,7 +1,7 @@
 RewriteEngine On
 
 # URL Amigável - Web Service
-RewriteRule ^api/(.*)$ api/index.php?$1 [L]
+RewriteRule ^api/(.*)$ api/index.php [L]
 
 # URL Amigável - Site
 RewriteCond %{REQUEST_URI} !/data/?

@@ -1,10 +1,10 @@
 <?php
 
-namespace tercom\api;
+namespace tercom;
 
-use tercom\TercomException;
+use Exception;
 
-class ApiException extends TercomException
+class TercomException extends Exception
 {
 	public function __construct($message = null, $code = null, $previous = null)
 	{

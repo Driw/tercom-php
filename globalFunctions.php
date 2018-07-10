@@ -1,9 +1,10 @@
 <?php
 
-use dProject\Core\System;
 use dProject\Primitive\KillPage;
 use dProject\Primitive\UrlFriendly;
-use dProject\api\ApiConnection;
+use tercom\api\ApiConnection;
+use tercom\Core\System;
+use tercom\api\ApiResponse;
 
 function PHPFatalError()
 {
@@ -22,13 +23,13 @@ function PHPFatalError()
 function APIShutdown()
 {
 	if (($error = error_get_last()) != null)
-		ApiConnection::jsonFatalError(API_PHP_FATAL_ERROR, $error['message'], $error['type'], $error['line'], $error['file']);
+		ApiConnection::jsonFatalError(ApiResponse::API_PHP_FATAL_ERROR, $error['message'], $error['type'], $error['line'], $error['file']);
 	exit;
 }
 
-function APIErrorHandler($code, $message, $file, $line)
+function APIErrorHandler(int $code, string $message, string $file, int $line)
 {
-	ApiConnection::jsonFatalError(API_PHP_FATAL_ERROR, $message,  $code, $line, $file);
+	ApiConnection::jsonFatalError(ApiResponse::API_PHP_FATAL_ERROR, $message,  $code, $line, $file);
 	exit;
 }
 
@@ -99,9 +100,9 @@ function PHPGetErroPrefix($type)
 		case E_DEPRECATED: return 'E_DEPRECATED';
 		case E_USER_DEPRECATED: return 'E_USER_DEPRECATED';
 	}
-	
+
 	return '';
-} 
+}
 
 function KillPageDialog($modalBody, $title, $level)
 {
@@ -168,6 +169,34 @@ function FriendlyPageNavigation()
 				</div>
 			</div>
 			<!-- Fim da Navegação de Páginas -->".PHP_EOL;
+}
+
+/**
+ * @return string aquisição do horário atual da máquina/servidor em milissegundos.
+ */
+
+function now():string
+{
+	$microtime = microtime();
+	$microtimeData = explode(' ', $microtime);
+	$seconds = intval($microtimeData[1]);
+	$milliseconds = intval(floatval($microtimeData[0]) * 1000);
+
+	return sprintf('%d%03d', $seconds, $milliseconds);
+}
+
+/**
+ * Formata um determinado período em milissegundos em uma forma mais legível.
+ * @param int $milleseconds quantidade de milissegundos do qual será formatado.
+ * @return string aquisição da string contendo o tempo formatado.
+ */
+
+function strms(int $milleseconds):string
+{
+	if ($milleseconds >= 1000)
+		return sprintf('%ss e %03dms', intval($milleseconds / 1000), $milleseconds % 1000);
+
+	return sprintf('%03dms', $milleseconds);
 }
 
 ?>

@@ -2,32 +2,18 @@
 
 namespace tercom\api;
 
+use Exception;
 use tercom\Core\Encryption;
-
-define('API_FAILURE', 0);
-define('API_SUCCESS', 1);
-define('API_PHP_FATAL_ERROR', 97);
-define('API_ERROR_EXCEPTION', 98);
-define('API_ERROR_API_EXCEPTION', 99);
-
-/**
- * @author Andrew
- */
 
 class ApiConnection
 {
-	/**
-	 * 
-	 */
+	private $timeup;
+	private $apiname;
 
 	public function __construct()
 	{
-		
+		$this->timeup = now();
 	}
-
-	/**
-	 * 
-	 */
 
 	public function start()
 	{
@@ -36,68 +22,67 @@ class ApiConnection
 		header('Pragma: no-cache');
 	}
 
-	/**
-	 * @throws \Exception
-	 */
-
 	public function identify()
 	{
-		$parameters = explode('/', substr($_SERVER['REQUEST_URI'], 1));
+		$uri = substr($_SERVER['REQUEST_URI'], 1);
+
+		if (($strpos = strpos($uri, '?')) !== false)
+			$uri = substr($uri, 0, $strpos);
+
+		$parameters = explode('/', $uri);
 
 		if ($parameters[0] !== 'api')
-			throw new \Exception('bad request');
+			throw new ApiBadRequestException();
 
-		$variables = array_slice($parameters, 2); // 0: sistema de api, 1: nome da api
-		$apiname = $parameters[1];
-		$classname = sprintf('%s\Api%s', __NAMESPACE__, $apiname);
+		if (count($parameters) < 3)
+			throw new ApiBadRequestException();
 
-		/**
-		 * @var ApiInterface $api
-		 */
-		$api = new $classname($this, $apiname, $variables);
-		$result = $api->execute();
+		$this->apiname = $parameters[1];
+		$apiclassname = $parameters[2];
+		$classname = sprintf('%s\%s\Api%s', __NAMESPACE__, $this->apiname, ucfirst($apiclassname));
 
-		echo json_encode([
-			'status' => $result !== null && $result !== false && !isset($result['failure']) ? API_SUCCESS : API_SUCCESS,
-			'result' => $result,
-		]);
+		if (!class_exists($classname))
+			throw new ApiNotFoundException();
+
+		$variables = array_slice($parameters, 3); // 0: sistema de api, 1: nome da api, 3: classe da api
+		$apiAction = self::newApiAction($classname, $parameters[2], $variables);
+		$apiResult = $apiAction->execute();
+
+		$response = new ApiResponse();
+		$response->setApiResult($apiResult);
+		$response->setTime(now() - $this->timeup);
+
+		echo $response->toApiJSON();
 	}
 
-	/**
-	 * @param \Exception $e
-	 * @param integer $code
-	 * @see ApiConnection::jsonFatalError()
-	 */
+	private function newApiAction(string $classname, string $addon, array $variables): ApiActionInterface
+	{
+		return new $classname($this, $addon, $variables);
+	}
 
-	public function jsonException(\Exception $e, $code)
+	public function jsonException(Exception $e, int $code)
 	{
 		if ($e instanceof ApiException)
-			self::jsonFatalError(API_ERROR_API_EXCEPTION, $e->getMessage(), $e->getCode(), $e->getLine(), $e->getFile());
+			self::jsonFatalError(ApiResponse::API_ERROR_API_EXCEPTION, $e->getMessage(), $e->getCode(), $e->getLine(), $e->getFile());
 		else
-			self::jsonFatalError(API_ERROR_EXCEPTION, $e->getMessage(), $e->getCode(), $e->getLine(), $e->getFile());
+			self::jsonFatalError(ApiResponse::API_ERROR_EXCEPTION, $e->getMessage(), $e->getCode(), $e->getLine(), $e->getFile());
 	}
 
-	/**
-	 * @param integer $status
-	 * @param string $message
-	 * @param integer $errorCode
-	 * @param integer $target
-	 * @param string $source
-	 */
-
-	public static function jsonFatalError($status, $message, $errorCode, $target, $source)
+	public static function jsonFatalError(int $status, string $message, int $errorCode, int $target, string $source)
 	{
 		$encryption = new Encryption();
+		$result = [
+			'code' => $errorCode,
+			'target' => $target,
+			'source' => SYS_DEVELOP ? $source : $encryption->encrypt($source),
+		];
 
-		echo json_encode([
-			'status' => $status,
-			'message' => $message,
-			'result' => [
-				'code' => $errorCode,
-				'target' => $target,
-				'source' => SYS_DEVELOP ? $source : $encryption->encrypt($source),
-			],
-		]);
+		$response = new ApiResponse();
+		$response->setStatus($status);
+		$response->setMessage($message);
+		$response->setResult($result);
+
+		echo $response->toApiJSON();
 	}
 }
 
