@@ -1,10 +1,10 @@
 <?php
 
-namespace tercom\Control;
+namespace tercom\control;
 
 class GenericControl
 {
-	
+
 }
 
 ?>

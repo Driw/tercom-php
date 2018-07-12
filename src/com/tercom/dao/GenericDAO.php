@@ -19,8 +19,11 @@ class GenericDAO
 		$this->mysql = $mysql;
 	}
 
-	protected function parseSingleResult(Result $result)
+	protected function parseSingleResult(Result $result):?array
 	{
+		if (!$result->hasNext())
+			return null;
+
 		$arrayData = $result->next();
 		$result->free();
 
