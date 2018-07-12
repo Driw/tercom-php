@@ -178,7 +178,7 @@ class Provider extends AdvancedObject
 	 * @return Phone
 	 */
 
-	public function getCommercial():?Phone
+	public function getCommercial():Phone
 	{
 		return $this->commercial;
 	}
@@ -196,7 +196,7 @@ class Provider extends AdvancedObject
 	 * @return Phone
 	 */
 
-	public function getOtherPhone():?Phone
+	public function getOtherPhone():Phone
 	{
 		return $this->otherphone;
 	}
@@ -207,7 +207,7 @@ class Provider extends AdvancedObject
 
 	public function setOtherPhone(Phone $otherPhone)
 	{
-		$this->otherphone = $otherphone;
+		$this->otherphone = $otherPhone;
 	}
 
 	/**

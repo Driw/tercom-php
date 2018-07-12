@@ -7,15 +7,20 @@ use dProject\Primitive\StringUtil;
 use dProject\Primitive\ArrayData;
 use tercom\api\ApiActionInterface;
 use tercom\api\ApiConnection;
+use tercom\api\ApiException;
 use tercom\api\ApiResult;
 use tercom\api\ApiUnauthorizedException;
 use tercom\api\ApiMissParam;
+use tercom\control\PhoneControl;
 use tercom\control\ProviderControl;
 use tercom\entities\Provider;
-use tercom\api\ApiException;
 
 class ApiProvider extends ApiActionInterface
 {
+	const REMOVE_COMMERCIAL_PHONE = 1;
+	const REMOVE_OTHER_PHONE = 2;
+	const REMOVE_ALL_PHONES = 3;
+
 	public function __construct(ApiConnection $apiConnection, string $apiname, array $vars)
 	{
 		parent::__contruct($apiConnection, $apiname, $vars);
@@ -42,7 +47,7 @@ class ApiProvider extends ApiActionInterface
 		return $this->defaultExecute();
 	}
 
-	public function actionAdd(ArrayData $parameters): ApiResultProvider
+	public function actionAdd(ArrayData $parameters):ApiResult
 	{
 		global $POST;
 
@@ -69,13 +74,15 @@ class ApiProvider extends ApiActionInterface
 		return $result;
 	}
 
-	public function actionSet(ArrayData $parameters): ApiResult
+	public function actionSet(ArrayData $parameters):ApiResult
 	{
 		global $POST;
 
-		$providerID = $parameters->getInt(0);
+		$providerID = $this->parseProviderID($parameters);
 		$providerControl = new ProviderControl($this->getMySQL());
-		$provider = $providerControl->get($providerID);
+
+		if (($provider = $providerControl->get($providerID)) == null)
+			throw new ApiException('fornecedor não encontrado');
 
 		try {
 
@@ -91,6 +98,7 @@ class ApiProvider extends ApiActionInterface
 		}
 
 		$provider->setInactive(false);
+		$providerControl->setPhones($provider);
 		$providerControl->set($provider);
 
 		$result = new ApiResultProvider();
@@ -99,9 +107,9 @@ class ApiProvider extends ApiActionInterface
 		return $result;
 	}
 
-	public function actionGet(ArrayData $parameters):?ApiResult
+	public function actionGet(ArrayData $parameters):ApiResult
 	{
-		$providerID = $parameters->getInt(0);
+		$providerID = $this->parseProviderID($parameters);
 		$providerControl = new ProviderControl($this->getMySQL());
 
 		if (($provider = $providerControl->get($providerID)) == null)
@@ -111,6 +119,97 @@ class ApiProvider extends ApiActionInterface
 		$result->setProvider($provider);
 
 		return $result;
+	}
+
+	public function actionSetPhones(ArrayData $parameters):ApiResult
+	{
+		global $POST;
+
+		$providerID = $this->parseProviderID($parameters);
+		$providerControl = new ProviderControl($this->getMySQL());
+
+		if (($provider = $providerControl->get($providerID)) == null)
+			throw new ApiException('fornecedor não encontrado');
+
+		$phoneControl = new PhoneControl($this->getMySQL());
+		$phoneControl->loadPhone($provider->getCommercial());
+		$phoneControl->loadPhone($provider->getOtherPhone());
+
+		try {
+
+			if ($POST->isSetted('commercial'))
+			{
+				$commercialData = $POST->newArrayData('commercial');
+
+				if ($commercialData->isSetted('ddd')) $provider->getCommercial()->setDDD($commercialData->getInt('ddd'));
+				if ($commercialData->isSetted('number')) $provider->getCommercial()->setNumber($commercialData->getString('number'));
+				if ($commercialData->isSetted('type')) $provider->getCommercial()->setType($commercialData->getString('type'));
+			}
+
+			if ($POST->isSetted('otherphone'))
+			{
+				$otherphoneData = $POST->newArrayData('otherphone');
+
+				if ($otherphoneData->isSetted('ddd')) $provider->getOtherPhone()->setDDD($otherphoneData->getInt('ddd'));
+				if ($otherphoneData->isSetted('number')) $provider->getOtherPhone()->setNumber($otherphoneData->getString('number'));
+				if ($otherphoneData->isSetted('type')) $provider->getOtherPhone()->setType($otherphoneData->getString('type'));
+			}
+
+		} catch (Exception $e) {
+			return new ApiMissParam($e->getMessage());
+		}
+
+		$providerControl->setPhones($provider);
+
+		$result = new ApiResultProvider();
+		$result->setProvider($provider);
+
+		return $result;
+	}
+
+	public function actionDeletePhone(ArrayData $parameters):ApiResult
+	{
+		global $POST;
+
+		$providerID = $this->parseProviderID($parameters);
+		$providerControl = new ProviderControl($this->getMySQL());
+
+		if (($provider = $providerControl->get($providerID)) == null)
+			throw new ApiException('fornecedor não encontrado');
+
+		if (!$parameters->isSetted(1))
+			throw new ApiException('telefone não definido');
+
+		$result = new ApiResultProvider();
+
+		switch ($parameters->getString(1))
+		{
+			case 'commercial':
+				if (!$providerControl->removeCommercial($provider));
+					$result->setMessage('telefone comercial já não existe');
+				break;
+
+			case 'otherphone':
+				if (!$providerControl->removeOtherphone($provider))
+					$result->setMessage('telefone secundário já não existe');
+				break;
+
+			default:
+				throw new ApiException('telefone inválido');
+		}
+
+		$result->setProvider($provider);
+
+		return $result;
+	}
+
+	private function parseProviderID(ArrayData $parameters):int
+	{
+		try {
+			return $parameters->getInt(0);
+		} catch (Exception $e) {
+			throw new ApiException('fornecedor não identificado');
+		}
 	}
 }
 

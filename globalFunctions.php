@@ -6,6 +6,11 @@ use tercom\api\ApiConnection;
 use tercom\Core\System;
 use tercom\api\ApiResponse;
 
+function IncludeThirdParty($thirdParty)
+{
+	include sprintf('%s/src/3rdparty/%s/include.php', $_SERVER['DOCUMENT_ROOT'], $thirdParty);
+}
+
 function PHPFatalError()
 {
 	if (($error = error_get_last()) != null)

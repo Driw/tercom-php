@@ -8,6 +8,7 @@ use tercom\entities\Provider;
 class ApiResultProvider implements ApiResult
 {
 	private $provider;
+	private $message;
 
 	public function __construct()
 	{
@@ -24,9 +25,24 @@ class ApiResultProvider implements ApiResult
 		$this->provider = $provider;
 	}
 
+	public function getMessage():?string
+	{
+		return $this->message;
+	}
+
+	public function setMessage(string $message)
+	{
+		$this->message = $message;
+	}
+
 	public function toApiArray(): array
 	{
-		return $this->provider->toArray();
+		$array = $this->provider->toArray();
+
+		if (!empty($this->message))
+			$array['message'] = $this->message;
+
+		return $array;
 	}
 }
 

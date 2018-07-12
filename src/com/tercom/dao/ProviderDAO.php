@@ -5,7 +5,7 @@ namespace tercom\DAO;
 use dProject\MySQL\MySQL;
 use dProject\MySQL\Result;
 use tercom\entities\Provider;
-use tercom\Functions;
+use dProject\Primitive\IntegerUtil;
 
 class ProviderDAO extends GenericDAO
 {
@@ -56,10 +56,26 @@ class ProviderDAO extends GenericDAO
 		$query->setString(3, $provider->getFantasyName());
 		$query->setString(4, $provider->getSpokesman());
 		$query->setString(5, $provider->getSite());
-		$query->setInteger(6, $provider->getCommercial() != null && $provider->getCommercial()->getID() > 0 ? $provider->getCommercial()->getID() : null);
-		$query->setInteger(7, $provider->getOtherPhone() != null && $provider->getOtherPhone()->getID() > 0 ? $provider->getOtherPhone()->getID() : null);
+		$query->setInteger(6, $provider->getCommercial()->getID() > 0 ? $provider->getCommercial()->getID() : null);
+		$query->setInteger(7, $provider->getOtherPhone()->getID() > 0 ? $provider->getOtherPhone()->getID() : null);
 		$query->setString(8, $provider->isInactive() ? 'yes' : 'no');
 		$query->setInteger(9, $provider->getID());
+
+		$result = $query->execute(true);
+
+		return $result->isSuccessful();
+	}
+
+	public function updatePhones(Provider $provider):bool
+	{
+		$sql = "UPDATE providers
+				SET commercial = ?, otherphone = ?
+				WHERE id = ?";
+
+		$query = $this->mysql->createQuery($sql);
+		$query->setInteger(1, $provider->getCommercial()->getID() > 0 ? $provider->getCommercial()->getID() : null);
+		$query->setInteger(2, $provider->getOtherPhone()->getID() > 0 ? $provider->getOtherPhone()->getID() : null);
+		$query->setInteger(3, $provider->getID());
 
 		$result = $query->execute(true);
 
@@ -138,8 +154,7 @@ class ProviderDAO extends GenericDAO
 		if (($providerArray = $this->parseSingleResult($result)) == null)
 			return null;
 
-		$provider = new Provider();
-		Functions::parseArrayObject($provider, $providerArray);
+		$provider = $this->newProvider($providerArray);
 
 		return $provider;
 	}
@@ -154,8 +169,7 @@ class ProviderDAO extends GenericDAO
 
 		foreach ($provideresArray as $providerArray)
 		{
-			$provider = new Provider();
-			Functions::parseArrayObject($provider, $providerArray);
+			$provider = $this->newProvider($providerArray);
 			array_push($provideres, $provider);
 
 			if ($loadContatos)
@@ -163,6 +177,19 @@ class ProviderDAO extends GenericDAO
 		}
 
 		return $providers;
+	}
+
+	private function newProvider(array $providerArray):Provider
+	{
+		$commercialID = $providerArray['commercial']; unset($providerArray['commercial']);
+		$otherphoneID = $providerArray['otherphone']; unset($providerArray['otherphone']);
+
+		$provider = new Provider();
+		$provider->fromArray($providerArray);
+		$provider->getCommercial()->setID(IntegerUtil::parse($commercialID));
+		$provider->getOtherPhone()->setID(IntegerUtil::parse($otherphoneID));
+
+		return $provider;
 	}
 
 	private function loadContatos(Provider $provider)

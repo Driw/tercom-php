@@ -20,6 +20,20 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+12.07.2018 - 0.0.1.9b
+- Implementação dos webservices para adicionar, atualizar e remover telefones dos fornecedores.
+- Enviando método necessário para gerador em globalFunctions, IncludeThirdParty() - já devia ter sido enviado.
+- Atualizado ApiResultProvider para que permita definir uma mensagem adicional ao resultado.
+	- Será usado ao remover telefones uma vez que um telefone já pode ter sido removido ou não existir.
+- Atualizado ProviderControl para gerenciar os telefones corretamente.
+	- Vai considerar se já está definido ou não os telefones e agirá conforme:
+		- Se não existir, cria e referencia no fornecedor.
+		- Se já existir, atualiza e mantem referencia no fornecedor.
+- Adicionado Controle e DAO para telefones em geral.
+- Correção de ProviderDAO para funcionar corretamente com foreign keys de 'phones' (commercial e otherphone).
+	- Também foi criado novo método newProvider() para centralizar a criação do objeto a partir de dados do banco.
+- Algumas correções de nome das variáveis e métodos, Phone e Provider.
+
 12.07.2018 - 0.0.1.9
 - Script para gerar massa de dados no sistema.
 - Modificado EntityParseException para que seja sempre obrigatório definir a mensagem ao menos

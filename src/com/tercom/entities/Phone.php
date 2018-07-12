@@ -54,6 +54,7 @@ class Phone extends AdvancedObject
 	public function __construct()
 	{
 		$this->id = 0;
+		$this->type = self::TYPE_PHONE;
 	}
 
 	/**
@@ -128,7 +129,7 @@ class Phone extends AdvancedObject
 
 	public function setType(string $type)
 	{
-		if (self::hasTipo($type))
+		if (self::hasType($type))
 			throw new EntityParseException('tipo de telefone inválido');
 
 		$this->type = $type;
@@ -155,7 +156,7 @@ class Phone extends AdvancedObject
 
 	public static function hasType(string $type):bool
 	{
-		return array_search($type, self::getTipos());
+		return array_search($type, self::getTypes());
 	}
 }
 
