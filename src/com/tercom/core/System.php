@@ -47,7 +47,7 @@ class System
 
 	public static function init()
 	{
-		self::$config = Config::parse(DIR_DATA."conf/system.php");
+		self::$config = Config::parse(DIR_DATA. 'conf/system.php');
 
 		setlocale(LC_ALL, self::$config->getLocale());
 		date_default_timezone_set(self::$config->getTimeZone());
@@ -78,7 +78,7 @@ class System
 	 * Essas ações podem ser de tentativa de acessar uma conta, sair de uma conta acessada,
 	 * verificar se a conta está banida e bloquear o acesso do mesmo ou outra ação.
 	 */
-	
+
 	public static function verifyLogin()
 	{
 		// TODO
@@ -89,7 +89,7 @@ class System
 	 * No caso, uma nova sessão será necessária apenas se não houver uma.
 	 * Caso haja uma sessão no momento ele irá ignorar a criação de uma nova.
 	 */
-	
+
 	public static function verifySession()
 	{
 		Session::getInstance()->start();
@@ -135,17 +135,18 @@ class System
 	{
 		if (self::$webConnection == null)
 		{
-			self::$config = Config::parse(DIR_DATA."conf/system.php");
+			self::$config = Config::parse(DIR_DATA. 'conf/system.php');
 
 			$mysqlConfigs = self::$config->getMySQL();
 			$mysqlSystemConfigs = $mysqlConfigs->getSystem();
 
-			self::$webConnection = new MySQL("Sistema Principal");
+			self::$webConnection = new MySQL('Sistema Principal');
 			self::$webConnection->setHost($mysqlSystemConfigs->getHost());
 			self::$webConnection->setUsername($mysqlSystemConfigs->getUsername());
 			self::$webConnection->setPassword($mysqlSystemConfigs->getPassword());
 			self::$webConnection->setDatabase($mysqlSystemConfigs->getDatabase());
 			self::$webConnection->connect();
+			self::$webConnection->setCharset($mysqlSystemConfigs->getCharset());
 		}
 
 		return self::$webConnection;

@@ -10,20 +10,16 @@ require_once '../constants.php';
 require_once '../globalFunctions.php';
 require_once '../vendor/autoload.php';
 
-register_shutdown_function('APIShutdown');
-set_error_handler('APIErrorHandler');
-error_reporting(0);
-
 try {
 
 	$POST = PostService::getInstance();
 
 	System::init();
-
-	$apiConnection = new ApiConnection();
-	$apiConnection->start();
-	$apiConnection->identify();
-
+	{
+		$apiConnection = new ApiConnection();
+		$apiConnection->start();
+		$apiConnection->identify();
+	}
 	System::shutdown();
 
 } catch (ApiException $e) {

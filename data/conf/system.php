@@ -39,6 +39,7 @@ return [
 			'Username'			=> 'tercom',
 			'Password'			=> 'HwBPbbBv3oFCTIon',
 			'Database'			=> 'tercom',
+			'Charset'			=> 'utf8',
 		]
 	],
 

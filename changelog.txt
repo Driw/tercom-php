@@ -20,6 +20,11 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+12.07.2018 - 0.0.1.7
+- Movido algumas configurações de sistema de 'api/index.php' para ApiConnection->init().
+	- Agora se definido 'debug' no método GET será possível visualizar detalhes de erros no PHP.
+- Configuração de charset para conexão com o banco de dados (padrão: utf8).
+
 10.07.2018 - 0.0.0.6
 - Ajustado ApiResponse para considerar valor inicial de time em zero.
 - Modificado jsonFatalError() para que possa ser informado time em ApiResponse, ApiConnection.

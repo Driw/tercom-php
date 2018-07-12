@@ -4,6 +4,7 @@ namespace tercom\api;
 
 use Exception;
 use tercom\Core\Encryption;
+use dProject\Primitive\GetService;
 
 class ApiConnection
 {
@@ -17,6 +18,15 @@ class ApiConnection
 
 	public function start()
 	{
+		if (GetService::getInstance()->isSetted('debug'))
+			error_reporting(E_ALL);
+		else
+		{
+			register_shutdown_function('APIShutdown');
+			set_error_handler('APIErrorHandler');
+			error_reporting(0);
+		}
+
 		header('Content-type: application/json');
 		header('Cache-Control: no-cache');
 		header('Pragma: no-cache');
