@@ -63,7 +63,7 @@ class ProviderControl extends GenericControl
 
 	private function keepPhone(Phone $phone):bool
 	{
-		if ($phone->getID() === 0)
+		if ($phone->getID() === 0 && !empty($phone->getNumber()))
 			return $this->phoneControl->addPhone($phone);
 
 		else if ($phone->getID() !== 0)

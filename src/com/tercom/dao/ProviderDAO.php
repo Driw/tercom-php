@@ -32,8 +32,8 @@ class ProviderDAO extends GenericDAO
 		$query->setString(3, $provider->getFantasyName());
 		$query->setString(4, $provider->getSpokesman());
 		$query->setString(5, $provider->getSite());
-		$query->setInteger(6, $provider->getCommercial() != null ? $provider->getCommercial()->getID() : null);
-		$query->setInteger(7, $provider->getOtherPhone() != null ? $provider->getOtherPhone()->getID() : null);
+		$query->setInteger(6, $provider->getCommercial()->getID() > 0 ? $provider->getCommercial()->getID() : null);
+		$query->setInteger(7, $provider->getOtherPhone()->getID() > 0 ? $provider->getOtherPhone()->getID() : null);
 		$query->setBoolean(8, $provider->isInactive());
 
 		$result = $query->execute(true);

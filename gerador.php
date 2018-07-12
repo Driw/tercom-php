@@ -1,5 +1,8 @@
 <?php
 
+use tercom\entities\Phone;
+
+require_once 'vendor\autoload.php';
 require_once 'constants.php';
 require_once 'globalFunctions.php';
 
@@ -37,6 +40,38 @@ switch ($_GET['action'])
 			'site' => $empresa['site'],
 		];
 		array_push($resultados, GeradorDeDados::callWebService("provider/set/$idProvider", $parameters));
+		break;
+
+	case 'genProviderPhones':
+		if (!isset($_GET['idProvider']))
+			continue;
+		$idProvider = intval($_GET['idProvider']);
+		$estado = GeradorDeDados::randArray(GeradorDeDados::getUFs());
+		$commercial = GeradorDeDados::genTelefone($estado);
+		$otherphone = GeradorDeDados::genCelular($estado);
+		$parameters = [
+			'commercial' => [
+				'ddd' => $commercial['ddd'],
+				'number' => $commercial['numero'],
+				'type' => Phone::TYPE_COMMERCIAL,
+			],
+			'otherphone' => [
+				'ddd' => $otherphone['ddd'],
+				'number' => $otherphone['numero'],
+				'type' => Phone::TYPE_PHONE,
+			],
+		];
+		array_push($resultados, GeradorDeDados::callWebService("provider/setPhones/$idProvider", $parameters));
+		break;
+
+	case 'deleteProviderPhones';
+		if (!isset($_GET['idProvider']))
+			continue;
+		$idProvider = intval($_GET['idProvider']);
+		if ((!isset($_GET['commercial']) && !isset($_GET['otherphone'])) || isset($_GET['commercial']))
+		array_push($resultados, GeradorDeDados::callWebService("provider/deletePhone/$idProvider/commercial", []));
+		if ((!isset($_GET['otherphone']) && !isset($_GET['commercial'])) || isset($_GET['otherphone']))
+		array_push($resultados, GeradorDeDados::callWebService("provider/deletePhone/$idProvider/otherphone", []));
 		break;
 
 	default:
@@ -152,12 +187,12 @@ class GeradorDeDados
 		return json_decode($htmlResult, true);
 	}
 
-	private static function randArray($array)
+	public static function randArray($array)
 	{
 		return $array[array_rand($array, 1)];
 	}
 
-	private static function randKeyArray($array)
+	public static function randKeyArray($array)
 	{
 		return array_rand($array);
 	}
@@ -231,6 +266,26 @@ class GeradorDeDados
 		$empresa['celular_ddd'] = self::randArray(self::getDDDs($empresa['estado']));
 
 		return $empresa;
+	}
+
+	public static function genTelefone($estado = null)
+	{
+		if (!isset($estado)) $estado = self::randArray(self::getUFs());
+
+		$telefone['ddd'] = self::randArray(self::getDDDs($estado));
+		$telefone['numero'] = sprintf('%d-%04d', rand(1000, 5000), rand(0, 9999));
+
+		return $telefone;
+	}
+
+	public static function genCelular($estado = null)
+	{
+		if (!isset($estado)) $estado = self::randArray(self::getUFs());
+
+		$telefone['ddd'] = self::randArray(self::getDDDs($estado));
+		$telefone['numero'] = sprintf('9%d-%04d', rand(5000, 9999), rand(0, 9999));
+
+		return $telefone;
 	}
 
 	public static function genRG($comPontuacao = false)

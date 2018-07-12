@@ -98,7 +98,6 @@ class ApiProvider extends ApiActionInterface
 		}
 
 		$provider->setInactive(false);
-		$providerControl->setPhones($provider);
 		$providerControl->set($provider);
 
 		$result = new ApiResultProvider();
@@ -185,7 +184,7 @@ class ApiProvider extends ApiActionInterface
 		switch ($parameters->getString(1))
 		{
 			case 'commercial':
-				if (!$providerControl->removeCommercial($provider));
+				if (!$providerControl->removeCommercial($provider))
 					$result->setMessage('telefone comercial já não existe');
 				break;
 
