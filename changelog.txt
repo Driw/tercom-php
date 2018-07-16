@@ -20,6 +20,17 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+16.07.2018 - 0.0.1.11
+- Pequenos ajustes no READ.md para informar como configurar o Xampp adequadamente em HTTP ou HTTPS.
+- Adicionado arquivo com configurações prontas (exemplo) e os arquivos para 'validação' do acesso HTTPS.
+	- Não consegui fazer o certificado ficar OK (verde), porém mesmo NOK (vermelho) o servidor ao menos aceita.
+
+12.07.2018 - 0.0.1.10
+- Corrigido actionSet() que estava tentando atualizar os telefones quando é apenas para atualizar o fornecedor, ApiProvider.
+- Corrigido actionDeletePhone() que sempre dizia que o 'telefone comercial já não existe', ApiProvider.
+- ProviderControl.keepPhone() terá que verificar se 'phone.number' foi especificado antes de tentar adicionar.
+- Corrigido insert() que estava verificando se os telefones não eram nulos quando é pra verificar se há um ID, ProviderDAO.
+
 12.07.2018 - 0.0.1.9b
 - Implementação dos webservices para adicionar, atualizar e remover telefones dos fornecedores.
 - Enviando método necessário para gerador em globalFunctions, IncludeThirdParty() - já devia ter sido enviado.

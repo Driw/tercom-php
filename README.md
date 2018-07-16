@@ -37,21 +37,35 @@
 ## CONFIGURAÇÃO APACHE (RECOMENDADO)
 
 ```
-<VirtualHost medicapp:443>
-	DocumentRoot "{PROJECT_DIR}"
-	<Directory "{PROJECT_DIR}">
+
+<VirtualHost localhost:80>
+	DocumentRoot "D:/Andrew/Workspace/PHP/Tercom/trunk"
+	<Directory "D:/Andrew/Workspace/PHP/Tercom/trunk">
 		Options Indexes FollowSymLinks Includes ExecCGI
 		AllowOverride All
 		Require all granted
 	</Directory>
-	ServerName tercom
+	ServerName tercom.localhost
 	ServerAdmin admin@tercom
-	ErrorLog "{PROJECT_DIR}/logs/error.log"
-	TransferLog "{PROJECT_DIR}/logs/access.log"
+	ErrorLog "{PROJECT_DIR}logs/error.log"
+	TransferLog "{PROJECT_DIR}logs/access.log"
+</VirtualHost>
+
+<VirtualHost localhost:443>
+	DocumentRoot "D:/Andrew/Workspace/PHP/Tercom/trunk"
+	<Directory "D:/Andrew/Workspace/PHP/Tercom/trunk">
+		Options Indexes FollowSymLinks Includes ExecCGI
+		AllowOverride All
+		Require all granted
+	</Directory>
+	ServerName tercom.localhost
+	ServerAdmin admin@tercom
+	ErrorLog "{PROJECT_DIR}logs/error.log"
+	TransferLog "{PROJECT_DIR}logs/access.log"
 	SSLEngine on
-	SSLCertificateFile "conf/ssl.crt/server.crt"
-	SSLCertificateKeyFile "conf/ssl.key/server.key"
-	CustomLog "{PROJECT_DIR}/logs/ssl_request.log" \
+	SSLCertificateFile "conf/ssl.crt/localhost.crt"
+	SSLCertificateKeyFile "conf/ssl.key/localhost.key"
+	CustomLog "{PROJECT_DIR}logs/ssl_request.log" \
 			  "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b"
 </VirtualHost>
 ```
