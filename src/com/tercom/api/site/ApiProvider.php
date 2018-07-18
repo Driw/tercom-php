@@ -3,17 +3,16 @@
 namespace tercom\api\site;
 
 use Exception;
-use dProject\Primitive\StringUtil;
 use dProject\Primitive\ArrayData;
 use tercom\api\ApiActionInterface;
 use tercom\api\ApiConnection;
 use tercom\api\ApiException;
 use tercom\api\ApiResult;
-use tercom\api\ApiUnauthorizedException;
 use tercom\api\ApiMissParam;
 use tercom\control\PhoneControl;
 use tercom\control\ProviderControl;
 use tercom\entities\Provider;
+use tercom\control\ProviderContactControl;
 
 class ApiProvider extends ApiActionInterface
 {
@@ -26,25 +25,16 @@ class ApiProvider extends ApiActionInterface
 		parent::__contruct($apiConnection, $apiname, $vars);
 	}
 
-	public function execute(): ApiResult
+	public function execute():ApiResult
 	{
-		// Se não tem HTTP_REFERER está sendo acessado diretamente pelo link
-		if (!isset($_SERVER['HTTP_REFERER']))
-		{
-			// Se estiver em dev podemos permitir
-			if (SYS_DEVELOP !== true)
-				throw new ApiUnauthorizedException();
-		}
-
-		// Se tem HTTP_REFERER foi chamado de alguma página por AJAX por exemplo
-		else
-		{
-			// No caso dessa API só será permitido o acesso do nosso site
-			if (!StringUtil::startsWith($_SERVER['HTTP_REFERER'], DOMAIN) && !StringUtil::startsWith($_SERVER['HTTP_REFERER'], WWW_DOMAIN))
-				throw new ApiUnauthorizedException();
-		}
+		ApiConnection::validateInternalCall();
 
 		return $this->defaultExecute();
+	}
+
+	public function actionSettings(ArrayData $parameters):ApiResult
+	{
+		return new ApiResultProviderSettings();
 	}
 
 	public function actionAdd(ArrayData $parameters):ApiResult
@@ -110,10 +100,12 @@ class ApiProvider extends ApiActionInterface
 	{
 		$providerID = $this->parseProviderID($parameters);
 		$providerControl = new ProviderControl($this->getMySQL());
+		$providerContactControl = new ProviderContactControl($this->getMySQL());
 
 		if (($provider = $providerControl->get($providerID)) == null)
 			throw new ApiException('fornecedor não encontrado');
 
+		$providerContactControl->loadProviderContacts($provider);
 		$result = new ApiResultProvider();
 		$result->setProvider($provider);
 
@@ -166,10 +158,8 @@ class ApiProvider extends ApiActionInterface
 		return $result;
 	}
 
-	public function actionDeletePhone(ArrayData $parameters):ApiResult
+	public function actionRemovePhone(ArrayData $parameters):ApiResult
 	{
-		global $POST;
-
 		$providerID = $this->parseProviderID($parameters);
 		$providerControl = new ProviderControl($this->getMySQL());
 

@@ -9,6 +9,8 @@ use dProject\Primitive\FriendlyPage;
 use dProject\Primitive\Session;
 use dProject\Primitive\UrlFriendly;
 use tercom\bootstrap\navbar\Navbar;
+use tercom\bootstrap\navbar\NavbarItem;
+use tercom\bootstrap\navbar\NavbarItems;
 use tercom\Functions;
 
 /**
@@ -186,6 +188,21 @@ class System
 
 			else
 				$navbar->getNavbarBrand()->setLink('/');
+
+			$navbarFornecedores = new NavbarItems('Fornecedores');
+			$navbar->getNavbarItems()->add($navbarFornecedores);
+
+			$niFornecedorListar = new NavbarItem('Listar');
+			$niFornecedorListar->setLink('/fornecedor/listar');
+			$navbarFornecedores->add($niFornecedorListar);
+
+			$niFornecedorConsultar = new NavbarItem('Projetos');
+			$niFornecedorConsultar->setLink('/fornecedor/consultar');
+			$navbarFornecedores->add($niFornecedorConsultar);
+
+			$niFornecedorAdicionar = new NavbarItem('Adicionar');
+			$niFornecedorAdicionar->setLink('/fornecedor/adicionar');
+			$navbarFornecedores->add($niFornecedorAdicionar);
 
 			self::$navbar = $navbar;
 		}

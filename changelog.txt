@@ -20,8 +20,23 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+18.07.2018 - 0.0.1.12
+- Adicionado arquivo .BAT para facilitar o procedimento de atualização do composer.
+- Alguns pequenos ajustes em README.md referente ao subdominio tercom.localhost.
+- Movido gerador.php para diversos arquivos PHP em 'test/{acao}.php'.
+	- Agora gerar.php serve apenas para acessar GeradorDeDados.
+- Configuração de alguns dos arquivos de projeto para Eclipse.
+- Versão mínima do PHP passa de '7.0' para '7.2' devido a algumas features utilizadas.
+- Subindo as definições de limites para as entidades envolvidas nos dados de fornecedores.
+- Adicionado validateInternalCall() a ApiConnection para que não permita chamados não locais.
+	- Alguns chamados não serão permitidos se não estiverem sendo chamados pelo site.
+	- Por exemplo bloquear chamados de terceiros ou aplicativos mobile/desktop.
+	- Estava implementado em ApiProvider.execute(), porém terá utilidade em outros serviços da API.
+- Adicionado nova funcionalidade no serviço da API para 'provider' que é 'settings':
+	- Irá informar algumas configurações de formulário como caracteres mínimos e máximos.
+
 16.07.2018 - 0.0.1.11
-- Pequenos ajustes no READ.md para informar como configurar o Xampp adequadamente em HTTP ou HTTPS.
+- Pequenos ajustes no README.md para informar como configurar o Xampp adequadamente em HTTP ou HTTPS.
 - Adicionado arquivo com configurações prontas (exemplo) e os arquivos para 'validação' do acesso HTTPS.
 	- Não consegui fazer o certificado ficar OK (verde), porém mesmo NOK (vermelho) o servidor ao menos aceita.
 

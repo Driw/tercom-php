@@ -30,8 +30,8 @@ class Mail extends PHPMailer
 
 	public function setEmailContent(MailContent $mailContent)
 	{
-		$mail->Body = $mailContent->getHtml();
-		$mail->AltBody = strip_tags($mailContent->getHtml());
+		$this->Body = $mailContent->getHtml();
+		$this->AltBody = strip_tags($mailContent->getHtml());
 	}
 }
 

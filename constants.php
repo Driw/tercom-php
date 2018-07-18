@@ -2,11 +2,10 @@
 
 /* CONFIGURAÇÕES GERAIS */
 
-define('PHP_VERSION_MIN',	'7.0');
+define('PHP_VERSION_MIN',	'7.2');
 define('DOMAIN',			sprintf('https://%s/', $_SERVER['SERVER_NAME']));
 define('WWW_DOMAIN',		sprintf('https://www.%s/', $_SERVER['SERVER_NAME']));
-define('SYS_DEVELOP',		!strcmp($_SERVER['REMOTE_ADDR'], '127.0.0.1') && !isset($_REQUEST['nodev']));
-define('PHP_ENCRYPT_KEY',	'ZlnBMzWyoG7OHAyhP7ooKmgM');
+define('SYS_DEVELOP',		($_SERVER['REMOTE_ADDR'] === '127.0.0.1' || $_SERVER['REMOTE_ADDR'] === '::1') && !isset($_REQUEST['nodev']));
 
 /* DIRETÓRIOS */
 

@@ -3,11 +3,9 @@ RewriteEngine On
 # URL Amigável - Web Service
 RewriteRule ^api/(.*)$ api/index.php [L]
 
-# Gerador de Dados/Teste JSON
-RewriteRule ^gerador?(.*)$ gerador.php [L]
-
 # URL Amigável - Site
 RewriteCond %{REQUEST_URI} !/data/?
+RewriteCond %{REQUEST_URI} !/test/?
 RewriteRule !\.(js|ico|gif|jpg|png|css|pdf|swf|flv|map)$ index.php [QSA]
 
 # Redirecionamento de Arquivos comuns para /data

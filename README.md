@@ -2,7 +2,7 @@
 
 ## STATUS
 
-- [ ] Core
+- [x] Core
 - [ ] Fornecedores
 - [ ] Fabricantes
 - [ ] Produtos
@@ -37,7 +37,6 @@
 ## CONFIGURAÇÃO APACHE (RECOMENDADO)
 
 ```
-
 <VirtualHost localhost:80>
 	DocumentRoot "D:/Andrew/Workspace/PHP/Tercom/trunk"
 	<Directory "D:/Andrew/Workspace/PHP/Tercom/trunk">
@@ -70,6 +69,16 @@
 </VirtualHost>
 ```
 
+## CONFIGURAÇÃO ARQUIVO HOSTS
+
+Apesar do subdominio local funcionar os webservices não funcional por curl, portanto alterar o arquivo hosts:
+
+```
+127.0.0.1 tercom.localhost
+```
+
 ## CRIANDO CERTIFICADO (CRT e KEY)
+
+Necessário apenas criar um certificado para localhost, já que tercom.localhost é um subdominio seu.
 
 - https://www.youtube.com/watch?v=JfRy5coRcCE

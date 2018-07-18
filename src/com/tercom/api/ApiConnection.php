@@ -3,8 +3,9 @@
 namespace tercom\api;
 
 use Exception;
-use tercom\Core\Encryption;
 use dProject\Primitive\GetService;
+use dProject\Primitive\StringUtil;
+use tercom\Encryption;
 
 class ApiConnection
 {
@@ -94,6 +95,30 @@ class ApiConnection
 		$response->setTime(now() - $this->timeup);
 
 		echo $response->toApiJSON();
+	}
+
+	public function validateKey($key)
+	{
+
+	}
+
+	public static function validateInternalCall()
+	{
+		// Se não tem HTTP_REFERER está sendo acessado diretamente pelo link
+		if (!isset($_SERVER['HTTP_REFERER']))
+		{
+			// Se estiver em dev podemos permitir
+			if (SYS_DEVELOP !== true)
+				throw new ApiUnauthorizedException();
+		}
+
+		// Se tem HTTP_REFERER foi chamado de alguma página por AJAX por exemplo
+		else
+		{
+			// No caso dessa API só será permitido o acesso do nosso site
+			if (!StringUtil::startsWith($_SERVER['HTTP_REFERER'], DOMAIN) && !StringUtil::startsWith($_SERVER['HTTP_REFERER'], WWW_DOMAIN))
+				throw new ApiUnauthorizedException();
+		}
 	}
 }
 

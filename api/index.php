@@ -18,6 +18,7 @@ try {
 	{
 		$apiConnection = new ApiConnection();
 		$apiConnection->start();
+		$apiConnection->validateKey($POST->getString('key', false));
 		$apiConnection->identify();
 	}
 	System::shutdown();
