@@ -30,10 +30,7 @@ class ProviderControl extends GenericControl
 
 	public function setPhones(Provider $provider):bool
 	{
-		$keepCommercial = $this->keepPhone($provider->getCommercial());
-		$keepOtherphone = $this->keepPhone($provider->getOtherPhone());
-
-		if ($keepCommercial || $keepOtherphone)
+		if ($this->phoneControl->keepPhones($provider->getPhones()))
 			return $this->providerDAO->updatePhones($provider);
 
 		return false;
@@ -44,7 +41,7 @@ class ProviderControl extends GenericControl
 		if ($provider->getCommercial()->getID() === 0)
 			return false;
 
-		if ($this->phoneControl->remove($provider->getCommercial()))
+		if ($this->phoneControl->removePhone($provider->getCommercial()))
 			$provider->setCommercial(new Phone());
 
 		return $this->providerDAO->updatePhones($provider);
@@ -55,21 +52,10 @@ class ProviderControl extends GenericControl
 		if ($provider->getOtherPhone()->getID() === 0)
 			return false;
 
-		if ($this->phoneControl->remove($provider->getOtherPhone()))
+		if ($this->phoneControl->removePhone($provider->getOtherPhone()))
 			$provider->setOtherPhone(new Phone());
 
 		return $this->providerDAO->updatePhones($provider);
-	}
-
-	private function keepPhone(Phone $phone):bool
-	{
-		if ($phone->getID() === 0 && !empty($phone->getNumber()))
-			return $this->phoneControl->addPhone($phone);
-
-		else if ($phone->getID() !== 0)
-			return $this->phoneControl->setPhone($phone);
-
-		return false;
 	}
 
 	public function enable(Provider $provider):bool

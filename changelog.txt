@@ -20,6 +20,25 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+18.07.2018 - 0.0.1.13
+- Alterado providers.companyName de '48' caracteres para '72' caracteres.
+- Renomeado provider_contact.post para provider_contact.position que se encaixa melhor.
+- Corrigido actionGet() que não estava instanciando $providerContactControl.
+- Renomeado actionDeletePhone() para actionRemovePhone() e removido $POST por não ser usado, ApiProvider.
+- Corrigido nome das variáveis utilizadas em getPhones(), PhoneControl.
+- Movido conteúdo de setPhones() para novo método keepPhones() - será útil nas revisões seguintes, ProviderControl.
+- Removido Encryption de 'tercom\core' afinal já temos em 'tercom'.
+	- Também foi corrigida a utilização de algumas variáveis.
+- Movido a criação de Phone em PhoneDAO para um newPhone() para evitar repetições de códigos.
+- Atualizado PhoneDAO devido a diversos problemas encontrado durante outros testes e melhorias na codificação.
+- Atualizado Phone para melhor validação e corrigido algumas validações.
+- Documentação de Provider e adicionado validação de seus atributos.
+- Alguns ajustes na documentação de ProviderContact e adicionado validação dos seus atributos.
+- Tipado os parâmetros não tipados dos métodos de Functions.
+	- Novos métodos: validar CNPJ, remover acentuação e desformatar qualquer formatação numérica.
+- Corrigido o funcionamento de ProviderContacts que não está funcional.
+- Modificado EntityParseException para que seja uma TercomException ao invés de um ParseError.
+
 18.07.2018 - 0.0.1.12
 - Adicionado arquivo .BAT para facilitar o procedimento de atualização do composer.
 - Alguns pequenos ajustes em README.md referente ao subdominio tercom.localhost.

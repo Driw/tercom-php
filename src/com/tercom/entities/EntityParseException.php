@@ -2,9 +2,9 @@
 
 namespace tercom\Entities;
 
-use ParseError;
+use tercom\TercomException;
 
-class EntityParseException extends ParseError
+class EntityParseException extends TercomException
 {
 	public function __construct($message, $code = null, $previous = null)
 	{

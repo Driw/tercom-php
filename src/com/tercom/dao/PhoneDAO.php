@@ -4,7 +4,6 @@ namespace tercom\DAO;
 
 use dProject\MySQL\Result;
 use tercom\entities\Phone;
-use tercom\Functions;
 
 /**
  * <h1>Telefone DAO</h1>
@@ -64,7 +63,7 @@ class PhoneDAO extends GenericDAO
 	}
 
 	/**
-	 * Apaga um telefone do banco de dedados através do seu código de identificação único.
+	 * Apaga um telefone do banco de de dados através do seu código de identificação único.
 	 * @param Phone $phone telefone (com código de identificação) do qual será apagado.
 	 * @return bool true se conseguir remover ou false se não encontrado.
 	 */
@@ -79,6 +78,24 @@ class PhoneDAO extends GenericDAO
 		$result = $query->execute();
 
 		return $result->isSuccessful();
+	}
+
+	/**
+	 * Apaga diversos telefones do banco de dados através dos seus códigos de identificações únicos.
+	 * @param array $phones vetor contendo o códiugo de identificação dos telefones à serem apagados.
+	 * @return int aquisição da quantidade de telefones que foram encontrados e apagados.
+	 */
+
+	public function deletePhones(array $phones):int
+	{
+		$sql = "DELETE FROM phones WHERE id = IN(?)";
+
+		$query = $this->mysql->createQuery($sql);
+		$query->setString(1, implode(", ", $phones));
+
+		$result = $query->execute();
+
+		return $result->getAffectedRows();
 	}
 
 	/**
@@ -130,10 +147,7 @@ class PhoneDAO extends GenericDAO
 	{
 		$phoneArray = $this->parseSingleResult($result);
 
-		$phone = new Phone();
-		Functions::parseArrayObject($phone, $phoneArray);
-
-		return $phone;
+		return $this->newPhone($phoneArray);
 	}
 
 	/**
@@ -150,12 +164,25 @@ class PhoneDAO extends GenericDAO
 
 		foreach ($phonesArray as $phoneArray)
 		{
-			$phone = new Phone();
-			Functions::parseArrayObject($phone, $phoneArray);
+			$phone = $this->newPhone($phoneArray);
 			array_push($phones, $phone);
 		}
 
 		return $phones;
+	}
+
+	/**
+	 * Cria uma nova instância de um telefone carregando os dados de um registro consultado.
+	 * @param array $phoneArray vetor com dados do registro obtido do banco de dados.
+	 * @return Phone aquisição do telefone com os dados carregados.
+	 */
+
+	private function newPhone(array $phoneArray):Phone
+	{
+		$phone = new Phone();
+		$phone->fromArray($phoneArray);
+
+		return $phone;
 	}
 }
 

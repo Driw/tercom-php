@@ -102,18 +102,18 @@ class PhoneControl extends GenericControl
 	/**
 	 * Obtém dados de telefones através de uma lista de códigos de identificação úncio.
 	 * Caso algum dos código de identificação não sejam encontrados não será informado.
-	 * @param array $phoneIDs lista contendo o código d eidentificação dos telefones à obter.
+	 * @param array $phonesID lista contendo o código d eidentificação dos telefones à obter.
 	 * @throws ControlException apenas se algum dos códigos de identificação forem inválidos.
 	 * @return array aquisição da lista contendo os telefones que foram obtidos.
 	 */
 
-	public function getPhones(array $phoneIDs):array
+	public function getPhones(array $phonesID):array
 	{
-		foreach ($phonesIDs as $phoneID)
-			if ($phoenID < 1)
+		foreach ($phonesID as $phoneID)
+			if ($phoneID < 1)
 				throw new ControlException('identificação do telefone inválida');
 
-		return $this->phoneDAO->selectByIDs($phoneIDs);
+		return $this->phoneDAO->selectByIDs($phonesID);
 	}
 
 	/**
@@ -137,17 +137,82 @@ class PhoneControl extends GenericControl
 
 	/**
 	 * Apaga os dados de um telefone existente no sistema, necessário código de identificação único.
-	 * @param Phone $phone telefone à ser apagado.
+	 * @param Phone $phone referência do telefone à ser apagado.
 	 * @throws ControlException código de identificação inválido.
 	 * @return bool true se conseguir apagar ou false caso não encontrado.
 	 */
 
-	public function remove(Phone $phone):bool
+	public function removePhone(Phone $phone):bool
 	{
 		if ($phone->getID() < 1)
 			throw new ControlException('identificação do telefone inválida');
 
 		return $this->phoneDAO->delete($phone);
+	}
+
+	/**
+	 * Apaga os dados de um ou mais telefones existentes no sistema, necessário código de identificação único.
+	 * @param array $phones vetor contendo o código de identificação dos telefones a serem apagados.
+	 * @throws ControlException telefone com instância inválida.
+	 * @return int quantidade de telefones que foram removidos do sistema.
+	 */
+
+	public function removePhones(array $phones):int
+	{
+		$phoneIDs = [];
+
+		foreach ($phones as $phone)
+		{
+			if (!($phone instanceof Phone))
+				throw new ControlException('tentativa de remover um telefone com instância inválida');
+
+			if ($phone->getID() > 0)
+				array_push($phoneIDs, $phone->getID());
+		}
+
+		return $this->phoneDAO->deletePhones($phoneIDs);
+	}
+
+	/**
+	 * Procedimento que verifica a necessidade de adicionar ou atualizar os dados de um telefone.
+	 * Caso o telefone já possua uma identificação irá atualizar suas informações,
+	 * caso contrário irá adicionar as informações no banco e obter uma identificação.
+	 * @param Phone $phone referência do telefone do qual será mantido.
+	 * @return bool true se atualizado ou adicionado caso contrário false.
+	 */
+
+	public function keepPhone(Phone $phone):bool
+	{
+		if ($phone->getID() === 0 && !empty($phone->getNumber()))
+			return $this->addPhone($phone);
+
+		else if ($phone->getID() !== 0)
+			return $this->setPhone($phone);
+
+		return false;
+	}
+
+	/**
+	 * Mantém os dados de diversos telefones especificados em um vetor de telefones.
+	 * @param array $phones vetor contendo todos os telefones a serem mantidos.
+	 * @throws ControlException se algum objeto do vetor não for um telefone.
+	 * @return bool true se um ou mais telefones foram adicionados e/ou atualizados.
+	 */
+
+	public function keepPhones(array $phones):bool
+	{
+		$keepPhone = false;
+
+		foreach ($phones as $phone)
+		{
+			if (!($phone instanceof Phone))
+				throw new ControlException('tentativa de manter um telefone com instância inválida');
+
+			if ($this->keepPhone($phone));
+				$keepPhone = true;
+		}
+
+		return $keepPhone;
 	}
 }
 

@@ -106,7 +106,7 @@ class ProviderDAO extends GenericDAO
 
 		$result = $query->execute(true);
 
-		return $this->parseProvider($result, true);
+		return $this->parseProvider($result);
 	}
 
 	public function selectByCNPJ(string $cnpj):Provider
@@ -120,7 +120,7 @@ class ProviderDAO extends GenericDAO
 
 		$result = $query->execute(true);
 
-		return $this->parseProvider($result, true);
+		return $this->parseProvider($result);
 	}
 
 	public function filterByCNPJ(string $cnpj):array
@@ -131,6 +131,8 @@ class ProviderDAO extends GenericDAO
 
 		$query = $this->mysql->createQuery($sql);
 		$query->setString(1, "%$cnpj%");
+
+		$result = $query->execute(true);
 
 		return $this->parseProviders($result, true);
 	}
@@ -149,7 +151,7 @@ class ProviderDAO extends GenericDAO
 		return $this->parseProviders($result, true);
 	}
 
-	private function parseProvider(Result $result, $loadProviderContacts):?Provider
+	private function parseProvider(Result $result):?Provider
 	{
 		if (($providerArray = $this->parseSingleResult($result)) == null)
 			return null;
@@ -161,8 +163,7 @@ class ProviderDAO extends GenericDAO
 
 	private function parseProviders(Result $result, bool $loadContatos):?array
 	{
-		$result = $query->execute(true);
-		$provideres = [];
+		$providers = [];
 
 		if (($provideresArray = $this->parseSingleResult($result)) == null)
 			return null;
@@ -170,7 +171,7 @@ class ProviderDAO extends GenericDAO
 		foreach ($provideresArray as $providerArray)
 		{
 			$provider = $this->newProvider($providerArray);
-			array_push($provideres, $provider);
+			array_push($providers, $provider);
 
 			if ($loadContatos)
 				$this->loadContatos($provider);
@@ -186,8 +187,9 @@ class ProviderDAO extends GenericDAO
 
 		$provider = new Provider();
 		$provider->fromArray($providerArray);
-		$provider->getCommercial()->setID(IntegerUtil::parse($commercialID));
-		$provider->getOtherPhone()->setID(IntegerUtil::parse($otherphoneID));
+
+		if ($commercialID > 0) $provider->getCommercial()->setID(IntegerUtil::parse($commercialID));
+		if ($otherphoneID) $provider->getOtherPhone()->setID(IntegerUtil::parse($otherphoneID));
 
 		return $provider;
 	}
@@ -197,7 +199,7 @@ class ProviderDAO extends GenericDAO
 		$contatos = $this->providerContactDAO->filterByProviderID($provider->getID());
 
 		foreach ($contatos as $contato)
-			$provider->getContatos()->add($contato);
+			$provider->getContatos()->addProviderContact($contato);
 	}
 }
 

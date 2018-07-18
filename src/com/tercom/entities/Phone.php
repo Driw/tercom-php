@@ -4,6 +4,9 @@ namespace tercom\entities;
 
 use dProject\Primitive\AdvancedObject;
 use dProject\Primitive\IntegerUtil;
+use tercom\Entities\EntityParseException;
+use dProject\Primitive\StringUtil;
+use tercom\Functions;
 
 /**
  * <h1>Telefone</h1>
@@ -20,15 +23,15 @@ class Phone extends AdvancedObject
 	/**
 	 * @var string type de telefone celular.
 	 */
-	const TYPE_PHONE = 'celular';
+	public const TYPE_PHONE = 'celular';
 	/**
 	 * @var string type de telefone comercial.
 	 */
-	const TYPE_COMMERCIAL = 'comercial';
+	public const TYPE_COMMERCIAL = 'comercial';
 	/**
 	 * @var string type de telefone residêncial.
 	 */
-	const TYPE_RESIDENTIAL = 'residencial';
+	public const TYPE_RESIDENTIAL = 'residencial';
 
 	/**
 	 * @var number código de identificação do telefone.
@@ -72,6 +75,9 @@ class Phone extends AdvancedObject
 
 	public function setID(int $id)
 	{
+		if ($id < 1)
+			throw new EntityParseException(sprintf('código de identificação inválido (id: %d)', $id));
+
 		$this->id = $id;
 	}
 
@@ -90,8 +96,8 @@ class Phone extends AdvancedObject
 
 	public function setDDD(int $ddd)
 	{
-		if (!IntegerUtil::inInterval($ddd, TELEFONE_MIN_DDD, TELEFONE_MAX_DDD))
-			throw new EntityParseException(sprintf('DDD deve ser de %d a %d (ddd: %d)', TELEFONE_MIN_DDD, TELEFONE_MAX_DDD, $ddd));
+		if (!IntegerUtil::inInterval($ddd, MIN_PHONE_DDD, MAX_PHONE_DDD))
+			throw new EntityParseException(sprintf('DDD deve ser de %d a %d (ddd: %d)', MIN_PHONE_DDD, MAX_PHONE_DDD, $ddd));
 
 		$this->ddd = $ddd;
 	}
@@ -111,6 +117,11 @@ class Phone extends AdvancedObject
 
 	public function setNumber(string $number)
 	{
+		$number = Functions::parseOnlyNumbers($number);
+
+		if (!StringUtil::hasBetweenLength($number, MIN_PHONE_NUMBER_LEN, MAX_PHONE_NUMBER_LEN))
+			throw new EntityParseException(sprintf('número deve ter de %d a %d dígitos (numero: %s)', MIN_PHONE_NUMBER_LEN, MAX_PHONE_NUMBER_LEN, $number));
+
 		$this->number = $number;
 	}
 
@@ -129,8 +140,8 @@ class Phone extends AdvancedObject
 
 	public function setType(string $type)
 	{
-		if (self::hasType($type))
-			throw new EntityParseException('tipo de telefone inválido');
+		if (!self::hasType($type))
+			throw new EntityParseException(sprintf('tipo de telefone inválido (tipo: %s)', $type));
 
 		$this->type = $type;
 	}
@@ -156,7 +167,22 @@ class Phone extends AdvancedObject
 
 	public static function hasType(string $type):bool
 	{
-		return array_search($type, self::getTypes());
+		return isset(self::getTypes()[$type]);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * @see \dProject\Primitive\AdvancedObject::getParamTypes()
+	 */
+
+	public function getParamTypes():array
+	{
+		return [
+			'id' => self::TYPE_INTEGER,
+			'ddd' => self::TYPE_INTEGER,
+			'number' => self::TYPE_STRING,
+			'type' => self::TYPE_STRING,
+		];
 	}
 }
 

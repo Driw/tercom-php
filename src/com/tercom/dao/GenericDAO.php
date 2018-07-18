@@ -9,7 +9,7 @@ use dProject\Primitive\StringUtil;
 class GenericDAO
 {
 	/**
-	 * 
+	 *
 	 * @var MySQL
 	 */
 	protected $mysql;
@@ -47,7 +47,7 @@ class GenericDAO
 		return $matrix;
 	}
 
-	protected function parsePage($page, $lenght)
+	protected function parsePage($page, $length)
 	{
 		$offset = ($page - 1) * $length;
 
@@ -57,7 +57,7 @@ class GenericDAO
 	protected function parseArrayJoin($baseArray, $prefix)
 	{
 		$array = [];
-		$prefix = "$prefix_";
+		$prefix = $prefix. '_';
 
 		foreach ($baseArray as $name => $value)
 			if (StringUtil::startsWith($name, $prefix))

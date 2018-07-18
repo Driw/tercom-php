@@ -15,7 +15,7 @@ function PHPFatalError()
 {
 	if (($error = error_get_last()) != null)
 	{
-		$level = ($isError = PHPIsError($error['type'])) ? KILL_PAGE_FATAL_ERROR : KILL_PAGE_ERROR;
+		$level = PHPIsError($error['type']) ? KILL_PAGE_FATAL_ERROR : KILL_PAGE_ERROR;
 		$modalBody =
 		sprintf('<b>Erro:</b> %s', $error['message']).
 		sprintf('</p><hr><p>').

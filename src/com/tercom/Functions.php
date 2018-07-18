@@ -2,6 +2,7 @@
 
 namespace tercom;
 
+use DateTime;
 use dProject\Primitive\StringUtil;
 use dProject\Primitive\AdvancedObject;
 
@@ -12,7 +13,7 @@ class Functions
 	 * @param string $message mensagem de alerta a ser exibido.
 	 */
 
-	public static function alert($string)
+	public static function alert(string $message)
 	{
 		echo "<script language='JavaScript' type='text/javascript'>".PHP_EOL;
 		echo "	alert('$message');".PHP_EOL;
@@ -24,7 +25,7 @@ class Functions
 	 * @param string $message mensagem a ser exibida no console do JavaScript.
 	 */
 
-	public static function debug($message)
+	public static function debug(string $message)
 	{
 		echo "<script language='JavaScript' type='text/javascript'>".PHP_EOL;
 		echo "	console.log('$message');".PHP_EOL;
@@ -36,37 +37,37 @@ class Functions
 	 * @param string $message mensagem do qual deve ser exibida dentro da caixa exibida.
 	 */
 
-	public static function showSuccessMessage($message)
+	public static function showSuccessMessage(string $message)
 	{
 		echo "<div class='alert alert-success' role='alert'>$message</div>";
 	}
-	
+
 	/**
 	 * Exibi uma divisão na página que será estilizada com uma caixa de mensagem do tipo informativo.
 	 * @param string $message mensagem do qual deve ser exibida dentro da caixa exibida.
 	 */
 
-	public static function showInfoMessage($message)
+	public static function showInfoMessage(string $message)
 	{
 		echo "<div class='alert alert-info' role='alert'>$message</div>";
 	}
-	
+
 	/**
 	 * Exibi uma divisão na página que será estilizada com uma caixa de mensagem do tipo alerta.
 	 * @param string $message mensagem do qual deve ser exibida dentro da caixa exibida.
 	 */
 
-	public static function showWarningMessage($message)
+	public static function showWarningMessage(string $message)
 	{
 		echo "<div class='alert alert-warning' role='alert'>$message</div>";
 	}
-	
+
 	/**
 	 * Exibi uma divisão na página que será estilizada com uma caixa de mensagem do tipo perigo.
 	 * @param string $message mensagem do qual deve ser exibida dentro da caixa exibida.
 	 */
 
-	public static function showDangerMessage($message)
+	public static function showDangerMessage(string $message)
 	{
 		echo "<div class='alert alert-danger' role='alert'>$message</div>";
 	}
@@ -75,7 +76,7 @@ class Functions
 	 * @return string aquisição da mensagem para cumprimento conforme o horário do servidor.
 	 */
 
-	public static function getGoodMorning()
+	public static function getGoodMorning():string
 	{
 		$hora = date('H');
 
@@ -92,7 +93,7 @@ class Functions
 	 * @return string aquisição de uma string MD5 com valor aleatório.
 	 */
 
-	public static function newRandomMD5()
+	public static function newRandomMD5():string
 	{
 		return md5(uniqid(rand(), true));
 	}
@@ -101,9 +102,9 @@ class Functions
 	 * @return \DateTime aquisição de um horário tempo definido o horário atual do sistema.
 	 */
 
-	public static function newDateTimeNow()
+	public static function newDateTimeNow():DateTime
 	{
-		return new \DateTime(time());
+		return new DateTime(time());
 	}
 
 	/**
@@ -112,9 +113,9 @@ class Functions
 	 * @see http://php.net/manual/pt_BR/function.strtotime.php
 	 */
 
-	public static function newDateTimeExpression($expression)
+	public static function newDateTimeExpression($expression):DateTime
 	{
-		return new \DateTime(time(strtotime($expression)));
+		return new DateTime(time(strtotime($expression)));
 	}
 
 	/**
@@ -128,7 +129,7 @@ class Functions
 	 * @return NULL|array[] vetor com os valores de prefixo ou null se não encontrar nada (opcional).
 	 */
 
-	public static function parseArrayJoin(array $baseArray, $prefix, $emptyAsNull = false)
+	public static function parseArrayJoin(array $baseArray, $prefix, $emptyAsNull = false):?array
 	{
 		$array = [];
 		$prefix = sprintf('%s_', $prefix);
@@ -137,7 +138,7 @@ class Functions
 			if (StringUtil::startsWith($name, $prefix))
 				$array[substr($name, strlen($prefix))] = $value;
 
-			return count($array) == 0 && $emptyAsNull ? null : $array;
+		return count($array) == 0 && $emptyAsNull ? null : $array;
 	}
 
 	/**
@@ -164,12 +165,16 @@ class Functions
 	 * @param string $classname nome da classe do qual será instanciada (com namespace).
 	 * @param array $baseArray vetor com os dados que serão aplicados ao novo objeto.
 	 * @param string $prefix préfixo contido no vetor dos dados que serão aplicados.
-	 * @return object aquisição de um novo objeto avançado.
+	 * @return AdvancedObject aquisição de um novo objeto avançado.
 	 */
 
-	public static function newAdvancedObject($classname, array $baseArray, $prefix)
+	public static function newAdvancedObject(string $classname, array $baseArray, string $prefix):?AdvancedObject
 	{
 		$object = new $classname();
+
+		if (!($object instanceof AdvancedObject))
+			return null;
+
 		$objectArray = self::parseArrayJoin($baseArray, $prefix);
 		$objectArray = self::parseArrayObject($object, $objectArray);
 
@@ -183,7 +188,7 @@ class Functions
 	 * @param string $mensagem mensagem do qual será registrada ao arquivo.
 	 */
 
-	public static function addLog($filepath, $mensagem)
+	public static function addLog(string $filepath, string $mensagem)
 	{
 		$folder = substr($filepath, 0, strrpos($filepath, '/'));
 
@@ -208,9 +213,79 @@ class Functions
 	 * @param array $array vetor contendo os dados do registro para salvar em JSON.
 	 */
 
-	public static function addJsonLog($filepath, array $array)
+	public static function addJsonLog(string $filepath, array $array)
 	{
 		self::addLog($filepath, json_encode($array));
+	}
+
+	/**
+	 * Procedimento para validar um número de CNPJ das empresas no sistema.
+	 * @param string $cnpj cadastro nacional de pessoa jurídica.
+	 * @return bool true se for válido ou false caso contrário.
+	 * @link https://gist.github.com/guisehn/3276302
+	 */
+
+	public static function validateCNPJ(string $cnpj):bool
+	{
+		$cnpj = preg_replace('/[^0-9]/', '', (string) $cnpj);
+
+		// Valida tamanho
+		if (strlen($cnpj) != 14)
+			return false;
+
+		// Valida primeiro dígito verificador
+		for ($i = 0, $j = 5, $sum = 0; $i < 12; $i++)
+		{
+			$sum += $cnpj{$i} * $j;
+			$j = ($j == 2) ? 9 : $j - 1;
+		}
+
+		$remainder = $sum % 11;
+
+		if ($cnpj{12} != ($remainder < 2 ? 0 : 11 - $remainder))
+			return false;
+
+		// Valida segundo dígito verificador
+		for ($i = 0, $j = 6, $sum = 0; $i < 13; $i++)
+		{
+			$sum += $cnpj{$i} * $j;
+			$j = ($j == 2) ? 9 : $j - 1;
+		}
+
+		$remainder = $sum % 11;
+
+		return $cnpj{13} == ($remainder < 2 ? 0 : 11 - $remainder);
+	}
+
+	/**
+	 * Remove caracteres utilizados para formatação de números:
+	 * pontos (.), virgulas (,), ífens (-) e til (~) e dois pontos (:).
+	 * @param string $number string contendo o valor numérico.
+	 * @return string aquisição do número com formatação removida.
+	 */
+
+	public static function parseOnlyNumbers(string $number):string
+	{
+		return preg_replace('~[.,-/ ]~', '', $number);
+	}
+
+	/**
+	 * Remove todos os tipos de acentos de uma string sejam caracteres minúsculos ou maísculos.
+	 * A remoção não consite em remover o caracter mas sim substituí-lo por um que não tenha acento.
+	 * @param string $string string do qual deseja substituir os acentos por suas lentras convencionais.
+	 * @return string aquisição da string com os acentos substituídos.
+	 */
+
+	public static function stripAccents(string $string):string
+	{
+		$replacements = [
+			'Š'=>'S', 'š'=>'s', 'Ž'=>'Z', 'ž'=>'z', 'À'=>'A', 'Á'=>'A', 'Â'=>'A', 'Ã'=>'A', 'Ä'=>'A', 'Å'=>'A', 'Æ'=>'A', 'Ç'=>'C', 'È'=>'E', 'É'=>'E',
+			'Ê'=>'E', 'Ë'=>'E', 'Ì'=>'I', 'Í'=>'I', 'Î'=>'I', 'Ï'=>'I', 'Ñ'=>'N', 'Ò'=>'O', 'Ó'=>'O', 'Ô'=>'O', 'Õ'=>'O', 'Ö'=>'O', 'Ø'=>'O', 'Ù'=>'U',
+			'Ú'=>'U', 'Û'=>'U', 'Ü'=>'U', 'Ý'=>'Y', 'Þ'=>'B', 'ß'=>'Ss', 'à'=>'a', 'á'=>'a', 'â'=>'a', 'ã'=>'a', 'ä'=>'a', 'å'=>'a', 'æ'=>'a', 'ç'=>'c',
+			'è'=>'e', 'é'=>'e', 'ê'=>'e', 'ë'=>'e', 'ì'=>'i', 'í'=>'i', 'î'=>'i', 'ï'=>'i', 'ð'=>'o', 'ñ'=>'n', 'ò'=>'o', 'ó'=>'o', 'ô'=>'o', 'õ'=>'o',
+			'ö'=>'o', 'ø'=>'o', 'ù'=>'u', 'ú'=>'u', 'û'=>'u', 'ý'=>'y', 'þ'=>'b', 'ÿ'=>'y'];
+
+		return strtr($string, $replacements);
 	}
 }
 
