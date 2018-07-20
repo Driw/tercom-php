@@ -1,6 +1,6 @@
 <?php
 
-namespace tercom\Core;
+namespace tercom\core;
 
 use PHPMailer\PHPMailer\Exception;
 

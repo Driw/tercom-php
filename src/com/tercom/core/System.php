@@ -1,6 +1,6 @@
 <?php
 
-namespace tercom\Core;
+namespace tercom\core;
 
 use dProject\MySQL\MySQL;
 use dProject\Primitive\Config;

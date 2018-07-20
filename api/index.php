@@ -3,7 +3,7 @@
 use tercom\api\ApiConnection;
 use tercom\api\ApiException;
 use tercom\api\ApiResponse;
-use tercom\Core\System;
+use tercom\core\System;
 use dProject\Primitive\PostService;
 
 require_once '../constants.php';

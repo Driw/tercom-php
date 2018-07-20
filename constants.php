@@ -1,11 +1,20 @@
 <?php
 
+function onEnviromentDevelop()
+{
+	$development =	$_SERVER['REMOTE_ADDR'] === '127.0.0.1' ||
+					$_SERVER['REMOTE_ADDR'] === '::1' ||
+					$_SERVER['SERVER_NAME'] === 'tercom.diverproject.org';
+
+	return	$development && !isset($_REQUEST['nodev']);
+}
+
 /* CONFIGURAÇÕES GERAIS */
 
 define('PHP_VERSION_MIN',	'7.2');
 define('DOMAIN',			sprintf('https://%s/', $_SERVER['SERVER_NAME']));
 define('WWW_DOMAIN',		sprintf('https://www.%s/', $_SERVER['SERVER_NAME']));
-define('SYS_DEVELOP',		($_SERVER['REMOTE_ADDR'] === '127.0.0.1' || $_SERVER['REMOTE_ADDR'] === '::1') && !isset($_REQUEST['nodev']));
+define('SYS_DEVELOP',		onEnviromentDevelop());
 
 /* DIRETÓRIOS */
 

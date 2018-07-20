@@ -3,7 +3,7 @@
 namespace tercom\control;
 
 use dProject\MySQL\MySQL;
-use tercom\DAO\PhoneDAO;
+use tercom\dao\PhoneDAO;
 use tercom\entities\Phone;
 use tercom\entities\lists\Phones;
 

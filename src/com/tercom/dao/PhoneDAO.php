@@ -1,6 +1,6 @@
 <?php
 
-namespace tercom\DAO;
+namespace tercom\dao;
 
 use dProject\MySQL\Result;
 use tercom\entities\Phone;

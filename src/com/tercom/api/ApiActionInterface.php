@@ -6,7 +6,7 @@ use ReflectionClass;
 use dProject\Primitive\AdvancedObject;
 use dProject\MySQL\MySQL;
 use dProject\Primitive\ArrayData;
-use tercom\Core\System;
+use tercom\core\System;
 
 class ApiActionInterface extends AdvancedObject
 {

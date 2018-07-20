@@ -1,6 +1,6 @@
 <?php
 
-namespace tercom\DAO;
+namespace tercom\dao;
 
 class DAOException extends \Exception
 {
