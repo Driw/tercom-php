@@ -123,8 +123,7 @@ class ApiProvider extends ApiActionInterface
 			throw new ApiException('fornecedor não encontrado');
 
 		$phoneControl = new PhoneControl($this->getMySQL());
-		$phoneControl->loadPhone($provider->getCommercial());
-		$phoneControl->loadPhone($provider->getOtherPhone());
+		$phoneControl->loadPhones($provider->getPhones());
 
 		try {
 

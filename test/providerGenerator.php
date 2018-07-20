@@ -15,7 +15,6 @@ function testExecute()
 		'site' => $empresa['site'],
 	];
 
-	return $parameters;
 	return GeradorDeDados::callWebService('provider/add', $parameters);
 }
 require_once 'execute.php';

@@ -2,6 +2,7 @@
 
 namespace tercom;
 
+use InvalidArgumentException;
 use Iterator;
 use dProject\Primitive\AdvancedObject;
 
@@ -22,22 +23,30 @@ class ArrayList extends AdvancedObject implements Iterator
 	const NOT_FOUND = -1;
 
 	/**
+	 * @var string nome da classe aceita pela lista.
+	 */
+	private $generic;
+	/**
 	 * @var array vetor contendo os elementos da lista.
 	 */
 	private $elements;
 
 	/**
 	 * Cria uma nova instância de uma lista em vetor inicializando o vetor dos elementos.
-	 * @param array $array [optional] se definido usa o vetor como lista,
+	 * @param string $generic [optional] nome do tipo de classe que será aceita pela lista,
+	 * se nenhum tipo for definido será considerado que aceita qualquer tipo de objeto/valor.
+	 * @param array $array [optional] se definido usa o vetor como lista.
 	 * caso contrário será iniciado uma lista em branco (vetor vazio).
 	 */
 
-	public function __construct($array = null)
+	public function __construct(?string $generic = null, $array = null)
 	{
 		if (is_array($array))
 			$this->elements = $array;
 		else
 			$this->clear();
+
+		$this->generic = $generic;
 	}
 
 	/**
@@ -47,6 +56,9 @@ class ArrayList extends AdvancedObject implements Iterator
 
 	public function add(object $element)
 	{
+		if ($this->generic !== null && !($element instanceof $this->generic))
+			throw new InvalidArgumentException(sprintf('lista aceita apenas objetos do tipo %s', nameOf($this->generic)));
+
 		array_push($this->elements, $element);
 	}
 

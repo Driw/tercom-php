@@ -6,7 +6,7 @@ use dProject\MySQL\MySQL;
 use dProject\MySQL\Result;
 use tercom\entities\ProviderContact;
 use tercom\entities\Provider;
-use tercom\entities\ProviderContacts;
+use tercom\entities\lists\ProviderContacts;
 
 class ProviderContactDAO extends GenericDAO
 {
@@ -167,18 +167,16 @@ class ProviderContactDAO extends GenericDAO
 	 * @return ProviderContact aquisição do contato de fornecedor selecionado.
 	 */
 
-	public function selectByID(int $idProvider, int $idProviderContact):ProviderContact
+	public function selectByID(int $idProvider, int $idProviderContact):?ProviderContact
 	{
 		$sql = "SELECT id, name, position, email, commercial, otherphone
 				FROM provider_contact
-				INNER JOIN provider_contacts ON provider_contacts.idProviderContact = ?
-				WHERE provider_contacts.idProvider = ?
-				ORDER BY nome";
+				INNER JOIN provider_contacts ON provider_contacts.idProviderContact = provider_contact.id
+				WHERE provider_contacts.idProvider = ? AND provider_contacts.idProviderContact = ?";
 
 		$query = $this->mysql->createQuery($sql);
-		$query->setInteger(1, $idProviderContact);
-		if ($idProvider !== null)
-		$query->setInteger(2, $idProvider);
+		$query->setInteger(1, $idProvider);
+		$query->setInteger(2, $idProviderContact);
 
 		$result = $query->execute();
 
@@ -207,7 +205,7 @@ class ProviderContactDAO extends GenericDAO
 		return $this->parseProviderContacts($result);
 	}
 
-	private function parseProviderContact(Result $result):ProviderContact
+	private function parseProviderContact(Result $result):?ProviderContact
 	{
 		if (!($providerContactArray = $this->parseSingleResult($result)))
 			return null;

@@ -5,6 +5,7 @@ namespace tercom\control;
 use dProject\MySQL\MySQL;
 use tercom\DAO\PhoneDAO;
 use tercom\entities\Phone;
+use tercom\entities\lists\Phones;
 
 /**
  * <h1>Controle de Telefone</h1>
@@ -136,6 +137,23 @@ class PhoneControl extends GenericControl
 	}
 
 	/**
+	 * Carrega os dados do banco de dados dos telefones informados por lista.
+	 * @param Phones $phones lista contendo os telefones a serem carregados.
+	 * @return bool true se ao menos um telefone for carregado ou false caso contrário.
+	 */
+
+	public function loadPhones(Phones $phones):bool
+	{
+		$loaded = false;
+
+		foreach ($phones as $phone)
+			if ($this->loadPhone($phone))
+				$loaded = true;
+
+		return $loaded;
+	}
+
+	/**
 	 * Apaga os dados de um telefone existente no sistema, necessário código de identificação único.
 	 * @param Phone $phone referência do telefone à ser apagado.
 	 * @throws ControlException código de identificação inválido.
@@ -152,23 +170,18 @@ class PhoneControl extends GenericControl
 
 	/**
 	 * Apaga os dados de um ou mais telefones existentes no sistema, necessário código de identificação único.
-	 * @param array $phones vetor contendo o código de identificação dos telefones a serem apagados.
+	 * @param Phones $phones lista contendo o código de identificação dos telefones a serem apagados.
 	 * @throws ControlException telefone com instância inválida.
 	 * @return int quantidade de telefones que foram removidos do sistema.
 	 */
 
-	public function removePhones(array $phones):int
+	public function removePhones(Phones $phones):int
 	{
 		$phoneIDs = [];
 
 		foreach ($phones as $phone)
-		{
-			if (!($phone instanceof Phone))
-				throw new ControlException('tentativa de remover um telefone com instância inválida');
-
 			if ($phone->getID() > 0)
 				array_push($phoneIDs, $phone->getID());
-		}
 
 		return $this->phoneDAO->deletePhones($phoneIDs);
 	}
@@ -193,24 +206,19 @@ class PhoneControl extends GenericControl
 	}
 
 	/**
-	 * Mantém os dados de diversos telefones especificados em um vetor de telefones.
-	 * @param array $phones vetor contendo todos os telefones a serem mantidos.
+	 * Mantém os dados de diversos telefones especificados em uma lista de telefones.
+	 * @param Phones $phones lista contendo todos os telefones a serem mantidos.
 	 * @throws ControlException se algum objeto do vetor não for um telefone.
 	 * @return bool true se um ou mais telefones foram adicionados e/ou atualizados.
 	 */
 
-	public function keepPhones(array $phones):bool
+	public function keepPhones(Phones $phones):bool
 	{
 		$keepPhone = false;
 
 		foreach ($phones as $phone)
-		{
-			if (!($phone instanceof Phone))
-				throw new ControlException('tentativa de manter um telefone com instância inválida');
-
 			if ($this->keepPhone($phone));
 				$keepPhone = true;
-		}
 
 		return $keepPhone;
 	}

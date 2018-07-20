@@ -5,6 +5,7 @@ namespace tercom\entities;
 use dProject\Primitive\AdvancedObject;
 use tercom\Entities\EntityParseException;
 use dProject\Primitive\StringUtil;
+use tercom\entities\lists\Phones;
 
 /**
  * <h1>Contato do Fornecedor</h1>
@@ -43,6 +44,10 @@ class ProviderContact extends AdvancedObject
 	 * @var Phone commercial otherphone para contato.
 	 */
 	private $otherphone;
+
+	/**
+	 * Cria uma nova instância de um contato de fornecedor.
+	 */
 
 	public function __construct()
 	{
@@ -175,12 +180,16 @@ class ProviderContact extends AdvancedObject
 	}
 
 	/**
-	 * @return array aquisição de um vetor com o telefone celular e o telefone secundário.
+	 * @return Phones aquisição de um vetor com o telefone celular e o telefone secundário.
 	 */
 
-	public function getPhones():array
+	public function getPhones():Phones
 	{
-		return [ $this->commercial, $this->otherphone ];
+		$phones = new Phones();
+		$phones->add($this->getCommercial());
+		$phones->add($this->getOtherPhone());
+
+		return $phones;
 	}
 }
 

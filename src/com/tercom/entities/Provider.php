@@ -3,9 +3,11 @@
 namespace tercom\entities;
 
 use dProject\Primitive\AdvancedObject;
+use dProject\Primitive\StringUtil;
 use tercom\Functions;
 use tercom\Entities\EntityParseException;
-use dProject\Primitive\StringUtil;
+use tercom\entities\lists\Phones;
+use tercom\entities\lists\ProviderContacts;
 
 /**
  * <h1>Provider</h1>
@@ -256,12 +258,16 @@ class Provider extends AdvancedObject
 	}
 
 	/**
-	 * @return array aquisição de um vetor com o telefone comercial e o telefone secundário.
+	 * @return Phones aquisição de uma lista com o telefone comercial e o telefone secundário.
 	 */
 
-	public function getPhones():array
+	public function getPhones():Phones
 	{
-		return [ $this->commercial, $this->otherphone ];
+		$phones = new Phones();
+		$phones->add($this->getCommercial());
+		$phones->add($this->getOtherPhone());
+
+		return $phones;
 	}
 
 	/**

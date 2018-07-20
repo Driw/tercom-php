@@ -1,9 +1,10 @@
 <?php
 
-namespace tercom\entities;
+namespace tercom\entities\lists;
 
 use Iterator;
 use tercom\ArrayList;
+use tercom\entities\ProviderContact;
 
 /**
  * <h1>Contatos do Fornecedor</h1>
@@ -17,15 +18,9 @@ use tercom\ArrayList;
 
 class ProviderContacts extends ArrayList
 {
-	/**
-	 * {@inheritDoc}
-	 * @see \tercom\ArrayList::add()
-	 */
-
-	public function add(object $element)
+	public function __construct()
 	{
-		if ($element instanceof ProviderContact)
-			parent::add($element);
+		parent::__construct(ProviderContact::class);
 	}
 
 	/**

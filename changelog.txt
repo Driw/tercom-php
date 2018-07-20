@@ -20,6 +20,16 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+19.07.2018 - 0.0.1.14
+- Novo método que nos permite saber o nome exato de uma classe sem considerar o namepsace, nameOf().
+- Adicionado novo método para simplificar o carregamento de dados de telefones com loadPhones(), PhoneControl.
+	- Para isso foi necessário adicionar um ArrayList de Phone, Phones.
+- Movido ProviderContacts de 'tercom\entities' para 'terom\entidades\lists'.
+- Pequeno aprimoramento no funcionamento de ArrayList que vai aceitar um 'generic' (nome da classe aceita).
+	- Caso aceite qualquer tipo de objeto basta não especificá-lo ou informar um valor nulo.
+- Atualizado outros códigos que era informado um array de Phone para usar Phones.
+- Implementação dos webservices para gerenciamento dos contatos de fornecedores, ProviderContact.
+
 18.07.2018 - 0.0.1.13
 - Alterado providers.companyName de '48' caracteres para '72' caracteres.
 - Renomeado provider_contact.post para provider_contact.position que se encaixa melhor.

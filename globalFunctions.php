@@ -204,4 +204,24 @@ function strms(int $milleseconds):string
 	return sprintf('%03dms', $milleseconds);
 }
 
+/**
+ * Retorna o nome de uma classe sem considerar o seu 'package' (namepsace).
+ * @param mixed $value referência do valor do qual deseja saber o nome da classe.
+ * @return NULL|string aquisição do nome da classe ou null se não for um objeto/classe.
+ */
+
+function nameOf($value)
+{
+	if (is_object($value))
+		$path = explode('\\', get_class($value));
+
+	else if (is_string($value))
+		$path = explode('\\', $value);
+
+	else
+		return null;
+
+	return array_pop($path);
+}
+
 ?>
