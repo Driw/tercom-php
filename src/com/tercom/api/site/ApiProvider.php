@@ -47,8 +47,8 @@ class ApiProvider extends ApiActionInterface
 			$provider->setCNPJ($POST->getString('cnpj'));
 			$provider->setCompanyName($POST->getString('companyName'));
 			$provider->setFantasyName($POST->getString('fantasyName'));
-			$provider->setSpokesman($POST->getString('spokesman'));
-			$provider->setSite($POST->getString('site'));
+			if (isset($POST->getString('spokesman'))) $provider->setSpokesman($POST->getString('spokesman'));
+			if (isset($POST->getString('site'))) $provider->setSite($POST->getString('site'));
 			$provider->setInactive(false);
 
 		} catch (Exception $e) {

@@ -20,6 +20,9 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+22.07.2018 - 0.0.1.17
+- Atualizado actionAdd() que não considerava 'spokesman' e 'site' como opcionais, ApiProvider.
+
 20.07.2018 - 0.0.1.16
 - Atualizado as configurações de conexão com o banco de dados conforme o servidor de desenvolvimento.
 - Correção de namepsace de 'terom\DAO' para 'terom\dao' e 'tercom\Core' para 'tercom\core', causa erro no Linux.
