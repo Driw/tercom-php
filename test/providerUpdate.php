@@ -11,7 +11,7 @@ function testExecute()
 		header('Content-type: text/html');
 ?>
 <form method='get'>
-	<input type='text' name='idProvider'>
+	Fornecedor ID: <input type='text' name='idProvider'>
 	<button type='submit'>Continuar</button>
 </form>
 <?php

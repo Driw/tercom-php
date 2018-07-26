@@ -49,7 +49,7 @@ class System
 
 	public static function init()
 	{
-		self::$config = Config::parse(DIR_DATA. 'conf/system.php');
+		self::initConfigs();
 
 		setlocale(LC_ALL, self::$config->getLocale());
 		date_default_timezone_set(self::$config->getTimeZone());
@@ -117,6 +117,15 @@ class System
 	}
 
 	/**
+	 * Inicializa a definição das configurações do sistema carregado o arquivo de configurações.
+	 */
+
+	private static function initConfigs()
+	{
+		self::$config = Config::parse(DIR_DATA. 'conf/system.php');
+	}
+
+	/**
 	 * As configurações do sistema possuem propriedades que gerais, que são usadas por todo o site.
 	 * Não são especificas de uma parte ou serviço prestado/oferecido no mesmo.
 	 * @return Config objeto contendo as configurações do sistema pré-definidas por padrão.
@@ -124,6 +133,9 @@ class System
 
 	public static function getConfig()
 	{
+		if (self::$config === null)
+			self::initConfigs();
+
 		return self::$config;
 	}
 
@@ -137,9 +149,7 @@ class System
 	{
 		if (self::$webConnection == null)
 		{
-			self::$config = Config::parse(DIR_DATA. 'conf/system.php');
-
-			$mysqlConfigs = self::$config->getMySQL();
+			$mysqlConfigs = self::getConfig()->getMySQL();
 			$mysqlSystemConfigs = $mysqlConfigs->getSystem();
 
 			self::$webConnection = new MySQL('Sistema Principal');

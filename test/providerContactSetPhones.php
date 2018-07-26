@@ -12,7 +12,7 @@ function testExecute()
 		header('Content-type: text/html');
 		?>
 <form method='get'>
-	Todos do Fornecedor ID: <input type='text' name='idProvider'>
+	Fornecedor ID: <input type='text' name='idProvider'>
 	Apenas do Contato ID: <input type='text' name='idProviderContact'>
 	até Contato ID (optional): <input type='text' name='idProviderContactLast'>
 	<select name='phoneType'>

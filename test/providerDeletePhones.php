@@ -11,7 +11,7 @@ function testExecute()
 		header('Content-type: text/html');
 		?>
 <form method='get'>
-	<input type='text' name='idProvider'>
+	Provider ID: <input type='text' name='idProvider'>
 	<select name='phoneType'>
 		<option value='0'>Ambos</option>
 		<option value='1'>Comercial</option>

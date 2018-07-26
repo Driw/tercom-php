@@ -11,8 +11,8 @@ function testExecute()
 		header('Content-type: text/html');
 ?>
 <form method='get'>
-	Quantos? <input type='text' name='qtd'>
 	Fornecedor ID: <input type='text' name='idProvider'>
+	Quantos? <input type='text' name='qtd'>
 	<button type='submit'>Continuar</button>
 </form>
 <?php
