@@ -7,6 +7,7 @@ use dProject\Primitive\IntegerUtil;
 use tercom\Entities\EntityParseException;
 use dProject\Primitive\StringUtil;
 use tercom\Functions;
+use dProject\Primitive\ObjectUtil;
 
 /**
  * <h1>Telefone</h1>
@@ -23,15 +24,15 @@ class Phone extends AdvancedObject
 	/**
 	 * @var string type de telefone celular.
 	 */
-	public const TYPE_PHONE = 'celular';
+	public const TYPE_PHONE = 'cellphone';
 	/**
 	 * @var string type de telefone comercial.
 	 */
-	public const TYPE_COMMERCIAL = 'comercial';
+	public const TYPE_COMMERCIAL = 'commercial';
 	/**
 	 * @var string type de telefone residêncial.
 	 */
-	public const TYPE_RESIDENTIAL = 'residencial';
+	public const TYPE_RESIDENTIAL = 'residential';
 
 	/**
 	 * @var number código de identificação do telefone.
@@ -172,16 +173,16 @@ class Phone extends AdvancedObject
 
 	/**
 	 * {@inheritDoc}
-	 * @see \dProject\Primitive\AdvancedObject::getParamTypes()
+	 * @see \dProject\Primitive\AdvancedObject::getAttributeTypes()
 	 */
 
-	public function getParamTypes():array
+	public function getAttributeTypes():array
 	{
 		return [
-			'id' => self::TYPE_INTEGER,
-			'ddd' => self::TYPE_INTEGER,
-			'number' => self::TYPE_STRING,
-			'type' => self::TYPE_STRING,
+			'id' => ObjectUtil::TYPE_INTEGER,
+			'ddd' => ObjectUtil::TYPE_INTEGER,
+			'number' => ObjectUtil::TYPE_STRING,
+			'type' => ObjectUtil::TYPE_STRING,
 		];
 	}
 }

@@ -121,27 +121,6 @@ class ProviderContactDAO extends GenericDAO
 	}
 
 	/**
-	 * Desvincula um único contato dos contatos de um fornecedor identificado.
-	 * @param Provider $provider referência do fornecedor a ter o contato desvinculado.
-	 * @param ProviderContact $providerContact contato a ser desvinculado do fornecedor.
-	 * @return bool true se conseguiu desvincular ou false se não vinculado.
-	 */
-
-	public function unlinkContact(Provider $provider, ProviderContact $providerContact):bool
-	{
-		$sql = "DELETE FROM provider_contacts
-				WHERE idProvider = ? AND idProviderContact = ?";
-
-		$query = $this->mysql->createQuery($sql);
-		$query->setInteger(1, $provider->getID());
-		$query->setInteger(2, $providerContact->getID());
-
-		$result = $query->execute();
-
-		return $result->getAffectedRows() !== 0;
-	}
-
-	/**
 	 * Desvincula todos os contatos de fornecedores de um fornecedor identificado.
 	 * @param Provider $provider referência do fornecedor a ter os contatos desvinculados.
 	 * @return int aquisição da quantidade de contatos que foram desvinculados.

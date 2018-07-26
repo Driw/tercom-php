@@ -14,6 +14,7 @@ use tercom\control\ProviderControl;
 use tercom\entities\Provider;
 use tercom\api\ApiException;
 use tercom\control\PhoneControl;
+use dProject\Primitive\PostService;
 
 class ApiProviderContact extends ApiActionInterface
 {
@@ -35,7 +36,7 @@ class ApiProviderContact extends ApiActionInterface
 
 	public function actionAdd(ArrayData $parameters):ApiResult
 	{
-		global $POST;
+		$POST = PostService::getInstance();;
 
 		$provider = $this->parseProvider($parameters);
 
@@ -62,12 +63,17 @@ class ApiProviderContact extends ApiActionInterface
 
 	public function actionSet(ArrayData $parameters):ApiResult
 	{
-		global $POST;
+		$POST = PostService::getInstance();;
 
 		$providerID = $parameters->getInt(0);
 		$providerContactID = $POST->getInt('id');
 		$providerContactControl = new ProviderContactControl($this->getMySQL());
-		$providerContact = $providerContactControl->getProvideContact($providerID, $providerContactID);
+
+		if (($providerContact = $providerContactControl->getProvideContact($providerID, $providerContactID)) === null)
+			throw new ApiException();
+
+		$phoneControl = new PhoneControl($this->getMySQL());
+		$phoneControl->loadPhones($providerContact->getPhones());
 
 		try {
 
@@ -89,7 +95,7 @@ class ApiProviderContact extends ApiActionInterface
 
 	public function actionSetPhones(ArrayData $parameters):ApiResult
 	{
-		global $POST;
+		$POST = PostService::getInstance();;
 
 		$providerID = $parameters->getInt(0);
 		$providerContactID = $POST->getInt('id');
@@ -136,49 +142,59 @@ class ApiProviderContact extends ApiActionInterface
 
 	public function actionRemoveCommercial(ArrayData $parameters):ApiResult
 	{
-		global $POST;
+		$POST = PostService::getInstance();;
 
 		$providerID = $parameters->getInt(0);
 		$providerContactID = $POST->getInt('id');
 
 		$providerContactControl = new ProviderContactControl($this->getMySQL());
-		$providerContact = $providerContactControl->getProvideContact($providerID, $providerContactID);
-		$providerContactControl->removeCommercial($providerContact);
 
-		$phoneControl = new PhoneControl($this->getMySQL());
-		$phoneControl->loadPhone($providerContact->getCommercial());
-		$phoneControl->loadPhone($providerContact->getOtherPhone());
+		if (($providerContact = $providerContactControl->getProvideContact($providerID, $providerContactID)) === null)
+			throw new ApiException();
 
 		$result = new ApiResultProviderContact();
 		$result->setProviderContact($providerContact);
+
+		if ($providerContactControl->removeCommercial($providerContact))
+			$result->setMessage('telefone comercial excluído');
+		else
+			$result->setMessage('telefone comercial não definido');
+
+		$phoneControl = new PhoneControl($this->getMySQL());
+		$phoneControl->loadPhones($providerContact->getPhones());
 
 		return $result;
 	}
 
 	public function actionRemoveOtherphone(ArrayData $parameters):ApiResult
 	{
-		global $POST;
+		$POST = PostService::getInstance();;
 
 		$providerID = $parameters->getInt(0);
 		$providerContactID = $POST->getInt('id');
 
 		$providerContactControl = new ProviderContactControl($this->getMySQL());
-		$providerContact = $providerContactControl->getProvideContact($providerID, $providerContactID);
-		$providerContactControl->removeOtherphone($providerContact);
 
-		$phoneControl = new PhoneControl($this->getMySQL());
-		$phoneControl->loadPhone($providerContact->getCommercial());
-		$phoneControl->loadPhone($providerContact->getOtherPhone());
+		if (($providerContact = $providerContactControl->getProvideContact($providerID, $providerContactID)) === null)
+			throw new ApiException();
 
 		$result = new ApiResultProviderContact();
 		$result->setProviderContact($providerContact);
+
+		if ($providerContactControl->removeOtherphone($providerContact))
+			$result->setMessage('telefone secundário excluído');
+		else
+			$result->setMessage('telefone secundário não definido');
+
+		$phoneControl = new PhoneControl($this->getMySQL());
+		$phoneControl->loadPhones($providerContact->getPhones());
 
 		return $result;
 	}
 
 	public function actionRemoveContact(ArrayData $parameters):ApiResult
 	{
-		global $POST;
+		$POST = PostService::getInstance();;
 
 		$provider = $this->parseProvider($parameters);
 		$providerContactID = $POST->getInt('id');
@@ -189,10 +205,14 @@ class ApiProviderContact extends ApiActionInterface
 		if (($providerContact = $provider->getContacs()->getContactByID($providerContactID)) === null)
 			throw new ApiException('contato de fornecedor não vinculado ao fornecedor');
 
-		$providerContact = $providerContactControl->getProvideContact($provider->getID(), $providerContactID);
+		if (($providerContact = $providerContactControl->getProvideContact($provider->getID(), $providerContactID)) === null)
+			throw new ApiException();
+
+		$phoneControl = new PhoneControl($this->getMySQL());
+		$phoneControl->loadPhones($providerContact->getPhones());
 
 		if ($providerContactControl->removeProviderContact($providerContact));
-			$provider->getContacs()->removeContact($providerContact);
+			$provider->getContacs()->removeElement($providerContact);
 
 		$result = new ApiResultProviderContacts();
 		$result->setProviderContacts($provider->getContacs());
@@ -202,7 +222,7 @@ class ApiProviderContact extends ApiActionInterface
 
 	public function actionGetContact(ArrayData $parameters):ApiResult
 	{
-		global $POST;
+		$POST = PostService::getInstance();;
 
 		$providerID = $parameters->getInt(0);
 		$providerContactID = $POST->getInt('id');
@@ -213,8 +233,7 @@ class ApiProviderContact extends ApiActionInterface
 			throw new ApiException('contato de fornecedor não encontrado');
 
 		$phoneControl = new PhoneControl($this->getMySQL());
-		$phoneControl->loadPhone($providerContact->getCommercial());
-		$phoneControl->loadPhone($providerContact->getOtherPhone());
+		$phoneControl->loadPhones($providerContact->getPhones());
 
 		$result = new ApiResultProviderContact();
 		$result->setProviderContact($providerContact);
@@ -228,6 +247,11 @@ class ApiProviderContact extends ApiActionInterface
 
 		$providerContactControl = new ProviderContactControl($this->getMySQL());
 		$providerContacts = $providerContactControl->getProvideContacts($providerID);
+
+		$phoneControl = new PhoneControl($this->getMySQL());
+
+		foreach ($providerContacts as $providerContact)
+			$phoneControl->loadPhones($providerContact->getPhones());
 
 		$result = new ApiResultProviderContacts();
 		$result->setProviderContacts($providerContacts);

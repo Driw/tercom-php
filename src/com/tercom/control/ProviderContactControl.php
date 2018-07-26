@@ -76,24 +76,26 @@ class ProviderContactControl extends GenericControl
 
 	public function removeCommercial(ProviderContact $providerContact):bool
 	{
-		if ($providerContact->getCommercial()->getID() === 0)
-			return false;
+		if ($providerContact->getCommercial()->getID() !== 0)
+			if ($this->phoneControl->removePhone($providerContact->getCommercial()))
+			{
+				$providerContact->setCommercial(new Phone());
+				return true;
+			}
 
-		if ($this->phoneControl->removePhone($providerContact->getCommercial()))
-			$providerContact->setCommercial(new Phone());
-
-		return $this->providerContactDAO->updatePhones($providerContact);
+		return false;
 	}
 
 	public function removeOtherphone(ProviderContact $providerContact):bool
 	{
-		if ($providerContact->getOtherPhone()->getID() === 0)
-			return false;
+		if ($providerContact->getOtherPhone()->getID() !== 0)
+			if ($this->phoneControl->removePhone($providerContact->getOtherPhone()))
+			{
+				$providerContact->setOtherPhone(new Phone());
+				return true;
+			}
 
-		if ($this->phoneControl->removePhone($providerContact->getOtherPhone()))
-			$providerContact->setOtherPhone(new Phone());
-
-		return $this->providerContactDAO->updatePhones($providerContact);
+		return false;
 	}
 
 	public function getProvideContact(int $providerID, int $providerContactID):?ProviderContact

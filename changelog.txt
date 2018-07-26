@@ -20,6 +20,24 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+26.07.2018 - 0.0.1.18
+- Alterado o nome dos tipos de telefones disponiveis no sistema, estavam em português.
+- Corrigido actionAdd() que estava usando isset() quando era pra usar $POST com isSetted(), ApiProvider.
+- Verificações de se o contato existe em algumas ações ApiProviderContact:
+	- actionSet(), actionRemoveCommercial(), actionRemoveOtherphone() e actionRemoveContact().
+- Corrigido método chamado para remover um contato da lista de contatos, ApiProviderContact.
+	- Não havia o método esperado que aceita-se valores ao invés de índice.
+- A lista de contatos obtidas não carregava os telefones dos contatos, ApiProviderContact.
+- Atualizações para ApiProvider e ApiProviderContact:
+	- Também foi atualizado para não usar 'global $post' mas sim 'PostService->getInstance()'.
+	- Modificado loadPhone() para usar loadPhones().
+	- Telefones excluídos também vão atualizar a mensagem.
+- Removido algumas tipagens desnecessárias em ArrayList e que podia causar mal funcionamento.
+	- Adicionado método que permite remover elementos pelo valor do elemento.
+	- Adicionado método que permite obter um elemento através de um índice.
+- Quanto nenhum telefone informado deletePhones() causava um erro na query executada, PhoneDAO.
+- Removido método desnecessário e não utilizado unlinkContact, ProviderContactDAO.
+
 22.07.2018 - 0.0.1.17
 - Atualizado actionAdd() que não considerava 'spokesman' e 'site' como opcionais, ApiProvider.
 

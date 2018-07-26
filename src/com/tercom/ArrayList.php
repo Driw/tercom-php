@@ -54,7 +54,7 @@ class ArrayList extends AdvancedObject implements Iterator
 	 * @param mixed $element elemento do qual será adicionado à lsita.
 	 */
 
-	public function add(object $element)
+	public function add($element)
 	{
 		if ($this->generic !== null && !($element instanceof $this->generic))
 			throw new InvalidArgumentException(sprintf('lista aceita apenas objetos do tipo %s', nameOf($this->generic)));
@@ -66,10 +66,10 @@ class ArrayList extends AdvancedObject implements Iterator
 	 * Remove um elemento da lista através da sua posição no mesmo.
 	 * Após remover o elemento irá reposicionar os elementos seguintes,
 	 * desta forma não havará índices com valores não definidos.
-	 * @param int $index índice do elemento do qual será removido da lista.
+	 * @param mixed $index índice do elemento do qual será removido da lista.
 	 */
 
-	public function remove(int $index)
+	public function remove($index)
 	{
 		if (isset($this->elements[$index]))
 			unset($this->elements[$index]);
@@ -78,28 +78,56 @@ class ArrayList extends AdvancedObject implements Iterator
 	}
 
 	/**
+	 * Remove um elemento da lista através do seu valor informado.
+	 * Após remover o elemento irá reposicionar os elementos seguintes,
+	 * desta forma não havará índices com valores não definidos.
+	 * @param mixed $element valor do elemento do qual deseja remover.
+	 */
+
+	public function removeElement($element)
+	{
+		if (($index = $this->indexOf($element)) !== self::NOT_FOUND)
+			$this->remove($index);
+	}
+
+	/**
 	 * Verifica se um determinado objeto se encontra na lista de elementos.
-	 * @param object $object referência do objeto do qual deseja verificar.
+	 * @param mixed $element referência do objeto do qual deseja verificar.
 	 * @return bool true se a lista possuir o objeto ou false caso contrário.
 	 */
 
-	public function has(object $object)
+	public function has($element)
 	{
-		return $this->key($object) !== self::NOT_FOUND;
+		return $this->key($element) !== self::NOT_FOUND;
 	}
 
 	/**
 	 * Percorre a lista procurando pelo índice de um objeto especifico.
-	 * @param object $object referência do objeto do qual deseja buscar.
-	 * @return int índice do objeto na lista ou <code>NOT_FOUND</code> se não encontrar.
+	 * @param mixed $element referência do objeto do qual deseja buscar.
+	 * @return mixed índice do objeto na lista ou <code>NOT_FOUND</code> se não encontrar.
 	 */
 
-	public function indexOf(object $object):int
+	public function indexOf($element)
 	{
-		if (($index = array_search($object, $this->elements)) === false)
+		if (($index = array_search($element, $this->elements)) === false)
 			return self::NOT_FOUND;
 
 		return $index;
+	}
+
+	/**
+	 * Obtém um elemento da lista conforme o índice especificado.
+	 * @param mixed $index índice do elemento à ser obtido.
+	 * @return NULL|mixed aquisição do elemento no índice ou
+	 * null se o índice invádlio.
+	 */
+
+	public function get($index)
+	{
+		if (isset($this->elements[$index]))
+			return $this->elements[$index];
+
+		return null;
 	}
 
 	/**

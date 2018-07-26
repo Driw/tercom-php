@@ -24,6 +24,21 @@ class ProviderContacts extends ArrayList
 	}
 
 	/**
+	 * Procura na lista um contato de fornecedor através do seu código de identificação.
+	 * @param int $provideContactID código de identificação do contato de fornecedor.
+	 * @return ProviderContact|NULL aquisição do contato de fornecedor ou null caso não encontrado.
+	 */
+
+	public function getContactByID(int $provideContactID):?ProviderContact
+	{
+		foreach ($this as $providerContact)
+			if ($providerContact->getID() == $provideContactID)
+				return $providerContact;
+
+		return null;
+	}
+
+	/**
 	 * {@inheritDoc}
 	 * @see Iterator::current()
 	 */

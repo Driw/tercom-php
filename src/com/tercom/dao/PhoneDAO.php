@@ -88,7 +88,10 @@ class PhoneDAO extends GenericDAO
 
 	public function deletePhones(array $phones):int
 	{
-		$sql = "DELETE FROM phones WHERE id = IN(?)";
+		if (count($phones) == 0)
+			return 0;
+
+		$sql = "DELETE FROM phones WHERE id IN(?)";
 
 		$query = $this->mysql->createQuery($sql);
 		$query->setString(1, implode(", ", $phones));
