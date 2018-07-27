@@ -6,6 +6,7 @@ class ApiResponse
 {
 	const API_FAILURE = 00;
 	const API_SUCCESS = 01;
+	const API_MISS_PARAM = 02;
 	const API_PHP_FATAL_ERROR = 97;
 	const API_ERROR_EXCEPTION = 98;
 	const API_ERROR_API_EXCEPTION = 99;

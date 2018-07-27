@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS providers
 	site VARCHAR(64) NULL DEFAULT NULL,
 	commercial INT NULL DEFAULT NULL,
 	otherphone INT NULL DEFAULT NULL,
-	inactive ENUM('no', 'yes') DEFAULT 'no',
+	inactive ENUM('no', 'yes') NOT NULL DEFAULT 'no',
 
 	CONSTRAINT providers_pk PRIMARY KEY(id),
 	CONSTRAINT providers_cnpj UNIQUE KEY(cnpj),
@@ -50,4 +50,12 @@ CREATE TABLE IF NOT EXISTS provider_contacts
 	CONSTRAINT provider_contacts_pk PRIMARY KEY (idProvider, idProviderContact),
     CONSTRAINT provider_contacts_fk_provider FOREIGN KEY (idProvider) REFERENCES providers(id) ON DELETE CASCADE,
     CONSTRAINT provider_contacts_fk_contact FOREIGN KEY (idProviderContact) REFERENCES provider_contact(id) ON DELETE CASCADE
+) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_general_ci;
+
+CREATE TABLE IF NOT EXISTS manufacturers
+(
+	id INT AUTO_INCREMENT,
+	fantasyName VARCHAR(48) NOT NULL,
+
+	CONSTRAINT manufacturers_pk PRIMARY KEY (id)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_general_ci;

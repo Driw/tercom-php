@@ -5,6 +5,7 @@ namespace tercom\dao;
 use dProject\MySQL\MySQL;
 use dProject\MySQL\Result;
 use dProject\Primitive\StringUtil;
+use dProject\MySQL\Query;
 
 class GenericDAO
 {
@@ -17,6 +18,11 @@ class GenericDAO
 	public function __construct(MySQL $mysql)
 	{
 		$this->mysql = $mysql;
+	}
+
+	protected function createQuery(string $sql):Query
+	{
+		return $this->mysql->createQuery($sql);
 	}
 
 	protected function parseSingleResult(Result $result):?array

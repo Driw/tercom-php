@@ -29,7 +29,7 @@ class ArrayList extends AdvancedObject implements Iterator
 	/**
 	 * @var array vetor contendo os elementos da lista.
 	 */
-	private $elements;
+	protected $elements;
 
 	/**
 	 * Cria uma nova instância de uma lista em vetor inicializando o vetor dos elementos.
@@ -128,6 +128,15 @@ class ArrayList extends AdvancedObject implements Iterator
 			return $this->elements[$index];
 
 		return null;
+	}
+
+	/**
+	 * @return array aquisição de um vetor com os elementos da lista.
+	 */
+
+	public function toElementsArray():array
+	{
+		return $this->elements;
 	}
 
 	/**
