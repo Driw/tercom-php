@@ -8,14 +8,14 @@ class GeradorDeDados
 {
 	public static function callWebService($webservice, $parameters)
 	{
-		$parameters = http_build_query($parameters);
-		$url = sprintf("http://%s/api/site/$webservice?debug", $_SERVER['SERVER_NAME']);
+		$post = http_build_query($parameters);
+		$url = sprintf("http://%s/api/site/$webservice", $_SERVER['SERVER_NAME']);
 
 		$curl = curl_init();
 		curl_setopt($curl, CURLOPT_URL, $url);
 		curl_setopt($curl, CURLOPT_POST, true);
 		curl_setopt($curl, CURLOPT_HEADER, false);
-		curl_setopt($curl, CURLOPT_POSTFIELDS, $parameters);
+		curl_setopt($curl, CURLOPT_POSTFIELDS, $post);
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($curl, CURLOPT_FRESH_CONNECT, true);
 
@@ -32,10 +32,15 @@ class GeradorDeDados
 		if (json_last_error() == JSON_ERROR_NONE)
 			return $json;
 
-		return [
-			'error' => json_last_error_msg(),
-			'response' => $response,
-		];
+		header('Content-type: text/html; charset=utf-8');
+
+		echo "<b>URL:</b> <a href='#'>$url</a><br>".PHP_EOL;
+		echo "<b>JSON Error:</b> " .json_last_error_msg(). "<br>".PHP_EOL;
+		echo "<b>Response:</b> length(".strlen($response).")<br>".PHP_EOL;
+		echo "$response<br>".PHP_EOL;
+		echo "<b>POST:</b><br>".PHP_EOL;
+		var_dump($parameters);
+		exit;
 	}
 
 	private static function call($acao, $parameters)

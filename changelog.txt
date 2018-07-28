@@ -20,6 +20,12 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+27.07.2018 - 0.0.2.21
+- Modificado ApiConnection para que funcione com Singleton ao invés de instanciável.
+- Movido funcionalidade de APIShutdown() e APIErrorHandler() para ApiConnection.
+	- Não estavam funcionando corretamente pois era necessário um die/exit na página.
+- Modificado GeradorDeDados para que caso não consiga um JSON como resposta interrompa o processo.
+
 27.07.2018 - 0.0.2.20
 - Implementação do gerenciamento de fabricantes através de webservices.
 - Modificado ApiMissParam para ter um código de resposta equivalente a API_MISS_PARAM (02).

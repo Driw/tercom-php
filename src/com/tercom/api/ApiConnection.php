@@ -6,13 +6,16 @@ use Exception;
 use dProject\Primitive\GetService;
 use dProject\Primitive\StringUtil;
 use tercom\Encryption;
+use tercom\core\System;
 
 class ApiConnection
 {
+	private static $instance;
+
 	private $timeup;
 	private $apiname;
 
-	public function __construct()
+	private function __construct()
 	{
 		$this->timeup = now();
 	}
@@ -23,8 +26,8 @@ class ApiConnection
 			error_reporting(E_ALL);
 		else
 		{
-			register_shutdown_function('APIShutdown');
-			set_error_handler('APIErrorHandler');
+			register_shutdown_function([ self::$instance, 'shutdownError' ]);
+			set_error_handler([ self::$instance, 'errorHandler' ]);
 			error_reporting(0);
 		}
 
@@ -95,11 +98,30 @@ class ApiConnection
 		$response->setTime(now() - $this->timeup);
 
 		echo $response->toApiJSON();
+		System::shutdown();
+		exit;
+	}
+
+	public function shutdownError()
+	{
+		if (($error = error_get_last()) != null)
+			ApiConnection::jsonFatalError(ApiResponse::API_PHP_FATAL_ERROR, $error['message'], $error['type'], $error['line'], $error['file']);
+	}
+
+	public function errorHandler(int $code, string $message, string $file, int $line)
+	{
+		ApiConnection::jsonFatalError(ApiResponse::API_PHP_FATAL_ERROR, $message,  $code, $line, $file);
 	}
 
 	public function validateKey($key)
 	{
 
+	}
+
+	public function shutdown()
+	{
+		System::shutdown();
+		exit;
 	}
 
 	public static function validateInternalCall()
@@ -119,6 +141,14 @@ class ApiConnection
 			if (!StringUtil::startsWith($_SERVER['HTTP_REFERER'], DOMAIN) && !StringUtil::startsWith($_SERVER['HTTP_REFERER'], WWW_DOMAIN))
 				throw new ApiUnauthorizedException();
 		}
+	}
+
+	public static function getInstance()
+	{
+		if (self::$instance === null)
+			self::$instance = new ApiConnection();
+
+		return self::$instance;
 	}
 }
 

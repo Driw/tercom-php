@@ -5,6 +5,8 @@ use dProject\Primitive\UrlFriendly;
 use tercom\api\ApiConnection;
 use tercom\Core\System;
 use tercom\api\ApiResponse;
+use tercom\TercomException;
+use PHPMailer\PHPMailer\Exception;
 
 function IncludeThirdParty($thirdParty)
 {
@@ -15,27 +17,22 @@ function PHPFatalError()
 {
 	if (($error = error_get_last()) != null)
 	{
-		$level = PHPIsError($error['type']) ? KILL_PAGE_FATAL_ERROR : KILL_PAGE_ERROR;
+		$level = PHPIsError($error['type']) ? KillPage::KP_FATAL_ERROR : KillPage::KP_ERROR;
 		$modalBody =
 		sprintf('<b>Erro:</b> %s', $error['message']).
 		sprintf('</p><hr><p>').
-		sprintf('<b>Origem:</b> %s(%d)', $error['file'], $error['line']);
+		sprintf('<b>Origem:</b> %s (%d)', $error['file'], $error['line']);
 
 		KillPage::showModalDialog($modalBody, PHPGetErroName($error['type']). ' (' .PHPGetErroPrefix($error['type']). ')', $level);
 	}
 }
 
-function APIShutdown()
+function PHPErrorHandler(int $code, string $message, string $file, int $line)
 {
-	if (($error = error_get_last()) != null)
-		ApiConnection::jsonFatalError(ApiResponse::API_PHP_FATAL_ERROR, $error['message'], $error['type'], $error['line'], $error['file']);
-	exit;
-}
+	$level = PHPIsError($code) ? KillPage::KP_FATAL_ERROR : KillPage::KP_ERROR;
+	$modalBody = "<b>Erro:</b> $message</p><hr><p><b>Origem:</b> $file ($line)";
 
-function APIErrorHandler(int $code, string $message, string $file, int $line)
-{
-	ApiConnection::jsonFatalError(ApiResponse::API_PHP_FATAL_ERROR, $message,  $code, $line, $file);
-	exit;
+	KillPage::showModalDialog($modalBody, PHPGetErroName($code). ' (' .PHPGetErroPrefix($code). ')', $level);
 }
 
 function PHPIsError($type)
@@ -134,7 +131,7 @@ function KillPageDialog($modalBody, $title, $level)
 	</script>
 	<!-- Fim do Modal Kill Page -->
 <?php
-	if ($level == KILL_PAGE_FATAL_ERROR)
+	if ($level == KillPage::KP_FATAL_ERROR)
 	{
 		System::shutdown();
 		exit;

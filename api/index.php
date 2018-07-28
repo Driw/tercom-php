@@ -16,7 +16,7 @@ try {
 
 	System::init();
 	{
-		$apiConnection = new ApiConnection();
+		$apiConnection = ApiConnection::getInstance();
 		$apiConnection->start();
 		$apiConnection->validateKey($POST->getString('key', false));
 		$apiConnection->identify();
