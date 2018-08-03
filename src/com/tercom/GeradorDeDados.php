@@ -6,8 +6,15 @@ IncludeThirdParty('simple_html_dom');
 
 class GeradorDeDados
 {
-	public static function callWebService($webservice, $parameters)
+	public static function callWebService($webservice, $parameters, $emptyAsNull = false)
 	{
+		if ($emptyAsNull)
+		{
+			foreach ($parameters as $key => $value)
+				if (empty($value))
+					unset($parameters[$key]);
+		}
+
 		$post = http_build_query($parameters);
 		$url = sprintf("http://%s/api/site/$webservice", $_SERVER['SERVER_NAME']);
 
