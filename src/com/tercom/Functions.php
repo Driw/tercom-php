@@ -3,7 +3,6 @@
 namespace tercom;
 
 use DateTime;
-use dProject\Primitive\StringUtil;
 use dProject\Primitive\AdvancedObject;
 
 class Functions
@@ -119,26 +118,25 @@ class Functions
 	}
 
 	/**
-	 * Itera todos os valores de um vetor procurando por valores que tenham chave com o prefixo definido.
-	 * As chaves que tiverem o prefixo serão copiadas para um novo vetor e não terá o prefixo nela.
-	 * <b>Exemplo</b>: ['a_a' => 1, 'a_b' => 2, 'b_c' => 3] se usado o prefixo 'a' será retornado:
-	 * um array apenas com os seguintes valores e com chave sem prefixo: <i>['a' => 1, 'b' => 2]</i>
-	 * @param array $baseArray vetor base que será iterado os seus valores e chaves em busca do prefixo.
-	 * @param string $prefix prefixo do qual as chaves devem possuir para serem copiados ao novo vetor.
-	 * @param boolean $emptyAsNull retornar null se não encontrar valores (padrão: false).
-	 * @return NULL|array[] vetor com os valores de prefixo ou null se não encontrar nada (opcional).
+	 * Itera todos os valores do objeto procurando resultados obtidos através de JOIN dos dados.
+	 * Será considerado como JOIN qualquer valor que tenha chave com _ (underline).
+	 * Antes do underline é o nome do atributo do objeto, após o underline é o nome do atributo no objeto.
+	 * @param array $array vetor base que será iterado os seus valores e chaves em busca de JOIN.
 	 */
 
-	public static function parseArrayJoin(array $baseArray, $prefix, $emptyAsNull = false):?array
+	public static function parseArrayJoin(array &$array)
 	{
-		$array = [];
-		$prefix = sprintf('%s_', $prefix);
+		foreach ($array as $name => $value)
+		{
+			if (($index = strpos($name, '_')) === false)
+				continue;
 
-		foreach ($baseArray as $name => $value)
-			if (StringUtil::startsWith($name, $prefix))
-				$array[substr($name, strlen($prefix))] = $value;
+			$prefix = substr($name, 0, $index);
+			$prefixName = substr($name, $index + 1);
 
-		return count($array) == 0 && $emptyAsNull ? null : $array;
+			unset($array[$name]);
+			$array[$prefix][$prefixName] = $value;
+		}
 	}
 
 	/**

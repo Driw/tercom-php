@@ -5,12 +5,14 @@ use tercom\Core\System;
 use dProject\Primitive\KillPage;
 use dProject\Primitive\FriendlyPage;
 use dProject\Primitive\FriendlyPageException;
+use tercom\Functions;
 
 require_once 'vendor/autoload.php';
 require_once 'constants.php';
 require_once 'globalFunctions.php';
 
 register_shutdown_function('PHPFatalError');
+set_error_handler('PHPErrorHandler');
 
 Page::verifyPHPVersion();
 Page::verifyPHPErrorReport();
@@ -24,9 +26,6 @@ System::verifyTemplate();
 KillPage::setMethodModal('KillPageDialog');
 FriendlyPage::getInstance()->setDevelopment(SYS_DEVELOP);
 FriendlyPage::getInstance()->setFriendlyNavMethod('FriendlyPageNavigation');
-
-$CONFIG = System::getConfig();
-$FRIENDLY_PAGE = FriendlyPage::getInstance();
 
 try {
 

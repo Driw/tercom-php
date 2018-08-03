@@ -99,7 +99,7 @@ class ApiManufacture extends ApiActionInterface
 		if ($manufactureControl->remove($manufacture))
 			$result->setMessage('fabricante excluído com êxtio');
 		else
-			$result->setMessage('fabricante já foi excluído');
+			$result->setMessage('fabricante já não existe mais');
 
 		return $result;
 	}

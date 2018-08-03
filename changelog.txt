@@ -20,6 +20,9 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+03.07.2018 - 0.0.3.22
+- Implementação do gerenciamento de categorias para produtos: famílias, grupos, subgrupos e setores.
+
 27.07.2018 - 0.0.2.21
 - Modificado ApiConnection para que funcione com Singleton ao invés de instanciável.
 - Movido funcionalidade de APIShutdown() e APIErrorHandler() para ApiConnection.
