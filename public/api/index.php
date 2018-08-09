@@ -6,9 +6,7 @@ use tercom\api\ApiResponse;
 use tercom\core\System;
 use dProject\Primitive\PostService;
 
-require_once '../constants.php';
-require_once '../globalFunctions.php';
-require_once '../vendor/autoload.php';
+require_once '../../include.php';
 
 try {
 

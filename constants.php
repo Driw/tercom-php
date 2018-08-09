@@ -18,8 +18,7 @@ define('SYS_DEVELOP',		onEnviromentDevelop());
 
 /* DIRETÓRIOS */
 
-define('DIR_DATA',		$_SERVER['DOCUMENT_ROOT']. '/data/');
-define('DIR_SYSTEM',	$_SERVER['DOCUMENT_ROOT']. '/system/');
+define('DIR_DATA',		__DIR__. '/data/');
 
 define('DIR_CONFIGS',	DIR_DATA. 'conf/');
 define('DIR_STYLES',	DIR_DATA. 'css/');

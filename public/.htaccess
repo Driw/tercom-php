@@ -1,0 +1,7 @@
+RewriteEngine On
+
+# Web Service
+RewriteRule ^api/(.*)$ api/index.php [L]
+
+# Home
+RewriteRule !\.(js|ico|gif|jpg|png|css|pdf|swf|flv|map)$ index.php [QSA]
