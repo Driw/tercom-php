@@ -11,22 +11,22 @@
 			<attribute name="composer" value="vendor"/>
 		</attributes>
 	</buildpathentry>
-	<buildpathentry kind="src" path="vendor/dproject/mysql-php/src/dProject/MySQL">
+	<buildpathentry kind="src" path="vendor/dproject/mysql-php/src">
 		<attributes>
 			<attribute name="composer" value="vendor"/>
 		</attributes>
 	</buildpathentry>
-	<buildpathentry kind="src" path="vendor/dproject/primitive-php/src/dProject/Primitive">
+	<buildpathentry kind="src" path="vendor/dproject/primitive-php/src">
 		<attributes>
 			<attribute name="composer" value="vendor"/>
 		</attributes>
 	</buildpathentry>
-	<buildpathentry kind="src" path="vendor/dproject/primitive-php/src/dProject/annotation">
+	<buildpathentry kind="src" path="vendor/dproject/annotation/src">
 		<attributes>
 			<attribute name="composer" value="vendor"/>
 		</attributes>
 	</buildpathentry>
-	<buildpathentry kind="src" path="vendor/dproject/primitive-php/src/dProject/restful">
+	<buildpathentry kind="src" path="vendor/dproject/restful/src">
 		<attributes>
 			<attribute name="composer" value="vendor"/>
 		</attributes>
