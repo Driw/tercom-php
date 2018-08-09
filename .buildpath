@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <buildpath>
 	<buildpathentry kind="con" path="org.eclipse.php.core.LANGUAGE"/>
-	<buildpathentry kind="src" path="src/com/tercom">
+	<buildpathentry kind="src" path="src/tercom">
 		<attributes>
 			<attribute name="composer" value="source"/>
 		</attributes>
@@ -11,12 +11,22 @@
 			<attribute name="composer" value="vendor"/>
 		</attributes>
 	</buildpathentry>
-	<buildpathentry kind="src" path="vendor/dproject/mysql-php/src/org/diverproject/php-mysql">
+	<buildpathentry kind="src" path="vendor/dproject/mysql-php/src/dProject/MySQL">
 		<attributes>
 			<attribute name="composer" value="vendor"/>
 		</attributes>
 	</buildpathentry>
-	<buildpathentry kind="src" path="vendor/dproject/primitive-php/src/org/diverproject/php-primitive">
+	<buildpathentry kind="src" path="vendor/dproject/primitive-php/src/dProject/Primitive">
+		<attributes>
+			<attribute name="composer" value="vendor"/>
+		</attributes>
+	</buildpathentry>
+	<buildpathentry kind="src" path="vendor/dproject/primitive-php/src/dProject/annotation">
+		<attributes>
+			<attribute name="composer" value="vendor"/>
+		</attributes>
+	</buildpathentry>
+	<buildpathentry kind="src" path="vendor/dproject/primitive-php/src/dProject/restful">
 		<attributes>
 			<attribute name="composer" value="vendor"/>
 		</attributes>
