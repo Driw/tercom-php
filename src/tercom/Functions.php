@@ -285,6 +285,17 @@ class Functions
 
 		return strtr($string, $replacements);
 	}
+
+	/**
+	 * Verifica se o conteúdo de uma daterminada string está em formato UTF8.
+	 * @param string $string string do qual será verificado o formato.
+	 * @return bool true se estiver em UTF8 ou false caso contrário.
+	 */
+
+	public static function isUTF8(string $string): bool
+	{
+		return preg_match('!!u', $string) === true;
+	}
 }
 
 ?>

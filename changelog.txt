@@ -20,6 +20,14 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+10.08.2018 - 0.0.5.27
+- Configurando projeto para funcionar com 'dproject\restful', necessário renomear classes.
+- Renomeado definição SYS_DEVELOP para DEV afim de simplificar os códigos.
+- Removido diversas funções globais de globalFunctions que serão usados por GlobalFunctions.
+- Configurado estrutura básica do funcionamento dos webservices com 'dproject\restful'.
+- Configurado estrutura básica do funcionamento das páginas do dashboard com 'dproject\restful'.
+- Estrutura básica para o funcionamento das boundaries com 'dproject\restful'.
+
 09.08.2018 - 0.0.4.26
 - Atualizada as configurações do composer para funcionar com as mudanças da rev24.
 - Adicionado um novo diretório para conter todo o conteúdo público das páginas em '/public'.

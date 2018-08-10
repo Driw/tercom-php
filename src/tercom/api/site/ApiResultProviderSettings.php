@@ -2,8 +2,8 @@
 
 namespace tercom\api\site;
 
-use tercom\api\ApiResult;
 use dProject\Primitive\AdvancedObject;
+use dProject\restful\ApiResult;
 
 class ApiResultProviderSettings extends AdvancedObject implements ApiResult
 {

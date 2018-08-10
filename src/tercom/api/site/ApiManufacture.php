@@ -5,15 +5,15 @@ namespace tercom\api\site;
 use dProject\Primitive\ArrayData;
 use dProject\Primitive\ArrayDataException;
 use dProject\Primitive\PostService;
-use tercom\api\ApiActionInterface;
-use tercom\api\ApiConnection;
-use tercom\api\ApiException;
-use tercom\api\ApiMissParam;
-use tercom\api\ApiResult;
+use dProject\restful\ApiConnection;
+use dProject\restful\ApiResult;
+use dProject\restful\ApiServiceInterface;
+use dProject\restful\exception\ApiException;
+use dProject\restful\exception\ApiMissParam;
 use tercom\control\ManufactureControl;
 use tercom\entities\Manufacture;
 
-class ApiManufacture extends ApiActionInterface
+class ApiManufacture extends ApiServiceInterface
 {
 	public function __construct(ApiConnection $apiConnection, string $apiname, array $vars)
 	{

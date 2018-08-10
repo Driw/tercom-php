@@ -2,7 +2,7 @@
 
 namespace tercom\api\site;
 
-use tercom\api\ApiResult;
+use dProject\restful\ApiResult;
 use tercom\entities\lists\ProviderContacts;
 
 class ApiResultProviderContacts implements ApiResult

@@ -4,18 +4,18 @@ namespace tercom\api\site;
 
 use Exception;
 use dProject\Primitive\ArrayData;
-use tercom\api\ApiActionInterface;
-use tercom\api\ApiConnection;
-use tercom\api\ApiException;
-use tercom\api\ApiResult;
-use tercom\api\ApiMissParam;
+use dProject\Primitive\PostService;
+use dProject\restful\ApiConnection;
+use dProject\restful\ApiServiceInterface;
+use dProject\restful\ApiResult;
+use dProject\restful\exception\ApiException;
+use dProject\restful\exception\ApiMissParam;
 use tercom\control\PhoneControl;
 use tercom\control\ProviderControl;
 use tercom\entities\Provider;
 use tercom\control\ProviderContactControl;
-use dProject\Primitive\PostService;
 
-class ApiProvider extends ApiActionInterface
+class ApiProvider extends ApiServiceInterface
 {
 	const REMOVE_COMMERCIAL_PHONE = 1;
 	const REMOVE_OTHER_PHONE = 2;

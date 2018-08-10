@@ -2,7 +2,7 @@
 
 namespace tercom\api\site;
 
-use tercom\api\ApiResult;
+use dProject\restful\ApiResult;
 use tercom\entities\lists\ProductCategories;
 
 /**
@@ -37,7 +37,7 @@ class ApiResultCategories implements ApiResult
 
 	/**
 	 * {@inheritDoc}
-	 * @see \tercom\api\ApiResult::toApiArray()
+	 * @see \dProject\restful\ApiResult::toApiArray()
 	 */
 
 	public function toApiArray():array

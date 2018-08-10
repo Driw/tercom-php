@@ -2,7 +2,7 @@
 
 namespace tercom\api\site;
 
-use tercom\api\ApiResult;
+use dProject\restful\ApiResult;
 use dProject\Primitive\AdvancedObject;
 
 class ApiManufactureSettings extends AdvancedObject implements ApiResult
@@ -28,7 +28,7 @@ class ApiManufactureSettings extends AdvancedObject implements ApiResult
 
 	/**
 	 * {@inheritDoc}
-	 * @see \tercom\api\ApiResult::toApiArray()
+	 * @see \dProject\restful\ApiResult::toApiArray()
 	 */
 
 	public function toApiArray():array

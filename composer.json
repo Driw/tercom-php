@@ -23,6 +23,7 @@
 		"dproject/primitive-php" : ">=1.0",
 		"dproject/mysql-php" : ">=1.0",
 		"dproject/restful" : ">=0.1",
+		"dproject/template" : ">=0.1",
 		"phpmailer/phpmailer" : "6.0.*"
 	},
 	"autoload" : {

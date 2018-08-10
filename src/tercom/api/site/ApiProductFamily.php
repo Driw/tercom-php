@@ -2,19 +2,19 @@
 
 namespace tercom\api\site;
 
-use tercom\api\ApiActionInterface;
-use tercom\api\ApiConnection;
-use tercom\api\ApiResult;
 use dProject\Primitive\ArrayData;
 use dProject\Primitive\ArrayDataException;
 use dProject\Primitive\PostService;
-use tercom\api\ApiMissParam;
+use dProject\restful\ApiConnection;
+use dProject\restful\ApiResult;
+use dProject\restful\ApiServiceInterface;
+use dProject\restful\exception\ApiException;
+use dProject\restful\exception\ApiMissParam;
 use tercom\entities\ProductFamily;
 use tercom\control\ProductFamilyControl;
-use tercom\api\ApiException;
 use tercom\control\ProductGroupControl;
 
-class ApiProductFamily extends ApiActionInterface
+class ApiProductFamily extends ApiServiceInterface
 {
 	public function __construct(ApiConnection $apiConnection, string $apiname, array $vars)
 	{

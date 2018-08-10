@@ -2,9 +2,9 @@
 
 namespace tercom\api\site;
 
-use tercom\api\ApiException;
-use tercom\api\ApiResult;
+use dProject\restful\ApiResult;
 use tercom\entities\ProductCategory;
+use dProject\restful\exception\ApiException;
 
 /**
  *
@@ -42,7 +42,7 @@ class ApiResultCategory implements ApiResult
 
 	/**
 	 * {@inheritDoc}
-	 * @see \tercom\api\ApiResult::toApiArray()
+	 * @see \dProject\restful\ApiResult::toApiArray()
 	 */
 
 	public function toApiArray():array

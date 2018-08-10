@@ -2,11 +2,11 @@
 
 namespace tercom\control;
 
-use tercom\entities\Manufacture;
 use dProject\MySQL\MySQL;
+use dProject\Primitive\StringUtil;
+use tercom\entities\Manufacture;
 use tercom\dao\ManufactureDAO;
 use tercom\entities\lists\Manufactures;
-use dProject\Primitive\StringUtil;
 
 class ManufactureControl extends GenericControl
 {

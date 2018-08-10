@@ -14,7 +14,7 @@ function onEnviromentDevelop()
 define('PHP_VERSION_MIN',	'7.2');
 define('DOMAIN',			sprintf('https://%s/', $_SERVER['SERVER_NAME']));
 define('WWW_DOMAIN',		sprintf('https://www.%s/', $_SERVER['SERVER_NAME']));
-define('SYS_DEVELOP',		onEnviromentDevelop());
+define('DEV',				onEnviromentDevelop());
 
 /* DIRETÓRIOS */
 
