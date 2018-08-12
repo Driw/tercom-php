@@ -20,6 +20,10 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+11.08.2018 - 0.0.5.29
+- Correção de IncludeThirdParty() já que o DOCUMENT_ROOT passou para '/public'.
+- Movido todos os scripts de testes de '/test' para '/public/test'.
+
 11.08.2018 - 0.0.5.28
 - Atualizado ProviderDAO onde execute() não precisa mais receber um parâmetro, este é informado em setEmptyAsNull(), Query.
 - Ajustes em ProviderControl para ser informado os possíveis tipos de retorno de get(), getByCNPJ() listByCNPJ() e listByFantasyName().

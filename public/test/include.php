@@ -1,8 +1,8 @@
 <?php
 
-require_once '../vendor/autoload.php';
-require_once '../constants.php';
-require_once '../globalFunctions.php';
+require_once '../../vendor/autoload.php';
+require_once '../../constants.php';
+require_once '../../globalFunctions.php';
 
 header('Content-type: application/json');
 header('Cache-Control: no-cache');
