@@ -129,7 +129,8 @@ class ProviderDAO extends GenericDAO
 	{
 		$sql = "SELECT id, cnpj, companyName, fantasyName, spokesman, site, commercial, otherphone, inactive
 				FROM providers
-				WHERE cnpj LIKE ?";
+				WHERE cnpj LIKE ?
+				ORDER BY fantasyName";
 
 		$query = $this->mysql->createQuery($sql);
 		$query->setString(1, "%$cnpj%");
@@ -143,7 +144,8 @@ class ProviderDAO extends GenericDAO
 	{
 		$sql = "SELECT id, cnpj, companyName, fantasyName, spokesman, site, commercial, otherphone, inactive
 				FROM providers
-				WHERE fantasyName LIKE ?";
+				WHERE fantasyName LIKE ?
+				ORDER BY fantasyName";
 
 		$query = $this->mysql->createQuery($sql);
 		$query->setString(1, "%$fantasyName%");

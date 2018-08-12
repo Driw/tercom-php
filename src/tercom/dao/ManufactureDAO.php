@@ -66,16 +66,15 @@ class ManufactureDAO extends GenericDAO
 		return $this->parseManufacture($result);
 	}
 
-	public function selectByFantasyName(string $fantasyName, int $amount):?Manufacture
+	public function searchByFantasyName(string $fantasyName, int $amount):Manufactures
 	{
 		$sql = "SELECT id, fantasyName
 				FROM manufacturers
 				WHERE fantasyName LIKE ?
-				LIMIT 0, ?";
+				ORDER BY fantasyName";
 
 		$query = $this->createQuery($sql);
 		$query->setString(1, "%$fantasyName%");
-		$query->setInteger(2, $amount);
 
 		$result = $query->execute();
 

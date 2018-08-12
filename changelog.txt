@@ -20,6 +20,15 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+12.08.2018 - 0.0.5.30
+- Corrigido 'test/manufactureUpdate' que estava informando 'companyName' ao invés de 'fantasyName'.
+- Atualizado ManufactureService para ser usado com 'dproject/restful':
+	- Documentação da classe e dos seus métodos (ações), atribuição de ApiAnnotation.
+	- Corrigido funcionamento de actionSearch() que buscava por nome fantasia completo e não parcial.
+		- Modificado para que seja chamado em '../manufacture/search/{filter}/{value}'.
+- Renomeado getByFantasyName() para listByFantasyName() conforme padrão estabelecido, ProviderControl.
+- As buscas por fornecedores e fornecedores agora serão ordenados pelo seus nomes fantasia respectivamente.
+
 11.08.2018 - 0.0.5.29
 - Correção de IncludeThirdParty() já que o DOCUMENT_ROOT passou para '/public'.
 - Movido todos os scripts de testes de '/test' para '/public/test'.

@@ -21,7 +21,7 @@ function testExecute()
 	$idManufacture = intval($_GET['idManufacture']);
 	$empresa = GeradorDeDados::genEmpresa();
 	$parameters = [
-		'companyName' => $empresa['nome']. '(CN)',
+		'fantasyName' => $empresa['nome'],
 	];
 	return GeradorDeDados::callWebService("manufacture/set/$idManufacture", $parameters);
 }

@@ -3,9 +3,8 @@
 namespace tercom\control;
 
 use dProject\MySQL\MySQL;
-use dProject\Primitive\StringUtil;
-use tercom\entities\Manufacture;
 use tercom\dao\ManufactureDAO;
+use tercom\entities\Manufacture;
 use tercom\entities\lists\Manufactures;
 
 class ManufactureControl extends GenericControl
@@ -61,12 +60,9 @@ class ManufactureControl extends GenericControl
 		return $this->manufactureDAO->select($idManufacture);
 	}
 
-	public function getByFantasyName(string $fantasyName, int $amount = 5):Manufactures
+	public function listByFantasyName(string $fantasyName, int $amount = 5): Manufactures
 	{
-		if (empty($fantasyName) || !StringUtil::hasMinLength($fantasyName, MIN_FANTASY_NAME))
-			throw new ControlException('nome fantasia não definido');
-
-		return $this->manufactureDAO->selectByFantasyName($fantasyName, $amount);
+		return $this->manufactureDAO->searchByFantasyName($fantasyName, $amount);
 	}
 }
 

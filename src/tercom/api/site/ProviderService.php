@@ -4,7 +4,6 @@ namespace tercom\api\site;
 
 use Exception;
 use dProject\Primitive\ArrayDataException;
-use dProject\Primitive\PostService;
 use dProject\restful\ApiContent;
 use dProject\restful\ApiConnection;
 use dProject\restful\ApiResult;
@@ -26,7 +25,6 @@ use tercom\entities\Provider;
  *
  * @see ApiServiceInterface
  * @see ApiConnection
- * @see SiteService
  * @author Andrew
  */
 
@@ -46,6 +44,7 @@ class ProviderService extends ApiServiceInterface
 	public const REMOVE_ALL_PHONES = 3;
 
 	/**
+	 * Cria uma nova instância de um serviço para gerenciamento de fornecedores no sistema.
 	 * @param ApiConnection $apiConnection conexão do sistema que realiza o chamado do serviço.
 	 * @param string $apiname nome do serviço que está sendo informado através da conexão.
 	 * @param ApiServiceInterface $parent serviço do qual solicitou o chamado.
@@ -67,6 +66,7 @@ class ProviderService extends ApiServiceInterface
 	}
 
 	/**
+	 * Ação para se obter as configurações de limites de cada atributo referente aos fornecedores.
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
 	 * @return ApiResult aquisição do resultado com as configurações dos dados de fornecedores.
 	 */
@@ -87,7 +87,7 @@ class ProviderService extends ApiServiceInterface
 
 	public function actionAdd(ApiContent $content): ApiResult
 	{
-		$POST = PostService::getInstance();
+		$POST = $content->getPost();
 
 		try {
 
@@ -123,7 +123,7 @@ class ProviderService extends ApiServiceInterface
 
 	public function actionSet(ApiContent $content): ApiResult
 	{
-		$POST = PostService::getInstance();
+		$POST = $content->getPost();
 
 		$providerID = $this->parseProviderID($content);
 		$providerControl = new ProviderControl(System::getWebConnection());
@@ -185,7 +185,7 @@ class ProviderService extends ApiServiceInterface
 	 * Os filtros são <i>cnpj</i> (CNPJ) e <i>fantasyName</i> (nome fantasia).
 	 * @ApiAnnotation({"params":["filter","value"]})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
-	 * @throws ApiException método de busca desconhecido.
+	 * @throws ApiException método de pesquisa desconhecido.
 	 * @return ApiResult aquisição do resultado com a lista de fornecedores encontrados.
 	 */
 
@@ -252,7 +252,7 @@ class ProviderService extends ApiServiceInterface
 
 	public function actionSetPhones(ApiContent $content): ApiResult
 	{
-		$POST = PostService::getInstance();;
+		$POST = $content->getPost();
 
 		$providerID = $this->parseProviderID($content);
 		$providerControl = new ProviderControl(System::getWebConnection());
