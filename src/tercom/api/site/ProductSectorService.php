@@ -2,9 +2,9 @@
 
 namespace tercom\api\site;
 
-use dProject\Primitive\ArrayData;
 use dProject\Primitive\ArrayDataException;
 use dProject\Primitive\PostService;
+use dProject\restful\ApiContent;
 use dProject\restful\ApiConnection;
 use dProject\restful\ApiResult;
 use dProject\restful\ApiServiceInterface;
@@ -12,22 +12,22 @@ use dProject\restful\exception\ApiException;
 use dProject\restful\exception\ApiMissParam;
 use tercom\entities\ProductSector;
 use tercom\control\ProductSectorControl;
+use tercom\api\SiteService;
+use tercom\core\System;
 
-class ApiProductSector extends ApiServiceInterface
+class ProductSectorService extends ApiServiceInterface
 {
-	public function __construct(ApiConnection $apiConnection, string $apiname, array $vars)
+	public function __construct(ApiConnection $apiConnection, string $apiname, SiteService $parent)
 	{
-		parent::__contruct($apiConnection, $apiname, $vars);
+		parent::__contruct($apiConnection, $apiname, $parent);
 	}
 
 	public function execute():ApiResult
 	{
-		ApiConnection::validateInternalCall();
-
 		return $this->defaultExecute();
 	}
 
-	public function actionAdd(ArrayData $parameters):ApiResult
+	public function actionAdd(ApiContent $content):ApiResult
 	{
 		$POST = PostService::getInstance();
 
@@ -41,7 +41,7 @@ class ApiProductSector extends ApiServiceInterface
 			return new ApiMissParam($e);
 		}
 
-		$productSectorControl = new ProductSectorControl($this->getMySQL());
+		$productSectorControl = new ProductSectorControl(System::getWebConnection());
 		$productSectorControl->add($productSector);
 
 		$result = new ApiResultCategory();
@@ -50,12 +50,12 @@ class ApiProductSector extends ApiServiceInterface
 		return $result;
 	}
 
-	public function actionSet(ArrayData $parameters):ApiResult
+	public function actionSet(ApiContent $content):ApiResult
 	{
 		$POST = PostService::getInstance();
-		$idProductSector = $parameters->getInt(0);
+		$idProductSector = $content->getParameters()->getInt(0);
 
-		$productSectorControl = new ProductSectorControl($this->getMySQL());
+		$productSectorControl = new ProductSectorControl(System::getWebConnection());
 
 		if (($productSector = $productSectorControl->get($idProductSector)) === null)
 			throw new ApiException('setor não encontrado');
@@ -80,11 +80,11 @@ class ApiProductSector extends ApiServiceInterface
 		return $result;
 	}
 
-	public function actionRemove(ArrayData $parameters):ApiResult
+	public function actionRemove(ApiContent $content):ApiResult
 	{
-		$idProductSector = $parameters->getInt(0);
+		$idProductSector = $content->getParameters()->getInt(0);
 
-		$productSectorControl = new ProductSectorControl($this->getMySQL());
+		$productSectorControl = new ProductSectorControl(System::getWebConnection());
 
 		if (($productSector = $productSectorControl->get($idProductSector)) === null)
 			throw new ApiException('setor não encontrado');
@@ -100,10 +100,10 @@ class ApiProductSector extends ApiServiceInterface
 		return $result;
 	}
 
-	public function actionGet(ArrayData $parameters):ApiResult
+	public function actionGet(ApiContent $content):ApiResult
 	{
-		$idProductSector = $parameters->getInt(0);
-		$productSectorControl = new ProductSectorControl($this->getMySQL());
+		$idProductSector = $content->getParameters()->getInt(0);
+		$productSectorControl = new ProductSectorControl(System::getWebConnection());
 
 		if (($productSector = $productSectorControl->get($idProductSector)) === null)
 			throw new ApiException('setor não encontrado');
@@ -114,10 +114,10 @@ class ApiProductSector extends ApiServiceInterface
 		return $result;
 	}
 
-	public function actionSearch(ArrayData $parameters):ApiResult
+	public function actionSearch(ApiContent $content):ApiResult
 	{
-		$name = $parameters->getString(0);
-		$productSectorControl = new ProductSectorControl($this->getMySQL());
+		$name = $content->getParameters()->getString(0);
+		$productSectorControl = new ProductSectorControl(System::getWebConnection());
 		$productCategories = $productSectorControl->search($name);
 
 		$result = new ApiResultCategories();

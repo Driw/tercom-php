@@ -20,6 +20,15 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+11.08.2018 - 0.0.5.28
+- Atualizado ProviderDAO onde execute() não precisa mais receber um parâmetro, este é informado em setEmptyAsNull(), Query.
+- Ajustes em ProviderControl para ser informado os possíveis tipos de retorno de get(), getByCNPJ() listByCNPJ() e listByFantasyName().
+- Atualização inicial dos serviços para funcionar com a API 'dproject\restufl', ainda necessário fazer alguns ajustes.
+	- No momento somente ProviderService foi verificado e ajustado corretamente.
+- Documentação da classe e métodos, tal como adição de anotações para o restful, ProviderService.
+- Necessário renomear as classes de api\site\Api*.php' para api\site\*Service.php' devido ao padrão do restful.
+- Implementação das ações de pesquisa de fornecedores por CNPJ e nome fantasia, ProviderService.
+
 10.08.2018 - 0.0.5.27
 - Configurando projeto para funcionar com 'dproject\restful', necessário renomear classes.
 - Renomeado definição SYS_DEVELOP para DEV afim de simplificar os códigos.

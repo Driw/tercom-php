@@ -6,6 +6,7 @@ use dProject\MySQL\MySQL;
 use dProject\MySQL\Result;
 use tercom\entities\Provider;
 use dProject\Primitive\IntegerUtil;
+use tercom\entities\lists\Providers;
 
 class ProviderDAO extends GenericDAO
 {
@@ -27,6 +28,7 @@ class ProviderDAO extends GenericDAO
 				VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
 		$query = $this->mysql->createQuery($sql);
+		$query->setEmptyAsNull(true);
 		$query->setString(1, $provider->getCNPJ());
 		$query->setString(2, $provider->getCompanyName());
 		$query->setString(3, $provider->getFantasyName());
@@ -36,7 +38,7 @@ class ProviderDAO extends GenericDAO
 		$query->setInteger(7, $provider->getOtherPhone()->getID() > 0 ? $provider->getOtherPhone()->getID() : null);
 		$query->setBoolean(8, $provider->isInactive());
 
-		$result = $query->execute(true);
+		$result = $query->execute();
 
 		if ($result->isSuccessful())
 			$provider->setId($result->getInsertID());
@@ -61,7 +63,7 @@ class ProviderDAO extends GenericDAO
 		$query->setString(8, $provider->isInactive() ? 'yes' : 'no');
 		$query->setInteger(9, $provider->getID());
 
-		$result = $query->execute(true);
+		$result = $query->execute();
 
 		return $result->isSuccessful();
 	}
@@ -77,7 +79,7 @@ class ProviderDAO extends GenericDAO
 		$query->setInteger(2, $provider->getOtherPhone()->getID() > 0 ? $provider->getOtherPhone()->getID() : null);
 		$query->setInteger(3, $provider->getID());
 
-		$result = $query->execute(true);
+		$result = $query->execute();
 
 		return $result->isSuccessful();
 	}
@@ -90,7 +92,7 @@ class ProviderDAO extends GenericDAO
 		$query->setBoolean(1, $provider->isInactive());
 		$query->setInteger(2, $provider->getID());
 
-		$result = $query->execute(true);
+		$result = $query->execute();
 
 		return $result->isSuccessful();
 	}
@@ -104,7 +106,7 @@ class ProviderDAO extends GenericDAO
 		$query = $this->mysql->createQuery($sql);
 		$query->setInteger(1, $providerID);
 
-		$result = $query->execute(true);
+		$result = $query->execute();
 
 		return $this->parseProvider($result);
 	}
@@ -118,12 +120,12 @@ class ProviderDAO extends GenericDAO
 		$query = $this->mysql->createQuery($sql);
 		$query->setString(1, $cnpj);
 
-		$result = $query->execute(true);
+		$result = $query->execute();
 
 		return $this->parseProvider($result);
 	}
 
-	public function filterByCNPJ(string $cnpj):array
+	public function searchByCNPJ(string $cnpj): Providers
 	{
 		$sql = "SELECT id, cnpj, companyName, fantasyName, spokesman, site, commercial, otherphone, inactive
 				FROM providers
@@ -132,12 +134,12 @@ class ProviderDAO extends GenericDAO
 		$query = $this->mysql->createQuery($sql);
 		$query->setString(1, "%$cnpj%");
 
-		$result = $query->execute(true);
+		$result = $query->execute();
 
 		return $this->parseProviders($result, true);
 	}
 
-	public function filterByFantasyName(string $fantasyName):array
+	public function searchByFantasyName(string $fantasyName): Providers
 	{
 		$sql = "SELECT id, cnpj, companyName, fantasyName, spokesman, site, commercial, otherphone, inactive
 				FROM providers
@@ -146,7 +148,7 @@ class ProviderDAO extends GenericDAO
 		$query = $this->mysql->createQuery($sql);
 		$query->setString(1, "%$fantasyName%");
 
-		$result = $query->execute(true);
+		$result = $query->execute();
 
 		return $this->parseProviders($result, true);
 	}
@@ -161,20 +163,15 @@ class ProviderDAO extends GenericDAO
 		return $provider;
 	}
 
-	private function parseProviders(Result $result, bool $loadContatos):?array
+	private function parseProviders(Result $result, bool $loadContatos): Providers
 	{
-		$providers = [];
+		$providers = new Providers();
 
-		if (($provideresArray = $this->parseSingleResult($result)) == null)
-			return null;
-
-		foreach ($provideresArray as $providerArray)
+		while ($result->hasNext())
 		{
+			$providerArray = $result->next();
 			$provider = $this->newProvider($providerArray);
-			array_push($providers, $provider);
-
-			if ($loadContatos)
-				$this->loadContatos($provider);
+			$providers->add($provider);
 		}
 
 		return $providers;

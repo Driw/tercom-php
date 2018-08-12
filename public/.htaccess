@@ -4,4 +4,5 @@ RewriteEngine On
 RewriteRule ^api/(.*)$ api/index.php [L]
 
 # Home
+RewriteCond %{REQUEST_URI} !/test/?
 RewriteRule !\.(js|ico|gif|jpg|png|css|pdf|swf|flv|map)$ index.php [QSA]

@@ -2,9 +2,9 @@
 
 namespace tercom\api\site;
 
-use dProject\Primitive\ArrayData;
 use dProject\Primitive\ArrayDataException;
 use dProject\Primitive\PostService;
+use dProject\restful\ApiContent;
 use dProject\restful\ApiConnection;
 use dProject\restful\ApiResult;
 use dProject\restful\ApiServiceInterface;
@@ -13,22 +13,22 @@ use dProject\restful\exception\ApiMissParam;
 use tercom\entities\ProductFamily;
 use tercom\control\ProductFamilyControl;
 use tercom\control\ProductGroupControl;
+use tercom\api\SiteService;
+use tercom\core\System;
 
-class ApiProductFamily extends ApiServiceInterface
+class ProductFamilyService extends ApiServiceInterface
 {
-	public function __construct(ApiConnection $apiConnection, string $apiname, array $vars)
+	public function __construct(ApiConnection $apiConnection, string $apiname, SiteService $parent)
 	{
-		parent::__contruct($apiConnection, $apiname, $vars);
+		parent::__contruct($apiConnection, $apiname, $parent);
 	}
 
 	public function execute(): ApiResult
 	{
-		ApiConnection::validateInternalCall();
-
 		return $this->defaultExecute();
 	}
 
-	public function actionAdd(ArrayData $parameters): ApiResult
+	public function actionAdd(ApiContent $content): ApiResult
 	{
 		$POST = PostService::getInstance();
 
@@ -41,7 +41,7 @@ class ApiProductFamily extends ApiServiceInterface
 			return new ApiMissParam($e);
 		}
 
-		$productFamilyControl = new ProductFamilyControl($this->getMySQL());
+		$productFamilyControl = new ProductFamilyControl(System::getWebConnection());
 		$productFamilyControl->add($productFamily);
 
 		$result = new ApiResultCategory();
@@ -50,12 +50,12 @@ class ApiProductFamily extends ApiServiceInterface
 		return $result;
 	}
 
-	public function actionSet(ArrayData $parameters): ApiResult
+	public function actionSet(ApiContent $content): ApiResult
 	{
 		$POST = PostService::getInstance();
-		$idProductFamily = $parameters->getInt(0);
+		$idProductFamily = $content->getParameters()->getInt(0);
 
-		$productFamilyControl = new ProductFamilyControl($this->getMySQL());
+		$productFamilyControl = new ProductFamilyControl(System::getWebConnection());
 
 		if (($productFamily = $productFamilyControl->get($idProductFamily)) === null)
 			throw new ApiException('família não encontrada');
@@ -79,11 +79,11 @@ class ApiProductFamily extends ApiServiceInterface
 		return $result;
 	}
 
-	public function actionRemove(ArrayData $parameters): ApiResult
+	public function actionRemove(ApiContent $content): ApiResult
 	{
-		$idProductFamily = $parameters->getInt(0);
+		$idProductFamily = $content->getParameters()->getInt(0);
 
-		$productFamilyControl = new ProductFamilyControl($this->getMySQL());
+		$productFamilyControl = new ProductFamilyControl(System::getWebConnection());
 
 		if (($productFamily = $productFamilyControl->get($idProductFamily)) === null)
 			throw new ApiException('família não encontrada');
@@ -99,10 +99,10 @@ class ApiProductFamily extends ApiServiceInterface
 		return $result;
 	}
 
-	public function actionGet(ArrayData $parameters): ApiResult
+	public function actionGet(ApiContent $content): ApiResult
 	{
-		$idProductFamily = $parameters->getInt(0);
-		$productFamilyControl = new ProductFamilyControl($this->getMySQL());
+		$idProductFamily = $content->getParameters()->getInt(0);
+		$productFamilyControl = new ProductFamilyControl(System::getWebConnection());
 
 		if (($productFamily = $productFamilyControl->get($idProductFamily)) === null)
 			throw new ApiException('família não encontrada');
@@ -113,15 +113,15 @@ class ApiProductFamily extends ApiServiceInterface
 		return $result;
 	}
 
-	public function actionGetGroups(ArrayData $parameters): ApiResult
+	public function actionGetGroups(ApiContent $content): ApiResult
 	{
-		$idProductFamily = $parameters->getInt(0);
-		$productFamilyControl = new ProductFamilyControl($this->getMySQL());
+		$idProductFamily = $content->getParameters()->getInt(0);
+		$productFamilyControl = new ProductFamilyControl(System::getWebConnection());
 
 		if (($productFamily = $productFamilyControl->get($idProductFamily)) === null)
 			throw new ApiException('família não encontrada');
 
-		$productGroupControl = new ProductGroupControl($this->getMySQL());
+		$productGroupControl = new ProductGroupControl(System::getWebConnection());
 		$productGroups = $productGroupControl->getByFamily($idProductFamily);
 		$productFamily->setProductGroups($productGroups);
 
@@ -131,10 +131,10 @@ class ApiProductFamily extends ApiServiceInterface
 		return $result;
 	}
 
-	public function actionSearch(ArrayData $parameters): ApiResult
+	public function actionSearch(ApiContent $content): ApiResult
 	{
-		$name = $parameters->getString(0);
-		$productFamilyControl = new ProductFamilyControl($this->getMySQL());
+		$name = $content->getParameters()->getString(0);
+		$productFamilyControl = new ProductFamilyControl(System::getWebConnection());
 		$productCategories = $productFamilyControl->search($name);
 
 		$result = new ApiResultCategories();

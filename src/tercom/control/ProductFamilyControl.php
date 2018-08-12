@@ -4,7 +4,7 @@ namespace tercom\control;
 
 use dProject\MySQL\MySQL;
 use dProject\MySQL\MySQLException;
-use tercom\api\ApiException;
+use dProject\restful\exception\ApiException;
 use tercom\dao\ProductFamilyDAO;
 use tercom\entities\ProductFamily;
 use tercom\entities\lists\ProductCategories;

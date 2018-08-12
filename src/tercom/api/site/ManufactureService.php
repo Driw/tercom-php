@@ -2,9 +2,9 @@
 
 namespace tercom\api\site;
 
-use dProject\Primitive\ArrayData;
 use dProject\Primitive\ArrayDataException;
 use dProject\Primitive\PostService;
+use dProject\restful\ApiContent;
 use dProject\restful\ApiConnection;
 use dProject\restful\ApiResult;
 use dProject\restful\ApiServiceInterface;
@@ -12,29 +12,29 @@ use dProject\restful\exception\ApiException;
 use dProject\restful\exception\ApiMissParam;
 use tercom\control\ManufactureControl;
 use tercom\entities\Manufacture;
+use tercom\api\SiteService;
+use tercom\core\System;
 
-class ApiManufacture extends ApiServiceInterface
+class ManufactureService extends ApiServiceInterface
 {
-	public function __construct(ApiConnection $apiConnection, string $apiname, array $vars)
+	public function __construct(ApiConnection $apiConnection, string $apiname, SiteService $parent)
 	{
-		parent::__contruct($apiConnection, $apiname, $vars);
+		parent::__contruct($apiConnection, $apiname, $parent);
 	}
 
 	public function execute():ApiResult
 	{
-		ApiConnection::validateInternalCall();
-
 		return $this->defaultExecute();
 	}
 
-	public function actionSettings(ArrayData $parameters):ApiManufactureSettings
+	public function actionSettings(ApiContent $content):ApiManufactureSettings
 	{
 		$settings = new ApiManufactureSettings();
 
 		return $settings;
 	}
 
-	public function actionAdd(ArrayData $parameters):ApiResult
+	public function actionAdd(ApiContent $content):ApiResult
 	{
 		$POST = PostService::getInstance();
 		$manufacture = new Manufacture();
@@ -47,7 +47,7 @@ class ApiManufacture extends ApiServiceInterface
 			return new ApiMissParam($e);
 		}
 
-		$manufactureControl = new ManufactureControl($this->getMySQL());
+		$manufactureControl = new ManufactureControl(System::getWebConnection());
 		$manufactureControl->add($manufacture);
 
 		$result = new ApiManufactureResult();
@@ -56,12 +56,12 @@ class ApiManufacture extends ApiServiceInterface
 		return $result;
 	}
 
-	public function actionSet(ArrayData $parameters):ApiResult
+	public function actionSet(ApiContent $content):ApiResult
 	{
 		$POST = PostService::getInstance();
 
-		$idManufacture = $parameters->getInt(0);
-		$manufactureControl = new ManufactureControl($this->getMySQL());
+		$idManufacture = $content->getParameters()->getInt(0);
+		$manufactureControl = new ManufactureControl(System::getWebConnection());
 
 		if (($manufacture = $manufactureControl->get($idManufacture)) === null)
 			throw new ApiException('fabricante não encontrado');
@@ -85,10 +85,10 @@ class ApiManufacture extends ApiServiceInterface
 		return $result;
 	}
 
-	public function actionRemove(ArrayData $parameters):ApiResult
+	public function actionRemove(ApiContent $content):ApiResult
 	{
-		$idManufacture = $parameters->getInt(0);
-		$manufactureControl = new ManufactureControl($this->getMySQL());
+		$idManufacture = $content->getParameters()->getInt(0);
+		$manufactureControl = new ManufactureControl(System::getWebConnection());
 
 		if (($manufacture = $manufactureControl->get($idManufacture)) === null)
 			throw new ApiException('fabricante não encontrado');
@@ -104,10 +104,10 @@ class ApiManufacture extends ApiServiceInterface
 		return $result;
 	}
 
-	public function actionGet(ArrayData $parameters):ApiResult
+	public function actionGet(ApiContent $content):ApiResult
 	{
-		$idManufacture = $parameters->getInt(0);
-		$manufactureControl = new ManufactureControl($this->getMySQL());
+		$idManufacture = $content->getParameters()->getInt(0);
+		$manufactureControl = new ManufactureControl(System::getWebConnection());
 
 		if (($manufacture = $manufactureControl->get($idManufacture)) === null)
 			throw new ApiException('fabricante não encontrado');
@@ -118,10 +118,10 @@ class ApiManufacture extends ApiServiceInterface
 		return $result;
 	}
 
-	public function actionSearch(ArrayData $parameters):ApiResult
+	public function actionSearch(ApiContent $content):ApiResult
 	{
-		$fantasyName = $parameters->getString(0);
-		$manufactureControl = new ManufactureControl($this->getMySQL());
+		$fantasyName = $content->getParameters()->getString(0);
+		$manufactureControl = new ManufactureControl(System::getWebConnection());
 
 		if (($manufacture = $manufactureControl->getByFantasyName($fantasyName)) === null)
 			throw new ApiException('fabricante não encontrado');

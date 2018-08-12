@@ -2,9 +2,9 @@
 
 namespace tercom\api\site;
 
-use dProject\Primitive\ArrayData;
 use dProject\Primitive\ArrayDataException;
 use dProject\Primitive\PostService;
+use dProject\restful\ApiContent;
 use dProject\restful\ApiConnection;
 use dProject\restful\ApiResult;
 use dProject\restful\ApiServiceInterface;
@@ -13,22 +13,22 @@ use dProject\restful\exception\ApiMissParam;
 use tercom\entities\ProductSubGroup;
 use tercom\control\ProductSubGroupControl;
 use tercom\control\ProductSectorControl;
+use tercom\api\SiteService;
+use tercom\core\System;
 
-class ApiProductSubGroup extends ApiServiceInterface
+class ProductSubGroupService extends ApiServiceInterface
 {
-	public function __construct(ApiConnection $apiConnection, string $apiname, array $vars)
+	public function __construct(ApiConnection $apiConnection, string $apiname, SiteService $parent)
 	{
-		parent::__contruct($apiConnection, $apiname, $vars);
+		parent::__contruct($apiConnection, $apiname, $parent);
 	}
 
 	public function execute():ApiResult
 	{
-		ApiConnection::validateInternalCall();
-
 		return $this->defaultExecute();
 	}
 
-	public function actionAdd(ArrayData $parameters):ApiResult
+	public function actionAdd(ApiContent $content):ApiResult
 	{
 		$POST = PostService::getInstance();
 
@@ -42,7 +42,7 @@ class ApiProductSubGroup extends ApiServiceInterface
 			return new ApiMissParam($e);
 		}
 
-		$productSubGroupControl = new ProductSubGroupControl($this->getMySQL());
+		$productSubGroupControl = new ProductSubGroupControl(System::getWebConnection());
 		$productSubGroupControl->add($productSubGroup);
 
 		$result = new ApiResultCategory();
@@ -51,12 +51,12 @@ class ApiProductSubGroup extends ApiServiceInterface
 		return $result;
 	}
 
-	public function actionSet(ArrayData $parameters):ApiResult
+	public function actionSet(ApiContent $content):ApiResult
 	{
 		$POST = PostService::getInstance();
-		$idProductSubGroup = $parameters->getInt(0);
+		$idProductSubGroup = $content->getParameters()->getInt(0);
 
-		$productSubGroupControl = new ProductSubGroupControl($this->getMySQL());
+		$productSubGroupControl = new ProductSubGroupControl(System::getWebConnection());
 
 		if (($productSubGroup = $productSubGroupControl->get($idProductSubGroup)) === null)
 			throw new ApiException('subgrupo não encontrada');
@@ -81,11 +81,11 @@ class ApiProductSubGroup extends ApiServiceInterface
 		return $result;
 	}
 
-	public function actionRemove(ArrayData $parameters):ApiResult
+	public function actionRemove(ApiContent $content):ApiResult
 	{
-		$idProductSubGroup = $parameters->getInt(0);
+		$idProductSubGroup = $content->getParameters()->getInt(0);
 
-		$productSubGroupControl = new ProductSubGroupControl($this->getMySQL());
+		$productSubGroupControl = new ProductSubGroupControl(System::getWebConnection());
 
 		if (($productSubGroup = $productSubGroupControl->get($idProductSubGroup)) === null)
 			throw new ApiException('subgrupo não encontrada');
@@ -101,10 +101,10 @@ class ApiProductSubGroup extends ApiServiceInterface
 		return $result;
 	}
 
-	public function actionGet(ArrayData $parameters):ApiResult
+	public function actionGet(ApiContent $content):ApiResult
 	{
-		$idProductSubGroup = $parameters->getInt(0);
-		$productSubGroupControl = new ProductSubGroupControl($this->getMySQL());
+		$idProductSubGroup = $content->getParameters()->getInt(0);
+		$productSubGroupControl = new ProductSubGroupControl(System::getWebConnection());
 
 		if (($productSubGroup = $productSubGroupControl->get($idProductSubGroup)) === null)
 			throw new ApiException('subgrupo não encontrada');
@@ -115,15 +115,15 @@ class ApiProductSubGroup extends ApiServiceInterface
 			return $result;
 	}
 
-	public function actionGetSectores(ArrayData $parameters):ApiResult
+	public function actionGetSectores(ApiContent $content):ApiResult
 	{
-		$idProductSubGroup = $parameters->getInt(0);
-		$productSubGroupControl = new ProductSubGroupControl($this->getMySQL());
+		$idProductSubGroup = $content->getParameters()->getInt(0);
+		$productSubGroupControl = new ProductSubGroupControl(System::getWebConnection());
 
 		if (($productSubGroup = $productSubGroupControl->get($idProductSubGroup)) === null)
 			throw new ApiException('subgrupo não encontrada');
 
-		$productSectorControl = new ProductSectorControl($this->getMySQL());
+		$productSectorControl = new ProductSectorControl(System::getWebConnection());
 		$productSectores = $productSectorControl->getBySubGroup($idProductSubGroup);
 		$productSubGroup->setProductSectores($productSectores);
 
@@ -133,10 +133,10 @@ class ApiProductSubGroup extends ApiServiceInterface
 		return $result;
 	}
 
-	public function actionSearch(ArrayData $parameters):ApiResult
+	public function actionSearch(ApiContent $content):ApiResult
 	{
-		$name = $parameters->getString(0);
-		$productSubGroupControl = new ProductSubGroupControl($this->getMySQL());
+		$name = $content->getParameters()->getString(0);
+		$productSubGroupControl = new ProductSubGroupControl(System::getWebConnection());
 		$productCategories = $productSubGroupControl->search($name);
 
 		$result = new ApiResultCategories();

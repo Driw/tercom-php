@@ -6,6 +6,7 @@ use dProject\MySQL\MySQL;
 use tercom\dao\ProviderDAO;
 use tercom\entities\Phone;
 use tercom\entities\Provider;
+use tercom\entities\lists\Providers;
 
 class ProviderControl extends GenericControl
 {
@@ -74,24 +75,24 @@ class ProviderControl extends GenericControl
 		return $this->providerDAO->updateInactive($provider);
 	}
 
-	public function get(int $providerID)
+	public function get(int $providerID): ?Provider
 	{
 		return $this->providerDAO->selectByID($providerID);
 	}
 
-	public function getByCNPJ(string $cnpj)
+	public function getByCNPJ(string $cnpj): ?Provider
 	{
 		return $this->providerDAO->selectByCNPJ($cnpj);
 	}
 
-	public function listByCNPJ(string $cnpj)
+	public function listByCNPJ(string $cnpj): Providers
 	{
-		$this->providerDAO->filterByCNPJ($cnpj);
+		return $this->providerDAO->searchByCNPJ($cnpj);
 	}
 
-	public function listByFantasyName(string $fantasyName)
+	public function listByFantasyName(string $fantasyName): Providers
 	{
-		return $this->providerDAO->filterByFantasyName($fantasyName);
+		return $this->providerDAO->searchByFantasyName($fantasyName);
 	}
 }
 
