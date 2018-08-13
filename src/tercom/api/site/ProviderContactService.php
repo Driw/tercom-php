@@ -3,41 +3,78 @@
 namespace tercom\api\site;
 
 use Exception;
-use dProject\Primitive\PostService;
 use dProject\restful\ApiContent;
 use dProject\restful\ApiConnection;
 use dProject\restful\ApiResult;
 use dProject\restful\ApiServiceInterface;
 use dProject\restful\exception\ApiException;
 use dProject\restful\exception\ApiMissParam;
-use tercom\entities\ProviderContact;
+use tercom\control\PhoneControl;
 use tercom\control\ProviderContactControl;
 use tercom\control\ProviderControl;
-use tercom\entities\Provider;
-use tercom\control\PhoneControl;
-use tercom\api\SiteService;
 use tercom\core\System;
+use tercom\entities\Provider;
+use tercom\entities\ProviderContact;
+use dProject\Primitive\ArrayDataException;
+
+/**
+ * <h1>Serviço de Contatos do Fornecedor</h1>
+ *
+ * <p>Este serviço realiza a comunicação do cliente para com o sistema em relação aos dados de fornecedores.
+ * Como serviço, oferece as possibilidades de acicionar fornecedor, atualizar fornecedor, definir telefones,
+ * remover telefones, obter fornecedor, procurar por CNPJ e procurar por nome fantasia.</p>
+ *
+ * @see ApiServiceInterface
+ * @see ApiConnection
+ * @author Andrew
+ */
 
 class ProviderContactService extends ApiServiceInterface
 {
-	const REMOVE_COMMERCIAL_PHONE = 1;
-	const REMOVE_OTHER_PHONE = 2;
-	const REMOVE_ALL_PHONES = 3;
+	/**
+	 * Cria uma nova instância de um serviço para gerenciamento de contatos do fornecedor no sistema.
+	 * @param ApiConnection $apiConnection conexão do sistema que realiza o chamado do serviço.
+	 * @param string $apiname nome do serviço que está sendo informado através da conexão.
+	 * @param ApiServiceInterface $parent serviço do qual solicitou o chamado.
+	 */
 
-	public function __construct(ApiConnection $apiConnection, string $apiname, SiteService $parent)
+	public function __construct(ApiConnection $apiConnection, string $apiname, ApiServiceInterface $parent)
 	{
-		parent::__contruct($apiConnection, $apiname, $parent);
+		parent::__construct($apiConnection, $apiname, $parent);
 	}
 
-	public function execute():ApiResult
+	/**
+	 * {@inheritDoc}
+	 * @see \dProject\restful\ApiServiceInterface::execute()
+	 */
+
+	public function execute(): ApiResult
 	{
 		return $this->defaultExecute();
 	}
 
-	public function actionAdd(ApiContent $content):ApiResult
-	{
-		$POST = PostService::getInstance();;
+	/**
+	 * Ação para se obter as configurações de limites de cada atributo referente aos fornecedores.
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @return ApiResult aquisição do resultado com as configurações dos dados de fornecedores.
+	 */
 
+	public function actionSettings(ApiContent $content): ApiResult
+	{
+		return new ApiResultProviderContactSettings();
+	}
+
+	/**
+	 * Adiciona um novo contato do fornecedor sendo necessário informar os seguintes dados:
+	 * nome; endereço de e-mail (opicional) e cargo (opcional).
+	 * @ApiAnnotation({"method":"post","params":["idProvider"]})
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @return ApiResult aquisição do resultado contendo os dados do contato do fornecedor adicionado.
+	 */
+
+	public function actionAdd(ApiContent $content): ApiResult
+	{
+		$POST = $content->getPost();
 		$provider = $this->parseProvider($content);
 
 		try {
@@ -61,11 +98,20 @@ class ProviderContactService extends ApiServiceInterface
 		return $result;
 	}
 
+	/**
+	 * Atualiza os dados do contato do fornecedor através do seu código de identificação.
+	 * Nenhum dado é obrigatório ser atualizado, porém se informado será considerado.
+	 * @ApiAnnotation({"method":"post", "params":["idContactProvider"]})
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @throws ApiException contato do fornecedor não encontrado.
+	 * @return ApiResult aquisição do resultado com os dados do contato do fornecedor atualizados.
+	 */
+
 	public function actionSet(ApiContent $content):ApiResult
 	{
-		$POST = PostService::getInstance();;
+		$POST = $content->getPost();
 
-		$providerID = $content->getParameters()->getInt(0);
+		$providerID = $content->getParameters()->getInt('idContactProvider');
 		$providerContactID = $POST->getInt('id');
 		$providerContactControl = new ProviderContactControl(System::getWebConnection());
 
@@ -93,16 +139,25 @@ class ProviderContactService extends ApiServiceInterface
 		return $result;
 	}
 
+	/**
+	 * Define quais os dados de telefone do contato do fornecedor.
+	 * Opcional definir tanto o telefone comercial quanto o secundário,
+	 * porém necessário definir ao menos um dos dois telefones.
+	 * @ApiAnnotation({"method":"post","params":["idProvider"]})
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @throws ApiException contato do fornecedor não encontrado.
+	 * @return ApiResult aquisição do resultado com os dados de contato do fornecedor com telefone(s) atualizado(s).
+	 */
+
 	public function actionSetPhones(ApiContent $content):ApiResult
 	{
-		$POST = PostService::getInstance();;
-
-		$providerID = $content->getParameters()->getInt(0);
+		$POST = $content->getPost();
+		$provider = $this->parseProvider($content);
 		$providerContactID = $POST->getInt('id');
 
 		$providerContactControl = new ProviderContactControl(System::getWebConnection());
 
-		if (($providerContact = $providerContactControl->getProvideContact($providerID, $providerContactID)) === null)
+		if (($providerContact = $providerContactControl->getProvideContact($provider->getID(), $providerContactID)) === null)
 			throw new ApiException('contato de fornecedor não encontrado');
 
 		$phoneControl = new PhoneControl(System::getWebConnection());
@@ -140,11 +195,19 @@ class ProviderContactService extends ApiServiceInterface
 		return $result;
 	}
 
+	/**
+	 * Exclui os dados do telefone comercial vinculado ao contato do fornecedor se houver.
+	 * @ApiAnnotation({"params":["idProvider"]})
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @throws ApiException contato do fornecedor não encontrado; telefone não definido; telefone inválido.
+	 * @return ApiResult aquisição dos dados do contato do fornecedor com o(s) telefone(s) removido(s).
+	 */
+
 	public function actionRemoveCommercial(ApiContent $content):ApiResult
 	{
-		$POST = PostService::getInstance();;
+		$POST = $content->getPost();
 
-		$providerID = $content->getParameters()->getInt(0);
+		$providerID = $content->getParameters()->getInt('idProvider');
 		$providerContactID = $POST->getInt('id');
 
 		$providerContactControl = new ProviderContactControl(System::getWebConnection());
@@ -166,11 +229,19 @@ class ProviderContactService extends ApiServiceInterface
 		return $result;
 	}
 
+	/**
+	 * Exclui os dados do telefone secundário vinculado ao contato do fornecedor se houver.
+	 * @ApiAnnotation({"params":["idProvider"]})
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @throws ApiException contato do fornecedor não encontrado; telefone não definido; telefone inválido.
+	 * @return ApiResult aquisição dos dados do contato do fornecedor com o(s) telefone(s) removido(s).
+	 */
+
 	public function actionRemoveOtherphone(ApiContent $content):ApiResult
 	{
-		$POST = PostService::getInstance();;
+		$POST = $content->getPost();
 
-		$providerID = $content->getParameters()->getInt(0);
+		$providerID = $content->getParameters()->getInt('idProvider');
 		$providerContactID = $POST->getInt('id');
 
 		$providerContactControl = new ProviderContactControl(System::getWebConnection());
@@ -192,10 +263,17 @@ class ProviderContactService extends ApiServiceInterface
 		return $result;
 	}
 
+	/**
+	 * Exclui os dados do contato de fornecedor e seus telefones se assim for encontrado.
+	 * @ApiAnnotation({"method":"post","param":["idProvider"]})
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @throws ApiException contato do fornecedor não vinculado ao fornecedor.
+	 * @return ApiResult aquisição dos dados do contato do fornecedor que foi excluído.
+	 */
+
 	public function actionRemoveContact(ApiContent $content):ApiResult
 	{
-		$POST = PostService::getInstance();;
-
+		$POST = $content->getPost();
 		$provider = $this->parseProvider($content);
 		$providerContactID = $POST->getInt('id');
 
@@ -220,11 +298,19 @@ class ProviderContactService extends ApiServiceInterface
 		return $result;
 	}
 
+	/**
+	 * Obtém os dados de um contato do fornecedor através do seu código de identificação.
+	 * @ApiAnnotation({"method":"post","params":["idProvider"]})
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @throws ApiException fornecedor não encontrado.
+	 * @return ApiResult aquisição do resultado com os dados do contato do fornecedor obtido.
+	 */
+
 	public function actionGetContact(ApiContent $content):ApiResult
 	{
-		$POST = PostService::getInstance();;
+		$POST = $content->getPost();
 
-		$providerID = $content->getParameters()->getInt(0);
+		$providerID = $content->getParameters()->getInt('idProvider');
 		$providerContactID = $POST->getInt('id');
 
 		$providerContactControl = new ProviderContactControl(System::getWebConnection());
@@ -241,12 +327,19 @@ class ProviderContactService extends ApiServiceInterface
 		return $result;
 	}
 
+	/**
+	 * Obtém uma lista de contatos do fornecedor através do código de identificação do fornecedor.
+	 * @ApiAnnotation({"params":["idProvider"]})
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @return ApiResult aquisição do resultado com a lista de contatos do fornecedor obtida.
+	 */
+
 	public function actionGetContacts(ApiContent $content):ApiResult
 	{
-		$providerID = $content->getParameters()->getInt(0);
+		$provider = $this->parseProvider($content);
 
 		$providerContactControl = new ProviderContactControl(System::getWebConnection());
-		$providerContacts = $providerContactControl->getProvideContacts($providerID);
+		$providerContacts = $providerContactControl->getProvideContacts($provider->getID());
 
 		$phoneControl = new PhoneControl(System::getWebConnection());
 
@@ -259,11 +352,25 @@ class ProviderContactService extends ApiServiceInterface
 		return $result;
 	}
 
+	/**
+	 * Procedimento interno que realiza a validação de uma ação do serviço que
+	 * seja necessário ser informado o código de identificação do fornecedor.
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @throws ApiException fornecedor não identificado; fornecedor não encontrado,
+	 * fornecedor com identificação inválida.
+	 * @return int aquisição do código de identificação do fornecedor informado.
+	 */
+
 	private function parseProvider(ApiContent $content):Provider
 	{
 		try {
 
-			$providerID = $content->getParameters()->getInt(0);
+			$parameters = $content->getParameters();
+
+			if (!$parameters->isSetted('idProvider'))
+				throw new ApiException('fornecedor não identificado');
+
+			$providerID = $parameters->getInt('idProvider');
 			$providerControl = new ProviderControl(System::getWebConnection());
 
 			if (($provider = $providerControl->get($providerID)) === null)
@@ -271,8 +378,9 @@ class ProviderContactService extends ApiServiceInterface
 
 			return $provider;
 
-		} catch (Exception $e) {
-			throw new ApiException('fornecedor não informado');
+		} catch (ArrayDataException $e) {
+			if ($e->getCode() === ArrayDataException::PARSE_TYPE)
+				throw new ApiException('fornecedor com identificação inválida');
 		}
 	}
 }

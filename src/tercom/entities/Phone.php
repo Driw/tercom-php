@@ -22,6 +22,23 @@ use dProject\Primitive\ObjectUtil;
 class Phone extends AdvancedObject
 {
 	/**
+	 * @var int valor mínimo permitido para o DDD.
+	 */
+	public const MIN_DDD = 11;
+	/**
+	 * @var int valor máximo permitido para o DDD.
+	 */
+	public const MAX_DDD = 99;
+	/**
+	 * @var int quantidade mínima de dígitos necessário no número.
+	 */
+	public const MIN_NUMBER_LEN = 8;
+	/**
+	 * @var int quantidade máxima de dígitos necessário no número.
+	 */
+	public const MAX_NUMBER_LEN = 9;
+
+	/**
 	 * @var string type de telefone celular.
 	 */
 	public const TYPE_PHONE = 'cellphone';
@@ -65,7 +82,7 @@ class Phone extends AdvancedObject
 	 * @return number aquisidção do código de identificação do telefone.
 	 */
 
-	public function getID():int
+	public function getID(): int
 	{
 		return $this->id;
 	}
@@ -77,7 +94,7 @@ class Phone extends AdvancedObject
 	public function setID(int $id)
 	{
 		if ($id < 1)
-			throw new EntityParseException(sprintf('código de identificação inválido (id: %d)', $id));
+			throw new EntityParseException("código de identificação inválido (id: $id)");
 
 		$this->id = $id;
 	}
@@ -97,8 +114,8 @@ class Phone extends AdvancedObject
 
 	public function setDDD(int $ddd)
 	{
-		if (!IntegerUtil::inInterval($ddd, MIN_PHONE_DDD, MAX_PHONE_DDD))
-			throw new EntityParseException(sprintf('DDD deve ser de %d a %d (ddd: %d)', MIN_PHONE_DDD, MAX_PHONE_DDD, $ddd));
+		if (!IntegerUtil::inInterval($ddd, self::MIN_DDD, self::MAX_DDD))
+			throw EntityParseException::new("DDD deve ser de %d a %d (ddd: $ddd)", self::MIN_DDD, self::MAX_DDD);
 
 		$this->ddd = $ddd;
 	}
@@ -107,7 +124,7 @@ class Phone extends AdvancedObject
 	 * @return string aquisição do número do telefone.
 	 */
 
-	public function getNumber():?string
+	public function getNumber(): ?string
 	{
 		return $this->number;
 	}
@@ -120,8 +137,8 @@ class Phone extends AdvancedObject
 	{
 		$number = Functions::parseOnlyNumbers($number);
 
-		if (!StringUtil::hasBetweenLength($number, MIN_PHONE_NUMBER_LEN, MAX_PHONE_NUMBER_LEN))
-			throw new EntityParseException(sprintf('número deve ter de %d a %d dígitos (numero: %s)', MIN_PHONE_NUMBER_LEN, MAX_PHONE_NUMBER_LEN, $number));
+		if (!StringUtil::hasBetweenLength($number, self::MIN_NUMBER_LEN, self::MAX_NUMBER_LEN))
+			throw EntityParseException::new("número deve ter de %d a %d dígitos (numero: $number)", self::MIN_NUMBER_LEN, self::MAX_NUMBER_LEN);
 
 		$this->number = $number;
 	}
@@ -130,7 +147,7 @@ class Phone extends AdvancedObject
 	 * @return string aquisição do type de telefone.
 	 */
 
-	public function getType():?string
+	public function getType(): ?string
 	{
 		return $this->type;
 	}
@@ -142,7 +159,7 @@ class Phone extends AdvancedObject
 	public function setType(string $type)
 	{
 		if (!self::hasType($type))
-			throw new EntityParseException(sprintf('tipo de telefone inválido (tipo: %s)', $type));
+			throw EntityParseException::new("tipo de telefone inválido (tipo: $type)");
 
 		$this->type = $type;
 	}
@@ -151,7 +168,7 @@ class Phone extends AdvancedObject
 	 * @return array aquisição de um vetor com todos os tipos de telefone.
 	 */
 
-	public static function getTypes():array
+	public static function getTypes(): array
 	{
 		return array(
 			self::TYPE_RESIDENTIAL => 'Residêncial',
@@ -176,7 +193,7 @@ class Phone extends AdvancedObject
 	 * @see \dProject\Primitive\AdvancedObject::getAttributeTypes()
 	 */
 
-	public function getAttributeTypes():array
+	public function getAttributeTypes(): array
 	{
 		return [
 			'id' => ObjectUtil::TYPE_INTEGER,

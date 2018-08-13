@@ -10,6 +10,14 @@ class EntityParseException extends TercomException
 	{
 		parent::__construct($message, $code, $previous);
 	}
+
+	public static function new(string $format)
+	{
+		$args = func_get_args();
+		array_shift($args); // Remover format
+
+		return new EntityParseException(vsprintf($format, $args));
+	}
 }
 
 ?>

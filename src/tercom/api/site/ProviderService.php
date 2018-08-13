@@ -99,8 +99,8 @@ class ProviderService extends ApiServiceInterface
 			if ($POST->isSetted('site')) $provider->setSite($POST->getString('site'));
 			$provider->setInactive(false);
 
-		} catch (Exception $e) {
-			return new ApiMissParam($e->getMessage());
+		} catch (ArrayDataException $e) {
+			return new ApiMissParam($e);
 		}
 
 		$providerControl = new ProviderControl(System::getWebConnection());
@@ -269,18 +269,18 @@ class ProviderService extends ApiServiceInterface
 			{
 				$commercialData = $POST->newArrayData('commercial');
 
-				if ($commercialData->isSetted('ddd')) $provider->getCommercial()->setDDD($commercialData->getInt('ddd'));
-				if ($commercialData->isSetted('number')) $provider->getCommercial()->setNumber($commercialData->getString('number'));
-				if ($commercialData->isSetted('type')) $provider->getCommercial()->setType($commercialData->getString('type'));
+				$provider->getCommercial()->setDDD($commercialData->getInt('ddd'));
+				$provider->getCommercial()->setNumber($commercialData->getString('number'));
+				$provider->getCommercial()->setType($commercialData->getString('type'));
 			}
 
 			if ($POST->isSetted('otherphone'))
 			{
 				$otherphoneData = $POST->newArrayData('otherphone');
 
-				if ($otherphoneData->isSetted('ddd')) $provider->getOtherPhone()->setDDD($otherphoneData->getInt('ddd'));
-				if ($otherphoneData->isSetted('number')) $provider->getOtherPhone()->setNumber($otherphoneData->getString('number'));
-				if ($otherphoneData->isSetted('type')) $provider->getOtherPhone()->setType($otherphoneData->getString('type'));
+				$provider->getOtherPhone()->setDDD($otherphoneData->getInt('ddd'));
+				$provider->getOtherPhone()->setNumber($otherphoneData->getString('number'));
+				$provider->getOtherPhone()->setType($otherphoneData->getString('type'));
 			}
 
 		} catch (Exception $e) {

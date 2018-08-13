@@ -6,6 +6,7 @@ use dProject\Primitive\AdvancedObject;
 use tercom\Entities\EntityParseException;
 use dProject\Primitive\StringUtil;
 use tercom\entities\lists\Phones;
+use dProject\Primitive\ObjectUtil;
 
 /**
  * <h1>Contato do Fornecedor</h1>
@@ -20,6 +21,27 @@ use tercom\entities\lists\Phones;
 
 class ProviderContact extends AdvancedObject
 {
+	/**
+	 * @var int quantidade mínima de caracteres necessário no nome.
+	 */
+	public const MIN_NAME_LEN = MIN_NAME_LEN;
+	/**
+	 * @var int quantidade máxima de caracteres necessário no nome.
+	 */
+	public const MAX_NAME_LEN = MAX_NAME_LEN;
+	/**
+	 * @var int quantidade mínima de caracteres necessário no cargo.
+	 */
+	public const MIN_POSITION_LEN = 3;
+	/**
+	 * @var int quantidade máxima de caracteres necessário no cargo.
+	 */
+	public const MAX_POSITION_LEN = 32;
+	/**
+	 * @var int quantidade mínima de caracteres necessário no endereço de e-mail.
+	 */
+	public const MAX_EMAIL_LEN = MAX_EMAIL_LEN;
+
 	/**
 	 * @var number código de identificação do contato.
 	 */
@@ -72,7 +94,7 @@ class ProviderContact extends AdvancedObject
 	public function setID(int $id)
 	{
 		if ($id < 1)
-			throw new EntityParseException('código de identificação inválido (id: %d)', $id);
+			throw EntityParseException::new("código de identificação inválido (id: $id)");
 
 		$this->id = $id;
 	}
@@ -81,7 +103,7 @@ class ProviderContact extends AdvancedObject
 	 * @return string aquisição do name completo do contato.
 	 */
 
-	public function getName():?string
+	public function getName(): ?string
 	{
 		return $this->name;
 	}
@@ -92,8 +114,8 @@ class ProviderContact extends AdvancedObject
 
 	public function setName($name)
 	{
-		if (!StringUtil::hasBetweenLength($name, MIN_CONTACT_NAME_LEN, MAX_CONTACT_NAME_LEN))
-			throw new EntityParseException(sprintf('nome do contato deve ter de %d a %d caracteres (nome: %s)', MIN_CONTACT_NAME_LEN, MAX_NAME_LEN, $name));
+		if (!StringUtil::hasBetweenLength($name, self::MIN_NAME_LEN, self::MAX_NAME_LEN))
+			throw EntityParseException::new("nome do contato deve ter de %d a %d caracteres (nome: $name)", self::MIN_NAME_LEN, self::MAX_NAME_LEN);
 
 		$this->name = $name;
 	}
@@ -102,7 +124,7 @@ class ProviderContact extends AdvancedObject
 	 * @return string aquisição do position do contato em sua empresa.
 	 */
 
-	public function getPosition()
+	public function getPosition(): ?string
 	{
 		return $this->position;
 	}
@@ -111,10 +133,10 @@ class ProviderContact extends AdvancedObject
 	 * @param string $position cargo do contato em sua empresa.
 	 */
 
-	public function setPosition($post)
+	public function setPosition(?string $post)
 	{
-		if (!StringUtil::hasBetweenLength($post, MIN_CONTACT_POST_LEN, MAX_CONTACT_POST_LEN))
-			throw new EntityParseException(sprintf('cargo deve ter de %d a %d caracteres (cargo: %s)', MIN_CONTACT_POST_LEN, MAX_CONTACT_POST_LEN, $post));
+		if (!StringUtil::hasBetweenLength($post, self::MIN_POSITION_LEN, self::MAX_POSITION_LEN))
+			throw EntityParseException::new("cargo deve ter de %d a %d caracteres (cargo: $post)", self::MIN_POSITION_LEN, self::MAX_POSITION_LEN);
 
 		$this->position = $post;
 	}
@@ -123,7 +145,7 @@ class ProviderContact extends AdvancedObject
 	 * @return string aquisição do endereço de e-mail para contato.
 	 */
 
-	public function getEmail()
+	public function getEmail(): ?string
 	{
 		return $this->email;
 	}
@@ -132,13 +154,13 @@ class ProviderContact extends AdvancedObject
 	 * @param string $email endereço de e-mail para contato.
 	 */
 
-	public function setEmail($email)
+	public function setEmail(?string $email)
 	{
 		if (!filter_var($email, FILTER_VALIDATE_EMAIL))
-			throw new EntityParseException(sprintf('endereço de e-mail inválido (email: %s)', $email));
+			throw new EntityParseException("endereço de e-mail inválido (email: $email)");
 
-		if (!StringUtil::hasMaxLength($email, MAX_CONTACT_EMAIL_LEN))
-			throw new EntityParseException(sprintf('endereço de e-mail deve até %d caracteres (email: %s)', MAX_CONTACT_EMAIL_LEN, $email));
+		if (!StringUtil::hasMaxLength($email, self::MAX_EMAIL_LEN))
+			throw EntityParseException::new("endereço de e-mail deve até %d caracteres (email: $email)", self::MAX_EMAIL_LEN);
 
 		$this->email = $email;
 	}
@@ -147,7 +169,7 @@ class ProviderContact extends AdvancedObject
 	 * @return Phone aquisição do commercial comercial para contato.
 	 */
 
-	public function getCommercial():Phone
+	public function getCommercial(): Phone
 	{
 		return $this->commercial;
 	}
@@ -165,7 +187,7 @@ class ProviderContact extends AdvancedObject
 	 * @return Phone aquisição do commercial otherphone para contato.
 	 */
 
-	public function getOtherPhone():Phone
+	public function getOtherPhone(): Phone
 	{
 		return $this->otherphone;
 	}
@@ -183,13 +205,30 @@ class ProviderContact extends AdvancedObject
 	 * @return Phones aquisição de um vetor com o telefone celular e o telefone secundário.
 	 */
 
-	public function getPhones():Phones
+	public function getPhones(): Phones
 	{
 		$phones = new Phones();
 		$phones->add($this->getCommercial());
 		$phones->add($this->getOtherPhone());
 
 		return $phones;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * @see \dProject\Primitive\AdvancedObject::getAttributeTypes()
+	 */
+
+	public function getAttributeTypes(): array
+	{
+		return [
+			'id' => ObjectUtil::TYPE_INTEGER,
+			'name' => ObjectUtil::TYPE_STRING,
+			'position' => ObjectUtil::TYPE_STRING,
+			'email' => ObjectUtil::TYPE_STRING,
+			'commercial' => Phone::class,
+			'otherphone' => Phone::class,
+		];
 	}
 }
 

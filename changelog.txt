@@ -20,6 +20,14 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+12.08.2018 - 0.0.5.31
+- Adicionado as configurações de telefone ao obter as configurações do fornecedor e contato do fornecedor.
+- Documentação de ProviderContactService e adicionado ApiAnnotation para funcionar com 'dproject\restful'.
+	- Atualizado actionSetPhones() e actionGet() para usar parseProvider().
+	- Corrigido parseProvider() que não reagia detalhadamente com validação incorreta.
+- Corrigido ProviderService que estava considerando os dados de telefone como opcionais.
+- Atualizado Phone, Provider, ProviderContact par que considere constantes ao invés de defines.
+
 12.08.2018 - 0.0.5.30
 - Corrigido 'test/manufactureUpdate' que estava informando 'companyName' ao invés de 'fantasyName'.
 - Atualizado ManufactureService para ser usado com 'dproject/restful':
@@ -28,6 +36,7 @@
 		- Modificado para que seja chamado em '../manufacture/search/{filter}/{value}'.
 - Renomeado getByFantasyName() para listByFantasyName() conforme padrão estabelecido, ProviderControl.
 - As buscas por fornecedores e fornecedores agora serão ordenados pelo seus nomes fantasia respectivamente.
+- Adicionado scripta para testar a busca por fabricantes, manufactureSearch.
 
 11.08.2018 - 0.0.5.29
 - Correção de IncludeThirdParty() já que o DOCUMENT_ROOT passou para '/public'.

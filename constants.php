@@ -51,10 +51,4 @@ define('HTTP_UNAUTHORIZED', 401);
 define('HTTP_NOT_FOUND', 404);
 define('HTTP_METHOD_NOT_ALLOWED', 405);
 
-/* BANCO DE DADOS */
-
-/* OUTROS */
-
-require_once 'constantsEntities.php';
-
 ?>

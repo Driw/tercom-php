@@ -29,6 +29,35 @@ use tercom\entities\lists\ProviderContacts;
 class Provider extends AdvancedObject
 {
 	/**
+	 * @var int quantidade mínima de caracteres necessário na razão social.
+	 */
+	public const MIN_COMPANY_NAME_LEN = 6;
+	/**
+	 * @var int quantidade máxima de caracteres necessário na razão social.
+	 */
+	public const MAX_COMPANY_NAME_LEN = 72;
+	/**
+	 * @var int quantidade mínima de caracteres necessário no nome fantasia.
+	 */
+	public const MIN_FANTASY_NAME_LEN = 6;
+	/**
+	 * @var int quantidade máxima de caracteres necessário no nome fantasia.
+	 */
+	public const MAX_FANTASY_NAME_LEN = 48;
+	/**
+	 * @var int quantidade mínima de caracteres necessário no nome do representante.
+	 */
+	public const MIN_SPOKESMAN_LEN = MIN_NAME_LEN;
+	/**
+	 * @var int quantidade máxima de caracteres necessário no nome do representante.
+	 */
+	public const MAX_SPOKESMAN_LEN = MAX_NAME_LEN;
+	/**
+	 * @var int quantidade máxima de caracteres necessário no endereço do site.
+	 */
+	public const MAX_SITE_LEN = 64;
+
+	/**
 	 * @var number código de identificação do fornecedor.
 	 */
 	private $id;
@@ -99,7 +128,7 @@ class Provider extends AdvancedObject
 	public function setID(int $id)
 	{
 		if ($id < 1)
-			throw new EntityParseException('código de identificação inválido (id: %d)', $id);
+			throw new EntityParseException("código de identificação inválido (id: $id)");
 
 		$this->id = $id;
 	}
@@ -108,7 +137,7 @@ class Provider extends AdvancedObject
 	 * @return string aquisição do número do cadastro nacional de pessoa jurídica.
 	 */
 
-	public function getCNPJ():?string
+	public function getCNPJ(): ?string
 	{
 		return $this->cnpj;
 	}
@@ -120,7 +149,7 @@ class Provider extends AdvancedObject
 	public function setCNPJ(string $cnpj)
 	{
 		if (!Functions::validateCNPJ($cnpj))
-			throw new EntityParseException(sprintf('CNPJ inválido (cnpj: %s)', $cnpj));
+			throw new EntityParseException("CNPJ inválido (cnpj: $cnpj)");
 
 		$this->cnpj = $cnpj;
 	}
@@ -129,7 +158,7 @@ class Provider extends AdvancedObject
 	 * @return string aquisição do nome de registro da empresa do fornecedor.
 	 */
 
-	public function getCompanyName():?string
+	public function getCompanyName(): ?string
 	{
 		return $this->companyName;
 	}
@@ -140,8 +169,8 @@ class Provider extends AdvancedObject
 
 	public function setCompanyName(string $companyName)
 	{
-		if (!StringUtil::hasBetweenLength($companyName, MIN_COMPANY_NAME_LEN, MAX_COMPANY_NAME_LEN))
-			throw new EntityParseException(sprintf('razão social deve ter de %d a %d caracteres (razão social: %s)', MIN_COMPANY_NAME_LEN, MAX_COMPANY_NAME_LEN, $companyName));
+		if (!StringUtil::hasBetweenLength($companyName, self::MIN_COMPANY_NAME_LEN, self::MAX_COMPANY_NAME_LEN))
+			throw EntityParseException::new("razão social deve ter de %d a %d caracteres (razão social: $companyName)", self::MIN_COMPANY_NAME_LEN, self::MAX_COMPANY_NAME_LEN);
 
 		$this->companyName = $companyName;
 	}
@@ -150,7 +179,7 @@ class Provider extends AdvancedObject
 	 * @return string aquisição do nome de fachada da empresa do fornecedor.
 	 */
 
-	public function getFantasyName():?string
+	public function getFantasyName(): ?string
 	{
 		return $this->fantasyName;
 	}
@@ -161,8 +190,8 @@ class Provider extends AdvancedObject
 
 	public function setFantasyName(string $fantasyName)
 	{
-		if (!StringUtil::hasBetweenLength($fantasyName, MIN_FANTASY_NAME_LEN, MAX_FANTASY_NAME_LEN))
-			throw new EntityParseException(sprintf('nome fantasia deve ter de %d a %d caracteres (nome fantasia: %s)', MIN_FANTASY_NAME_LEN, MAX_FANTASY_NAME_LEN, $fantasyName));
+		if (!StringUtil::hasBetweenLength($fantasyName, self::MIN_FANTASY_NAME_LEN, self::MAX_FANTASY_NAME_LEN))
+			throw EntityParseException::new("nome fantasia deve ter de %d a %d caracteres (nome fantasia: $fantasyName)", self::MIN_FANTASY_NAME_LEN, self::MAX_FANTASY_NAME_LEN);
 
 		$this->fantasyName = $fantasyName;
 	}
@@ -171,7 +200,7 @@ class Provider extends AdvancedObject
 	 * @return string aquisição do nome de uma pessoa representante do fornecedor.
 	 */
 
-	public function getSpokesman():?string
+	public function getSpokesman(): ?string
 	{
 		return $this->spokesman;
 	}
@@ -182,8 +211,8 @@ class Provider extends AdvancedObject
 
 	public function setSpokesman(?string $spokesman)
 	{
-		if ($spokesman != null && !StringUtil::hasBetweenLength($spokesman, MIN_SPOKESMAN_LEN, MAX_SPOKESMAN_LEN))
-			throw new EntityParseException(sprintf('nome do representante deve ter de %d a %d caracteres (representante: %s)', MIN_SPOKESMAN_LEN, MAX_SPOKESMAN_LEN, $spokesman));
+		if ($spokesman != null && !StringUtil::hasBetweenLength($spokesman, self::MIN_SPOKESMAN_LEN, self::MAX_SPOKESMAN_LEN))
+			throw EntityParseException::new("nome do representante deve ter de %d a %d caracteres (representante: $spokesman)", self::MIN_SPOKESMAN_LEN, self::MAX_SPOKESMAN_LEN);
 
 		$this->spokesman = $spokesman;
 	}
@@ -192,7 +221,7 @@ class Provider extends AdvancedObject
 	 * @return string aquisição do link para acesso à página do fornecedor.
 	 */
 
-	public function getSite():?string
+	public function getSite(): ?string
 	{
 		return $this->site;
 	}
@@ -206,10 +235,10 @@ class Provider extends AdvancedObject
 		if ($site != null)
 		{
 			if (filter_var($site, FILTER_VALIDATE_URL))
-				throw new EntityParseException(sprintf('site inválido (url: %s)', $site));
+				throw new EntityParseException("site inválido (url: $site)");
 
-			if (!StringUtil::hasMaxLength($site, MAX_SITE_LEN))
-				throw new EntityParseException(sprintf('endereço do site deve ter até %d caracteres (site: %d)', MAX_SITE_LEN, $site));
+			if (!StringUtil::hasMaxLength($site, self::MAX_SITE_LEN))
+				throw EntityParseException::new("endereço do site deve ter até %d caracteres (site: $site)", self::MAX_SITE_LEN);
 		}
 
 		$this->site = $site;
@@ -219,7 +248,7 @@ class Provider extends AdvancedObject
 	 * @return Phone aquisição do número de telefone commercial.
 	 */
 
-	public function getCommercial():Phone
+	public function getCommercial(): Phone
 	{
 		return $this->commercial;
 	}
@@ -240,7 +269,7 @@ class Provider extends AdvancedObject
 	 * @return Phone aquisição do número de telefone secundário.
 	 */
 
-	public function getOtherPhone():Phone
+	public function getOtherPhone(): Phone
 	{
 		return $this->otherphone;
 	}
@@ -261,7 +290,7 @@ class Provider extends AdvancedObject
 	 * @return Phones aquisição de uma lista com o telefone comercial e o telefone secundário.
 	 */
 
-	public function getPhones():Phones
+	public function getPhones(): Phones
 	{
 		$phones = new Phones();
 		$phones->add($this->getCommercial());
@@ -274,7 +303,7 @@ class Provider extends AdvancedObject
 	 * @return boolean fornecedor está ativo ou não no sistema.
 	 */
 
-	public function isInactive():bool
+	public function isInactive(): bool
 	{
 		return $this->inactive;
 	}
@@ -292,7 +321,7 @@ class Provider extends AdvancedObject
 	 * @return ProviderContacts aquisição da lista de contatos do fornecedor.
 	 */
 
-	public function getContacs():ProviderContacts
+	public function getContacs(): ProviderContacts
 	{
 		return $this->contacts;
 	}
