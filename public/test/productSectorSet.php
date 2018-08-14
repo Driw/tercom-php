@@ -11,7 +11,6 @@ function testExecute()
 		?>
 <form method='get'>
 	Setor ID: <input type='text' name='idProductSector'>
-	Sub Grupo ID: <input type='text' name='idProductSubGroup'>
 	Setor: <input type='text' name='name'>
 	<input type='submit' value='Continuar'>
 </form>

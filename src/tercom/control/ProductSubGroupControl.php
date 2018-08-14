@@ -47,10 +47,10 @@ class ProductSubGroupControl extends GenericControl
 		$this->validate($productSubGroup, false);
 
 		if ($this->getByName($productSubGroup->getName()) !== null)
-			throw new ControlException('grupo já registrado');
+			throw new ControlException('subgrupo já registrado');
 
 		if (!$this->productGroupControl->has($productSubGroup->getProductGroupID()))
-			throw new ControlException('família não encontrada');
+			throw new ControlException('grupo não encontrada');
 
 		try {
 			return $this->productSubGroupDAO->insert($productSubGroup);

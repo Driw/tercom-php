@@ -11,7 +11,6 @@ function testExecute()
 		?>
 <form method='get'>
 	Sub Grupo ID: <input type='text' name='idProductSubGroup'>
-	Grupo ID: <input type='text' name='idProductGroup'>
 	Sub Grupo: <input type='text' name='name'>
 	<input type='submit' value='Continuar'>
 </form>
@@ -19,11 +18,7 @@ function testExecute()
 		exit;
 	}
 	$idProductSubGroup = intval($_GET['idProductSubGroup']);
-	$parameters = [
-		'name' => $_GET['name'],
-		'idProductGroup' => $_GET['idProductGroup'],
-	];
-	return GeradorDeDados::callWebService("productSubGroup/set/$idProductSubGroup", $parameters, true);
+	return GeradorDeDados::callWebService("productSubGroup/set/$idProductSubGroup", $_GET, true);
 }
 require_once 'execute.php';
 

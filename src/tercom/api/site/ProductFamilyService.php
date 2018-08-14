@@ -19,9 +19,9 @@ use tercom\entities\ProductFamily;
 use tercom\api\site\results\ApiResultCategorySettings;
 
 /**
- * <h1>Serviço de Família de Produtos</h1>
+ * <h1>Serviço de Família dos Produtos</h1>
  *
- * <p>Este serviço realiza a comunicação do cliente para com o sistema em relação aos dados de família de produtos.
+ * <p>Este serviço realiza a comunicação do cliente para com o sistema em relação aos dados de família dos produtos.
  * Como serviço, oferece as possibilidades de acicionar família, atualizar família, obter família,
  * obter grupos da família, remover família e procurar por família.</p>
  *
@@ -33,7 +33,7 @@ use tercom\api\site\results\ApiResultCategorySettings;
 class ProductFamilyService extends ApiServiceInterface
 {
 	/**
-	 * Cria uma nova instância de um serviço para gerenciamento de famílias para produtos no sistema.
+	 * Cria uma nova instância de um serviço para gerenciamento de famílias dos produtos no sistema.
 	 * @param ApiConnection $apiConnection conexão do sistema que realiza o chamado do serviço.
 	 * @param string $apiname nome do serviço que está sendo informado através da conexão.
 	 * @param ApiServiceInterface $parent serviço do qual solicitou o chamado.
@@ -57,7 +57,7 @@ class ProductFamilyService extends ApiServiceInterface
 	/**
 	 * Ação para se obter as configurações de limites de cada atributo referente aos fornecedores.
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
-	 * @return ApiResult aquisição do resultado com as configurações dos dados de família de produtos.
+	 * @return ApiResult aquisição do resultado com as configurações dos dados de família dos produtos.
 	 */
 
 	public function actionSettings(ApiContent $content): ApiResult
@@ -66,10 +66,10 @@ class ProductFamilyService extends ApiServiceInterface
 	}
 
 	/**
-	 * Adiciona uma nova família de produtos sendo necessário informar somente o nome.
+	 * Adiciona uma nova família dos produtos sendo necessário informar somente o nome.
 	 * @ApiAnnotation({"method":"post"})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
-	 * @return ApiResult aquisição do resultado contendo os dados da família de produtos adicionada.
+	 * @return ApiResult aquisição do resultado contendo os dados da família dos produtos adicionada.
 	 */
 
 	public function actionAdd(ApiContent $content): ApiResult
@@ -95,12 +95,12 @@ class ProductFamilyService extends ApiServiceInterface
 	}
 
 	/**
-	 * Atualiza os dados de uma família de produto através do seu código de identificação.
+	 * Atualiza os dados de uma família dos produtos através do seu código de identificação.
 	 * Nenhum dado é obrigatório ser atualizado, porém se informado será considerado.
 	 * @ApiAnnotation({"method":"post", "params":["idProductFamily"]})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
 	 * @throws ApiException família não encontrada.
-	 * @return ApiResult aquisição do resultado com os dados da família de produtos atualizada.
+	 * @return ApiResult aquisição do resultado com os dados da família dos produtos atualizada.
 	 */
 
 	public function actionSet(ApiContent $content): ApiResult
@@ -133,7 +133,7 @@ class ProductFamilyService extends ApiServiceInterface
 	}
 
 	/**
-	 * Excluí os dados de uma família de produtos através do seu código de identificação.
+	 * Excluí os dados de uma família dos produtos através do seu código de identificação.
 	 * @ApiAnnotation({"params":["idProductFamily"]})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
 	 * @throws ApiException família não encontrada;
@@ -161,11 +161,11 @@ class ProductFamilyService extends ApiServiceInterface
 	}
 
 	/**
-	 * Obtém os dados de uma família de produtos através do seu código de identificação.
+	 * Obtém os dados de uma família dos produtos através do seu código de identificação.
 	 * @ApiAnnotation({"params":["idProductFamily"]})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
 	 * @throws ApiException fornecedor não encontrado.
-	 * @return ApiResult aquisição do resultado com os dados da família de produtos obtido.
+	 * @return ApiResult aquisição do resultado com os dados da família dos produtos obtido.
 	 */
 
 	public function actionGet(ApiContent $content): ApiResult
@@ -183,11 +183,11 @@ class ProductFamilyService extends ApiServiceInterface
 	}
 
 	/**
-	 * Obtém os dados dos grupos de produtos vinculados a uma família de produtos especificado..
+	 * Obtém os dados dos grupos dos produtos vinculados a uma família dos produtos especificado.
 	 * @ApiAnnotation({"params":["idProductFamily"]})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
 	 * @throws ApiException fornecedor não encontrado.
-	 * @return ApiResult aquisição do resultado com os dados dos grupos de produtos encontrados.
+	 * @return ApiResult aquisição do resultado com os dados dos grupos dos produtos encontrados.
 	 */
 
 	public function actionGetGroups(ApiContent $content): ApiResult
@@ -209,11 +209,11 @@ class ProductFamilyService extends ApiServiceInterface
 	}
 
 	/**
-	 * Pesquisa por famílias de produtos através de um filtro e um valor de busca.
+	 * Pesquisa por famílias dos produtos através de um filtro e um valor de busca.
 	 * @ApiAnnotation({"params":["filter","value"]})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
 	 * @throws ApiException método de pesquisa desconhecido.
-	 * @return ApiResult aquisição do resultado com a lista de famílias de produtos encontrados.
+	 * @return ApiResult aquisição do resultado com a lista das famílias dos produtos encontrados.
 	 */
 
 	public function actionSearch(ApiContent $content): ApiResult
@@ -230,9 +230,9 @@ class ProductFamilyService extends ApiServiceInterface
 	}
 
 	/**
-	 * Procedimento interno utilizado para buscar por famílias de produtos através do nome.
-	 * @param string $name nome parcial ou completo da família de produtos à ser procurada.
-	 * @return ApiResult aquisição do resultado com a lista de famílias de produtos encontrados.
+	 * Procedimento interno utilizado para buscar por famílias dos produtos através do nome.
+	 * @param string $name nome parcial ou completo da família dos produtos à ser procurada.
+	 * @return ApiResult aquisição do resultado com a lista das famílias dos produtos encontrados.
 	 */
 
 	private function actionSearchByName(string $name): ApiResult

@@ -11,7 +11,6 @@ function testExecute()
 		?>
 <form method='get'>
 	Grupo ID: <input type='text' name='idProductGroup'>
-	Família ID: <input type='text' name='idProductFamily'>
 	Grupo: <input type='text' name='name'>
 	<input type='submit' value='Continuar'>
 </form>

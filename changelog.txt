@@ -20,6 +20,13 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+13.08.2018 - 0.0.5.35
+- Alguns ajustes nos scripts de testes e modificado os scripts de busca (categorias de produtos).
+	- As buscas agora devem possuir um filtro e depois um valor referente ao filtro.
+- Documentação e ajustes para funcionar com 'dproject\restful' dos seguintes serviços:
+	- ProductSectorService, ProductSubGroupService e ProductGroupService.
+- Alguns ajustes na documentação de ProductFamilyService.
+
 13.08.2018 - 0.0.5.34
 - Movido algumas constantes que estavamo como defines em constantesEntities para ProductCategory.
 	- Também foi atualizado setName() para que realize a validação conforme valores.

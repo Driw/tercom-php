@@ -10,7 +10,7 @@ function testExecute()
 		header('Content-type: text/html');
 		?>
 <form method='get'>
-	Família ID: <input type='text' name='idProductFamily'>
+	Família ID: <input type='text' name='idProductGroup'>
 	Grupo: <input type='text' name='name'>
 	<input type='submit' value='Continuar'>
 </form>
@@ -19,7 +19,7 @@ function testExecute()
 	}
 	$parameters = [
 		'name' => $_GET['name'],
-		'idProductFamily' => $_GET['idProductFamily'],
+		'idProductGroup' => $_GET['idProductGroup'],
 	];
 
 	return GeradorDeDados::callWebService('productGroup/add', $parameters);

@@ -10,26 +10,67 @@ use dProject\restful\ApiResult;
 use dProject\restful\ApiServiceInterface;
 use dProject\restful\exception\ApiException;
 use dProject\restful\exception\ApiMissParam;
-use tercom\control\ProductSectorControl;
-use tercom\entities\ProductSector;
-use tercom\api\SiteService;
-use tercom\core\System;
 use tercom\api\site\results\ApiResultCategory;
 use tercom\api\site\results\ApiResultCategories;
+use tercom\control\ProductSectorControl;
+use tercom\core\System;
+use tercom\entities\ProductSector;
+use tercom\api\site\results\ApiResultCategorySettings;
+
+/**
+ * <h1>Serviço de Setores dos Produtos</h1>
+ *
+ * <p>Este serviço realiza a comunicação do cliente para com o sistema em relação aos dados de setores dos produtos.
+ * Como serviço, oferece as possibilidades de acicionar setor, atualizar setor, obter setor, remover setor e procurar por setor.</p>
+ *
+ * @see ApiServiceInterface
+ * @see ApiConnection
+ * @author Andrew
+ */
 
 class ProductSectorService extends ApiServiceInterface
 {
-	public function __construct(ApiConnection $apiConnection, string $apiname, SiteService $parent)
+	/**
+	 * Cria uma nova instância de um serviço para gerenciamento de stores dos produtos no sistema.
+	 * @param ApiConnection $apiConnection conexão do sistema que realiza o chamado do serviço.
+	 * @param string $apiname nome do serviço que está sendo informado através da conexão.
+	 * @param ApiServiceInterface $parent serviço do qual solicitou o chamado.
+	 */
+
+	public function __construct(ApiConnection $apiConnection, string $apiname, ApiServiceInterface $parent)
 	{
-		parent::__contruct($apiConnection, $apiname, $parent);
+		parent::__construct($apiConnection, $apiname, $parent);
 	}
 
-	public function execute():ApiResult
+	/**
+	 * {@inheritDoc}
+	 * @see \dProject\restful\ApiServiceInterface::execute()
+	 */
+
+	public function execute(): ApiResult
 	{
 		return $this->defaultExecute();
 	}
 
-	public function actionAdd(ApiContent $content):ApiResult
+	/**
+	 * Ação para se obter as configurações de limites de cada atributo referente aos setores dos produtos.
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @return ApiResult aquisição do resultado com as configurações dos dados de setores dos produtos.
+	 */
+
+	public function actionSettings(ApiContent $content): ApiResult
+	{
+		return new ApiResultCategorySettings();
+	}
+
+	/**
+	 * Adiciona um novo setor dos produtos sendo necessário informar somente o nome.
+	 * @ApiAnnotation({"method":"post"})
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @return ApiResult aquisição do resultado contendo os dados do setor dos produtos adicionado.
+	 */
+
+	public function actionAdd(ApiContent $content): ApiResult
 	{
 		$POST = PostService::getInstance();
 
@@ -52,10 +93,19 @@ class ProductSectorService extends ApiServiceInterface
 		return $result;
 	}
 
-	public function actionSet(ApiContent $content):ApiResult
+	/**
+	 * Atualiza os dados de um setor dos produtos através do seu código de identificação.
+	 * Nenhum dado é obrigatório ser atualizado, porém se informado será considerado.
+	 * @ApiAnnotation({"method":"post", "params":["idProductSector"]})
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @throws ApiException grupo não encontrada.
+	 * @return ApiResult aquisição do resultado com os dados do setor dos produtos atualizado.
+	 */
+
+	public function actionSet(ApiContent $content): ApiResult
 	{
 		$POST = PostService::getInstance();
-		$idProductSector = $content->getParameters()->getInt(0);
+		$idProductSector = $content->getParameters()->getInt('idProductSector');
 
 		$productSectorControl = new ProductSectorControl(System::getWebConnection());
 
@@ -82,9 +132,17 @@ class ProductSectorService extends ApiServiceInterface
 		return $result;
 	}
 
-	public function actionRemove(ApiContent $content):ApiResult
+	/**
+	 * Excluí os dados de um setor dos produtos através do seu código de identificação.
+	 * @ApiAnnotation({"params":["idProductSector"]})
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @throws ApiException subgrupo não encontrada;
+	 * @return ApiResult aquisição dos dados do setor que foi excluída.
+	 */
+
+	public function actionRemove(ApiContent $content): ApiResult
 	{
-		$idProductSector = $content->getParameters()->getInt(0);
+		$idProductSector = $content->getParameters()->getInt('idProductSector');
 
 		$productSectorControl = new ProductSectorControl(System::getWebConnection());
 
@@ -102,9 +160,17 @@ class ProductSectorService extends ApiServiceInterface
 		return $result;
 	}
 
-	public function actionGet(ApiContent $content):ApiResult
+	/**
+	 * Obtém os dados de um setor dos produtos através do seu código de identificação.
+	 * @ApiAnnotation({"params":["idProductSector"]})
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @throws ApiException subgrupo não encontrado.
+	 * @return ApiResult aquisição do resultado com os dados do setor dos produtos obtido.
+	 */
+
+	public function actionGet(ApiContent $content): ApiResult
 	{
-		$idProductSector = $content->getParameters()->getInt(0);
+		$idProductSector = $content->getParameters()->getInt('idProductSector');
 		$productSectorControl = new ProductSectorControl(System::getWebConnection());
 
 		if (($productSector = $productSectorControl->get($idProductSector)) === null)
@@ -116,9 +182,35 @@ class ProductSectorService extends ApiServiceInterface
 		return $result;
 	}
 
+	/**
+	 * Pesquisa por setores dos produtos através de um filtro e um valor de busca.
+	 * @ApiAnnotation({"params":["filter","value"]})
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @throws ApiException método de pesquisa desconhecido.
+	 * @return ApiResult aquisição do resultado com a lista dos setores dos produtos encontrados.
+	 */
+
 	public function actionSearch(ApiContent $content):ApiResult
 	{
-		$name = $content->getParameters()->getString(0);
+		$filter = $content->getParameters()->getString('filter');
+		$value = $content->getParameters()->getString('value');
+
+		switch ($filter)
+		{
+			case 'name': return $this->actionSearchByName($value);
+		}
+
+		throw new ApiException('método de pesquisa desconhecido');
+	}
+
+	/**
+	 * Procedimento interno utilizado para buscar por setores dos produtos através do nome.
+	 * @param string $name nome parcial ou completo da família dos produtos à ser procurada.
+	 * @return ApiResult aquisição do resultado com a lista das famílias dos produtos encontrados.
+	 */
+
+	public function actionSearchByName(string $name): ApiResult
+	{
 		$productSectorControl = new ProductSectorControl(System::getWebConnection());
 		$productCategories = $productSectorControl->search($name);
 
