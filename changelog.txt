@@ -20,6 +20,10 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+13.08.2018 - 0.0.5.33
+- Movido todas as estruturas de resultados dos webserbices de 'api/site' para 'api/site/results'.
+- Documentação da entidade Manufacture e atualizado a utilização de defines para constantes.
+
 13.08.2018 - 0.0.5.32
 - Corrigido parâmetro na ApiAnnotation de actionRemoveContact() de 'param' para 'params', ProviderContactService.
 

@@ -1,20 +1,20 @@
 <?php
 
-namespace tercom\api\site;
+namespace tercom\api\site\results;
 
 use dProject\restful\ApiResult;
-use tercom\entities\Manufacture;
+use tercom\entities\lists\Manufactures;
 
-class ApiManufactureResult implements ApiResult
+class ApiResultManufactures implements ApiResult
 {
 	/**
 	 * @var string
 	 */
 	private $message;
 	/**
-	 * @var Manufacture
+	 * @var Manufactures
 	 */
-	private $manufacture;
+	private $manufactures;
 
 	/**
 	 *
@@ -22,16 +22,16 @@ class ApiManufactureResult implements ApiResult
 
 	public function __construct()
 	{
-		$this->manufacture = new Manufacture();
+		$this->manufactures = new Manufactures();
 	}
 
 	/**
-	 * @param Manufacture $manufacture
+	 * @param Manufactures $manufactures
 	 */
 
-	public function setManufacture(Manufacture $manufacture)
+	public function setManufactures(Manufactures $manufactures)
 	{
-		$this->manufacture = $manufacture;
+		$this->manufactures = $manufactures;
 	}
 
 	/**
@@ -50,7 +50,7 @@ class ApiManufactureResult implements ApiResult
 
 	public function toApiArray():array
 	{
-		$array = $this->manufacture->toArray();
+		$array = $this->manufactures->toArray();
 
 		if ($this->message !== null)
 			$array['message'] = $this->message;

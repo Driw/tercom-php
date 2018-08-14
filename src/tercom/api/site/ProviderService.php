@@ -15,6 +15,9 @@ use tercom\control\ProviderControl;
 use tercom\control\ProviderContactControl;
 use tercom\core\System;
 use tercom\entities\Provider;
+use tercom\api\site\results\ApiResultProviderSettings;
+use tercom\api\site\results\ApiResultProvider;
+use tercom\api\site\results\ApiResultProviders;
 
 /**
  * <h1>Serviço de Fornecedor</h1>

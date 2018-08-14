@@ -10,17 +10,18 @@ use dProject\restful\ApiResult;
 use dProject\restful\ApiServiceInterface;
 use dProject\restful\exception\ApiException;
 use dProject\restful\exception\ApiMissParam;
-use tercom\entities\ProductSubGroup;
 use tercom\control\ProductSubGroupControl;
 use tercom\control\ProductSectorControl;
-use tercom\api\SiteService;
 use tercom\core\System;
+use tercom\entities\ProductSubGroup;
+use tercom\api\site\results\ApiResultCategory;
+use tercom\api\site\results\ApiResultCategories;
 
 class ProductSubGroupService extends ApiServiceInterface
 {
-	public function __construct(ApiConnection $apiConnection, string $apiname, SiteService $parent)
+	public function __construct(ApiConnection $apiConnection, string $apiname, ApiServiceInterface $parent)
 	{
-		parent::__contruct($apiConnection, $apiname, $parent);
+		parent::__construct($apiConnection, $apiname, $parent);
 	}
 
 	public function execute():ApiResult

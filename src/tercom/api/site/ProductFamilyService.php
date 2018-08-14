@@ -10,11 +10,13 @@ use dProject\restful\ApiResult;
 use dProject\restful\ApiServiceInterface;
 use dProject\restful\exception\ApiException;
 use dProject\restful\exception\ApiMissParam;
-use tercom\entities\ProductFamily;
+use tercom\api\SiteService;
+use tercom\api\site\results\ApiResultCategory;
+use tercom\api\site\results\ApiResultCategories;
 use tercom\control\ProductFamilyControl;
 use tercom\control\ProductGroupControl;
-use tercom\api\SiteService;
 use tercom\core\System;
+use tercom\entities\ProductFamily;
 
 class ProductFamilyService extends ApiServiceInterface
 {

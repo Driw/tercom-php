@@ -10,7 +10,8 @@ use tercom\Entities\EntityParseException;
 /**
  * <h1>Fabricante</h1>
  *
- * <p></p>
+ * <p>Cada vlaor de produto no sistema deve ser vinculado a um fabrincate já que um mesmo produto pode ter vários.
+ * Quanto ao fabrincate é necessário apenas o seu nome e que por regra de negócio é o seu nome fantasia.</p>
  *
  * @see AdvancedObject
  * @author Andrew
@@ -19,16 +20,25 @@ use tercom\Entities\EntityParseException;
 class Manufacture extends AdvancedObject
 {
 	/**
-	 * @var int
+	 * @var int quantidade mínima de caracteres necessário no nome fantasia.
+	 */
+	public const MIN_FANTASY_NAME_LEN = 6;
+	/**
+	 * @var int quantidade máxima de caracteres necessário no nome fantasia.
+	 */
+	public const MAX_FANTASY_NAME_LEN = 48;
+
+	/**
+	 * @var int código de identificação único.
 	 */
 	private $id;
 	/**
-	 * @var string
+	 * @var string nome fantasia da empresa.
 	 */
 	private $fantasyName;
 
 	/**
-	 *
+	 * Cria uma nova instância de um fabricante.
 	 */
 
 	public function __construct()
@@ -38,40 +48,40 @@ class Manufacture extends AdvancedObject
 	}
 
 	/**
-	 * @return number
+	 * @return int aquisição do código de identificação.
 	 */
 
-	public function getID()
+	public function getID(): int
 	{
 		return $this->id;
 	}
 
 	/**
-	 * @param number $id
+	 * @param int $id código de identificação.
 	 */
 
-	public function setID($id)
+	public function setID(int $id)
 	{
 		$this->id = $id;
 	}
 
 	/**
-	 * @return string
+	 * @return string aquisição do nome fantasia da empresa.
 	 */
 
-	public function getFantasyName()
+	public function getFantasyName(): string
 	{
 		return $this->fantasyName;
 	}
 
 	/**
-	 * @param string $name
+	 * @param string $name nome fantasia da empresa.
 	 */
 
-	public function setFantasyName($fantasyName)
+	public function setFantasyName(string $fantasyName)
 	{
-		if (!StringUtil::hasBetweenLength($fantasyName, MIN_FANTASY_NAME_LEN, MAX_FANTASY_NAME_LEN))
-			throw new EntityParseException(sprintf('nome do fabricante deve deter de %d a %d caracteres (nome: %s)', MIN_FANTASY_NAME_LEN, MAX_FANTASY_NAME_LEN, $fantasyName));
+		if (!StringUtil::hasBetweenLength($fantasyName, self::MIN_FANTASY_NAME_LEN, self::MAX_FANTASY_NAME_LEN))
+			throw EntityParseException::new("nome do fabricante deve deter de %d a %d caracteres (nome: $fantasyName)", self::MIN_FANTASY_NAME_LEN, self::MAX_FANTASY_NAME_LEN);
 
 		$this->fantasyName = $fantasyName;
 	}

@@ -1,11 +1,12 @@
 <?php
 
-namespace tercom\api\site;
+namespace tercom\api\site\results;
 
 use dProject\restful\ApiResult;
 use dProject\Primitive\AdvancedObject;
+use tercom\entities\Manufacture;
 
-class ApiManufactureSettings extends AdvancedObject implements ApiResult
+class ApiResultManufactureSettings extends AdvancedObject implements ApiResult
 {
 	/**
 	 * @var int
@@ -22,8 +23,8 @@ class ApiManufactureSettings extends AdvancedObject implements ApiResult
 
 	public function __construct()
 	{
-		$this->minFantasyNameLen = MIN_FANTASY_NAME_LEN;
-		$this->maxFantasyNameLen = MAX_FANTASY_NAME_LEN;
+		$this->minFantasyNameLen = Manufacture::MIN_FANTASY_NAME_LEN;
+		$this->maxFantasyNameLen = Manufacture::MAX_FANTASY_NAME_LEN;
 	}
 
 	/**

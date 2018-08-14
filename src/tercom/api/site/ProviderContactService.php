@@ -16,6 +16,9 @@ use tercom\core\System;
 use tercom\entities\Provider;
 use tercom\entities\ProviderContact;
 use dProject\Primitive\ArrayDataException;
+use tercom\api\site\results\ApiResultProviderContactSettings;
+use tercom\api\site\results\ApiResultProviderContact;
+use tercom\api\site\results\ApiResultProviderContacts;
 
 /**
  * <h1>Serviço de Contatos do Fornecedor</h1>

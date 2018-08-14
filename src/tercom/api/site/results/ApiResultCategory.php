@@ -1,6 +1,6 @@
 <?php
 
-namespace tercom\api\site;
+namespace tercom\api\site\results;
 
 use dProject\restful\ApiResult;
 use tercom\entities\ProductCategory;

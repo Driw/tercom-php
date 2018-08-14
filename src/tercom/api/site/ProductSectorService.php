@@ -10,10 +10,12 @@ use dProject\restful\ApiResult;
 use dProject\restful\ApiServiceInterface;
 use dProject\restful\exception\ApiException;
 use dProject\restful\exception\ApiMissParam;
-use tercom\entities\ProductSector;
 use tercom\control\ProductSectorControl;
+use tercom\entities\ProductSector;
 use tercom\api\SiteService;
 use tercom\core\System;
+use tercom\api\site\results\ApiResultCategory;
+use tercom\api\site\results\ApiResultCategories;
 
 class ProductSectorService extends ApiServiceInterface
 {

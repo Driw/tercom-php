@@ -9,9 +9,12 @@ use dProject\restful\ApiResult;
 use dProject\restful\ApiServiceInterface;
 use dProject\restful\exception\ApiException;
 use dProject\restful\exception\ApiMissParam;
+use tercom\api\site\results\ApiResultManufacture;
+use tercom\api\site\results\ApiResultManufactures;
+use tercom\api\site\results\ApiResultManufactureSettings;
 use tercom\control\ManufactureControl;
-use tercom\entities\Manufacture;
 use tercom\core\System;
+use tercom\entities\Manufacture;
 
 /**
  * <h1>Serviço de Fabricantes</h1>
@@ -52,12 +55,12 @@ class ManufactureService extends ApiServiceInterface
 	/**
 	 * Ação para se obter as configurações de limites de cada atributo referente aos fabricantes.
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
-	 * @return ApiManufactureSettings
+	 * @return ApiResultManufactureSettings
 	 */
 
-	public function actionSettings(ApiContent $content): ApiManufactureSettings
+	public function actionSettings(ApiContent $content): ApiResultManufactureSettings
 	{
-		$settings = new ApiManufactureSettings();
+		$settings = new ApiResultManufactureSettings();
 
 		return $settings;
 	}
@@ -85,7 +88,7 @@ class ManufactureService extends ApiServiceInterface
 		$manufactureControl = new ManufactureControl(System::getWebConnection());
 		$manufactureControl->add($manufacture);
 
-		$result = new ApiManufactureResult();
+		$result = new ApiResultManufacture();
 		$result->setManufacture($manufacture);
 
 		return $result;
@@ -118,7 +121,7 @@ class ManufactureService extends ApiServiceInterface
 			return new ApiMissParam($e);
 		}
 
-		$result = new ApiManufactureResult();
+		$result = new ApiResultManufacture();
 		$result->setManufacture($manufacture);
 
 		if ($manufactureControl->set($manufacture))
@@ -145,7 +148,7 @@ class ManufactureService extends ApiServiceInterface
 		if (($manufacture = $manufactureControl->get($idManufacture)) === null)
 			throw new ApiException('fabricante não encontrado');
 
-		$result = new ApiManufactureResult();
+		$result = new ApiResultManufacture();
 		$result->setManufacture($manufacture);
 
 		if ($manufactureControl->remove($manufacture))
@@ -172,7 +175,7 @@ class ManufactureService extends ApiServiceInterface
 		if (($manufacture = $manufactureControl->get($idManufacture)) === null)
 			throw new ApiException('fabricante não encontrado');
 
-		$result = new ApiManufactureResult();
+		$result = new ApiResultManufacture();
 		$result->setManufacture($manufacture);
 
 		return $result;
