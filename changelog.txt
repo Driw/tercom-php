@@ -20,6 +20,13 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+13.08.2018 - 0.0.5.34
+- Movido algumas constantes que estavamo como defines em constantesEntities para ProductCategory.
+	- Também foi atualizado setName() para que realize a validação conforme valores.
+- Modificado a forma como é feita a busca de famílias sendo necessário informar o filtro.
+- Documentação da classe e ações disponiveis em ProductFamilyService tal como adaptações para 'dproject\restful'.
+- Adicionado opção para se obter as configurações dos dados de ProductFamily.
+
 13.08.2018 - 0.0.5.33
 - Movido todas as estruturas de resultados dos webserbices de 'api/site' para 'api/site/results'.
 - Documentação da entidade Manufacture e atualizado a utilização de defines para constantes.
@@ -37,7 +44,7 @@
 
 12.08.2018 - 0.0.5.30
 - Corrigido 'test/manufactureUpdate' que estava informando 'companyName' ao invés de 'fantasyName'.
-- Atualizado ManufactureService para ser usado com 'dproject/restful':
+- Atualizado ManufactureService para ser usado com 'dproject\restful':
 	- Documentação da classe e dos seus métodos (ações), atribuição de ApiAnnotation.
 	- Corrigido funcionamento de actionSearch() que buscava por nome fantasia completo e não parcial.
 		- Modificado para que seja chamado em '../manufacture/search/{filter}/{value}'.
@@ -77,7 +84,7 @@
 09.08.2018 - 0.0.4.24
 - Atualizado '.buildpath' do projeto e suas dependências devido as atualizações.
 - Movido o código fonte de 'src/com/tercom' para 'src/tercom' afim de manter o padrão do composer.
-- Adicionado novas libs que serão usadas nas próximas versões: 'dproject/restful' e 'dproject/annotation'.
+- Adicionado novas libs que serão usadas nas próximas versões: 'dproject\restful' e 'dproject/annotation'.
 
 03.08.2018 - 0.0.3.23
 - Enviado arquivos de teste do funcionamento dos webservices referentes a rev22.

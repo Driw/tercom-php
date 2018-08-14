@@ -202,7 +202,7 @@ class ProviderService extends ApiServiceInterface
 			case 'fantasyName': return $this->actionSearchByFantasyName($content);
 		}
 
-		throw new ApiException('método de busca desconhecido');
+		throw new ApiException('método de pesquisa desconhecido');
 	}
 
 	/**
@@ -299,6 +299,8 @@ class ProviderService extends ApiServiceInterface
 	}
 
 	/**
+	 * Excluí os dados de telefone de um dos fornecedores através do seu código identificação.
+	 * Necessário também informar por parâmetro qual o telefonse será excluído, <code>REMOVE_*_PHONE</code>
 	 * @ApiAnnotation({"params":["idProvider", "phone"]})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
 	 * @throws ApiException fornecedor não encontrado; telefone não definido; telefone inválido.

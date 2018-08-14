@@ -4,6 +4,8 @@ namespace tercom\entities;
 
 use dProject\Primitive\ObjectUtil;
 use dProject\Primitive\AdvancedObject;
+use dProject\Primitive\StringUtil;
+use tercom\Entities\EntityParseException;
 
 /**
  * <h1>Produto Folha</h1>
@@ -18,6 +20,15 @@ use dProject\Primitive\AdvancedObject;
 
 abstract class ProductCategory extends AdvancedObject
 {
+	/**
+	 * @var int quantidade mínima de caracteres necessário no nome.
+	 */
+	public const MIN_NAME_LEN = MIN_NAME_LEN;
+	/**
+	 * @var int quantidade máxima de caracteres necessário no nome.
+	 */
+	public const MAX_NAME_LEN = 32;
+
 	/**
 	 * @var int código da categoria do tipo familia.
 	 */
@@ -93,6 +104,9 @@ abstract class ProductCategory extends AdvancedObject
 
 	public function setName(string $name)
 	{
+		if (!StringUtil::hasBetweenLength($name, self::MIN_NAME_LEN, self::MAX_NAME_LEN))
+			throw EntityParseException::new("nome deve possuir de %d a %d caracteres (nome: $name)", self::MIN_NAME_LEN, self::MAX_NAME_LEN);
+
 		$this->name = $name;
 	}
 
