@@ -20,6 +20,9 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+13.08.2018 - 0.0.5.32
+- Corrigido parâmetro na ApiAnnotation de actionRemoveContact() de 'param' para 'params', ProviderContactService.
+
 12.08.2018 - 0.0.5.31
 - Adicionado as configurações de telefone ao obter as configurações do fornecedor e contato do fornecedor.
 - Documentação de ProviderContactService e adicionado ApiAnnotation para funcionar com 'dproject\restful'.

@@ -265,7 +265,7 @@ class ProviderContactService extends ApiServiceInterface
 
 	/**
 	 * Exclui os dados do contato de fornecedor e seus telefones se assim for encontrado.
-	 * @ApiAnnotation({"method":"post","param":["idProvider"]})
+	 * @ApiAnnotation({"method":"post","params":["idProvider"]})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
 	 * @throws ApiException contato do fornecedor não vinculado ao fornecedor.
 	 * @return ApiResult aquisição dos dados do contato do fornecedor que foi excluído.
