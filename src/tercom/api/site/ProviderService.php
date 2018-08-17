@@ -18,6 +18,7 @@ use tercom\entities\Provider;
 use tercom\api\site\results\ApiResultProviderSettings;
 use tercom\api\site\results\ApiResultProvider;
 use tercom\api\site\results\ApiResultProviders;
+use tercom\api\site\results\ApiResultProviderPage;
 
 /**
  * <h1>Serviço de Fornecedor</h1>
@@ -134,6 +135,9 @@ class ProviderService extends ApiServiceInterface
 		if (($provider = $providerControl->get($providerID)) == null)
 			throw new ApiException('fornecedor não encontrado');
 
+		$phoneControl = new PhoneControl(System::getWebConnection());
+		$phoneControl->loadPhones($provider->getPhones());
+
 		try {
 
 			if ($POST->isSetted('cnpj')) $provider->setCNPJ($POST->getString('cnpj'));
@@ -143,8 +147,8 @@ class ProviderService extends ApiServiceInterface
 			if ($POST->isSetted('site')) $provider->setSite($POST->getString('site'));
 			if ($POST->isSetted('inactive')) $provider->setSite($POST->getBoolean('inactive'));
 
-		} catch (Exception $e) {
-			return new ApiMissParam($e->getMessage());
+		} catch (ArrayDataException $e) {
+			return new ApiMissParam($e);
 		}
 
 		$provider->setInactive(false);
@@ -239,6 +243,33 @@ class ProviderService extends ApiServiceInterface
 
 		$result = new ApiResultProviders();
 		$result->setProviders($providers);
+
+		return $result;
+	}
+
+	/**
+	 * Lista todos os forenecedores registrados sendo selecionados por paginas.
+	 * A página irá determinar quais fornecedores são necessários no retorno.
+	 * @ApiAnnotation({"params":["page"]})
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @throws ApiException método de pesquisa desconhecido.
+	 * @return ApiResult aquisição do resultado com a lista de fornecedores encontrados.
+	 */
+
+	public function actionList(ApiContent $content): ApiResult
+	{
+		if ($content->getParameters()->getString('page') === 'all')
+			$page = -1;
+		else
+			$page = $content->getParameters()->getInt('page');
+
+		$providerControl = new ProviderControl(System::getWebConnection());
+		$providers = $providerControl->listByPage($page);
+		$pageCount = $providerControl->getPageCount();
+
+		$result = new ApiResultProviderPage();
+		$result->setProviders($providers);
+		$result->setPageCount($pageCount);
 
 		return $result;
 	}

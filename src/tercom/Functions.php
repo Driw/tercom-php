@@ -8,6 +8,11 @@ use dProject\Primitive\AdvancedObject;
 class Functions
 {
 	/**
+	 * @var string padronização de formato para CNPJ.
+	 */
+	public const PATTERN_CNPJ = '/[0-9]{2}\.?[0-9]{3}\.?[0-9]{3}\/?[0-9]{4}\-?[0-9]{2}/';
+
+	/**
 	 * Exibe um alerta em javascript visível apenas como mensagem.
 	 * @param string $message mensagem de alerta a ser exibido.
 	 */
@@ -223,8 +228,11 @@ class Functions
 	 * @link https://gist.github.com/guisehn/3276302
 	 */
 
-	public static function validateCNPJ(string $cnpj):bool
+	public static function validateCNPJ(string &$cnpj):bool
 	{
+		if (!preg_match(self::PATTERN_CNPJ, $cnpj))
+			return false;
+
 		$cnpj = preg_replace('/[^0-9]/', '', (string) $cnpj);
 
 		// Valida tamanho

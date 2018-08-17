@@ -1,9 +1,14 @@
 RewriteEngine On
 
 # URL Amigável - Site
-RewriteRule !\.(js|ico|gif|jpg|png|css|pdf|swf|flv|map)$ index.php [QSA]
+RewriteRule !\.(js|ico|gif|jpg|png|css|pdf|swf|flv|map|ttf|woff)$ index.php [QSA]
 
-# Redirecionamento de Arquivos comuns para /data
+# Redirecionamento de Arquivos de Layout para dashboard
+RedirectMatch ^/dashboard/css/(.*) /dashboard/stylesheets/$1
+RedirectMatch ^/dashboard/img/(.*) /dashboard/images/$1
+RedirectMatch ^/dashboard/js/(.*) /dashboard/javascripts/$1
+
+# Redirecionamento de Arquivos de Layout base
 RedirectMatch ^/css/(.*) /stylesheets/$1
 RedirectMatch ^/img/(.*) /images/$1
-RedirectMatch ^/js/(.*) /javascript/$1
+RedirectMatch ^/js/(.*) /javascripts/$1

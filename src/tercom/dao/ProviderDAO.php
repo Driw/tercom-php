@@ -11,6 +11,10 @@ use tercom\entities\lists\Providers;
 class ProviderDAO extends GenericDAO
 {
 	/**
+	 * @var int
+	 */
+	private const PAGE_LENGTH = 10;
+	/**
 	 * @var ProviderContactDAO
 	 */
 	private $providerContactDAO;
@@ -60,7 +64,7 @@ class ProviderDAO extends GenericDAO
 		$query->setString(5, $provider->getSite());
 		$query->setInteger(6, $provider->getCommercial()->getID() > 0 ? $provider->getCommercial()->getID() : null);
 		$query->setInteger(7, $provider->getOtherPhone()->getID() > 0 ? $provider->getOtherPhone()->getID() : null);
-		$query->setString(8, $provider->isInactive() ? 'yes' : 'no');
+		$query->setString(8, $provider->isInactive());
 		$query->setInteger(9, $provider->getID());
 
 		$result = $query->execute();
@@ -155,7 +159,33 @@ class ProviderDAO extends GenericDAO
 		return $this->parseProviders($result, true);
 	}
 
-	private function parseProvider(Result $result):?Provider
+	public function searchByPage(int $page): Providers
+	{
+		$sqlLimit = $page !== -1 ? $this->parsePage($page, self::PAGE_LENGTH) : '';
+		$sql = "SELECT id, cnpj, companyName, fantasyName, spokesman, site, commercial, otherphone
+				FROM providers
+				WHERE inactive = 0
+				ORDER BY id DESC
+				$sqlLimit";
+
+		$query = $this->mysql->createQuery($sql);
+		$result = $query->execute();
+
+		return $this->parseProviders($result, true);
+	}
+
+	public function calcPageCount(): int
+	{
+		$sql = "SELECT COUNT(*) AS qtd FROM providers WHERE inactive = 0";
+
+		$query = $this->mysql->createQuery($sql);
+		$result = $query->execute();
+		$providers = $result->next();
+
+		return ceil(intval($providers['qtd']) / self::PAGE_LENGTH);
+	}
+
+	private function parseProvider(Result $result): ?Provider
 	{
 		if (($providerArray = $this->parseSingleResult($result)) == null)
 			return null;

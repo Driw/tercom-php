@@ -18,7 +18,7 @@ class BoundaryListener extends ApiConnectionAdapter
 
 	public function onApiException($connection, $e)
 	{
-		$connection->newResponseException($e, $e->getCode());
+		die(str_replace(PHP_EOL, "<br>".PHP_EOL, jTraceEx($e)));
 	}
 
 	/**
@@ -28,7 +28,7 @@ class BoundaryListener extends ApiConnectionAdapter
 
 	public function onGenericException($connection, $e)
 	{
-		$connection->newResponseException($e, $e->getCode());
+		die(str_replace(PHP_EOL, "<br>".PHP_EOL, jTraceEx($e)));
 	}
 }
 

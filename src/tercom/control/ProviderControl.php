@@ -94,6 +94,16 @@ class ProviderControl extends GenericControl
 	{
 		return $this->providerDAO->searchByFantasyName($fantasyName);
 	}
+
+	public function listByPage(int $page): Providers
+	{
+		return $this->providerDAO->searchByPage($page);
+	}
+
+	public function getPageCount(): int
+	{
+		return $this->providerDAO->calcPageCount();
+	}
 }
 
 ?>
