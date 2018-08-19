@@ -19,6 +19,7 @@ use tercom\api\site\results\ApiResultProviderSettings;
 use tercom\api\site\results\ApiResultProvider;
 use tercom\api\site\results\ApiResultProviders;
 use tercom\api\site\results\ApiResultProviderPage;
+use tercom\api\site\results\ApiResultSimpleValidation;
 
 /**
  * <h1>Serviço de Fornecedor</h1>
@@ -375,6 +376,50 @@ class ProviderService extends ApiServiceInterface
 		}
 
 		$result->setProvider($provider);
+
+		return $result;
+	}
+
+	/**
+	 * @ApiAnnotation({"params":["attribute","value"]})
+	 * @param ApiContent $content
+	 * @return ApiResult
+	 */
+
+	public function actionValidate(ApiContent $content): ApiResult
+	{
+		$attribute = $content->getParameters()->getString('attribute');
+
+		switch ($attribute)
+		{
+			case 'cnpj': return $this->validateCNPJ($content);
+		}
+
+		throw new ApiException('tipo de validação desconhecida');
+	}
+
+	/**
+	 * @param ApiContent $content
+	 * @return ApiResult
+	 */
+
+	private function validateCNPJ(ApiContent $content): ApiResult
+	{
+		$cnpj = $content->getParameters()->getString('value');
+		$providerControl = new ProviderControl(System::getWebConnection());
+
+		$result = new ApiResultSimpleValidation();
+
+		try {
+
+			if (!$providerControl->avaiableCNPJ($cnpj))
+				$result->setOkMessage(false, 'CNPJ indisponível');
+			else
+				$result->setOkMessage(true, 'CNPJ disponível');
+
+		} catch (Exception $e) {
+			$result->setOkMessage(false, $e->getMessage());
+		}
 
 		return $result;
 	}

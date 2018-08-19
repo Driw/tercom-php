@@ -7,6 +7,7 @@ use tercom\dao\ProviderDAO;
 use tercom\entities\Phone;
 use tercom\entities\Provider;
 use tercom\entities\lists\Providers;
+use tercom\Functions;
 
 class ProviderControl extends GenericControl
 {
@@ -103,6 +104,22 @@ class ProviderControl extends GenericControl
 	public function getPageCount(): int
 	{
 		return $this->providerDAO->calcPageCount();
+	}
+
+	public function avaiableCNPJ(string $cnpj): bool
+	{
+		if (!Functions::validateCNPJ($cnpj))
+			throw new ControlValidationException('CNPJ inválido');
+
+		return !$this->providerDAO->existCNPJ($cnpj);
+	}
+
+	public static function getFilters(): array
+	{
+		return [
+			'fantasyName' => 'Nome Fantasia',
+			'cnpj' => 'CNPJ',
+		];
 	}
 }
 

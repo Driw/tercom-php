@@ -1,0 +1,114 @@
+// out: dashboard.min.css, sourcemap: true, compress: true
+
+@import "constants.less";
+@import (reference) "bootstrap.min.less";
+@import (reference) "bootstrap-grid.less";
+@import (reference) "bootstrap-dialog.min.less";
+
+/* Configurações Gerais */
+
+.checkbox label {
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+/* Bootstrap Modal */
+
+.modal-dialog {
+    .modal-content {
+        .modal-header {
+            text-align: center;
+
+            .modal-title {
+                margin: 0px;
+                text-align: center;
+            }
+        }
+    }
+}
+
+#modalKillPage {
+    .modal-dialog {
+        .modal-content {
+            &:extend(.bg-white);
+            &:extend(.text-dark);
+        }
+    }
+}
+
+/* Formulários */
+
+.tercom-form
+{
+    &:extend(.mx-auto);
+}
+
+.tercom-form
+{
+    .input-group-text {
+		padding: .375rem .75rem;
+		border: 1px solid rgb(206, 212, 218);
+
+        .oi,
+        .fas {
+            margin-right: 10px;
+        }
+    }
+
+    .dp-submit {
+        text-align: center;
+
+        input[type='submit'] {
+            min-width: 120px;
+        }
+    }
+
+    label.error {
+        &:extend(.invalid-tooltip);
+    }
+}
+
+@media @screen-min-lg
+{
+    .tercom-form {
+        &.tercom-form-xl { max-width: 1080px; }
+        &.tercom-form-lg { max-width: 960px; }
+        &.tercom-form-md { max-width: 720px; }
+        &.tercom-form-sm { max-width: 480px; }
+        &.tercom-form-xs { max-width: 320px; }
+    }
+}
+
+@media @screen-md
+{
+    .tercom-form {
+        &.tercom-form-xl { max-width: 720px; }
+        &.tercom-form-lg { max-width: 720px; }
+        &.tercom-form-md { max-width: 720px; }
+        &.tercom-form-sm { max-width: 480px; }
+        &.tercom-form-xs { max-width: 320px; }
+    }
+}
+
+@media @screen-sm
+{
+    .tercom-form {
+        &.tercom-form-xl { max-width: 480px; }
+        &.tercom-form-lg { max-width: 480px; }
+        &.tercom-form-md { max-width: 480px; }
+        &.tercom-form-sm { max-width: 480px; }
+        &.tercom-form-xs { max-width: 320px; }
+    }
+}
+
+@media @screen-xs
+{
+    .tercom-form {
+        &.tercom-form-xl { max-width: 320px; }
+        &.tercom-form-lg { max-width: 320px; }
+        &.tercom-form-md { max-width: 320px; }
+        &.tercom-form-sm { max-width: 320px; }
+        &.tercom-form-xs { max-width: 320px; }
+    }
+}

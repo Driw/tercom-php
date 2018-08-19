@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>{Head_Title}</title>
+		<meta name="description" content="{Head_Description}">
+		<meta name="viewport" content="{Head_ViewPort}">
+		<meta name="robots" content="{Head_Robots}">
+		<meta name="keywords" content="{Head_keyWords}">
+		<meta name="author" content="{Head_Author}">
+		<meta name='ROBOTS' content='NOINDEX, NOFOLLOW'>
+		<meta name='GOOGLEBOT' content='NOINDEX, NOFOLLOW'>
+		<base href="{Head_BaseURL}">
+		<!-- Fonts -->
+		<!-- BEGIN Fonts -->
+		<link rel='stylesheet' href='{Element}' type='text/css'>
+		<!-- END Fonts -->
+		<!-- CSS -->
+		<!-- BEGIN Stylesheet_CDNJS -->
+		<link rel='stylesheet' href='{Stylesheet_CDNJS_Url}' integrity='{Stylesheet_CDNJS_Integrity}' crossorigin='{Stylesheet_CDNJS_Crossorigin}'>
+		<!-- END Stylesheet_CDNJS -->
+		<!-- BEGIN Stylesheet_ThirdParty -->
+		<link rel='stylesheet' href='{Element}'>
+		<!-- END Stylesheet_ThirdParty -->
+		<!-- BEGIN Stylesheet_Local -->
+		<link rel='stylesheet' href='css/{Element}{ImportTimestamp}'>
+		<!-- END Stylesheet_Local -->
+		<!-- JavaScript -->
+		<!-- BEGIN JavaScript_CDNJS -->
+		<script src='{JavaScript_CDNJS_Url}' integrity='{JavaScript_CDNJS_Integrity}' crossorigin='{JavaScript_CDNJS_Crossorigin}'></script>
+		<!-- END JavaScript_CDNJS -->
+		<!-- BEGIN JavaScript_ThirdParty -->
+		<script src='{Element}'></script>
+		<!-- END JavaScript_ThirdParty -->
+		<!-- BEGIN JavaScript_Local -->
+		<script type='text/javascript' src='js/{Element}{ImportTimestamp}'></script>
+		<!-- END JavaScript_Local -->
+		<!-- BEGIN JavaScriptPage -->
+		<script type='text/javascript' src='{Element}{ImportTimestamp}'></script>
+		<!-- END JavaScriptPage -->
+		<!-- Favicon-->
+		<link rel="shortcut icon" href="{Head_FavIcon}">
+	</head>
+	<body>
+	<div class="page">
+		<!-- Main Navbar-->
+		<header class="header">
+			<nav class="navbar">
+				<!-- Search Box-->
+				<div class="search-box">
+					<button class="dismiss"><i class="icon-close"></i></button>
+					<form id="searchForm" action="#" role="search">
+						<input type="search" placeholder="Pelo que você está procurando..." class="form-control">
+					</form>
+				</div>
+				<div class="container-fluid">
+					<div
+						class="navbar-holder d-flex align-items-center justify-content-between">
+						<!-- Navbar Header-->
+						<div class="navbar-header">
+							<!-- Navbar Brand -->
+							<a href="/" class="navbar-brand d-none d-sm-inline-block">
+								<div class="brand-text d-none d-lg-inline-block">
+									<span>TERCOM#</span><strong>Dashboard</strong>
+								</div>
+								<div class="brand-text d-none d-sm-inline-block d-lg-none">
+									<strong>TD</strong>
+								</div>
+							</a>
+							<!-- Toggle Button-->
+							<a id="toggle-btn" href="#" class="menu-btn active">
+								<span></span>
+								<span></span>
+								<span></span>
+							</a>
+						</div>
+						<!-- Navbar Menu -->
+						<ul class="nav-menu list-unstyled d-flex flex-md-row align-items-md-center">
+							<!-- Search-->
+							<li class="nav-item d-flex align-items-center"><a id="search" href="#"><i class="icon-search"></i></a></li>
+							<!-- Logout	-->
+							<li class="nav-item">
+								<a href="logout" class="nav-link logout">
+									<span class="d-none d-sm-inline">Logout</span><i class="fa fa-sign-out"></i>
+								</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</nav>
+		</header>
+		<div class="page-content d-flex align-items-stretch">
+			<!-- Side Navbar -->
+			<nav class="side-navbar">
+				<!-- Sidebar Header-->
+				<div class="sidebar-header d-flex align-items-center">
+					<div class="avatar">
+						<img src="img/logo-side.png" alt="..." class="img-fluid rounded-circle">
+					</div>
+					<div class="title">
+						<h1 class="h4">Mark Stephen</h1>
+						<p>Web Designer</p>
+					</div>
+				</div>
+				<!-- Sidebar Navidation Menus-->
+				<span class="heading">Menu</span>
+				<ul class="list-unstyled">
+				<!-- BEGIN NavSide -->
+					<!-- BEGIN NavSide_Item -->
+					<li class="{NavSide_Class}">
+						<a href="{NavSide_Item_Url}"><i class="{NavSide_Item_Icon}"></i>{NavSide_Item_Name}</a>
+					</li>
+					<!-- END NavSide_Item -->
+					<!-- BEGIN NavSide_Dropdown -->
+					<li class="{NavSide_Dropdown_Class}">
+						<a href="#{NavSide_Dropdown_ID}" aria-expanded="false" data-toggle="collapse"><i class="{NavSide_Dropdown_Icon}"></i>{NavSide_Dropdown_Name}</a>
+						<ul id="{NavSide_Dropdown_ID}" class="collapse list-unstyled ">
+							<!-- BEGIN NavSide_Dropdown_Itens -->
+							<li><a href="{NavSide_Dropdown_Itens_Url}"><i class="{NavSide_Dropdown_Itens_Icon}"></i>{NavSide_Dropdown_Itens_Name}</a></li>
+							<!-- END NavSide_Dropdown_Itens -->
+						</ul>
+					</li>
+					<!-- END NavSide_Dropdown -->
+				<!-- END NavSide -->
+				</ul>
+			</nav>
+			<div class="content-inner">
+				<!-- Page Header-->
+				<header class="page-header">
+					<div class="container-fluid">
+						<h2 class="no-margin-bottom">
+{IncludeBreadcrumbs}
+						</h2>
+					</div>
+				</header>
+{IncludeDashboard}
+				<!-- Page Footer-->
+				<footer class="main-footer">
+					<div class="container-fluid">
+						<div class="row">
+							<div class="col-sm-6">
+								<p>TERCOM &copy; {StartYear}{CurrentYear}</p>
+							</div>
+							<div class="col-sm-6 text-right">
+								<p>Design by <a href="https://bootstrapious.com/admin-templates" class="external">Bootstrapious</a></p>
+								<!-- Please do not remove the backlink to us unless you support further theme's development at https://bootstrapious.com/donate. It is part of the license conditions. Thank you for understanding :)-->
+							</div>
+						</div>
+					</div>
+				</footer>
+			</div>
+		</div>
+	</div>
+
+	<!-- Modal API Error -->
+	<div class="modal fade" id="apiErrorModal" tabindex="-1" role="dialog" aria-labelledby="apiErrorModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="apiErrorModalLabel"></h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<p><b>Erro:</b> <span id="apiErrorModalMessage"></span></p>
+					<p><small><i>Se este erro lhe for estranho, por favor entrar em contato com a equipe de suporte!</i></small></p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

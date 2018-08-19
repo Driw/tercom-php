@@ -1,0 +1,54 @@
+[
+	{
+		"Item": {
+			"service": "home",
+			"Name": "Inicio",
+			"Icon": "fas fa-home",
+			"Url": "/",
+			"Class": ""
+		}
+	},
+	{
+		"Dropdown": {
+			"service": "provider",
+			"Name": "Fornecedores",
+			"Icon": "fas fa-boxes",
+			"ID": "dropdown-providers",
+			"Class": "",
+			"Itens": [
+				{ "Name": "Listar", "Icon": "fas fa-list-ul", "Url": "provider/list" },
+				{ "Name": "Procurar", "Icon": "fas fa-search", "Url": "provider/search" },
+				{ "Name": "Adicionar", "Icon": "fas fa-plus", "Url": "provider/add" }
+			]
+		}
+	},
+	{
+		"Dropdown": {
+			"service": "manufacture",
+			"Name": "Fabricantes",
+			"Icon": "fas fa-industry",
+			"ID": "dropdown-manufactures",
+			"Class": "",
+			"Itens": [
+				{ "Name": "Listar", "Icon": "fas fa-list-ul", "Url": "manufacture/list" },
+				{ "Name": "Procurar", "Icon": "fas fa-search", "Url": "manufacture/search" },
+				{ "Name": "Adicionar", "Icon": "fas fa-plus", "Url": "manufacture/add" }
+			]
+		}
+	},
+	{
+		"Dropdown": {
+			"service": "product.categories",
+			"Name": "Produto Categorias",
+			"Icon": "fas fa-layer-group",
+			"ID": "dropdown-categories",
+			"Class": "",
+			"Itens": [
+				{ "Name": "Famílias", "Icon": "fas fa-chess-king", "Url": "product/categories/family" },
+				{ "Name": "Grupos", "Icon": "fas fa-chess-queen", "Url": "product/categories/group" },
+				{ "Name": "Sub Grupos", "Icon": "fas fa-chess-knight", "Url": "product/categories/subgroup" },
+				{ "Name": "Setores", "Icon": "fas fa-chess-rook", "Url": "product/categories/sector" }
+			]
+		}
+	}
+]

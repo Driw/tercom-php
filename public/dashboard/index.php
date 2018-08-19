@@ -14,13 +14,13 @@ DashboardTemplate::setDirectory(sprintf('%s/%s', __DIR__, 'boundaries'));
 $listener = new BoundaryListener();
 
 $settings = new ApiSettings();
-$settings->setParametersOffset(3);
+$settings->setParametersOffset(0);
 $settings->setEnableDebug(true);
 $settings->setEnableTimeUp(true);
 $settings->setEnableResultClass(true);
 $settings->setEnableContentLength(true);
 $settings->setApiNameSpace(namespaceOf($listener));
-$settings->setResponseType(ApiSettings::RESPONSE_JSON);
+$settings->setResponseType(ApiSettings::RESPONSE_TEMPLATE);
 
 $apiConnection = ApiConnection::getInstance();
 $apiConnection->setSettings($settings);

@@ -1,0 +1,16 @@
+// out: dashboard-datatables.min.css, sourcemap: true, compress: true
+
+@import "constants.less";
+@import (reference) "bootstrap.min.less";
+@import (reference) "bootstrap-grid.less";
+@import (reference) "bootstrap-dialog.min.less";
+
+section.dashboard-counts {
+	.dataTables_wrapper {
+		&:extend(.col-12);
+
+		.row {
+			padding: 15px 10px;
+		}
+	}
+}

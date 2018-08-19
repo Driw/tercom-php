@@ -234,6 +234,10 @@ class Provider extends AdvancedObject
 	{
 		if ($site != null)
 		{
+			// Remover protocolos
+			$site = str_replace('http://', '', $site);
+			$site = str_replace('https://', '', $site);
+
 			if (filter_var($site, FILTER_VALIDATE_URL))
 				throw new EntityParseException("site inválido (url: $site)");
 

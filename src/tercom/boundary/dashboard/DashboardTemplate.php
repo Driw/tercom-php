@@ -23,6 +23,16 @@ class DashboardTemplate extends DefaultTemplate
 	}
 
 	/**
+	 * {@inheritDoc}
+	 * @see \raelgc\view\Template::addFile()
+	 */
+
+	public function addFile($varname, $filename)
+	{
+		parent::addFile($varname, sprintf('%s/%s.html', self::$directory, $filename));
+	}
+
+	/**
 	 * @return string
 	 */
 
@@ -39,6 +49,5 @@ class DashboardTemplate extends DefaultTemplate
 	{
 		self::$directory = $directory;
 	}
-
 }
 

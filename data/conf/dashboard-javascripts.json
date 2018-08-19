@@ -1,0 +1,78 @@
+{
+	"CDNJS": [
+		{
+			"Url": "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js",
+			"Integrity": "sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q",
+			"Crossorigin": "anonymous"
+		},{
+			"Url": "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js",
+			"Integrity": "sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=",
+			"Crossorigin": "anonymous"
+		},{
+			"Url": "https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/js/bootstrap.min.js",
+			"Integrity": "sha256-xaF9RpdtRxzwYMWg4ldJoyPWqyDPCRD0Cv7YEEe6Ie8=",
+			"Crossorigin": "anonymous"
+		},{
+			"Url": "https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.35.4/js/bootstrap-dialog.min.js",
+			"Integrity": "sha256-IpgnbT7iaNM6j9WjtXKI8VMJ272WM9VvFYkZdu1umOA=",
+			"Crossorigin": "anonymous"
+		},{
+			"Url": "https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js",
+			"Integrity": "sha256-CutOzxCRucUsn6C6TcEYsauvvYilEniTXldPa6/wu0k=",
+			"Crossorigin": "anonymous"
+		},{
+			"Url": "https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/locale/pt-br.js",
+			"Integrity": "sha256-LosziN79TxO+Pb6NSpePf3lMaUeq8Iwg8adFrVaB2Sg=",
+			"Crossorigin": "anonymous"
+		},{
+			"Url": "https://cdnjs.cloudflare.com/ajax/libs/smalot-bootstrap-datetimepicker/2.4.4/js/bootstrap-datetimepicker.min.js",
+			"Integrity": "sha256-KWLvsoTXFF8o3o9zKOjUsYC/NPKjgYmUXbrxNk90F8k=",
+			"Crossorigin": "anonymous"
+		},{
+			"Url": "https://cdnjs.cloudflare.com/ajax/libs/smalot-bootstrap-datetimepicker/2.4.4/js/locales/bootstrap-datetimepicker.pt-BR.js",
+			"Integrity": "sha256-Z8X5Ww6HOCU2fSuQ/RJ0I23PAe2pd5h8ezCJ714EH/Q=",
+			"Crossorigin": "anonymous"
+		},{
+			"Url": "https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js",
+			"Integrity": "sha256-u7MY6EG5ass8JhTuxBek18r5YG6pllB9zLqE4vZyTn4=",
+			"Crossorigin": "anonymous"
+		},{
+			"Url": "https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.min.js",
+			"Integrity": "sha256-F6h55Qw6sweK+t7SiOJX+2bpSAa3b/fnlrVCJvmEj1A=",
+			"Crossorigin": "anonymous"
+		},{
+			"Url": "https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/additional-methods.min.js",
+			"Integrity": "sha256-0Yg/eibVdKyxkuVo1Qwh0DspoUCHvSbm/oOoYVz32BQ=",
+			"Crossorigin": "anonymous"
+		},{
+			"Url": "https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/localization/messages_pt_PT.min.js",
+			"Integrity": "sha256-VYNqraSzCjGDMEMBNiWWNyEHnOUgV93eAQ6FG8lTdNo=",
+			"Crossorigin": "anonymous"
+		},{
+			"Url": "https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.0.2/bootstrap-slider.min.js",
+			"Integrity": "sha256-VYMMGFCEeBYop7KDzrlj8Bf6R4rhv0XxdH/ctYViebc=",
+			"Crossorigin": "anonymous"
+		},{
+			"Url": "https://cdnjs.cloudflare.com/ajax/libs/featherlight/1.7.13/featherlight.min.js",
+			"Integrity": "sha256-/SEQTcl9tvyYDA8SuhV/PMn92shN3kNn8C9vnbBcE9Y=",
+			"Crossorigin": "anonymous"
+		},{
+			"Url": "https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js",
+			"Integrity": "sha256-1A78rJEdiWTzco6qdn3igTBv9VupN3Q1ozZNTR4WE/Y=",
+			"Crossorigin": "anonymous"
+		},{
+			"Url": "https://cdnjs.cloudflare.com/ajax/libs/jquery-loading-overlay/2.1.5/loadingoverlay.min.js",
+			"Integrity": "sha256-GhHe8GSgsaXMAaJkzy9Ycn0k90mYDh0R02BKx+pQkM8=",
+			"Crossorigin": "anonymous"
+		}
+	],
+	"ThirdParty": [
+		"https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.js"
+	],
+	"Local": [
+		"bootstrap-confirmation.min.js",
+		"bootstrap-select.min.js",
+		"front.js",
+		"dashboard.min.js"
+	]
+}

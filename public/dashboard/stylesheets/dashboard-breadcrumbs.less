@@ -1,0 +1,160 @@
+// out: dashboard-breadcrumbs.min.css, sourcemap: true, compress: true
+
+@import "constants.less";
+@import (reference) "bootstrap.min.less";
+@import (reference) "bootstrap-grid.less";
+@import (reference) "bootstrap-dialog.min.less";
+
+/* Breadcrumb */
+
+.breadcrumb-pages {
+    &:extend(.bg-dark);
+    &:extend(.text-light);
+    &:extend(.breadcrumb);
+
+    .btn-breadcrumb {
+        &:extend(.mx-auto);
+
+        .btn {
+            padding: 6px 12px 6px 24px;
+            transition: all 0.25s;
+
+            &:not(:last-child):after,
+            &:not(:last-child):before {
+                top: 0px;
+                left: 100%;
+                width: 0px;
+                height: 100%;
+            	content: " ";
+            	display: block;
+            	position: absolute;
+            	border-top: 18px solid transparent;
+            	border-bottom: 18px solid transparent;
+                transition: all 0.25s;
+            	z-index: 3;
+            }
+
+            &:not(:last-child):after {
+                margin-left: -1px;
+            	border-left: 10px solid white;
+            }
+
+            &:not(:last-child):before {
+                margin-left: 0px;
+            	border-left: 10px solid rgb(173, 173, 173);
+            }
+
+            &:first-child {
+            	padding: 6px 6px 6px 10px;
+            }
+
+            &:last-child {
+            	padding: 6px 18px 6px 24px;
+            }
+
+            &.btn-primary {
+                &:not(:last-child) {
+                	&:after { border-left: 10px solid @color-primary; }
+                    &:before { border-left: 10px solid @color-primary-hover; }
+                }
+
+                &:hover,
+                &:active {
+                    &:after { border-left: 10px solid @color-primary-hover; }
+                    &:before { border-left: 10px solid @color-primary-border; }
+                }
+            }
+
+            &.btn-secondary {
+                &:not(:last-child) {
+                	&:after { border-left: 10px solid @color-secondary; }
+                    &:before { border-left: 10px solid @color-secondary-hover; }
+                }
+
+                &:hover,
+                &:active {
+                    &:after { border-left: 10px solid @color-secondary-hover; }
+                    &:before { border-left: 10px solid @color-secondary-border; }
+                }
+            }
+
+            &.btn-success {
+                &:not(:last-child) {
+                	&:after { border-left: 10px solid @color-success; }
+                    &:before { border-left: 10px solid @color-success-hover; }
+                }
+
+                &:hover,
+                &:active {
+                    &:after { border-left: 10px solid @color-success-hover; }
+                    &:before { border-left: 10px solid @color-success-border; }
+                }
+            }
+
+            &.btn-danger {
+                &:not(:last-child) {
+                	&:after { border-left: 10px solid @color-danger; }
+                    &:before { border-left: 10px solid @color-danger-hover; }
+                }
+
+                &:hover,
+                &:active {
+                    &:after { border-left: 10px solid @color-danger-hover; }
+                    &:before { border-left: 10px solid @color-danger-border; }
+                }
+            }
+
+            &.btn-warning {
+                &:not(:last-child) {
+                	&:after { border-left: 10px solid @color-warning; }
+                    &:before { border-left: 10px solid @color-warning-hover; }
+                }
+
+                &:hover,
+                &:active {
+                    &:after { border-left: 10px solid @color-warning-hover; }
+                    &:before { border-left: 10px solid @color-warning-border; }
+                }
+            }
+
+            &.btn-info {
+                &:not(:last-child) {
+                	&:after { border-left: 10px solid @color-info; }
+                    &:before { border-left: 10px solid @color-info-hover; }
+                }
+
+                &:hover,
+                &:active {
+                    &:after { border-left: 10px solid @color-info-hover; }
+                    &:before { border-left: 10px solid @color-info-border; }
+                }
+            }
+
+            &.btn-light {
+                &:not(:last-child) {
+                	&:after { border-left: 10px solid @color-light; }
+                    &:before { border-left: 10px solid @color-light-hover; }
+                }
+
+                &:hover,
+                &:active {
+                    &:after { border-left: 10px solid @color-light-hover; }
+                    &:before { border-left: 10px solid @color-light-border; }
+                }
+            }
+
+            &.btn-dark {
+                &:not(:last-child) {
+                	&:after { border-left: 10px solid @color-dark; }
+                    &:before { border-left: 10px solid @color-dark-hover; }
+                }
+
+                &:hover,
+                &:active {
+                    &:after { border-left: 10px solid @color-dark-hover; }
+                    &:before { border-left: 10px solid @color-dark-border; }
+                }
+            }
+        }
+    }
+}

@@ -42,5 +42,23 @@ class DashboardConfigs extends BoundaryConfigs
 	{
 		return $this->getConfigByName('dashboard-stylesheets');
 	}
+
+	/**
+	 * @return Config
+	 */
+
+	public function getFonts(): Config
+	{
+		return $this->getConfigByName('dashboard-fonts');
+	}
+
+	/**
+	 * @return Config
+	 */
+
+	public function getNavSide(): Config
+	{
+		return $this->getConfigByName('dashboard-navside');
+	}
 }
 
