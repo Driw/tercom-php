@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS providers
 	site VARCHAR(64) NULL DEFAULT NULL,
 	commercial INT NULL DEFAULT NULL,
 	otherphone INT NULL DEFAULT NULL,
-	inactive inactive TINYINT(1) NOT NULL DEFAULT '0',
+	inactive TINYINT(1) NOT NULL DEFAULT '0',
 
 	CONSTRAINT providers_pk PRIMARY KEY(id),
 	CONSTRAINT providers_cnpj UNIQUE KEY(cnpj),

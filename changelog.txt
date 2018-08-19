@@ -20,6 +20,10 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+17.08.2018 - 0.1.0.38
+- Pequenos ajustes no 'card' das boundaries ProviderList e ProviderSearch para ocuparem toda horizontal.
+- Corrigido erro em 'tabelas.sql' devido ao 'copy paste' durante as atualizações.
+
 17.08.2018 - 0.1.0.37
 - Implementação do layout dashboard que será acessado pelos funcionários da tercom e/ou clientes.
 - Implementação dos formulários para listar, pesquisar, adicionar e atualizar dados de fornecedores.
