@@ -62,5 +62,18 @@ abstract class DashboardApiTemplate extends ApiTemplate
 
 		return $dashboardTemplate;
 	}
+
+	public static function parseOptions(array $array): array
+	{
+		$options = [];
+
+		foreach ($array as $value => $option)
+			$options[] = [
+				'Value' => $value,
+				'Option' => $option,
+			];
+
+		return $options;
+	}
 }
 

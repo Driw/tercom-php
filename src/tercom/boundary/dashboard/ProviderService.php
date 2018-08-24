@@ -5,6 +5,8 @@ namespace tercom\boundary\dashboard;
 use dProject\restful\template\ApiTemplateResult;
 use dProject\restful\ApiContent;
 use tercom\control\ProviderControl;
+use tercom\entities\Phone;
+use tercom\Functions;
 
 /**
  * @see BoundaryManager
@@ -96,9 +98,12 @@ class ProviderService extends DashboardApiTemplate
 
 	public function actionView(ApiContent $content): ApiTemplateResult
 	{
+		$phoneTypeOptions = DashboardApiTemplate::parseOptions(Phone::getTypes());
 		$dashboardTemplate = $this->getApiParent()->newBaseTemplate();
 		$dashboardTemplate = $this->prepareInclude('ProviderView');
 		$dashboardTemplate->ProviderID = $content->getParameters()->getInt('idProvider');
+		$dashboardTemplate->setDataArray('Commercial_PhoneType', $phoneTypeOptions);
+		$dashboardTemplate->setDataArray('Otherphone_PhoneType', $phoneTypeOptions);
 
 		$result = new ApiTemplateResult();
 		$result->add($dashboardTemplate);

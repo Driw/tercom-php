@@ -1,22 +1,30 @@
 
 $(document).ready(function()
 {
-	var providers = [];
-	var table = $('#providers-table');
-	var tbody = table.find('tbody');
-	var dataTable = newDataTables(table);
+	Controller.init();
+	Controller.loadProviders();
+});
 
-	loadProviders();
-
-	function loadProviders()
+var Controller = Controller ||
+{
+	init: function()
 	{
+		this.providers = [];
+		this.table = $('#providers-table');
+		this.tbody = this.table.find('tbody');
+		this.dataTable = newDataTables(this.table);
+	},
+	loadProviders: function()
+	{
+		var controller = this;
+
 		$.ajax({
 			'type': 'post',
 			'url': API_ENDPOINT+ 'provider/list/all',
 			'contentType': 'application/json; charset=utf8',
 			'cache': 'false',
 			'beforeSend': function() {
-				tbody.LoadingOverlay('show');
+				controller.tbody.LoadingOverlay('show');
 			},
 			'error': function() {
 				showModalApiError('não foi possível obter a lista de fornecedores');
@@ -30,11 +38,11 @@ $(document).ready(function()
 				elements.forEach(function(provider, index) {
 					var provider = parseAdvancedObject(provider);
 					var id = provider.id;
-					providers[provider.id] = provider;
+					controller.providers[provider.id] = provider;
 
-					var siteButton = '<button type="button" class="btn btn-info btn-site" data-id="' +id+ '">Site</button>';
-					var openButton = '<button type="button" class="btn btn-primary btn-see" data-id="' +id+ '">Ver</button>';
-					var row = dataTable.row.add([
+					var siteButton = '<button type="button" class="btn btn-info" data-id="' +id+ '" onclick="Controller.onSite(this)">Site</button>';
+					var openButton = '<button type="button" class="btn btn-primary" data-id="' +id+ '" onclick="Controller.onSee(this)">Ver</button>';
+					var row = controller.dataTable.row.add([
 						provider.id,
 						provider.cnpj,
 						provider.companyName,
@@ -43,20 +51,20 @@ $(document).ready(function()
 						'<div class="btn-group">' +siteButton+openButton+ '</div>',
 					]).draw();
 				});
-
-				$('.btn-site').click(function() {
-					var provider = providers[this.dataset.id];
-					window.open('http://' +provider.site, '_blank');
-				});
-
-				$('.btn-see').click(function() {
-					var provider = providers[this.dataset.id];
-					window.open('provider/view/' +provider.id, '_blank');
-				});
 			},
 			'complete': function() {
-				tbody.LoadingOverlay('hide');
+				controller.tbody.LoadingOverlay('hide');
 			}
 		});
-	}
-});
+	},
+	onSite: function(btn)
+	{
+		var provider = this.providers[btn.dataset.id];
+		window.open('http://' +provider.site, '_blank');
+	},
+	onSee: function(btn)
+	{
+		var provider = this.providers[btn.dataset.id];
+		window.open('provider/view/' +provider.id, '_blank');
+	},
+}

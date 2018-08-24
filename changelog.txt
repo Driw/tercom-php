@@ -20,6 +20,15 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+24.08.2018 - 0.1.0.39
+- ProviderList não estava com os botões 'site' e 'ver' funcionando além da página 1 (um).
+	- Os botões adicionados não funcionavam para as páginas não visíveis logo no começo.
+- Adicionado área para gerenciar os telefones (comercial e secundário) do fornecedor.
+- Pequenos ajustes para melhor funcionamento do fomulário dos dados do fornecedor.
+- Nova function para configurar o 'JQuery Loading Overlay', mantendo um padrão.
+- Estendido a validação de CNPJ para considerar que esteja sendo validado em um fornecedor já adicionado.
+	- Neste caso, o CNPJ pode existir desde que seja do fornecedor informado.
+
 17.08.2018 - 0.1.0.38
 - Pequenos ajustes no 'card' das boundaries ProviderList e ProviderSearch para ocuparem toda horizontal.
 - Corrigido erro em 'tabelas.sql' devido ao 'copy paste' durante as atualizações.

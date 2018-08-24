@@ -106,12 +106,12 @@ class ProviderControl extends GenericControl
 		return $this->providerDAO->calcPageCount();
 	}
 
-	public function avaiableCNPJ(string $cnpj): bool
+	public function avaiableCNPJ(string $cnpj, int $idProvider): bool
 	{
 		if (!Functions::validateCNPJ($cnpj))
 			throw new ControlValidationException('CNPJ inválido');
 
-		return !$this->providerDAO->existCNPJ($cnpj);
+		return !$this->providerDAO->existCNPJ($cnpj, $idProvider);
 	}
 
 	public static function getFilters(): array

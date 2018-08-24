@@ -8,13 +8,11 @@
 			"Url": "https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap-grid.min.css",
 			"Integrity": "sha256-Q8nNKcntju0t1uAHHUxonugW0axeUnGCDzYut4AdH3c=",
 			"Crossorigin": "anonymous"
-		},
-		{
+		},{
 			"Url": "https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.35.4/css/bootstrap-dialog.min.css",
 			"Integrity": "sha256-wstTM1F5dOf7cgnlRHIW3bmoRAAGh6jL7tMIvqTuFZE=",
 			"Crossorigin": "anonymous"
-		},
-		{
+		},{
 			"Url": "https://cdnjs.cloudflare.com/ajax/libs/smalot-bootstrap-datetimepicker/2.4.4/css/bootstrap-datetimepicker.min.css",
 			"Integrity": "sha256-ff4Vuur4aYrm0ZOAEC/me1LBOcid7PJ5oP9xxvJ0AKQ=",
 			"Crossorigin": "anonymous"
@@ -22,8 +20,7 @@
 			"Url": "https://cdnjs.cloudflare.com/ajax/libs/open-iconic/1.1.1/font/css/open-iconic-bootstrap.min.css",
 			"Integrity": "sha256-BJ/G+e+y7bQdrYkS2RBTyNfBHpA9IuGaPmf9htub5MQ=",
 			"Crossorigin": "anonymous"
-		},
-		{
+		},{
 			"Url": "https://use.fontawesome.com/releases/v5.2.0/css/all.css",
 			"Integrity": "sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ",
 			"Crossorigin": "anonymous"

@@ -185,12 +185,13 @@ class ProviderDAO extends GenericDAO
 		return ceil(intval($providers['qtd']) / self::PAGE_LENGTH);
 	}
 
-	public function existCNPJ(string $cnpj): bool
+	public function existCNPJ(string $cnpj, int $idProvider): bool
 	{
-		$sql = "SELECT COUNT(*) AS qtd FROM providers WHERE cnpj = ?";
+		$sql = "SELECT COUNT(*) AS qtd FROM providers WHERE cnpj = ? AND id <> ?";
 
 		$query = $this->mysql->createQuery($sql);
 		$query->setString(1, $cnpj);
+		$query->setInteger(2, $idProvider);
 
 		$result = $query->execute();
 		$providers = $result->next();

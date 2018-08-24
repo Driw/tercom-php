@@ -8,6 +8,7 @@ $(document).ready(function()
 	initMasks();
 	initDateTimePicker();
 	initJQueryValidators();
+	initJQueryLoadingOverlay();
 });
 
 function initSpoiler()
@@ -132,9 +133,26 @@ function initJQueryValidators()
 		if (settings.replacePattern !== undefined)
 			value = value.replace(settings.replacePattern[0], settings.replacePattern[1]);
 
+		var url = API_ENDPOINT+settings.webservice+ '/' +value;
+
+		if (settings.parameters !== undefined)
+		{
+			var webservice = settings.webservice.replace('{value}', value);
+
+			for (var parameter in settings.parameters)
+			{
+				var value = settings.parameters[parameter];
+				value = typeof(value) === 'function' ? value() : value;
+				webservice = webservice.replace('{' +parameter+ '}', value);
+			}
+
+			var url = API_ENDPOINT+webservice;
+		}
+
 		return $.validator.methods.remote.call(this, value, element, {
-			'url': API_ENDPOINT+settings.webservice+ '/' +value,
+			'url': url,
 			'type': 'POST',
+			'cache': false,
 			'dataType': 'json',
 			'processData': false,
 			dataFilter: function(response)
@@ -157,6 +175,13 @@ function initJQueryValidators()
 		});
 	}, function() {
 		return $.validator.messages.remote;
+	});
+}
+
+function initJQueryLoadingOverlay()
+{
+	$.LoadingOverlaySetup({
+		background	: 'rgb(0, 0, 0, 0.0)',
 	});
 }
 

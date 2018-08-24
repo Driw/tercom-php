@@ -381,7 +381,7 @@ class ProviderService extends ApiServiceInterface
 	}
 
 	/**
-	 * @ApiAnnotation({"params":["attribute","value"]})
+	 * @ApiAnnotation({"params":["attribute","value","idProvider"]})
 	 * @param ApiContent $content
 	 * @return ApiResult
 	 */
@@ -406,13 +406,13 @@ class ProviderService extends ApiServiceInterface
 	private function validateCNPJ(ApiContent $content): ApiResult
 	{
 		$cnpj = $content->getParameters()->getString('value');
+		$idProvider = $content->getParameters()->isSetted('idProvider') ? $content->getParameters()->getInt('idProvider') : 0;
 		$providerControl = new ProviderControl(System::getWebConnection());
-
 		$result = new ApiResultSimpleValidation();
 
 		try {
 
-			if (!$providerControl->avaiableCNPJ($cnpj))
+			if (!$providerControl->avaiableCNPJ($cnpj, $idProvider))
 				$result->setOkMessage(false, 'CNPJ indisponível');
 			else
 				$result->setOkMessage(true, 'CNPJ disponível');
