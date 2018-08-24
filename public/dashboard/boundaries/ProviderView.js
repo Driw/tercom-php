@@ -144,8 +144,7 @@ var Controller = Controller ||
 				if (apiNeedShowErrorModal(response))
 					return;
 
-				var result = response.result;
-				var provider = Controller.provider = parseAdvancedObject(response.result);
+				var provider = parseAdvancedObject(response.result);
 				Controller.setProvider(provider);
 			},
 			'complete': function() {
@@ -173,8 +172,7 @@ var Controller = Controller ||
 				if (apiNeedShowErrorModal(response))
 					return;
 
-				var result = response.result;
-				var provider = Controller.provider = parseAdvancedObject(response.result);
+				var provider = parseAdvancedObject(response.result);
 				Controller.setProvider(provider);
 			},
 			'complete': function() {
@@ -198,7 +196,10 @@ var Controller = Controller ||
 		Controller.onCommercialExists(phone.id !== 0);
 
 		if (phone.id === 0)
+		{
+			this.formCommercial.trigger('reset');
 			return;
+		}
 
 		$(this.formCommercial[0]['commercial[id]']).val(phone.id);
 		$(this.formCommercial[0]['commercial[ddd]']).val(phone.ddd);
@@ -210,7 +211,10 @@ var Controller = Controller ||
 		Controller.onOtherphoneExists(phone.id !== 0);
 
 		if (phone.id === 0)
+		{
+			this.formOtherphone.trigger('reset');
 			return;
+		}
 
 		$(this.formOtherphone[0]['otherphone[id]']).val(phone.id);
 		$(this.formOtherphone[0]['otherphone[ddd]']).val(phone.ddd);
@@ -286,6 +290,47 @@ var Controller = Controller ||
 			},
 			'error': function() {
 				showModalApiError('não foi atualizar o telefone ' +(phoneCommercial ? 'comercial' : 'secundário'));
+			},
+			'success': function(response) {
+				if (apiNeedShowErrorModal(response))
+					return;
+
+				var provider = parseAdvancedObject(response.result);
+				Controller.setProvider(provider);
+			},
+			'complete': function() {
+				form.LoadingOverlay('hide');
+			}
+		});
+	},
+	removeCommercial: function()
+	{
+		this.removePhone(this.formCommercial);
+	},
+	removeOtherphone: function()
+	{
+		this.removePhone(this.formOtherphone);
+	},
+	removePhone: function(form)
+	{
+		if (form.valid() === false)
+			return;
+
+		var phoneCommercial = form.attr('id') === 'form-commercial';
+		var formData = new FormData();
+
+		$.ajax({
+			'url': API_ENDPOINT+ 'provider/removePhone/' +Controller.provider.id+ '/' +(phoneCommercial ? 'commercial' : 'otherphone'),
+			'data': formData,
+			'type': 'POST',
+			'dataType': 'json',
+			'processData': false,
+			'contentType': false,
+			'beforeSend': function() {
+				form.LoadingOverlay('show');
+			},
+			'error': function() {
+				showModalApiError('não foi excluir o telefone ' +(phoneCommercial ? 'comercial' : 'secundário'));
 			},
 			'success': function(response) {
 				if (apiNeedShowErrorModal(response))
