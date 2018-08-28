@@ -50,7 +50,7 @@ class ProviderContactControl extends GenericControl
 
 	public function setProviderContact(ProviderContact $providerContact):bool
 	{
-		$this->validate($providerContact, false);
+		$this->validate($providerContact, true);
 		$this->setPhones($providerContact);
 
 		return $this->providerContactDAO->update($providerContact);
@@ -113,7 +113,10 @@ class ProviderContactControl extends GenericControl
 		$provider->getContacs()->clear();
 
 		foreach ($this->getProvideContacts($provider->getID()) as $providerContact)
+		{
+			$this->phoneControl->loadPhones($providerContact->getPhones());
 			$provider->getContacs()->add($providerContact);
+		}
 	}
 }
 

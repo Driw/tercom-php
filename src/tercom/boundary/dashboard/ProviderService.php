@@ -6,7 +6,6 @@ use dProject\restful\template\ApiTemplateResult;
 use dProject\restful\ApiContent;
 use tercom\control\ProviderControl;
 use tercom\entities\Phone;
-use tercom\Functions;
 
 /**
  * @see BoundaryManager
@@ -104,6 +103,8 @@ class ProviderService extends DashboardApiTemplate
 		$dashboardTemplate->ProviderID = $content->getParameters()->getInt('idProvider');
 		$dashboardTemplate->setDataArray('Commercial_PhoneType', $phoneTypeOptions);
 		$dashboardTemplate->setDataArray('Otherphone_PhoneType', $phoneTypeOptions);
+		$dashboardTemplate->setDataArray('Contact_Commercial_PhoneType', $phoneTypeOptions);
+		$dashboardTemplate->setDataArray('Contact_Otherphone_PhoneType', $phoneTypeOptions);
 
 		$result = new ApiTemplateResult();
 		$result->add($dashboardTemplate);

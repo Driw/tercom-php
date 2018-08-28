@@ -234,10 +234,17 @@ function parseAdvancedObject(advancedObject)
 	else
 		object = advancedObject;
 
-	for (var attribute in object)
+	if (object.elements === undefined)
+		for (var attribute in object)
+		{
+			if (object[attribute] !== null && object[attribute].attributes !== undefined)
+				object[attribute] = parseAdvancedObject(object[attribute]);
+		}
+
+	else
 	{
-		if (object[attribute] !== null && object[attribute].attributes !== undefined)
-			object[attribute] = parseAdvancedObject(object[attribute]);
+		for (var i = 0; i < object.elements.length; i++)
+			object.elements[i] = parseAdvancedObject(object.elements[i]);
 	}
 
 	return object;

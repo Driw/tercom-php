@@ -21,8 +21,8 @@ var Controller = Controller ||
 		$.ajax({
 			'type': 'post',
 			'url': API_ENDPOINT+ 'provider/list/all',
-			'contentType': 'application/json; charset=utf8',
 			'cache': 'false',
+			'contentType': 'application/json; charset=utf8',
 			'beforeSend': function() {
 				controller.tbody.LoadingOverlay('show');
 			},

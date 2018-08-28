@@ -20,6 +20,11 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+27.08.2018 - 0.1.0.41
+- Listagem de contatos e gerenciamento de contatos do fornecedor, ProviderView.
+- Atualizado parseAdvancedObject() para que funcione corretamente com estruturas do tipo ArrayList.
+- Agora loadProviderContacts() irá carregar os dados de telefone dos contatos de fornecedor, ProviderContactControl.
+
 24.08.2018 - 0.1.0.40
 - Adicionado a funcionalidade do botão para excluir os telefones em ProviderView.
 
