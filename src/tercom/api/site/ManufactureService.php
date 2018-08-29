@@ -4,9 +4,7 @@ namespace tercom\api\site;
 
 use dProject\Primitive\ArrayDataException;
 use dProject\restful\ApiContent;
-use dProject\restful\ApiConnection;
 use dProject\restful\ApiResult;
-use dProject\restful\ApiServiceInterface;
 use dProject\restful\exception\ApiException;
 use dProject\restful\exception\ApiMissParam;
 use tercom\api\site\results\ApiResultManufacture;
@@ -28,30 +26,8 @@ use tercom\entities\Manufacture;
  * @author Andrew
  */
 
-class ManufactureService extends ApiServiceInterface
+class ManufactureService extends DefaultSiteService
 {
-	/**
-	 * Cria uma nova insterface de um serviço para gerenciamento de fabricantes no sistema.
-	 * @param ApiConnection $apiConnection conexão do sistema que realiza o chamado do serviço.
-	 * @param string $apiname nome do serviço que está sendo informado através da conexão.
-	 * @param ApiServiceInterface $parent serviço do qual solicitou o chamado.
-	 */
-
-	public function __construct(ApiConnection $apiConnection, string $apiname, ApiServiceInterface $parent)
-	{
-		parent::__construct($apiConnection, $apiname, $parent);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * @see \dProject\restful\ApiServiceInterface::execute()
-	 */
-
-	public function execute(): ApiResult
-	{
-		return $this->defaultExecute();
-	}
-
 	/**
 	 * Ação para se obter as configurações de limites de cada atributo referente aos fabricantes.
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.

@@ -20,6 +20,9 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+29.08.2018 - 0.1.0.42
+- Adicionado DefaultSiteService para simplificar o codificação dos outros serviços.
+
 27.08.2018 - 0.1.0.41
 - Listagem de contatos e gerenciamento de contatos do fornecedor, ProviderView.
 - Atualizado parseAdvancedObject() para que funcione corretamente com estruturas do tipo ArrayList.
