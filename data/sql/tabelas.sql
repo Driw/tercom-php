@@ -106,7 +106,7 @@ CREATE TABLE IF NOT EXISTS product_units
 (
 	id INT AUTO_INCREMENT,
 	name VARCHAR(32) NOT NULL,
-	initials VARCHAR(6) NOT NULL,
+	shortName VARCHAR(6) NOT NULL,
 
 	CONSTRAINT product_units_pk PRIMARY KEY (id)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_general_ci;

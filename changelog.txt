@@ -20,7 +20,11 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
-29.08.2018 - 0.1.2.44
+30.08.2018 - 0.1.3.45
+- Implementação do webservice, controle e DAO para gerenciar as unidades de produtos.
+- Incluso scripts testes para adicionar, definir, obter, procurar e remover unidades de produtos.
+
+30.08.2018 - 0.1.2.44
 - Implementação do webservice, controle e DAO para gerenciar as embalagens de produtos.
 - Incluso scripts testes para adicionar, definir, obter, procurar e remover embalagem de produtos.
 
