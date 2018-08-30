@@ -4,6 +4,7 @@ namespace tercom;
 
 use DateTime;
 use dProject\Primitive\AdvancedObject;
+use dProject\Primitive\StringUtil;
 
 class Functions
 {
@@ -303,6 +304,24 @@ class Functions
 	public static function isUTF8(string $string): bool
 	{
 		return preg_match('!!u', $string) === true;
+	}
+
+	/**
+	 * @param array $entry
+	 * @param string $prefix
+	 * @return string[]
+	 */
+
+	public static function parseEntrySQL(array $entry, string $prefix)
+	{
+		$filtrado = [];
+		$prefix .= '_';
+
+		foreach ($entry as $campo => $value)
+			if (StringUtil::startsWith($campo, $prefix))
+				$filtrado[substr($campo, strlen($prefix))] = $value;
+
+		return $filtrado;
 	}
 }
 

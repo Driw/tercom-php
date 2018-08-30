@@ -71,6 +71,11 @@ class ProductUnitControl extends GenericControl
 		return $this->productUnitDAO->selectByName($name);
 	}
 
+	public function has(int $idProductUnit): bool
+	{
+		return $this->productUnitDAO->exist($idProductUnit);
+	}
+
 	public function hasAvaiableName(string $name, int $idProductUnit = 0): bool
 	{
 		return !$this->productUnitDAO->existName($name, $idProductUnit);

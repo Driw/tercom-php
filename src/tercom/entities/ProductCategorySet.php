@@ -66,8 +66,8 @@ class ProductCategorySet extends AdvancedObject
 
 	public function setFamily(ProductFamily $family)
 	{
-		if ($this->group !== null)
-			if ($this->group->getProductFamilyID() !== $family->getID())
+		if ($this->getGroup()->getID() !== 0)
+			if ($this->getGroup()->getProductFamilyID() !== $family->getID())
 				throw new EntityParseException('conjunto com grupo fora da família à definir');
 
 		$this->family = $family;
@@ -90,12 +90,12 @@ class ProductCategorySet extends AdvancedObject
 
 	public function setGroup(ProductGroup $group)
 	{
-		if ($this->family !== null)
-			if ($this->family->getID() !== $group->getProductFamilyID())
+		if ($this->getFamily()->getID() !== 0)
+			if ($this->getFamily()->getID() !== $group->getProductFamilyID())
 				throw new EntityParseException('conunto com família que não possui o grupo à definir');
 
-		if ($this->subgroup !== null)
-			if ($this->subgroup->getProductGroupID() !== $group->getID())
+		if ($this->getSubgroup()->getID() !== 0)
+			if ($this->getSubgroup()->getProductGroupID() !== $group->getID())
 				throw new EntityParseException('conjunto com subgrupo fora do grupo à definir');
 
 		$this->group = $group;
@@ -118,12 +118,12 @@ class ProductCategorySet extends AdvancedObject
 
 	public function setSubgroup(ProductSubGroup $subgroup)
 	{
-		if ($this->group !== null)
-			if ($this->group->getID() !== $subgroup->getProductGroupID())
+		if ($this->getGroup() !== null)
+			if ($this->getGroup()->getID() !== $subgroup->getProductGroupID())
 				throw new EntityParseException('conunto com grupo que não possui o subgrupo à definir');
 
-		if ($this->sector !== null)
-			if ($this->sector->getProductSubGroupID() !== $subgroup->getID())
+		if ($this->getSector()->getID() !== 0)
+			if ($this->getSector()->getProductSubGroupID() !== $subgroup->getID())
 				throw new EntityParseException('conjunto com setor fora do subgrupo à definir');
 
 		$this->subgroup = $subgroup;
@@ -145,8 +145,8 @@ class ProductCategorySet extends AdvancedObject
 
 	public function setSector($sector)
 	{
-		if ($this->subgroup !== null)
-			if ($this->subgroup->getID() !== $sector->getProductSubGroupID())
+		if ($this->getSubgroup()->getID() !== 0)
+			if ($this->getSubgroup()->getID() !== $sector->getProductSubGroupID())
 				throw new EntityParseException('conunto com subgrupo que não possui o setor à definir');
 
 		$this->sector = $sector;

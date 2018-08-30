@@ -71,6 +71,26 @@ class GenericDAO
 
 		return count($array) == 0 ? null : $array;
 	}
+
+	protected function buildQuery(array $columns, string $table, $prefix = null): string
+	{
+		$sqlCampos = [];
+
+		if (empty($prefix))
+			foreach ($columns as $campo)
+				$sqlCampos[] = sprintf('%s.%s', $table, $campo);
+
+		else
+			foreach ($columns as $campo)
+				$sqlCampos[] = sprintf('%s.%s AS %s_%s', $table, $campo, $prefix, $campo);
+
+		return implode(", ", $sqlCampos);
+	}
+
+	protected function parseNullID(int $id): ?int
+	{
+		return $id === 0 ? null : $id;
+	}
 }
 
 ?>

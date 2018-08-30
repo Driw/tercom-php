@@ -20,6 +20,17 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+30.08.2018 - 0.1.4.47
+- Implementação do webservice, controle e DAO para gerenciar os produtos.
+- Incluso scripts testes para adicionar, definir, obter e procurar por produtos.
+- Novo método para verificar a existência de uma unidade de produto por código de identificação.
+- Dois novos métodos utilitários adicionados a GenericDAO:
+	- buildQuery() permite criar um SELECT com LEFT JOIN de forma mais prática e reutilizável.
+	- parseNullID() para simplificar a construção das queries usando ifs.
+- Corrigido problema com CategorySet devido a por falta de identificação da família em newProductGroup(), ProductGroupControl.
+- Adicionado as entidades para representação de produtos e valor de produtos.
+	- Por enquanto somente produtos podem ser gerenciados no sistema.
+
 30.08.2018 - 0.1.4.46
 - A chave única deve ser por categoria mãe e não por categoria:
 	- Adicionado idProduct{Mother} à product_groups, product_subgroups e product_sectores.

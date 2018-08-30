@@ -2,10 +2,9 @@
 
 namespace tercom\dao;
 
+use dProject\MySQL\Result;
 use tercom\entities\ProductGroup;
 use tercom\entities\lists\ProductCategories;
-use dProject\MySQL\Result;
-use tercom\Functions;
 
 class ProductGroupDAO extends GenericDAO
 {
@@ -138,10 +137,11 @@ class ProductGroupDAO extends GenericDAO
 
 	private function newProductGroup(array $array): ProductGroup
 	{
-		Functions::parseArrayJoin($array);
+		$idProductSubGroup = intval($array['idProductFamily']); unset($array['idProductFamily']);
 
 		$productGroup = new ProductGroup();
 		$productGroup->fromArray($array);
+		$productGroup->setProductFamilyID($idProductSubGroup);
 
 		return $productGroup;
 	}
