@@ -5,6 +5,7 @@ namespace tercom\api\site;
 use dProject\Primitive\ArrayDataException;
 use dProject\restful\ApiContent;
 use dProject\restful\ApiResult;
+use dProject\restful\exception\ApiException;
 use dProject\restful\exception\ApiMissParam;
 use tercom\api\site\results\ApiResultProductType;
 use tercom\api\site\results\ApiResultProductTypes;
@@ -12,7 +13,6 @@ use tercom\api\site\results\ApiResultProductTypeSettings;
 use tercom\entities\ProductType;
 use tercom\control\ProductTypeControl;
 use tercom\core\System;
-use dProject\restful\exception\ApiException;
 
 /**
  * @see DefaultSiteService

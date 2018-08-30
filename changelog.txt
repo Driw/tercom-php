@@ -20,6 +20,10 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+29.08.2018 - 0.1.2.44
+- Implementação do webservice, controle e DAO para gerenciar as embalagens de produtos.
+- Incluso scripts testes para adicionar, definir, obter, procurar e remover embalagem de produtos.
+
 29.08.2018 - 0.1.1.43
 - Ajuste na configuração do buildpath do código fonte da TERCOM, o Eclipse não estava dando namespace recomendado corretamente.
 - Adicionado novas tabelas referentes aos dados de produtos, tipos de produtos, unidades de produtos e embalagem de produtos.
