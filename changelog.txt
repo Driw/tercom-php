@@ -20,6 +20,12 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+30.08.2018 - 0.1.4.46
+- A chave única deve ser por categoria mãe e não por categoria:
+	- Adicionado idProduct{Mother} à product_groups, product_subgroups e product_sectores.
+- Necessário adicionar a identificação de cada subnível de categoria em products.
+- Alterado inactive para que seja TINYINT ao invés de ENUM e utility não será mais NULLABLE.
+
 30.08.2018 - 0.1.3.45
 - Implementação do webservice, controle e DAO para gerenciar as unidades de produtos.
 - Incluso scripts testes para adicionar, definir, obter, procurar e remover unidades de produtos.

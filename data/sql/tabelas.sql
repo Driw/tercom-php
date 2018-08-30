@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS product_groups
 	idProductFamily INT NOT NULL,
 	name VARCHAR(32) NOT NULL,
 
-	CONSTRAINT product_groups_name UNIQUE KEY (name),
+	CONSTRAINT product_groups_name UNIQUE KEY (idProductFamily, name),
 	CONSTRAINT product_groups_pk PRIMARY KEY (id),
 	CONSTRAINT product_groups_fk FOREIGN KEY (idProductFamily) REFERENCES product_families(id) ON DELETE RESTRICT
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_general_ci;
@@ -86,7 +86,7 @@ CREATE TABLE IF NOT EXISTS product_subgroups
 	idProductGroup INT NOT NULL,
 	name VARCHAR(32) NOT NULL,
 
-	CONSTRAINT product_subgroups_name UNIQUE KEY (name),
+	CONSTRAINT product_subgroups_name UNIQUE KEY (idProductGroup, name),
 	CONSTRAINT product_subgroups_pk PRIMARY KEY (id),
 	CONSTRAINT product_subgroups_fk FOREIGN KEY (idProductGroup) REFERENCES product_groups(id) ON DELETE RESTRICT
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_general_ci;
@@ -97,7 +97,7 @@ CREATE TABLE IF NOT EXISTS product_sectores
 	idProductSubgroup INT NOT NULL,
 	name VARCHAR(32) NOT NULL,
 
-	CONSTRAINT product_sectores_name UNIQUE KEY (name),
+	CONSTRAINT product_sectores_name UNIQUE KEY (idProductSubgroup, name),
 	CONSTRAINT product_sectores_pk PRIMARY KEY (id),
 	CONSTRAINT product_sectores_fk FOREIGN KEY (idProductSubgroup) REFERENCES product_subgroups(id) ON DELETE RESTRICT
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_general_ci;
@@ -130,13 +130,23 @@ CREATE TABLE IF NOT EXISTS product_packages
 CREATE TABLE IF NOT EXISTS products
 (
 	id INT AUTO_INCREMENT,
-	idProductUnit INT NOT NULL,
 	name VARCHAR(48) NOT NULL,
 	description VARCHAR(128) NOT NULL,
-	utility VARCHAR(128) NULL DEFAULT NULL,
-	inactive TINYINT(1) DEFAULT '0',
+	utility VARCHAR(128) NOT NULL DEFAULT '',
+	inactive TINYINT(1) NOT NULL DEFAULT '0',
+	idProductUnit INT NOT NULL,
+	idProductFamily INT NULL DEFAULT NULL,
+	idProductGroup INT NULL DEFAULT NULL,
+	idProductSubGroup INT NULL DEFAULT NULL,
+	idProductSector INT NULL DEFAULT NULL,
 
-	CONSTRAINT products_pk PRIMARY KEY (id)
+	CONSTRAINT products_pk PRIMARY KEY (id),
+	CONSTRAINT products_unit_fk FOREIGN KEY (idProductUnit) REFERENCES product_units(id),
+	CONSTRAINT products_family_fk FOREIGN KEY (idProductFamily) REFERENCES product_families(id),
+	CONSTRAINT products_group_fk FOREIGN KEY (idProductGroup) REFERENCES product_groups(id),
+	CONSTRAINT products_subgroup_fk FOREIGN KEY (idProductSubGroup) REFERENCES product_subgroups(id),
+	CONSTRAINT products_sector_fk FOREIGN KEY (idProductSector) REFERENCES product_sectores(id),
+	CONSTRAINT products_name_uq UNIQUE (name)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_general_ci;
 
 CREATE TABLE IF NOT EXISTS product_values
