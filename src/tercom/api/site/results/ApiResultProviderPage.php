@@ -4,8 +4,9 @@ namespace tercom\api\site\results;
 
 use dProject\restful\ApiResult;
 use tercom\entities\lists\Providers;
+use dProject\Primitive\AdvancedObject;
 
-class ApiResultProviderPage implements ApiResult
+class ApiResultProviderPage extends AdvancedObject implements ApiResult
 {
 	private $pageCount;
 	private $providers;
@@ -38,10 +39,7 @@ class ApiResultProviderPage implements ApiResult
 
 	public function toApiArray(): array
 	{
-		return [
-			'pageCount' => $this->pageCount,
-			'providers' => $this->providers->toArray(),
-		];
+		return $this->toArray();
 	}
 }
 

@@ -56,7 +56,7 @@ class ProductGroupService extends DefaultSiteService
 
 			$productGroup = new ProductGroup();
 			$productGroup->setName($POST->getString('name'));
-			$productGroup->setProductFamilyID($POST->getInt('idProductGroup'));
+			$productGroup->setProductFamilyID($POST->getInt('idProductFamily'));
 
 		} catch (ArrayDataException $e) {
 			return new ApiMissParam($e);
@@ -93,7 +93,7 @@ class ProductGroupService extends DefaultSiteService
 		try {
 
 			if ($POST->isSetted('name')) $productGroup->setName($POST->getString('name'));
-			if ($POST->isSetted('idProductGroup')) $productGroup->setProductFamilyID($POST->getInt('idProductGroup'));
+			if ($POST->isSetted('idProductFamily')) $productGroup->setProductFamilyID($POST->getInt('idProductFamily'));
 
 		} catch (ArrayDataException $e) {
 			return new ApiMissParam($e);

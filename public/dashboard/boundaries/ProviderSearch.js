@@ -39,8 +39,8 @@ var Controller = Controller ||
 			'success': function(response) {
 				if (apiNeedShowErrorModal(response))
 					return;
-				var result = response.result;
-				var elements = result.attributes.elements;
+				var providers = parseAdvancedObject(response.result);
+				var elements = providers.elements;
 
 				elements.forEach(function(provider, index) {
 					var provider = parseAdvancedObject(provider);

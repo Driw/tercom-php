@@ -10,14 +10,14 @@ function testExecute()
 		header('Content-type: text/html');
 		?>
 <form method='get'>
-	Família ID: <input type='text' name='idProductFamily'>
-	Grupo: <input type='text' name='name'>
+	Tipo: <input type='text' name='name'>
 	<input type='submit' value='Continuar'>
 </form>
 <?php
 		exit;
 	}
-	return GeradorDeDados::callWebService('productGroup/add', $_POST);
+
+	return GeradorDeDados::callWebService('productType/add', $_GET);
 }
 require_once 'execute.php';
 

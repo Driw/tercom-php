@@ -20,6 +20,13 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+29.08.2018 - 0.1.1.43
+- Ajuste na configuração do buildpath do código fonte da TERCOM, o Eclipse não estava dando namespace recomendado corretamente.
+- Adicionado novas tabelas referentes aos dados de produtos, tipos de produtos, unidades de produtos e embalagem de produtos.
+- Atualizado os JavaScript de ProviderList e ProviderSearch para funcionarem conforme ApiResultProviderPage.
+- Alguns ajustes no nome dos parâmetros nos arquivos de teste e na API.
+- Implementação do webservice, controle e DAO para gerenciar os tipos de produtos.
+
 29.08.2018 - 0.1.0.42
 - Adicionado DefaultSiteService para simplificar o codificação dos outros serviços.
 
