@@ -20,6 +20,10 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+30.08.2018 - 0.1.4.48
+- Implementação de um template para ser utilizado quando houver erros inesperados ou acessos inválidos.
+- 
+
 30.08.2018 - 0.1.4.47
 - Implementação do webservice, controle e DAO para gerenciar os produtos.
 - Incluso scripts testes para adicionar, definir, obter e procurar por produtos.

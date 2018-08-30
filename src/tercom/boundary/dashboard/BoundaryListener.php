@@ -3,6 +3,7 @@
 namespace tercom\boundary\dashboard;
 
 use dProject\restful\ApiConnectionAdapter;
+use tercom\boundary\dashboard\template\ErrorTemplate;
 
 /**
  * @see ApiConnectionAdapter
@@ -18,7 +19,10 @@ class BoundaryListener extends ApiConnectionAdapter
 
 	public function onApiException($connection, $e)
 	{
-		die(str_replace(PHP_EOL, "<br>".PHP_EOL, jTraceEx($e)));
+		$notfoundTemplate = new ErrorTemplate();
+		$notfoundTemplate->init();
+		$notfoundTemplate->setException($e);
+		die($notfoundTemplate->show());
 	}
 
 	/**
@@ -28,7 +32,10 @@ class BoundaryListener extends ApiConnectionAdapter
 
 	public function onGenericException($connection, $e)
 	{
-		die(str_replace(PHP_EOL, "<br>".PHP_EOL, jTraceEx($e)));
+		$notfoundTemplate = new ErrorTemplate();
+		$notfoundTemplate->init();
+		$notfoundTemplate->setException($e);
+		die($notfoundTemplate->show());
 	}
 }
 

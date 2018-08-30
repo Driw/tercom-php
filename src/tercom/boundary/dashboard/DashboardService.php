@@ -2,7 +2,6 @@
 
 namespace tercom\boundary\dashboard;
 
-use dProject\restful\template\ApiTemplate;
 use dProject\restful\template\ApiTemplateResult;
 use tercom\boundary\BoundaryConfigs;
 
@@ -11,7 +10,7 @@ use tercom\boundary\BoundaryConfigs;
  * @author Andrew
  */
 
-class DashboardService extends ApiTemplate
+class DashboardService extends DefaultDashboardBoundary
 {
 	/**
 	 * @var DashboardConfigs

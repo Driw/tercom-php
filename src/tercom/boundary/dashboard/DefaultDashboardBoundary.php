@@ -2,14 +2,14 @@
 
 namespace tercom\boundary\dashboard;
 
-use dproject\restful\template\ApiTemplate;
+use dProject\restful\template\ApiTemplate;
 
 /**
  * @see ApiTemplate
  * @author Andrew
  */
 
-abstract class DashboardApiTemplate extends ApiTemplate
+abstract class DefaultDashboardBoundary extends ApiTemplate
 {
 	/**
 	 * @return DashboardService
@@ -19,6 +19,26 @@ abstract class DashboardApiTemplate extends ApiTemplate
 	public function getApiParent()
 	{
 		return parent::getApiParent();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * @see \dProject\restful\ApiServiceInterface::patterClassService()
+	 */
+
+	protected function patterClassService($serviceName)
+	{
+		return sprintf('%sBoundary', $serviceName);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * @see \dProject\restful\ApiServiceInterface::patterMethodAction()
+	 */
+
+	protected function patterMethodAction($actionName)
+	{
+		return sprintf('on%s', ucfirst($actionName));
 	}
 
 	/**
@@ -62,6 +82,11 @@ abstract class DashboardApiTemplate extends ApiTemplate
 
 		return $dashboardTemplate;
 	}
+
+	/**
+	 * @param array $array
+	 * @return array
+	 */
 
 	public static function parseOptions(array $array): array
 	{

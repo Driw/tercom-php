@@ -12,7 +12,7 @@ use tercom\entities\Phone;
  * @author Andrew
  */
 
-class ProviderService extends DashboardApiTemplate
+class ProviderBoundary extends DefaultDashboardBoundary
 {
 	/**
 	 * @var DashboardConfigs
@@ -33,7 +33,7 @@ class ProviderService extends DashboardApiTemplate
 	 * @return ApiTemplateResult
 	 */
 
-	public function actionList(): ApiTemplateResult
+	public function onList(): ApiTemplateResult
 	{
 		$dashboardTemplate = $this->prepareInclude('ProviderList');
 
@@ -47,7 +47,7 @@ class ProviderService extends DashboardApiTemplate
 	 * @return ApiTemplateResult
 	 */
 
-	public function actionSearch()
+	public function onSearch()
 	{
 		$dashboardTemplate = $this->getApiParent()->newBaseTemplate();
 		$dashboardTemplate = $this->prepareInclude('ProviderSearch');
@@ -78,7 +78,7 @@ class ProviderService extends DashboardApiTemplate
 	 * @return ApiTemplateResult
 	 */
 
-	public function actionAdd(): ApiTemplateResult
+	public function onAdd(): ApiTemplateResult
 	{
 		$dashboardTemplate = $this->getApiParent()->newBaseTemplate();
 		$dashboardTemplate = $this->prepareInclude('ProviderAdd');
@@ -95,9 +95,9 @@ class ProviderService extends DashboardApiTemplate
 	 * @return ApiTemplateResult
 	 */
 
-	public function actionView(ApiContent $content): ApiTemplateResult
+	public function onView(ApiContent $content): ApiTemplateResult
 	{
-		$phoneTypeOptions = DashboardApiTemplate::parseOptions(Phone::getTypes());
+		$phoneTypeOptions = DashboardService::parseOptions(Phone::getTypes());
 		$dashboardTemplate = $this->getApiParent()->newBaseTemplate();
 		$dashboardTemplate = $this->prepareInclude('ProviderView');
 		$dashboardTemplate->ProviderID = $content->getParameters()->getInt('idProvider');
