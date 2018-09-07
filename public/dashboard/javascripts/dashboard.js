@@ -1,6 +1,7 @@
 
+const DEV = window.location.host === 'tercom.localhost';
+const BASE_URL = window.location.protocol+ '//' +window.location.host+ '/';
 const API_STATUS_SUCCESS = 1;
-const API_ENDPOINT = '/api/site/';
 
 $(document).ready(function()
 {
@@ -211,9 +212,9 @@ function newDataTables(table)
 
 function showModalApiError(message, title)
 {
-	$('#apiErrorModalLabel').html(title === undefined ? 'Erro de API' : title);
-	$('#apiErrorModalMessage').html(message);
-	$('#apiErrorModal').modal('show');
+	$('#api-error-modal-label').html(title === undefined ? 'Erro de API' : title);
+	$('#api-error-modal-message').html(message);
+	$('#api-error-modal').modal('show');
 }
 
 function apiNeedShowErrorModal(response, title)
@@ -248,4 +249,23 @@ function parseAdvancedObject(advancedObject)
 	}
 
 	return object;
+}
+
+/* MÉTODOS UTILITÁRIOS */
+
+var Util = Util ||
+{
+	redirect: function(path, newTab)
+	{
+		var url = BASE_URL + path;
+
+		if (newTab !== true)
+			window.location = url;
+		else
+			window.open(url, '_blank');
+	},
+	showChecked: function(bool)
+	{
+		return bool === true ? '<i class="fas fa-check-square"></i>' : '<i class="fas fa-uncheck-square"></i>';
+	}
 }

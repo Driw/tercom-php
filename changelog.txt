@@ -20,6 +20,16 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+07.09.2018 - 0.1.4.50
+- Adicionado dois novos JavaScripts, uma para simplificar a comunicação AJAX e outro com os WebServices.
+- Iniciando a implementação dos produtos, começando com o menu para listar os produtos registrados.
+- Substituído o Stylesheet do Bootswatch tema Lux para o Bootstrap padrão, já que o tema não se aplica ao dashboard.
+- Removido ImportTimestamp de alguns dos Stylesheets e JavaScripts, mantendo somente no JavaScript da página acessada.
+	- Renomeado os ID dos elementos utilizados durante a exibição da Modal para erros de API.
+- Alguns ajustes de estilização na exibição dos '.card'.
+- Dois novos métodos disponíveis em ProductService que permite ativar/desativar produtos e listar todos os produtos.
+- Modificado DefaultDashboardBoundary para que os JavaScripts locais sejam minify apenas se não for DEV.
+
 07.09.2018 - 0.1.4.49
 - Modificado ErrorTemplate para que possa ser exibida com o layout base do dashboard.
 - Ajuste no nome da variável usada com ApiAnnotation em actionSet(), providerContactService.

@@ -128,6 +128,13 @@ class ProductControl extends GenericControl
 		return $product;
 	}
 
+	public function getAll(): Products
+	{
+		$product = $this->productDAO->selectAll();
+
+		return $product;
+	}
+
 	public function searchByName(string $name): Products
 	{
 		return $this->productDAO->selectByName($name);

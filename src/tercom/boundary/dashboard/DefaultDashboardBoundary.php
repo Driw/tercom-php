@@ -78,7 +78,7 @@ abstract class DefaultDashboardBoundary extends ApiTemplate
 		$dashboardTemplate = new DashboardTemplate('Base');
 
 		if (!empty($this->getLocalJavaScript()))
-			$dashboardTemplate->setDataArray('JavaScriptPage', [ sprintf('boundaries/%s.min.js', $this->getLocalJavaScript()) ]);
+			$dashboardTemplate->setDataArray('JavaScriptPage', [ sprintf('boundaries/%s%s.js', $this->getLocalJavaScript(), DEV ? '' : '.min') ]);
 
 		$configs->getHead()->set('BaseURL', sprintf('%sdashboard/', DOMAIN), true, true);
 		$dashboardTemplate->ImportTimestamp = sprintf('?%d', time());

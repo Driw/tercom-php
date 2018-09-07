@@ -1,8 +1,8 @@
 {
 	"CDNJS": [
 		{
-			"Url": "https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.1.3/lux/bootstrap.min.css",
-			"Integrity": "sha256-h/ACCXBDNRgopiheDDTkGD9OGPIRwF0+KojdlmwT3DE=",
+			"Url": "https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css",
+			"Integrity": "sha256-eSi1q2PG6J7g7ib17yAaWMcrr5GrtohYChqibrV7PBE=",
 			"Crossorigin": "anonymous"
 		},{
 			"Url": "https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap-grid.min.css",

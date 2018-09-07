@@ -72,7 +72,9 @@
 	"Local": [
 		"bootstrap-confirmation.min.js",
 		"bootstrap-select.min.js",
+		"ajax.js",
 		"front.js",
+		"webservice.js",
 		"dashboard.min.js"
 	]
 }

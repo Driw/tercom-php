@@ -113,6 +113,39 @@ class ProductService extends DefaultSiteService
 	}
 
 	/**
+	 * @ApiAnnotation({"params":["idProduct","inactive"]})
+	 * @param ApiContent $content
+	 * @return ApiResult
+	 */
+
+	public function actionSetInactive(ApiContent $content): ApiResult
+	{
+		$idProduct = $content->getParameters()->getInt('idProduct');
+		$productControl = new ProductControl(System::getWebConnection());
+
+		if (($product = $productControl->get($idProduct)) === null)
+			throw new ApiException('produto não encontrado');
+
+		try {
+
+			$product->setInactive($content->getParameters()->getBoolean('inactive'));
+
+		} catch (ArrayDataException $e) {
+			return new ApiMissParam($e);
+		}
+
+		$result = new ApiResultProduct();
+		$result->setProduct($product);
+
+		if ($productControl->set($product))
+			$result->setMessage('produto atualizado');
+		else
+			$result->setMessage('nenhuma informação alterada');
+
+		return $result;
+	}
+
+	/**
 	 * @ApiAnnotation({"params":["idProduct"]})
 	 * @param ApiContent $content
 	 * @return ApiResult
@@ -126,8 +159,26 @@ class ProductService extends DefaultSiteService
 		if (($product = $productControl->get($idProduct)) === null)
 			throw new ApiException('produto não encontrado');
 
-		$result = new ApiResultProduct();
-		$result->setProduct($product);
+			$result = new ApiResultProduct();
+			$result->setProduct($product);
+
+			return $result;
+	}
+
+	/**
+	 * @param ApiContent $content
+	 * @return ApiResult
+	 */
+
+	public function actionGetAll(ApiContent $content): ApiResult
+	{
+		$productControl = new ProductControl(System::getWebConnection());
+
+		if (($products = $productControl->getAll()) === null)
+			throw new ApiException('produto não encontrado');
+
+		$result = new ApiResultProducts();
+		$result->setProducts($products);
 
 		return $result;
 	}

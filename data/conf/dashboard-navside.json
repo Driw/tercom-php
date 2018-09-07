@@ -41,13 +41,66 @@
 			"service": "product.categories",
 			"Name": "Produto Categorias",
 			"Icon": "fas fa-layer-group",
-			"ID": "dropdown-categories",
+			"ID": "dropdown-product-categories",
 			"Class": "",
 			"Itens": [
 				{ "Name": "Famílias", "Icon": "fas fa-chess-king", "Url": "product/categories/family" },
 				{ "Name": "Grupos", "Icon": "fas fa-chess-queen", "Url": "product/categories/group" },
 				{ "Name": "Sub Grupos", "Icon": "fas fa-chess-knight", "Url": "product/categories/subgroup" },
 				{ "Name": "Setores", "Icon": "fas fa-chess-rook", "Url": "product/categories/sector" }
+			]
+		}
+	},
+	{
+		"Dropdown": {
+			"service": "product.packages",
+			"Name": "Produto Embalagens",
+			"Icon": "fas fa-cube",
+			"ID": "dropdown-product-packages",
+			"Class": "",
+			"Itens": [
+				{ "Name": "Listar", "Icon": "fas fa-list-ul", "Url": "product/package/list" },
+				{ "Name": "Adicionar", "Icon": "fas fa-plus", "Url": "product/package/add" }
+			]
+		}
+	},
+	{
+		"Dropdown": {
+			"service": "product.units",
+			"Name": "Produto Unidades",
+			"Icon": "fas fa-ruler",
+			"ID": "dropdown-product-units",
+			"Class": "",
+			"Itens": [
+				{ "Name": "Listar", "Icon": "fas fa-list-ul", "Url": "product/unit/list" },
+				{ "Name": "Adicionar", "Icon": "fas fa-plus", "Url": "product/unit/add" }
+			]
+		}
+	},
+	{
+		"Dropdown": {
+			"service": "product.types",
+			"Name": "Produto Tipos",
+			"Icon": "fas fa-dolly",
+			"ID": "dropdown-product-types",
+			"Class": "",
+			"Itens": [
+				{ "Name": "Listar", "Icon": "fas fa-list-ul", "Url": "product/types/list" },
+				{ "Name": "Adicionar", "Icon": "fas fa-plus", "Url": "product/types/add" }
+			]
+		}
+	},
+	{
+		"Dropdown": {
+			"service": "product",
+			"Name": "Produtos",
+			"Icon": "fas fa-dolly-flatbed",
+			"ID": "dropdown-product",
+			"Class": "",
+			"Itens": [
+				{ "Name": "Listar", "Icon": "fas fa-list-ul", "Url": "product/list" },
+				{ "Name": "Procurar", "Icon": "fas fa-search", "Url": "product/search" },
+				{ "Name": "Adicionar", "Icon": "fas fa-plus", "Url": "product/add" }
 			]
 		}
 	}

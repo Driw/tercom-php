@@ -23,7 +23,7 @@
 		<link rel='stylesheet' href='{Element}'>
 		<!-- END Stylesheet_ThirdParty -->
 		<!-- BEGIN Stylesheet_Local -->
-		<link rel='stylesheet' href='css/{Element}{ImportTimestamp}'>
+		<link rel='stylesheet' href='css/{Element}'>
 		<!-- END Stylesheet_Local -->
 		<!-- JavaScript -->
 		<!-- BEGIN JavaScript_CDNJS -->
@@ -33,7 +33,7 @@
 		<script src='{Element}'></script>
 		<!-- END JavaScript_ThirdParty -->
 		<!-- BEGIN JavaScript_Local -->
-		<script type='text/javascript' src='js/{Element}{ImportTimestamp}'></script>
+		<script type='text/javascript' src='js/{Element}'></script>
 		<!-- END JavaScript_Local -->
 		<!-- BEGIN JavaScriptPage -->
 		<script type='text/javascript' src='{Element}{ImportTimestamp}'></script>
@@ -153,17 +153,17 @@
 		</div>
 	
 		<!-- Modal API Error -->
-		<div class="modal fade" id="apiErrorModal" tabindex="-1" role="dialog" aria-labelledby="apiErrorModalLabel" aria-hidden="true">
+		<div class="modal fade" id="api-error-modal" tabindex="-1" role="dialog" aria-labelledby="api-error-modal-label" aria-hidden="true">
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h5 class="modal-title" id="apiErrorModalLabel"></h5>
+						<h5 class="modal-title" id="api-error-modal-label"></h5>
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 							<span aria-hidden="true">&times;</span>
 						</button>
 					</div>
 					<div class="modal-body">
-						<p><b>Erro:</b> <span id="apiErrorModalMessage"></span></p>
+						<p><b>Erro:</b> <span id="api-error-modal-message"></span></p>
 						<p><small><i>Se este erro lhe for estranho, por favor entrar em contato com a equipe de suporte!</i></small></p>
 					</div>
 					<div class="modal-footer">

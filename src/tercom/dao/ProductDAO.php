@@ -97,6 +97,15 @@ class ProductDAO extends GenericDAO
 		return $this->parseProduct($result);
 	}
 
+	public function selectAll(): Products
+	{
+		$sql = $this->newSelect();
+		$query = $this->mysql->createQuery($sql);
+		$result = $query->execute();
+
+		return $this->parseProducts($result);
+	}
+
 	public function selectByName(string $name): Products
 	{
 		$sqlSELECT = $this->newSelect();
