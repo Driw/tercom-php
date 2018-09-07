@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS products
 	inactive ENUM('no', 'yes') DEFAULT 'no',
 
 	CONSTRAINT products_pk PRIMARY KEY (id),
-	CONSTRAINT product_units_fk FOREIGN KEY (unit) REFERENCES product_units(id) ON DELETE RESTRICT
+	CONSTRAINT product_units_fk FOREIGN KEY (idProductUnit) REFERENCES product_units(id) ON DELETE RESTRICT
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_general_ci;
 
 CREATE TABLE IF NOT EXISTS product_values

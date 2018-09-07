@@ -80,7 +80,7 @@ class ProviderContactService extends DefaultSiteService
 	/**
 	 * Atualiza os dados do contato do fornecedor através do seu código de identificação.
 	 * Nenhum dado é obrigatório ser atualizado, porém se informado será considerado.
-	 * @ApiAnnotation({"method":"post", "params":["idContactProvider"]})
+	 * @ApiAnnotation({"method":"post", "params":["idProvider"]})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
 	 * @throws ApiException contato do fornecedor não encontrado.
 	 * @return ApiResult aquisição do resultado com os dados do contato do fornecedor atualizados.
@@ -90,7 +90,7 @@ class ProviderContactService extends DefaultSiteService
 	{
 		$POST = $content->getPost();
 
-		$providerID = $content->getParameters()->getInt('idContactProvider');
+		$providerID = $content->getParameters()->getInt('idProvider');
 		$providerContactID = $POST->getInt('id');
 		$providerContactControl = new ProviderContactControl(System::getWebConnection());
 

@@ -14,11 +14,11 @@ class BoundaryException extends Exception
 	/**
 	 * @var int
 	 */
-	const CONFIG_NOT_FOUND = 1;
+	public const CONFIG_NOT_FOUND = 1;
 	/**
 	 * @var int
 	 */
-	const CONFIG_PARSE = 2;
+	public const CONFIG_PARSE = 2;
 
 	/**
 	 * @param string $message [optional]

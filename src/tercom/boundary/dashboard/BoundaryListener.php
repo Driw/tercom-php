@@ -19,10 +19,10 @@ class BoundaryListener extends ApiConnectionAdapter
 
 	public function onApiException($connection, $e)
 	{
-		$notfoundTemplate = new ErrorTemplate();
+		$notfoundTemplate = new ErrorTemplate($connection);
 		$notfoundTemplate->init();
 		$notfoundTemplate->setException($e);
-		die($notfoundTemplate->show());
+		die($notfoundTemplate->callIndex()->toApiArray()[0]->show());
 	}
 
 	/**
@@ -35,7 +35,7 @@ class BoundaryListener extends ApiConnectionAdapter
 		$notfoundTemplate = new ErrorTemplate();
 		$notfoundTemplate->init();
 		$notfoundTemplate->setException($e);
-		die($notfoundTemplate->show());
+		die($notfoundTemplate->callIndex()->toApiArray()[0]->show());
 	}
 }
 

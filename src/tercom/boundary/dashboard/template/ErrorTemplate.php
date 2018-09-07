@@ -3,39 +3,38 @@
 namespace tercom\boundary\dashboard\template;
 
 use Exception;
-use tercom\boundary\dashboard\DashboardTemplate;
-use tercom\boundary\dashboard\DashboardConfigs;
-use dProject\restful\exception\ApiNotFoundException;
 use dProject\restful\exception\ApiBadRequestException;
 use dProject\restful\exception\ApiMethodNotAllowedException;
-use dProject\restful\exception\ApiUnauthorizedException;
 use dProject\restful\exception\ApiNotAcceptable;
+use dProject\restful\exception\ApiNotFoundException;
+use dProject\restful\exception\ApiUnauthorizedException;
+use dProject\restful\template\ApiTemplateResult;
+use tercom\boundary\dashboard\DashboardConfigs;
+use tercom\boundary\dashboard\DefaultDashboardBoundary;
+use dProject\restful\ApiConnection;
 
-class ErrorTemplate extends DashboardTemplate
+class ErrorTemplate extends DefaultDashboardBoundary
 {
 	/**
 	 * @var DashboardConfigs
 	 */
 	private $configs;
+	/**
+	 * @var string
+	 */
+	private $exceptionMessage;
+	/**
+	 * @var string
+	 */
+	private $exceptionTrace;
 
 	/**
 	 * @param string $script [optional]
 	 */
 
-	public function __construct($script = 'Error')
+	public function __construct(ApiConnection $connection, $script = 'Error')
 	{
-		parent::__construct('Error');
-	}
-
-	/**
-	 *
-	 */
-
-	public function init()
-	{
-		$this->configs = new DashboardConfigs();
-		$this->configs->getHead()->set('BaseURL', sprintf('%s://%s/dashboard/', DEV ? 'http' : 'https', $_SERVER['HTTP_HOST']), true, true);
-		$this->setDataConfig('Head', $this->configs->getHead());
+		parent::__construct($connection, 'Error');
 	}
 
 	/**
@@ -46,39 +45,57 @@ class ErrorTemplate extends DashboardTemplate
 	{
 		if ($e instanceof ApiBadRequestException)
 		{
-			$this->ExceptionName = '400 # Bad Request';
-			$this->TraceString = 'Requisição inválida';
+			$this->exceptionMessage = '400 # Bad Request';
+			$this->exceptionTrace = 'Requisição inválida';
 		}
 
 		else if ($e instanceof ApiUnauthorizedException)
 		{
-			$this->ExceptionName = '401 # Unauthorized';
-			$this->TraceString = 'Necessário efetuar o acesso ou acesso não autorizado';
+			$this->exceptionMessage = '401 # Unauthorized';
+			$this->exceptionTrace = 'Necessário efetuar o acesso ou acesso não autorizado';
 		}
 
 		else if ($e instanceof ApiNotFoundException)
 		{
-			$this->ExceptionName = '404 # Not Found';
-			$this->TraceString = 'Serviço informado não foi encontrado';
+			$this->exceptionMessage = '404 # Not Found';
+			$this->exceptionTrace = 'Serviço informado não foi encontrado';
 		}
 
 		else if ($e instanceof ApiMethodNotAllowedException)
 		{
-			$this->ExceptionName = '405 # Method Not Allowed';
-			$this->TraceString = 'Ação informada não foi encontrada';
+			$this->exceptionMessage = '405 # Method Not Allowed';
+			$this->exceptionTrace = 'Ação informada não foi encontrada';
 		}
 
 		else if ($e instanceof ApiNotAcceptable)
 		{
-			$this->ExceptionName = '406 # Not Acceptable';
-			$this->TraceString = 'Serviço informado ainda não implementado';
+			$this->exceptionMessage = '406 # Not Acceptable';
+			$this->exceptionTrace = 'Serviço informado ainda não implementado';
 		}
 
 		else
 		{
-			$this->ExceptionName = nameOf($e);
-			$this->TraceString = str_replace(PHP_EOL, '<br>'.PHP_EOL, jTraceEx($e));
+			$this->exceptionMessage = nameOf($e);
+			$this->exceptionTrace = str_replace(PHP_EOL, '<br>'.PHP_EOL, jTraceEx($e));
 		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * @see \dProject\restful\template\ApiTemplate::callIndex()
+	 */
+
+	public function callIndex()
+	{
+		$dashboardTemplate = $this->newBaseTemplate();
+		$dashboardTemplate->addFile('IncludeDashboard', 'Error');
+		$dashboardTemplate->ExceptionName = $this->exceptionMessage;
+		$dashboardTemplate->TraceString = $this->exceptionTrace;
+
+		$result = new ApiTemplateResult();
+		$result->add($dashboardTemplate);
+
+		return $result;
 	}
 }
 

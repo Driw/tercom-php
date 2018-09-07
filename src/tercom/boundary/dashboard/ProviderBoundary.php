@@ -15,17 +15,14 @@ use tercom\entities\Phone;
 class ProviderBoundary extends DefaultDashboardBoundary
 {
 	/**
-	 * @var DashboardConfigs
-	 */
-	private $configs;
-
-	/**
 	 * {@inheritDoc}
 	 * @see \dProject\restful\ApiServiceInterface::init()
 	 */
 
 	public function init()
 	{
+		parent::init();
+
 		$this->setNavSideActive('provider');
 	}
 
@@ -49,7 +46,7 @@ class ProviderBoundary extends DefaultDashboardBoundary
 
 	public function onSearch()
 	{
-		$dashboardTemplate = $this->getApiParent()->newBaseTemplate();
+		$dashboardTemplate = $this->newBaseTemplate();
 		$dashboardTemplate = $this->prepareInclude('ProviderSearch');
 		$dashboardTemplate->setDataArray('FilterOption', $this->getFilterOptions());
 
@@ -80,7 +77,7 @@ class ProviderBoundary extends DefaultDashboardBoundary
 
 	public function onAdd(): ApiTemplateResult
 	{
-		$dashboardTemplate = $this->getApiParent()->newBaseTemplate();
+		$dashboardTemplate = $this->newBaseTemplate();
 		$dashboardTemplate = $this->prepareInclude('ProviderAdd');
 
 		$result = new ApiTemplateResult();
@@ -98,7 +95,7 @@ class ProviderBoundary extends DefaultDashboardBoundary
 	public function onView(ApiContent $content): ApiTemplateResult
 	{
 		$phoneTypeOptions = DashboardService::parseOptions(Phone::getTypes());
-		$dashboardTemplate = $this->getApiParent()->newBaseTemplate();
+		$dashboardTemplate = $this->newBaseTemplate();
 		$dashboardTemplate = $this->prepareInclude('ProviderView');
 		$dashboardTemplate->ProviderID = $content->getParameters()->getInt('idProvider');
 		$dashboardTemplate->setDataArray('Commercial_PhoneType', $phoneTypeOptions);
@@ -119,7 +116,7 @@ class ProviderBoundary extends DefaultDashboardBoundary
 
 	public function callIndex()
 	{
-		return $this->getApiParent()->callIndex();
+		return $this->callIndex();
 	}
 }
 

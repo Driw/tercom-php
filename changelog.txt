@@ -20,9 +20,18 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+07.09.2018 - 0.1.4.49
+- Modificado ErrorTemplate para que possa ser exibida com o layout base do dashboard.
+- Ajuste no nome da variável usada com ApiAnnotation em actionSet(), providerContactService.
+- Movido boa parte da codificação de DashboardService para DefaultDashboardBoundary.
+	- O conteúdo de template deve ser referente as Boundaries e não aos Services.
+
 30.08.2018 - 0.1.4.48
 - Implementação de um template para ser utilizado quando houver erros inesperados ou acessos inválidos.
-- 
+- Renomeado DashboardApiTemplate para DefaultDashboardBoundary para manter os padrões do projeto.
+- Agora os serviços nas boundaries serão "{Service}Boundary" e as ações serão "on{Action}".
+- DashboardService não será herdado de ApiTemplate mas sim de DefaultDashboardBoundary.
+- Renomeado ProviderService para ProviderBoundary conforme os novos padrões.
 
 30.08.2018 - 0.1.4.47
 - Implementação do webservice, controle e DAO para gerenciar os produtos.
