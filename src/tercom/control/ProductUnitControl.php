@@ -66,6 +66,11 @@ class ProductUnitControl extends GenericControl
 		return $this->productUnitDAO->select($idProductUnit);
 	}
 
+	public function getAll(): ProductUnits
+	{
+		return $this->productUnitDAO->selectAll();
+	}
+
 	public function filterByName(string $name): ProductUnits
 	{
 		return $this->productUnitDAO->selectByName($name);

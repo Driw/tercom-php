@@ -88,7 +88,12 @@ class ProductFamilyControl extends GenericControl
 		if ($idProductFamily < 1)
 			throw new ControlException('identificação da família inválida');
 
-		return $this->productFamilyDAO->select($idProductFamily);
+			return $this->productFamilyDAO->select($idProductFamily);
+	}
+
+	public function getAll(): ProductCategories
+	{
+		return $this->productFamilyDAO->selectAll();
 	}
 
 	public function search(string $name): ProductCategories

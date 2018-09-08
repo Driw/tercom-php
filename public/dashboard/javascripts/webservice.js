@@ -36,6 +36,60 @@ Webservice.prototype.newBaseErrorMessage = function(message)
 {
 	return 'Falha de comunicação com a API da TERCOM ao ' +message;
 };
+Webservice.prototype.productUnit_getAll = function(target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'productUnit/getAll',
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter unidades de produto'),
+	});
+};
+Webservice.prototype.productFamily_getAll = function(target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'productFamily/getAll',
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter famílias de produto'),
+	});
+};
+Webservice.prototype.productGroup_getAll = function(idProductFamily, target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'productFamily/getGroups/' +idProductFamily,
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter grupos de produto'),
+	});
+};
+Webservice.prototype.productSubgroup_getAll = function(idProductGroup, target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'productGroup/getSubGroups/' +idProductGroup,
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter subgrupos de produto'),
+	});
+};
+Webservice.prototype.productSector_getAll = function(idProductSubgroup, target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'productSubgroup/getSectores/'+ idProductSubgroup,
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter setores de produto'),
+	});
+};
+Webservice.prototype.product_settings = function(target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'product/settings',
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('configurar produto'),
+	});
+};
 Webservice.prototype.product_add = function(form, listener)
 {
 	this.setOptionsAndExecute({

@@ -13,6 +13,7 @@ use tercom\api\site\results\ApiResultProductSettings;
 use tercom\control\ProductControl;
 use tercom\core\System;
 use tercom\entities\Product;
+use tercom\api\site\results\ApiResultSimpleValidation;
 
 /**
  * @see DefaultSiteService
@@ -286,6 +287,43 @@ class ProductService extends DefaultSiteService
 
 		$result = new ApiResultProducts();
 		$result->setProducts($products);
+
+		return $result;
+	}
+
+	/**
+	 * @ApiAnnotation({"params":["field","value"]})
+	 * @param ApiContent $content
+	 * @return ApiResult
+	 */
+
+	public function actionAvaiable(ApiContent $content): ApiResult
+	{
+		$field = $content->getParameters()->getString('field');
+
+		switch ($field)
+		{
+			case 'name': return $this->onAvaiableName($content);
+		}
+
+		throw new ApiException('opção inexistente');
+	}
+
+	/**
+	 * @param ApiContent $content
+	 * @return ApiResult
+	 */
+
+	public function onAvaiableName(ApiContent $content): ApiResult
+	{
+		$name = $content->getParameters()->getString('value');
+		$productControl = new ProductControl(System::getWebConnection());
+		$result = new ApiResultSimpleValidation();
+
+		if ($productControl->hasAvaiableName($name))
+			$result->setOkMessage(true, 'nome de produto disponível');
+		else
+			$result->setOkMessage(false, 'nome de produto indisponível');
 
 		return $result;
 	}

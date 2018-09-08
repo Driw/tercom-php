@@ -187,9 +187,9 @@ class ProductDAO extends GenericDAO
 		$query->setInteger(2, $idProduct);
 
 		$result = $query->execute();
-		$product = $result->next();
+		$products = $result->next();
 
-		return intval($product['qtd']) === 1;
+		return intval($products['qtd']) === 1;
 	}
 
 	public function selectByProvider(int $idProvider, bool $inactives): Products

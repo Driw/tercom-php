@@ -66,6 +66,17 @@ class ProductFamilyDAO extends GenericDAO
 		return $this->parseProductFamily($result);
 	}
 
+	public function selectAll(): ProductCategories
+	{
+		$sql = "SELECT id, name
+				FROM product_families";
+
+		$query = $this->createQuery($sql);
+		$result = $query->execute();
+
+		return $this->parseProductFamilies($result);
+	}
+
 	public function selectByName(string $family): ?ProductFamily
 	{
 		$sql = "SELECT id, name

@@ -159,6 +159,24 @@ class ProductFamilyService extends DefaultSiteService
 	}
 
 	/**
+	 * Obtém os dados de todas as famílias dos produtos.
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @throws ApiException fornecedor não encontrado.
+	 * @return ApiResult aquisição do resultado com os dados das famílias dos produtos encontrados.
+	 */
+
+	public function actionGetAll(ApiContent $content): ApiResult
+	{
+		$productFamilyControl = new ProductFamilyControl(System::getWebConnection());
+		$productFamilies = $productFamilyControl->getAll();
+
+		$result = new ApiResultCategories();
+		$result->setProductCategories($productFamilies);
+
+		return $result;
+	}
+
+	/**
 	 * Obtém os dados dos grupos dos produtos vinculados a uma família dos produtos especificado.
 	 * @ApiAnnotation({"params":["idProductFamily"]})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.

@@ -143,6 +143,22 @@ class ProductUnitService extends DefaultSiteService
 	}
 
 	/**
+	 * @param ApiContent $content
+	 * @return ApiResult
+	 */
+
+	public function actionGetAll(ApiContent $content): ApiResult
+	{
+		$productUnitControl = new ProductUnitControl(System::getWebConnection());
+		$productUnits = $productUnitControl->getAll();
+
+		$result = new ApiResultProductUnits();
+		$result->setProductUnits($productUnits);
+
+		return $result;
+	}
+
+	/**
 	 * @ApiAnnotation({"params":["filter","value"]})
 	 * @param ApiContent $content
 	 * @return ApiResult

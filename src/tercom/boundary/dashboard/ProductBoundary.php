@@ -92,7 +92,7 @@ class ProductBoundary extends DefaultDashboardBoundary
 	public function onAdd(): ApiTemplateResult
 	{
 		$dashboardTemplate = $this->newBaseTemplate();
-		$dashboardTemplate = $this->prepareInclude('ProviderAdd');
+		$dashboardTemplate = $this->prepareInclude('ProductAdd');
 
 		$result = new ApiTemplateResult();
 		$result->add($dashboardTemplate);

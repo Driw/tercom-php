@@ -20,6 +20,13 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+07.09.2018 - 0.1.4.51
+- Implementação da página para adicionar novos produtos no sistema.
+- Adicionada ação para verificar disponibilidade de nome para produtos, ProductService.
+- Adicionada ação para obter todas as unidades de produtos existentes no sistema.
+- Adicionada ação para obter todas as famílias de produtos existentes no sistema.
+- Modificado hasAvaiableName() para que desconsidere um produto por padrão, ProductControl.
+
 07.09.2018 - 0.1.4.50
 - Adicionado dois novos JavaScripts, uma para simplificar a comunicação AJAX e outro com os WebServices.
 - Iniciando a implementação dos produtos, começando com o menu para listar os produtos registrados.

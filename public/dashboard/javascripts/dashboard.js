@@ -267,5 +267,14 @@ var Util = Util ||
 	showChecked: function(bool)
 	{
 		return bool === true ? '<i class="fas fa-check-square"></i>' : '<i class="fas fa-uncheck-square"></i>';
-	}
+	},
+	createElementOption: function(html, value)
+	{
+		var element = document.createElement('option');
+		var option = $(element);
+		option.val(value);
+		option.html(html);
+
+		return option;
+	},
 }

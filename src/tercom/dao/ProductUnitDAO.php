@@ -68,6 +68,17 @@ class ProductUnitDAO extends GenericDAO
 		return $this->parseProductUnit($result);
 	}
 
+	public function selectAll(): ProductUnits
+	{
+		$sql = "SELECT id, name, shortName
+				FROM product_units";
+
+		$query = $this->createQuery($sql);
+		$result = $query->execute();
+
+		return $this->parseProductUnits($result);
+	}
+
 	public function selectByName(string $name): ProductUnits
 	{
 		$sql = "SELECT id, name, shortName
