@@ -100,10 +100,10 @@ Webservice.prototype.product_add = function(form, listener)
 		'errorMessage': this.newBaseErrorMessage('adicionar produto'),
 	});
 };
-Webservice.prototype.product_set = function(form, listener)
+Webservice.prototype.product_set = function(idProduct, form, listener)
 {
 	this.setOptionsAndExecute({
-		'webservice': 'product/set',
+		'webservice': 'product/set/' +idProduct,
 		'form': form,
 		'target': form,
 		'listener': listener,
@@ -131,7 +131,7 @@ Webservice.prototype.product_setInactive = function(idProduct, target, listener)
 Webservice.prototype.product_get = function(idProduct, target, listener)
 {
 	this.setOptionsAndExecute({
-		'webservice': 'product/get' +idProduct,
+		'webservice': 'product/get/' +idProduct,
 		'target': target,
 		'listener': listener,
 		'errorMessage': this.newBaseErrorMessage('obter produto'),

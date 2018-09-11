@@ -5,7 +5,6 @@ namespace tercom\boundary\dashboard;
 use dProject\restful\template\ApiTemplateResult;
 use dProject\restful\ApiContent;
 use tercom\control\ProviderControl;
-use tercom\entities\Phone;
 
 /**
  * @see BoundaryManager
@@ -14,6 +13,18 @@ use tercom\entities\Phone;
 
 class ProductBoundary extends DefaultDashboardBoundary
 {
+	/**
+	 * {@inheritDoc}
+	 * @see \dProject\restful\ApiServiceInterface::init()
+	 */
+
+	public function init()
+	{
+		parent::init();
+
+		$this->setNavSideActive('product');
+	}
+
 	/**
 	 * {@inheritDoc}
 	 * @see \dproject\restful\template\ApiTemplate::callIndex()
@@ -26,18 +37,6 @@ class ProductBoundary extends DefaultDashboardBoundary
 		$result->add($baseTemplate);
 
 		return $result;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 * @see \dProject\restful\ApiServiceInterface::init()
-	 */
-
-	public function init()
-	{
-		parent::init();
-
-		$this->setNavSideActive('product');
 	}
 
 	/**
@@ -61,7 +60,7 @@ class ProductBoundary extends DefaultDashboardBoundary
 	public function onSearch()
 	{
 		$dashboardTemplate = $this->newBaseTemplate();
-		$dashboardTemplate = $this->prepareInclude('ProviderSearch');
+		$dashboardTemplate = $this->prepareInclude('ProductSearch');
 		$dashboardTemplate->setDataArray('FilterOption', $this->getFilterOptions());
 
 		$result = new ApiTemplateResult();
@@ -101,21 +100,16 @@ class ProductBoundary extends DefaultDashboardBoundary
 	}
 
 	/**
-	 * @ApiAnnotation({"params":["idProvider"]})
+	 * @ApiAnnotation({"params":["idProduct"]})
 	 * @param ApiContent $content
 	 * @return ApiTemplateResult
 	 */
 
 	public function onView(ApiContent $content): ApiTemplateResult
 	{
-		$phoneTypeOptions = DashboardService::parseOptions(Phone::getTypes());
 		$dashboardTemplate = $this->newBaseTemplate();
-		$dashboardTemplate = $this->prepareInclude('ProviderView');
-		$dashboardTemplate->ProviderID = $content->getParameters()->getInt('idProvider');
-		$dashboardTemplate->setDataArray('Commercial_PhoneType', $phoneTypeOptions);
-		$dashboardTemplate->setDataArray('Otherphone_PhoneType', $phoneTypeOptions);
-		$dashboardTemplate->setDataArray('Contact_Commercial_PhoneType', $phoneTypeOptions);
-		$dashboardTemplate->setDataArray('Contact_Otherphone_PhoneType', $phoneTypeOptions);
+		$dashboardTemplate = $this->prepareInclude('ProductView');
+		$dashboardTemplate->idProduct = $content->getParameters()->getInt('idProduct');
 
 		$result = new ApiTemplateResult();
 		$result->add($dashboardTemplate);

@@ -20,6 +20,14 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+10.09.2018 - 0.1.4.52
+- Implementação da página para atualizar os dados de produtos já registrados.
+- Corrigido problema onde 'remoteapi' não funcionava corretamente com parâmetros, dashboard.js.
+- Ajustado product_get() e product_set() que não era informado idProduct na URL do chamado.
+- Atualizado a busca por nome de produto disponível para considerar idProduct (em caso de atualização).
+- Modificado callIndex() para que também seja a listagem dos produtos existentes, ProductBoundary.
+- Atualizado ProductDAO para que 'utility' e 'id' das categorias de produtos sejam obtidos do banco.
+
 07.09.2018 - 0.1.4.51
 - Implementação da página para adicionar novos produtos no sistema.
 - Adicionada ação para verificar disponibilidade de nome para produtos, ProductService.

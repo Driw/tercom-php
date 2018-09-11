@@ -292,7 +292,7 @@ class ProductService extends DefaultSiteService
 	}
 
 	/**
-	 * @ApiAnnotation({"params":["field","value"]})
+	 * @ApiAnnotation({"params":["field","value","idProduct"]})
 	 * @param ApiContent $content
 	 * @return ApiResult
 	 */
@@ -316,11 +316,13 @@ class ProductService extends DefaultSiteService
 
 	public function onAvaiableName(ApiContent $content): ApiResult
 	{
-		$name = $content->getParameters()->getString('value');
+		$parameters = $content->getParameters();
+		$name = $parameters->getString('value');
+		$idProduct = $parameters->isSetted('idProduct') ? $parameters->getInt('idProduct') : 0;
 		$productControl = new ProductControl(System::getWebConnection());
 		$result = new ApiResultSimpleValidation();
 
-		if ($productControl->hasAvaiableName($name))
+		if ($productControl->hasAvaiableName($name, $idProduct))
 			$result->setOkMessage(true, 'nome de produto disponível');
 		else
 			$result->setOkMessage(false, 'nome de produto indisponível');

@@ -11,12 +11,12 @@ class ProductDAO extends GenericDAO
 {
 	private function newSelect(): string
 	{
-		$productColumns = ['id', 'name', 'description', 'inactive', 'idProductUnit', 'idProductFamily', 'idProductGroup', 'idProductSubGroup', 'idProductSector'];
+		$productColumns = ['id', 'name', 'description', 'utility', 'inactive', 'idProductUnit', 'idProductFamily', 'idProductGroup', 'idProductSubGroup', 'idProductSector'];
 		$productUnitColumns = ['id', 'name', 'shortName'];
-		$productFamilyColumns = ['name'];
-		$productGroupColumns = ['name'];
-		$productSubGroupColumns = ['name'];
-		$productSectorColumns = ['name'];
+		$productFamilyColumns = ['id', 'name'];
+		$productGroupColumns = ['id', 'name'];
+		$productSubGroupColumns = ['id', 'name'];
+		$productSectorColumns = ['id', 'name'];
 		$productQuery = $this->buildQuery($productColumns, 'products');
 		$productUnitQuery = $this->buildQuery($productUnitColumns, 'product_units', 'productUnit');
 		$productFamilyQuery = $this->buildQuery($productFamilyColumns, 'product_families', 'productFamily');

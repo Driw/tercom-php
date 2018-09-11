@@ -140,14 +140,14 @@ function initJQueryValidators()
 		{
 			var webservice = settings.webservice.replace('{value}', value);
 
-			for (var parameter in settings.parameters)
+			for (var key in settings.parameters)
 			{
-				var value = settings.parameters[parameter];
-				value = typeof(value) === 'function' ? value() : value;
-				webservice = webservice.replace('{' +parameter+ '}', value);
+				var parameter = settings.parameters[key];
+				parameter = typeof(parameter) === 'function' ? parameter() : parameter;
+				webservice = webservice.replace('{' +key+ '}', parameter);
 			}
 
-			var url = API_ENDPOINT+webservice;
+			url = API_ENDPOINT+webservice;
 		}
 
 		return $.validator.methods.remote.call(this, value, element, {
@@ -257,6 +257,9 @@ var Util = Util ||
 {
 	redirect: function(path, newTab)
 	{
+		if (!path.startsWith('/'))
+			path = 'dashboard/' +path;
+
 		var url = BASE_URL + path;
 
 		if (newTab !== true)
