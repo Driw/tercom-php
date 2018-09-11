@@ -75,7 +75,7 @@ Webservice.prototype.productSubgroup_getAll = function(idProductGroup, target, l
 Webservice.prototype.productSector_getAll = function(idProductSubgroup, target, listener)
 {
 	this.setOptionsAndExecute({
-		'webservice': 'productSubgroup/getSectores/'+ idProductSubgroup,
+		'webservice': 'productSubGroup/getSectores/'+ idProductSubgroup,
 		'target': target,
 		'listener': listener,
 		'errorMessage': this.newBaseErrorMessage('obter setores de produto'),

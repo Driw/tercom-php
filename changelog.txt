@@ -20,6 +20,11 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+11.09.2018 - 0.1.4.53
+- Adicionando arquivos com massa de dados básicos para o sistema: fabricantes e unidades de produto.
+- Corrigido chamado de webservice para se obter os setores de um grupo de produtos, webservice.js.
+- Renomeado importação de ajax.js e webservice.js para usarem arquivos minify.
+
 10.09.2018 - 0.1.4.52
 - Implementação da página para atualizar os dados de produtos já registrados.
 - Corrigido problema onde 'remoteapi' não funcionava corretamente com parâmetros, dashboard.js.
