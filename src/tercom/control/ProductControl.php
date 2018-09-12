@@ -164,5 +164,16 @@ class ProductControl extends GenericControl
 	{
 		return !$this->productDAO->existName($name, $idProduct);
 	}
+
+	public static function getFilters(): array
+	{
+		return [
+			'name' => 'Nome',
+			'family' => 'Família',
+			'group' => 'Grupo',
+			'subgroup' => 'Subgrupo',
+			'sector' => 'Setor',
+		];
+	}
 }
 
