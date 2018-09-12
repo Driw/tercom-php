@@ -20,6 +20,9 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+11.09.2018 - 0.1.5.56
+- Enviado scripts de teste para o serviço de preços dos produtos.
+
 11.09.2018 - 0.1.5.55
 - Implementação do serviço para gerenciamento de preços dos produtos.
 - Renomeado avaiableCNPJ() para hasAvaiableCNPJ() para manter o padrão do sistema, ProviderService.
