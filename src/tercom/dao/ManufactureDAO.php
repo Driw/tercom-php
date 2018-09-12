@@ -81,6 +81,38 @@ class ManufactureDAO extends GenericDAO
 		return $this->parseManufactures($result);
 	}
 
+	public function existName(string $fantasyName):Manufactures
+	{
+		$sql = "SELECT COUNT(*) AS qtd
+				FROM manufacturers
+				WHERE fantasyName = ?";
+
+		$query = $this->createQuery($sql);
+		$query->setString(1, $fantasyName);
+
+		$result = $query->execute();
+		$manufacture = $result->next();
+		$result->free();
+
+		return intval($manufacture['qtd']) === 1;
+	}
+
+	public function existID(int $idManufacture): bool
+	{
+		$sql = "SELECT COUNT(*) AS qtd
+				FROM manufacturers
+				WHERE id = ?";
+
+		$query = $this->createQuery($sql);
+		$query->setInteger(1, $idManufacture);
+
+		$result = $query->execute();
+		$manufacture = $result->next();
+		$result->free();
+
+		return intval($manufacture['qtd']) === 1;
+	}
+
 	private function parseManufacture(Result $result):?Manufacture
 	{
 		if (!$result->hasNext())

@@ -71,6 +71,11 @@ class ProductTypeControl extends GenericControl
 		return $this->productTypeDAO->selectByName($name);
 	}
 
+	public function has(int $idProductType): bool
+	{
+		return $this->productTypeDAO->existID($idProductType);
+	}
+
 	public function hasAvaiableName(string $name, int $idProductType = 0): bool
 	{
 		return !$this->productTypeDAO->existName($name, $idProductType);

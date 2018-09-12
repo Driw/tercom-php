@@ -388,7 +388,7 @@ class ProviderService extends DefaultSiteService
 
 		try {
 
-			if (!$providerControl->avaiableCNPJ($cnpj, $idProvider))
+			if (!$providerControl->hasAvaiableCNPJ($cnpj, $idProvider))
 				$result->setOkMessage(false, 'CNPJ indisponível');
 			else
 				$result->setOkMessage(true, 'CNPJ disponível');

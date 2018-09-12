@@ -160,6 +160,11 @@ class ProductControl extends GenericControl
 		return $this->productDAO->selectByProductSector($idProductSector);
 	}
 
+	public function has(int $idProduct): bool
+	{
+		return $this->productDAO->existID($idProduct);
+	}
+
 	public function hasAvaiableName(string $name, int $idProduct = 0): bool
 	{
 		return !$this->productDAO->existName($name, $idProduct);

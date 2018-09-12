@@ -3,9 +3,9 @@
 namespace tercom\entities\lists;
 
 use tercom\ArrayList;
-use tercom\entities\ProductValue;
+use tercom\entities\ProductPrice;
 
-class ProductValues extends ArrayList
+class ProductPrices extends ArrayList
 {
 	/**
 	 *
@@ -13,7 +13,7 @@ class ProductValues extends ArrayList
 
 	public function __construct()
 	{
-		parent::__construct(ProductValue::class);
+		parent::__construct(ProductPrice::class);
 	}
 
 	/**
@@ -21,7 +21,7 @@ class ProductValues extends ArrayList
 	 * @see \tercom\ArrayList::current()
 	 */
 
-	public function current():ProductValue
+	public function current():ProductPrice
 	{
 		return parent::current();
 	}

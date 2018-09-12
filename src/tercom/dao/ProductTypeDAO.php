@@ -80,6 +80,21 @@ class ProductTypeDAO extends GenericDAO
 		return $this->parseProductTypes($result);
 	}
 
+	public function existID(int $idProductType): bool
+	{
+		$sql = "SELECT COUNT(*) AS qtd
+				FROM product_types
+				WHERE id = ?";
+
+		$query = $this->createQuery($sql);
+		$query->setInteger(1, $idProductType);
+
+		$result = $query->execute();
+		$productType = $result->next();
+
+		return intval($productType['qtd']) === 1;
+	}
+
 	public function existName(string $name, int $idProductType = 0): bool
 	{
 		$sql = "SELECT COUNT(*) AS qtd

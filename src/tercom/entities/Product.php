@@ -3,10 +3,10 @@
 namespace tercom\entities;
 
 use dProject\Primitive\ObjectUtil;
-use tercom\entities\lists\ProductValues;
 use dProject\Primitive\AdvancedObject;
 use dProject\Primitive\StringUtil;
 use tercom\Entities\EntityParseException;
+use tercom\entities\lists\ProductPrices;
 
 /**
  * @see AdvancedObject
@@ -66,9 +66,9 @@ class Product extends AdvancedObject
 	 */
 	private $category;
 	/**
-	 * @var ProductValues lista de valores do produto.
+	 * @var ProductPrices lista de preços do produto.
 	 */
-	private $values;
+	private $prices;
 
 	/**
 	 * Cria uma nova instância de um produto.
@@ -82,7 +82,7 @@ class Product extends AdvancedObject
 		$this->utility = '';
 		$this->inactive = false;
 		$this->category = new ProductCategorySet();
-		$this->values = new ProductValues();
+		$this->prices = new ProductPrices();
 		$this->unit = new ProductUnit();
 	}
 
@@ -223,21 +223,21 @@ class Product extends AdvancedObject
 	}
 
 	/**
-	 * @return ProductValues aquisição da lista de valores do produto.
+	 * @return ProductPrices aquisição da lista de preços do produto.
 	 */
 
-	public function getValues(): ProductValues
+	public function getValues(): ProductPrices
 	{
-		return $this->values;
+		return $this->prices;
 	}
 
 	/**
-	 * @param ProductValues $values lista de valores do produto.
+	 * @param ProductPrices $prices lista de preços do produto.
 	 */
 
-	public function setValues(ProductValues $values)
+	public function setValues(ProductPrices $prices)
 	{
-		$this->values = $values;
+		$this->prices = $prices;
 	}
 
 	/**
@@ -255,7 +255,7 @@ class Product extends AdvancedObject
 			'utility' => ObjectUtil::TYPE_STRING,
 			'inactive' => ObjectUtil::TYPE_BOOLEAN,
 			'category' => ProductCategorySet::class,
-			'values' => ProductValues::class,
+			'prices' => ProductPrices::class,
 		];
 	}
 }

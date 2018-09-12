@@ -34,5 +34,15 @@ class DefaultSiteService extends ApiServiceInterface
 	{
 		return $this->defaultExecute();
 	}
+
+	/**
+	 * @param int|NULL $int
+	 * @return int
+	 */
+
+	protected function parseNullToInt($int): int
+	{
+		return $int === null ? 0 : $int;
+	}
 }
 

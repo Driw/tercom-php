@@ -71,6 +71,11 @@ class ProductPackageControl extends GenericControl
 		return $this->productPackageDAO->searchByName($name);
 	}
 
+	public function has(int $idProductPackage): bool
+	{
+		return $this->productPackageDAO->existID($idProductPackage);
+	}
+
 	public function hasAvaiableName(string $name, int $idProductPackage = 0): bool
 	{
 		return !$this->productPackageDAO->existName($name, $idProductPackage);

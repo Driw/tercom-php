@@ -20,6 +20,16 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+11.09.2018 - 0.1.5.55
+- Implementação do serviço para gerenciamento de preços dos produtos.
+- Renomeado avaiableCNPJ() para hasAvaiableCNPJ() para manter o padrão do sistema, ProviderService.
+- Adicionado has() para verificar se há um ID e hasFantasyName() para verificar se há um nome fantasia, ManufactureControl.
+- Adicionado has() para verificar se há um ID e hasFantasyName() para verificar se há um nome fantasia, ProviderControl.
+- Adicionado has() para verificar se há um registro por ID em:
+	- ProductControl, ProductPackageControl e ProductTypeControl.
+- Renomeado ProductValue para ProductPrice, para condizer com o real significado: preço.
+	- Excluído ProductValue e ProductValues, foram substituidos por ProductPrice e ProductPrices respectivamente.
+
 11.09.2018 - 0.1.4.54
 - Implementação da página para busca de produtos através de um filtro e valor.
 - A listagem dos produtos tem o mesmo estilo da lista geral de produtos.
