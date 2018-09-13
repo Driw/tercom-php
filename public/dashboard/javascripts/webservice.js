@@ -155,5 +155,14 @@ Webservice.prototype.product_search = function(filter, value, target, listener)
 		'errorMessage': this.newBaseErrorMessage('procurar produto'),
 	});
 };
+Webservice.prototype.fabricante_getAll = function(target, listener) 
+{
+	this.setOptionsAndExecute({
+		'webservice': 'manufacture/search/fantasyName/a',
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('procurar fornecedor')
+	});
+};
 
 const ws = new Webservice();
