@@ -75,9 +75,16 @@ class ManufactureControl extends GenericControl
 		return $this->manufactureDAO->existID($idManufacture);
 	}
 
-	public function hasAvaiableFantasyName(string $fantasyName): bool
+	public function hasAvaiableFantasyName(string $fantasyName, int $idManufacturer = 0): bool
 	{
-		return $this->manufactureDAO->existName($fantasyName);
+		return !$this->manufactureDAO->existName($fantasyName, $idManufacturer);
+	}
+
+	public static function getFilters(): array
+	{
+		return [
+			'fantasyName' => 'Nome Fantasia',
+		];
 	}
 }
 

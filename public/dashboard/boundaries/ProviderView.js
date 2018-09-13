@@ -732,6 +732,7 @@ var Controller = Controller ||
 	{
 		var tr = $(button).parents('tr');
 		var contact = this.contacts[button.dataset.index];
+		console.log(contact);
 		var formData = new FormData();
 		formData.append('id', contact.id);
 

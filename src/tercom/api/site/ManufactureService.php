@@ -13,6 +13,7 @@ use tercom\api\site\results\ApiResultManufactureSettings;
 use tercom\control\ManufactureControl;
 use tercom\core\System;
 use tercom\entities\Manufacture;
+use tercom\api\site\results\ApiResultSimpleValidation;
 
 /**
  * <h1>Serviço de Fabricantes</h1>
@@ -213,6 +214,49 @@ class ManufactureService extends DefaultSiteService
 
 		$result = new ApiResultManufactures();
 		$result->setManufactures($manufactures);
+
+		return $result;
+	}
+
+	/**
+	 * @ApiAnnotation({"params":["filter","value","idManufacturer"]})
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @throws ApiException método de pesquisa desconhecido.
+	 * @return ApiResult aquisição do resultado com a lista de fabricantes encontrados.
+	 */
+
+	public function actionAvaiable(ApiContent $content):ApiResult
+	{
+		$filter = $content->getParameters()->getString('filter');
+
+		switch ($filter)
+		{
+			case 'fantasyName': return $this->actionAvaiableFantasyName($content);
+		}
+
+		throw new ApiException('opção inexistente');
+	}
+
+	/**
+	 * Procedimento interno usado pela pesquisa de fabricantes através do nome fantasia.
+	 * A busca é feita mesmo que o nome fantasia seja informado parcialmente.
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @return ApiResult aquisição da lista de fabricantes com o nome fantasia informado.
+	 */
+
+	private function actionAvaiableFantasyName(ApiContent $content): ApiResult
+	{
+		$parameters = $content->getParameters();
+		$fantasyName = $parameters->getString('value');
+		$idManufacturer = $this->parseNullToInt($parameters->getInt('idManufacturer', false));
+		$manufactureControl = new ManufactureControl(System::getWebConnection());
+
+		$result = new ApiResultSimpleValidation();
+
+		if ($manufactureControl->hasAvaiableFantasyName($fantasyName, $idManufacturer))
+			$result->setOkMessage(true, 'nome fantasia disponível');
+		else
+			$result->setOkMessage(false, 'nome fantasia indisponível');
 
 		return $result;
 	}

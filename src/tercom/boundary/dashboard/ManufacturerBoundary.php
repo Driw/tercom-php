@@ -2,8 +2,8 @@
 
 namespace tercom\boundary\dashboard;
 
-use dProject\restful\template\ApiTemplateResult;
 use dProject\restful\ApiContent;
+use dProject\restful\template\ApiTemplateResult;
 use tercom\control\ManufactureControl;
 
 /**
@@ -12,7 +12,8 @@ use tercom\control\ManufactureControl;
  */
 
 class ManufacturerBoundary extends DefaultDashboardBoundary
-{	/**
+{
+	/**
 	 * {@inheritDoc}
 	 * @see \dProject\restful\ApiServiceInterface::init()
 	 */
@@ -56,6 +57,7 @@ class ManufacturerBoundary extends DefaultDashboardBoundary
 	* @ApiAnnotation({"params":["fantasyName"]})
 	 * @return ApiTemplateResult
 	 */
+
 	public function onSearch()
 	{
 		$dashboardTemplate = $this->getApiParent()->newBaseTemplate();
@@ -74,8 +76,7 @@ class ManufacturerBoundary extends DefaultDashboardBoundary
 
 	private function getFilterOptions(): array
 	{
-		//Isso é necessário? vvv
-		//$providerFilters = ProviderControl::getFilters();
+		$providerFilters = ManufactureControl::getFilters();
 		$filterOptions = [];
 
 		foreach ($providerFilters as $value => $option)
@@ -100,7 +101,7 @@ class ManufacturerBoundary extends DefaultDashboardBoundary
 	}
 
 	/**
-	 * @ApiAnnotation({"params":["id"]})
+	 * @ApiAnnotation({"params":["idManufacturer"]})
 	 * @param ApiContent $content
 	 * @return ApiTemplateResult
 	 */
@@ -108,8 +109,8 @@ class ManufacturerBoundary extends DefaultDashboardBoundary
 	public function onView(ApiContent $content): ApiTemplateResult
 	{
 		$dashboardTemplate = $this->getApiParent()->newBaseTemplate();
-		$dashboardTemplate = $this->prepareInclude('ManufactureView');
-		//$dashboardTemplate->ProviderID = $content->getParameters()->getInt('idProvider');
+		$dashboardTemplate = $this->prepareInclude('ManufacturerView');
+		$dashboardTemplate->idManufacturer = $content->getParameters()->getInt('idManufacturer');
 
 		$result = new ApiTemplateResult();
 		$result->add($dashboardTemplate);

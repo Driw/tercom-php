@@ -51,6 +51,45 @@ Webservice.prototype.provider_getAll = function(target, listener)
 
 // -- Manufacturer
 
+Webservice.prototype.manufacturer_settings = function(target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'manufacture/settings',
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter configuração para fabricante'),
+	});
+};
+Webservice.prototype.manufacturer_add = function(form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'manufacture/add',
+		'form': form,
+		'target': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('adicionar fabricante'),
+	});
+};
+Webservice.prototype.manufacturer_set = function(idManufacturer, form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'manufacture/set/' +idManufacturer,
+		'form': form,
+		'target': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('atualizar fabricante'),
+	});
+};
+Webservice.prototype.manufacturer_get = function(idManufacturer, form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'manufacture/get/' +idManufacturer,
+		'form': form,
+		'target': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter fabricante'),
+	});
+};
 Webservice.prototype.manufacturer_getAll = function(target, listener)
 {
 	this.setOptionsAndExecute({
@@ -205,15 +244,6 @@ Webservice.prototype.product_search = function(filter, value, target, listener)
 		'target': target,
 		'listener': listener,
 		'errorMessage': this.newBaseErrorMessage('procurar produto'),
-	});
-};
-Webservice.prototype.fabricante_getAll = function(target, listener)
-{
-	this.setOptionsAndExecute({
-		'webservice': 'manufacture/search/fantasyName/a',
-		'target': target,
-		'listener': listener,
-		'errorMessage': this.newBaseErrorMessage('procurar fornecedor')
 	});
 };
 
