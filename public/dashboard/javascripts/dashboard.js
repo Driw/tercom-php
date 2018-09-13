@@ -2,6 +2,7 @@
 const DEV = window.location.host === 'tercom.localhost';
 const BASE_URL = window.location.protocol+ '//' +window.location.host+ '/';
 const API_STATUS_SUCCESS = 1;
+const NO_VALUE = '-';
 
 $(document).ready(function()
 {
@@ -28,7 +29,8 @@ function initMasks()
 	$('.mask-cep').mask('00000-000', {reverse: false});
 	$('.mask-cpf').mask('000.000.000-00', {reverse: false});
 	$('.mask-cnpj').mask('00.000.000/0000-00', {reverse: false});
-	$('.mask-money').mask('#.##0,00', { reverse: true });
+	// FIXME: arrumar getFloat() para que aceite $('.mask-money').mask('#.##0,00', { reverse: true });
+	$('.mask-money').mask('#0.00', { reverse: true });
 	$('.mask-percent').mask('00,00%', { reverse: true });
 	$('.mask-integer').mask('#0', { reverse: true });
 	$('.mask-simple-date').mask('0000-00-00', { reverse: false });
@@ -44,7 +46,11 @@ function initMasks()
 
 function initSelectPicker()
 {
-	$('.select-picker').selectpicker();
+	$.fn.selectpicker.Constructor.BootstrapVersion = '4';
+	$('.select-picker').selectpicker({
+		'liveSearchNormalize': true,
+		'size': 6,
+	});
 }
 
 function initDateTimePicker()
@@ -277,13 +283,46 @@ var Util = Util ||
 	{
 		return bool === true ? '<i class="fas fa-check-square"></i>' : '<i class="fas fa-uncheck-square"></i>';
 	},
-	createElementOption: function(html, value)
+	createElementOption: function(html, value, selected)
 	{
 		var element = document.createElement('option');
 		var option = $(element);
 		option.val(value);
 		option.html(html);
+		option.prop('selected', selected === true);
 
 		return option;
+	},
+	formatNull: function(value)
+	{
+		return value === null || value === undefined ? NO_VALUE : value;
+	},
+	formatDateTime: function(datetime)
+	{
+		datetime = Util.formatNull(datetime);
+
+		return datetime.length === 1 ? datetime : datetime.split('#')[0];
+	},
+	formatOnlyNumbers: function(value)
+	{
+		return value.replace(PATTERN_ONLY_NUMBERS, '');
+	},
+	formatCnpj: function(cnpj)
+	{
+		cnpj = Util.formatNull(cnpj);
+
+		return cpf.length !== 14 ? cnpj : cnpj.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, "$1.$2.$3/$4-$5");
+	},
+	formatCep: function(cep)
+	{
+		cep = Util.formatNull(cep);
+
+		return cep.length !== 8 ? cep : cep.replace(/^(\d{5})(\d{3})/, "$1-$2");
+	},
+	formatMoney: function(money)
+	{
+		money = Util.formatNull(money);
+
+		return money === NO_VALUE ? money : money.toFixed(2);
 	},
 }

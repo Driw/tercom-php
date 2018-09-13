@@ -36,6 +36,31 @@ Webservice.prototype.newBaseErrorMessage = function(message)
 {
 	return 'Falha de comunicação com a API da TERCOM ao ' +message;
 };
+
+// -- Provider
+
+Webservice.prototype.provider_getAll = function(target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'provider/getAll',
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter os fornecedores'),
+	});
+};
+
+// -- Manufacturer
+
+Webservice.prototype.manufacturer_getAll = function(target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'manufacture/getAll',
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter os fabricantes'),
+	});
+};
+
 Webservice.prototype.productUnit_getAll = function(target, listener)
 {
 	this.setOptionsAndExecute({
@@ -81,6 +106,33 @@ Webservice.prototype.productSector_getAll = function(idProductSubgroup, target, 
 		'errorMessage': this.newBaseErrorMessage('obter setores de produto'),
 	});
 };
+
+// -- ProductPackage
+
+Webservice.prototype.productPackage_getAll = function(target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'productPackage/getAll',
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter as embalagens de produto'),
+	});
+};
+
+// -- ProductType
+
+Webservice.prototype.productType_getAll = function(target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'productType/getAll',
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter os tipos de produto'),
+	});
+};
+
+// -- Product
+
 Webservice.prototype.product_settings = function(target, listener)
 {
 	this.setOptionsAndExecute({
@@ -155,13 +207,72 @@ Webservice.prototype.product_search = function(filter, value, target, listener)
 		'errorMessage': this.newBaseErrorMessage('procurar produto'),
 	});
 };
-Webservice.prototype.fabricante_getAll = function(target, listener) 
+Webservice.prototype.fabricante_getAll = function(target, listener)
 {
 	this.setOptionsAndExecute({
 		'webservice': 'manufacture/search/fantasyName/a',
 		'target': target,
 		'listener': listener,
 		'errorMessage': this.newBaseErrorMessage('procurar fornecedor')
+	});
+};
+
+// -- ProductPrice
+
+Webservice.prototype.productPrice_settings = function(target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'productPrice/settings',
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter configurações para preço de produto'),
+	});
+};
+Webservice.prototype.productPrice_add = function(idProduct, form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'productPrice/add/' +idProduct,
+		'form': form,
+		'target': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('adicionar preço de produto'),
+	});
+};
+Webservice.prototype.productPrice_set = function(idProductPrice, form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'productPrice/set/' +idProductPrice,
+		'form': form,
+		'target': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('atualizar preço de produto'),
+	});
+};
+Webservice.prototype.productPrice_remove = function(idProductPrice, target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'productPrice/remove/' +idProductPrice,
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter preço do produto'),
+	});
+};
+Webservice.prototype.productPrice_get = function(idProductPrice, target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'productPrice/get/' +idProductPrice,
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter preço do produto'),
+	});
+};
+Webservice.prototype.productPrice_getAll = function(idProduct, target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'productPrice/getAll/' +idProduct,
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter lista de preços do produto'),
 	});
 };
 

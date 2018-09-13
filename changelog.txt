@@ -20,10 +20,38 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
-11.09.2018 - 0.1.5.56
+13.09.2018 - 0.1.6.61
+- Modificado temporariamente a mascara 'mask-money' para desconsiderar a separação dos milhares.
+- Ajustes nas configurações do Bootstrap Select Picker para limitar até 6 itens por vez e desconsiderar case sensitive no 'live-search'.
+- Adicionado opção a createElementOption() para que seja possível adicionar opções selecionadas.
+- Adicionado algumas opções para formatar campos:
+	- formatNull: se for null ou undefined considera um valor padrão de NO_VALUE.
+	- formatDateTime: recebe um valor configurado como DateTime e desconsidera o fusorário.
+	- formatOnlyNumbers: remove qualquer tipo de informação que não seja numérica.
+	- formatCnpj: formata um valor que possua somente valores numéricos conforme máscara de CNPJ.
+	- formatCep: formata um valor que possua somente valores numéricos conforme máscara de CEP.
+	- formatMoney: formata um valor numérico flutuante para exibir até duas casas decimais conforme máscara monetária.
+
+13.09.2018 - 0.1.5.60
+- Atualizado dashboard.js para inicializar o Boostrap Select Picker em elementos com '.select-picker'.
+- Ajustes na especificação da estilização dos formulários tercom, dashboard.less.
+- Ajuste no script teste para adicionar novos produtos, campos em branco serão desconsiderados.
+- Corrigido onGenericException() por não informar a conexão na instância de ErroTemplate, BoundaryListener.
+- Corrigido namespace de EntityParseException que estava usando 'entities' como 'Entities', no linux não funciona.
+
+13.09.2018 - 0.1.5.59
+- Faltou esse arquivo nos últimos commit.
+
+13.09.2018 - 0.1.5.58
+- Corrigido id da tabela para manufacturer, em vez de produto.
+
+13.09.2018 - 0.1.5.57
+- Correção de Manufacture para Manufacturer, Add e List.
+
+12.09.2018 - 0.1.5.56
 - Enviado scripts de teste para o serviço de preços dos produtos.
 
-11.09.2018 - 0.1.5.55
+12.09.2018 - 0.1.5.55
 - Implementação do serviço para gerenciamento de preços dos produtos.
 - Renomeado avaiableCNPJ() para hasAvaiableCNPJ() para manter o padrão do sistema, ProviderService.
 - Adicionado has() para verificar se há um ID e hasFantasyName() para verificar se há um nome fantasia, ManufactureControl.
