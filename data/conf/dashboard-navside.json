@@ -53,14 +53,14 @@
 	},
 	{
 		"Dropdown": {
-			"service": "product.packages",
+			"service": "productPackage",
 			"Name": "Produto Embalagens",
 			"Icon": "fas fa-cube",
 			"ID": "dropdown-product-packages",
 			"Class": "",
 			"Itens": [
-				{ "Name": "Listar", "Icon": "fas fa-list-ul", "Url": "product/package/list" },
-				{ "Name": "Adicionar", "Icon": "fas fa-plus", "Url": "product/package/add" }
+				{ "Name": "Listar", "Icon": "fas fa-list-ul", "Url": "productPackage/list" },
+				{ "Name": "Adicionar", "Icon": "fas fa-plus", "Url": "productPackage/add" }
 			]
 		}
 	},

@@ -148,6 +148,45 @@ Webservice.prototype.productSector_getAll = function(idProductSubgroup, target, 
 
 // -- ProductPackage
 
+Webservice.prototype.productPackage_settings = function(target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'productPackage/settings',
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter configurações para embalagem de produto'),
+	});
+};
+Webservice.prototype.productPackage_add = function(form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'productPackage/add',
+		'form': form,
+		'target': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('adicionar embalagem de produto'),
+	});
+};
+Webservice.prototype.productPackage_set = function(idProductPackage, form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'productPackage/set/' +idProductPackage,
+		'form': form,
+		'target': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('atualizar embalagem de produto'),
+	});
+};
+Webservice.prototype.productPackage_get = function(idProductPackage, form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'productPackage/get/' +idProductPackage,
+		'form': form,
+		'target': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter embalagem de produto'),
+	});
+};
 Webservice.prototype.productPackage_getAll = function(target, listener)
 {
 	this.setOptionsAndExecute({

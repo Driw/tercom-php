@@ -221,13 +221,13 @@ class ProductTypeService extends DefaultSiteService
 	private function avaiableName(ApiContent $content): ApiResult
 	{
 		$parameters = $content->getParameters();
-		$fantasyName = $parameters->getString('value');
+		$name = $parameters->getString('value');
 		$idProductType = $this->parseNullToInt($parameters->getInt('idProductType', false));
 		$productTypeControl = new ProductTypeControl(System::getWebConnection());
 
 		$result = new ApiResultSimpleValidation();
 
-		if ($productTypeControl->hasAvaiableName($fantasyName, $idProductType))
+		if ($productTypeControl->hasAvaiableName($name, $idProductType))
 			$result->setOkMessage(true, 'nome disponível');
 		else
 			$result->setOkMessage(false, 'nome indisponível');

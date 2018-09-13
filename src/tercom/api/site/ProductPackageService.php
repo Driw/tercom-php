@@ -13,6 +13,7 @@ use tercom\api\site\results\ApiResultProductPackageSettings;
 use tercom\entities\ProductPackage;
 use tercom\control\ProductPackageControl;
 use tercom\core\System;
+use tercom\api\site\results\ApiResultSimpleValidation;
 
 /**
  * @see DefaultSiteService
@@ -187,6 +188,49 @@ class ProductPackageService extends DefaultSiteService
 
 		$result = new ApiResultProductPackages();
 		$result->setProductPackages($productPackages);
+
+		return $result;
+	}
+
+	/**
+	 * @ApiAnnotation({"params":["filter","value","idProductPackage"]})
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @throws ApiException método de pesquisa desconhecido.
+	 * @return ApiResult aquisição do resultado com a lista dos tipos de produtos encontrados.
+	 */
+
+	public function actionAvaiable(ApiContent $content):ApiResult
+	{
+		$filter = $content->getParameters()->getString('filter');
+
+		switch ($filter)
+		{
+			case 'name': return $this->avaiableName($content);
+		}
+
+		throw new ApiException('opção inexistente');
+	}
+
+	/**
+	 * Procedimento interno usado pela pesquisa de fabricantes através do nome fantasia.
+	 * A busca é feita mesmo que o nome fantasia seja informado parcialmente.
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @return ApiResult aquisição da lista de fabricantes com o nome fantasia informado.
+	 */
+
+	private function avaiableName(ApiContent $content): ApiResult
+	{
+		$parameters = $content->getParameters();
+		$name = $parameters->getString('value');
+		$idProductPackage = $this->parseNullToInt($parameters->getInt('idProductPackage', false));
+		$productPackageControl = new ProductPackageControl(System::getWebConnection());
+
+		$result = new ApiResultSimpleValidation();
+
+		if ($productPackageControl->hasAvaiableName($name, $idProductPackage))
+			$result->setOkMessage(true, 'nome disponível');
+		else
+			$result->setOkMessage(false, 'nome indisponível');
 
 		return $result;
 	}
