@@ -79,14 +79,14 @@
 	},
 	{
 		"Dropdown": {
-			"service": "product.types",
-			"Name": "Produto Tipos",
+			"service": "productTypes",
+			"Name": "Tipos de Produto",
 			"Icon": "fas fa-dolly",
 			"ID": "dropdown-product-types",
 			"Class": "",
 			"Itens": [
-				{ "Name": "Listar", "Icon": "fas fa-list-ul", "Url": "product/types/list" },
-				{ "Name": "Adicionar", "Icon": "fas fa-plus", "Url": "product/types/add" }
+				{ "Name": "Listar", "Icon": "fas fa-list-ul", "Url": "productType/list" },
+				{ "Name": "Adicionar", "Icon": "fas fa-plus", "Url": "productType/add" }
 			]
 		}
 	},

@@ -160,6 +160,45 @@ Webservice.prototype.productPackage_getAll = function(target, listener)
 
 // -- ProductType
 
+Webservice.prototype.productType_settings = function(target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'productType/settings',
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter configurações para tipo de produto'),
+	});
+};
+Webservice.prototype.productType_add = function(form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'productType/add',
+		'form': form,
+		'target': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('adicionar tipo de produto'),
+	});
+};
+Webservice.prototype.productType_set = function(idProductType, form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'productType/set/' +idProductType,
+		'form': form,
+		'target': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('atualizar tipo de produto'),
+	});
+};
+Webservice.prototype.productType_get = function(idProductType, form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'productType/get/' +idProductType,
+		'form': form,
+		'target': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter tipo de produto'),
+	});
+};
 Webservice.prototype.productType_getAll = function(target, listener)
 {
 	this.setOptionsAndExecute({
