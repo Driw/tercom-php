@@ -24,15 +24,15 @@
 	},
 	{
 		"Dropdown": {
-			"service": "manufacture",
+			"service": "manufacturer",
 			"Name": "Fabricantes",
 			"Icon": "fas fa-industry",
-			"ID": "dropdown-manufactures",
+			"ID": "dropdown-manufacturers",
 			"Class": "",
 			"Itens": [
-				{ "Name": "Listar", "Icon": "fas fa-list-ul", "Url": "manufacture/list" },
-				{ "Name": "Procurar", "Icon": "fas fa-search", "Url": "manufacture/search" },
-				{ "Name": "Adicionar", "Icon": "fas fa-plus", "Url": "manufacture/add" }
+				{ "Name": "Listar", "Icon": "fas fa-list-ul", "Url": "manufacturer/list" },
+				{ "Name": "Procurar", "Icon": "fas fa-search", "Url": "manufacturer/search" },
+				{ "Name": "Adicionar", "Icon": "fas fa-plus", "Url": "manufacturer/add" }
 			]
 		}
 	},
