@@ -3,10 +3,9 @@
 namespace tercom\entities;
 
 use dProject\Primitive\AdvancedObject;
-use tercom\Entities\EntityParseException;
+use dProject\Primitive\ObjectUtil;
 use dProject\Primitive\StringUtil;
 use tercom\entities\lists\Phones;
-use dProject\Primitive\ObjectUtil;
 
 /**
  * <h1>Contato do Fornecedor</h1>

@@ -24,7 +24,7 @@ function testExecute()
 		exit;
 	}
 
-	return GeradorDeDados::callWebService('product/add', $_GET);
+	return GeradorDeDados::callWebService('product/add', $_GET, true);
 }
 require_once 'execute.php';
 

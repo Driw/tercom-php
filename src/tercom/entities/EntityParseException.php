@@ -1,6 +1,6 @@
 <?php
 
-namespace tercom\Entities;
+namespace tercom\entities;
 
 use tercom\TercomException;
 

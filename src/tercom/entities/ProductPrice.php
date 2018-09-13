@@ -4,11 +4,10 @@ namespace tercom\entities;
 
 use DateTime;
 use dProject\Primitive\AdvancedObject;
-use dProject\Primitive\ObjectUtil;
-use dProject\Primitive\StringUtil;
-use tercom\Entities\EntityParseException;
 use dProject\Primitive\FloatUtil;
 use dProject\Primitive\IntegerUtil;
+use dProject\Primitive\ObjectUtil;
+use dProject\Primitive\StringUtil;
 
 /**
  * @see AdvancedObject

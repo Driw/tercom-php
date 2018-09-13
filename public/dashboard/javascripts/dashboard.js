@@ -7,6 +7,7 @@ $(document).ready(function()
 {
 	initSpoiler();
 	initMasks();
+	initSelectPicker();
 	initDateTimePicker();
 	initJQueryValidators();
 	initJQueryLoadingOverlay();
@@ -39,6 +40,11 @@ function initMasks()
 	var SPMaskBehavior = function (val) { return val.replace(/\D/g, '').length === 9 ? '00000-0000' : '0000-00009'; };
 	var spOptions = { onKeyPress: function(val, e, field, options) { field.mask(SPMaskBehavior.apply({}, arguments), options); } };
 	$('.mask-phone').mask(SPMaskBehavior, spOptions);
+}
+
+function initSelectPicker()
+{
+	$('.select-picker').selectpicker();
 }
 
 function initDateTimePicker()

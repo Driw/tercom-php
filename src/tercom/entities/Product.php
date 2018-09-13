@@ -2,10 +2,9 @@
 
 namespace tercom\entities;
 
-use dProject\Primitive\ObjectUtil;
 use dProject\Primitive\AdvancedObject;
+use dProject\Primitive\ObjectUtil;
 use dProject\Primitive\StringUtil;
-use tercom\Entities\EntityParseException;
 use tercom\entities\lists\ProductPrices;
 
 /**

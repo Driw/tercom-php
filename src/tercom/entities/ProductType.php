@@ -5,7 +5,6 @@ namespace tercom\entities;
 use dProject\Primitive\AdvancedObject;
 use dProject\Primitive\ObjectUtil;
 use dProject\Primitive\StringUtil;
-use tercom\Entities\EntityParseException;
 
 /**
  * <h1>Tipo de Produto</h1>

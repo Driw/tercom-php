@@ -5,7 +5,6 @@ namespace tercom\entities;
 use dProject\Primitive\AdvancedObject;
 use dProject\Primitive\StringUtil;
 use tercom\Functions;
-use tercom\Entities\EntityParseException;
 use tercom\entities\lists\Phones;
 use tercom\entities\lists\ProviderContacts;
 

@@ -32,7 +32,7 @@ class BoundaryListener extends ApiConnectionAdapter
 
 	public function onGenericException($connection, $e)
 	{
-		$notfoundTemplate = new ErrorTemplate();
+		$notfoundTemplate = new ErrorTemplate($connection);
 		$notfoundTemplate->init();
 		$notfoundTemplate->setException($e);
 		die($notfoundTemplate->callIndex()->toApiArray()[0]->show());

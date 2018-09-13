@@ -4,10 +4,9 @@ namespace tercom\entities;
 
 use dProject\Primitive\AdvancedObject;
 use dProject\Primitive\IntegerUtil;
-use tercom\Entities\EntityParseException;
+use dProject\Primitive\ObjectUtil;
 use dProject\Primitive\StringUtil;
 use tercom\Functions;
-use dProject\Primitive\ObjectUtil;
 
 /**
  * <h1>Telefone</h1>

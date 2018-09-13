@@ -160,10 +160,10 @@ class ProductService extends DefaultSiteService
 		if (($product = $productControl->get($idProduct)) === null)
 			throw new ApiException('produto não encontrado');
 
-			$result = new ApiResultProduct();
-			$result->setProduct($product);
+		$result = new ApiResultProduct();
+		$result->setProduct($product);
 
-			return $result;
+		return $result;
 	}
 
 	/**

@@ -3,7 +3,6 @@
 namespace tercom\entities;
 
 use dProject\Primitive\AdvancedObject;
-use tercom\Entities\EntityParseException;
 
 /**
  * <h1>Conjunto de Categorias para Produto</h1>
@@ -92,7 +91,7 @@ class ProductCategorySet extends AdvancedObject
 	{
 		if ($this->getFamily()->getID() !== 0)
 			if ($this->getFamily()->getID() !== $group->getProductFamilyID())
-				throw new EntityParseException('conunto com família que não possui o grupo à definir');
+				throw new EntityParseException('conjunto com família que não possui o grupo à definir');
 
 		if ($this->getSubgroup()->getID() !== 0)
 			if ($this->getSubgroup()->getProductGroupID() !== $group->getID())
@@ -120,7 +119,7 @@ class ProductCategorySet extends AdvancedObject
 	{
 		if ($this->getGroup() !== null)
 			if ($this->getGroup()->getID() !== $subgroup->getProductGroupID())
-				throw new EntityParseException('conunto com grupo que não possui o subgrupo à definir');
+				throw new EntityParseException('conjunto com grupo que não possui o subgrupo à definir');
 
 		if ($this->getSector()->getID() !== 0)
 			if ($this->getSector()->getProductSubGroupID() !== $subgroup->getID())
@@ -147,7 +146,7 @@ class ProductCategorySet extends AdvancedObject
 	{
 		if ($this->getSubgroup()->getID() !== 0)
 			if ($this->getSubgroup()->getID() !== $sector->getProductSubGroupID())
-				throw new EntityParseException('conunto com subgrupo que não possui o setor à definir');
+				throw new EntityParseException('conjunto com subgrupo que não possui o setor à definir');
 
 		$this->sector = $sector;
 	}
