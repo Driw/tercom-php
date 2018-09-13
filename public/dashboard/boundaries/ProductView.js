@@ -184,7 +184,12 @@ var ProductView = ProductView ||
 		if (idProductSubgroup !== '')
 			ProductView.loadProductSector(idProductSubgroup);
 	},
-	submit: function() {
+	onButtonViewPrices: function()
+	{
+		Util.redirect('product/viewPrices/' +ProductView.idProduct, true);
+	},
+	submit: function()
+	{
 		ws.product_set(ProductView.idProduct, ProductView.form, ProductView.onSubmited);
 	},
 	onSettings: function(settings)
@@ -223,7 +228,8 @@ var ProductView = ProductView ||
 			}
 		});
 	},
-	onSubmited: function(product, message) {
+	onSubmited: function(product, message)
+	{
 		$('#product-view-name').html(product.name);
 		$('#product-view-message').html(message);
 		$('#product-view-paragraph').show('slow');

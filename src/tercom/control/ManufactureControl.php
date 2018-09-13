@@ -60,6 +60,11 @@ class ManufactureControl extends GenericControl
 		return $this->manufactureDAO->select($idManufacture);
 	}
 
+	public function getAll(): Manufactures
+	{
+		return $this->manufactureDAO->selectAll();
+	}
+
 	public function listByFantasyName(string $fantasyName, int $amount = 5): Manufactures
 	{
 		return $this->manufactureDAO->searchByFantasyName($fantasyName, $amount);

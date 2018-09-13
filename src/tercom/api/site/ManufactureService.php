@@ -158,6 +158,24 @@ class ManufactureService extends DefaultSiteService
 	}
 
 	/**
+	 * Obtém uma lista contendo todos os fabricantes existentes no sistema.
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @throws ApiException fabricante não encontrado.
+	 * @return ApiResult aquisição do resultado com os dados do fabricante obtido.
+	 */
+
+	public function actionGetAll(ApiContent $content): ApiResult
+	{
+		$manufactureControl = new ManufactureControl(System::getWebConnection());
+		$manufactures = $manufactureControl->getAll();
+
+		$result = new ApiResultManufactures();
+		$result->setManufactures($manufactures);
+
+		return $result;
+	}
+
+	/**
 	 * Pesquisa por fornecedores através de um filtro e um valor de busca.
 	 * Os filtros são <i>cnpj</i> (CNPJ) e <i>fantasyName</i> (nome fantasia).
 	 * @ApiAnnotation({"params":["filter","value"]})

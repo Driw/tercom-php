@@ -84,7 +84,7 @@ var ProductList = ProductList ||
 	{
 		var index = this.dataset.index;
 		var product = ProductList.products[index];
-		Util.redirect('productValues/view/' +product.id, true);
+		Util.redirect('product/viewPrices/' +product.id, true);
 	},
 	onClickBtnActive: function()
 	{

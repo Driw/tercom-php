@@ -165,6 +165,51 @@ class ProviderService extends DefaultSiteService
 	}
 
 	/**
+	 * Obtém uma lista contendo todos os fornecedores registrados no sistema.
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @throws ApiException método de pesquisa desconhecido.
+	 * @return ApiResult aquisição do resultado com a lista de fornecedores encontrados.
+	 */
+
+	public function actionGetAll(ApiContent $content): ApiResult
+	{
+		$providerControl = new ProviderControl(System::getWebConnection());
+		$providers = $providerControl->getAll();
+
+		$result = new ApiResultProviders();
+		$result->setProviders($providers);
+
+		return $result;
+	}
+
+	/**
+	 * Lista todos os forenecedores registrados sendo selecionados por paginas.
+	 * A página irá determinar quais fornecedores são necessários no retorno.
+	 * @ApiAnnotation({"params":["page"]})
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @throws ApiException método de pesquisa desconhecido.
+	 * @return ApiResult aquisição do resultado com a lista de fornecedores encontrados.
+	 */
+
+	public function actionList(ApiContent $content): ApiResult
+	{
+		if ($content->getParameters()->getString('page') === 'all')
+			$page = -1;
+		else
+			$page = $content->getParameters()->getInt('page');
+
+		$providerControl = new ProviderControl(System::getWebConnection());
+		$providers = $providerControl->listByPage($page);
+		$pageCount = $providerControl->getPageCount();
+
+		$result = new ApiResultProviderPage();
+		$result->setProviders($providers);
+		$result->setPageCount($pageCount);
+
+		return $result;
+	}
+
+	/**
 	 * Pesquisa por fornecedores através de um filtro e um valor de busca.
 	 * Os filtros são <i>cnpj</i> (CNPJ) e <i>fantasyName</i> (nome fantasia).
 	 * @ApiAnnotation({"params":["filter","value"]})
@@ -220,33 +265,6 @@ class ProviderService extends DefaultSiteService
 
 		$result = new ApiResultProviders();
 		$result->setProviders($providers);
-
-		return $result;
-	}
-
-	/**
-	 * Lista todos os forenecedores registrados sendo selecionados por paginas.
-	 * A página irá determinar quais fornecedores são necessários no retorno.
-	 * @ApiAnnotation({"params":["page"]})
-	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
-	 * @throws ApiException método de pesquisa desconhecido.
-	 * @return ApiResult aquisição do resultado com a lista de fornecedores encontrados.
-	 */
-
-	public function actionList(ApiContent $content): ApiResult
-	{
-		if ($content->getParameters()->getString('page') === 'all')
-			$page = -1;
-		else
-			$page = $content->getParameters()->getInt('page');
-
-		$providerControl = new ProviderControl(System::getWebConnection());
-		$providers = $providerControl->listByPage($page);
-		$pageCount = $providerControl->getPageCount();
-
-		$result = new ApiResultProviderPage();
-		$result->setProviders($providers);
-		$result->setPageCount($pageCount);
 
 		return $result;
 	}

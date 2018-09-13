@@ -66,6 +66,11 @@ class ProductTypeControl extends GenericControl
 		return $this->productTypeDAO->select($idProductType);
 	}
 
+	public function getAll(): ProductTypes
+	{
+		return $this->productTypeDAO->selectAll();
+	}
+
 	public function filterByName(string $name): ProductTypes
 	{
 		return $this->productTypeDAO->selectByName($name);

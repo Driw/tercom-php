@@ -115,6 +115,17 @@ class ProviderDAO extends GenericDAO
 		return $this->parseProvider($result);
 	}
 
+	public function selectAll(): Providers
+	{
+		$sql = "SELECT id, cnpj, companyName, fantasyName, spokesman, site, commercial, otherphone, inactive
+				FROM providers";
+
+		$query = $this->mysql->createQuery($sql);
+		$result = $query->execute();
+
+		return $this->parseProviders($result);
+	}
+
 	public function selectByCNPJ(string $cnpj):Provider
 	{
 		$sql = "SELECT id, cnpj, companyName, fantasyName, spokesman, site, commercial, otherphone, inactive
@@ -222,7 +233,7 @@ class ProviderDAO extends GenericDAO
 		return $provider;
 	}
 
-	private function parseProviders(Result $result, bool $loadContatos): Providers
+	private function parseProviders(Result $result, bool $loadContatos = false): Providers
 	{
 		$providers = new Providers();
 

@@ -66,6 +66,17 @@ class ManufactureDAO extends GenericDAO
 		return $this->parseManufacture($result);
 	}
 
+	public function selectAll(): Manufactures
+	{
+		$sql = "SELECT id, fantasyName
+				FROM manufacturers";
+
+		$query = $this->createQuery($sql);
+		$result = $query->execute();
+
+		return $this->parseManufactures($result);
+	}
+
 	public function searchByFantasyName(string $fantasyName, int $amount):Manufactures
 	{
 		$sql = "SELECT id, fantasyName

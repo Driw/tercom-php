@@ -141,6 +141,22 @@ class ProductTypeService extends DefaultSiteService
 	}
 
 	/**
+	 * @param ApiContent $content
+	 * @return ApiResult
+	 */
+
+	public function actionGetAll(ApiContent $content): ApiResult
+	{
+		$productTypeControl = new ProductTypeControl(System::getWebConnection());
+		$productTypes = $productTypeControl->getAll();
+
+		$result = new ApiResultProductTypes();
+		$result->setProductTypes($productTypes);
+
+		return $result;
+	}
+
+	/**
 	 * @ApiAnnotation({"params":["filter","value"]})
 	 * @param ApiContent $content
 	 * @return ApiResult

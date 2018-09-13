@@ -66,6 +66,17 @@ class ProductPackageDAO extends GenericDAO
 		return $this->parseProductPackage($result);
 	}
 
+	public function selectAll(): ProductPackages
+	{
+		$sql = "SELECT id, name
+				FROM product_packages";
+
+		$query = $this->createQuery($sql);
+		$result = $query->execute();
+
+		return $this->parseProductPackages($result);
+	}
+
 	public function searchByName(string $name): ProductPackages
 	{
 		$sql = "SELECT id, name

@@ -116,5 +116,77 @@ class ProductBoundary extends DefaultDashboardBoundary
 
 		return $result;
 	}
+
+	/**
+	 * @ApiAnnotation({"params":["idProduct"]})
+	 * @param ApiContent $content
+	 * @return ApiTemplateResult
+	 */
+
+	public function onViewPrices(ApiContent $content): ApiTemplateResult
+	{
+		$dashboardTemplate = $this->newBaseTemplate();
+		$dashboardTemplate = $this->prepareInclude('ProductPriceList');
+		$dashboardTemplate->idProduct = $content->getParameters()->getInt('idProduct');
+
+		$result = new ApiTemplateResult();
+		$result->add($dashboardTemplate);
+
+		return $result;
+	}
+
+	/**
+	 * @ApiAnnotation({"params":["idProduct"]})
+	 * @param ApiContent $content
+	 * @return ApiTemplateResult
+	 */
+
+	public function onAddPrice(ApiContent $content): ApiTemplateResult
+	{
+		$dashboardTemplate = $this->newBaseTemplate();
+		$dashboardTemplate = $this->prepareInclude('ProductPriceAdd');
+		$dashboardTemplate->idProduct = $content->getParameters()->getInt('idProduct');
+
+		$result = new ApiTemplateResult();
+		$result->add($dashboardTemplate);
+
+		return $result;
+	}
+
+	/**
+	 * @ApiAnnotation({"params":["idProductPrice"]})
+	 * @param ApiContent $content
+	 * @return ApiTemplateResult
+	 */
+
+	public function onViewPrice(ApiContent $content): ApiTemplateResult
+	{
+		$dashboardTemplate = $this->newBaseTemplate();
+		$dashboardTemplate = $this->prepareInclude('ProductPriceView');
+		$dashboardTemplate->idProductPrice = $content->getParameters()->getInt('idProductPrice');
+
+		$result = new ApiTemplateResult();
+		$result->add($dashboardTemplate);
+
+		return $result;
+	}
+
+	/**
+	 * @ApiAnnotation({"params":["idProductPrice"]})
+	 * @param ApiContent $content
+	 * @return ApiTemplateResult
+	 */
+
+	public function onRemovePrice(ApiContent $content): ApiTemplateResult
+	{
+		$dashboardTemplate = $this->newBaseTemplate();
+		$dashboardTemplate = $this->prepareInclude('ProductPriceRemove');
+		$dashboardTemplate->idProductPrice = $content->getParameters()->getInt('idProductPrice');
+
+		$result = new ApiTemplateResult();
+		$result->add($dashboardTemplate);
+
+		return $result;
+	}
 }
 

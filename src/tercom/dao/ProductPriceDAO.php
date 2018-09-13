@@ -78,20 +78,19 @@ class ProductPriceDAO extends GenericDAO
 		$productPrice->getLastUpdate()->setTimestamp(time());
 
 		$sql = "UPDATE product_prices
-				SET idProduct = ? AND idProvider = ?, idManufacture = ?, idProductPackage = ?, idProductType = ?, name = ?, amount = ?, price = ?, lastUpdate = ?
+				SET idProvider = ?, idManufacture = ?, idProductPackage = ?, idProductType = ?, name = ?, amount = ?, price = ?, lastUpdate = ?
 				WHERE id = ?";
 
 		$query = $this->createQuery($sql);
-		$query->setInteger(1, $productPrice->getProduct()->getID());
-		$query->setInteger(2, $productPrice->getProvider()->getID());
-		$query->setInteger(3, $productPrice->getManufacture()->getID());
-		$query->setInteger(4, $productPrice->getPackage()->getID());
-		$query->setInteger(5, $productPrice->getType()->getID());
-		$query->setString(6, $productPrice->getName());
-		$query->setInteger(7, $productPrice->getAmount());
-		$query->setFloat(8, $productPrice->getPrice());
-		$query->setDateTime(9, $productPrice->getLastUpdate());
-		$query->setInteger(10, $productPrice->getID());
+		$query->setInteger(1, $productPrice->getProvider()->getID());
+		$query->setInteger(2, $productPrice->getManufacture()->getID());
+		$query->setInteger(3, $productPrice->getPackage()->getID());
+		$query->setInteger(4, $productPrice->getType()->getID());
+		$query->setString(5, $productPrice->getName());
+		$query->setInteger(6, $productPrice->getAmount());
+		$query->setFloat(7, $productPrice->getPrice());
+		$query->setDateTime(8, $productPrice->getLastUpdate());
+		$query->setInteger(9, $productPrice->getID());
 
 		$result = $query->execute();
 

@@ -141,6 +141,22 @@ class ProductPackageService extends DefaultSiteService
 	}
 
 	/**
+	 * @param ApiContent $content
+	 * @return ApiResult
+	 */
+
+	public function actionGetAll(ApiContent $content): ApiResult
+	{
+		$productPackageControl = new ProductPackageControl(System::getWebConnection());
+		$productPackages = $productPackageControl->getAll();
+
+		$result = new ApiResultProductPackages();
+		$result->setProductPackages($productPackages);
+
+		return $result;
+	}
+
+	/**
 	 * @ApiAnnotation({"params":["filter","value"]})
 	 * @param ApiContent $content
 	 * @return ApiResult

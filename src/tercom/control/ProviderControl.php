@@ -81,6 +81,11 @@ class ProviderControl extends GenericControl
 		return $this->providerDAO->selectByID($providerID);
 	}
 
+	public function getAll(): Providers
+	{
+		return $this->providerDAO->selectAll();
+	}
+
 	public function getByCNPJ(string $cnpj): ?Provider
 	{
 		return $this->providerDAO->selectByCNPJ($cnpj);

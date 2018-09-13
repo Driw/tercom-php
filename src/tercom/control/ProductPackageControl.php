@@ -66,6 +66,11 @@ class ProductPackageControl extends GenericControl
 		return $this->productPackageDAO->select($idProductPackage);
 	}
 
+	public function getAll(): ProductPackages
+	{
+		return $this->productPackageDAO->selectAll();
+	}
+
 	public function filterByName(string $name): ProductPackages
 	{
 		return $this->productPackageDAO->searchByName($name);
