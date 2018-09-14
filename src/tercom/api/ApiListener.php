@@ -37,13 +37,17 @@ class ApiListener extends ApiConnectionAdapter
 
 	private function showExceptionResponse(ApiConnection $connection, Throwable $e)
 	{
+		$trace = jTraceEx($e);
 		$response = new ApiResponse();
-		$response->setStatus(ApiResponse::API_FAILURE);
+		{
+			if ($e instanceof ApiStatusException)
+				$response->setStatus($e->getCode());
+			else
+				$response->setStatus(ApiResponse::API_FAILURE);
+		}
 		$response->setMessage($e->getMessage());
-		if (DEV)
-		$response->setResult(explode(PHP_EOL, jTraceEx($e)));
-		else
-		$response->setResult([ (new Encryption())->encrypt(jTraceEx($e)) ]);
+		$response->setResult(DEV ? explode(PHP_EOL, $trace) : [ (new Encryption())->encrypt($trace) ]);
+
 		$connection->showResponse($response);
 	}
 }

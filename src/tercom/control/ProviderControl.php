@@ -91,17 +91,7 @@ class ProviderControl extends GenericControl
 		return $this->providerDAO->selectByCNPJ($cnpj);
 	}
 
-	public function listByCNPJ(string $cnpj): Providers
-	{
-		return $this->providerDAO->searchByCNPJ($cnpj);
-	}
-
-	public function listByFantasyName(string $fantasyName): Providers
-	{
-		return $this->providerDAO->searchByFantasyName($fantasyName);
-	}
-
-	public function listByPage(int $page): Providers
+	public function getByPage(int $page): Providers
 	{
 		return $this->providerDAO->searchByPage($page);
 	}
@@ -109,6 +99,16 @@ class ProviderControl extends GenericControl
 	public function getPageCount(): int
 	{
 		return $this->providerDAO->calcPageCount();
+	}
+
+	public function filterByCNPJ(string $cnpj): Providers
+	{
+		return $this->providerDAO->searchByCNPJ($cnpj);
+	}
+
+	public function filterByFantasyName(string $fantasyName): Providers
+	{
+		return $this->providerDAO->searchByFantasyName($fantasyName);
 	}
 
 	public function has(int $idProvider)

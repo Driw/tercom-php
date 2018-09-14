@@ -5,6 +5,11 @@ namespace tercom\api\site;
 use dProject\restful\ApiConnection;
 use dProject\restful\ApiResult;
 use dProject\restful\ApiServiceInterface;
+use dProject\MySQL\MySQL;
+use tercom\control\ProviderContactControl;
+use tercom\control\ProviderControl;
+use tercom\control\PhoneControl;
+use tercom\core\System;
 
 /**
  * @see ApiServiceInterface
@@ -43,6 +48,42 @@ class DefaultSiteService extends ApiServiceInterface
 	protected function parseNullToInt($int): int
 	{
 		return $int === null ? 0 : $int;
+	}
+
+	/**
+	 * @return MySQL
+	 */
+
+	protected function getMySQL(): MySQL
+	{
+		return System::getWebConnection();
+	}
+
+	/**
+	 * @return ProviderControl
+	 */
+
+	protected function newPhoneControl(): PhoneControl
+	{
+		return new PhoneControl($this->getMySQL());
+	}
+
+	/**
+	 * @return ProviderControl
+	 */
+
+	protected function newProviderControl(): ProviderControl
+	{
+		return new ProviderControl($this->getMySQL());
+	}
+
+	/**
+	 * @return ProviderControl
+	 */
+
+	protected function newProviderContactControl(): ProviderContactControl
+	{
+		return new ProviderContactControl($this->getMySQL());
 	}
 }
 

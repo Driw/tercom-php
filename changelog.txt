@@ -20,6 +20,20 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+14.09.2018 - 0.1.10.68
+- Adicionada novas exceptions para aumentar a dinâmica em questões de erros no sistema.
+	- Alguns erros como problema com parâmetros e filtros inválidos são comuns entre as APIs.
+	- Agora alguns tipos de erros ocorridos ao utilizar as APIs terão status diferentes de zero (failure).
+		- A lista dos erros poderão ser encontrados em ApiStatus.
+- Mudanças no serviço da API para fornecedores:
+	- Utilização de ParameterException, FilterException e ProviderException.
+	- Renomeado a ação 'validate' para 'avaiable' seguindo o novo padrão dos webservices.
+	- Separado a ação 'removePhone' em 'removeCommercial' e 'removeOtherphone'.
+- Adicionado ApiObjectResult para reduzir o número de classes de resultado com lógicas iguais.
+- Adicionada novas responsabilidades a DefaultSiteService referente a instância de controles.
+	- Assim, centraliza-se qual conexão com o banco de dados deve ser utilizada por controle.
+- Enviado imagem de favicon do dashboard.
+
 14.09.2018 - 0.1.9.67
 - Movido a configuração do restful da api e do dashboard para System.
 - Removido todo o conteúdo de 'tercom/boostrap', não será utilizado em nenhum caso.

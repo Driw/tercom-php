@@ -6,18 +6,15 @@ use Exception;
 use dProject\Primitive\ArrayDataException;
 use dProject\restful\ApiContent;
 use dProject\restful\ApiResult;
-use dProject\restful\exception\ApiException;
-use dProject\restful\exception\ApiMissParam;
-use tercom\control\PhoneControl;
-use tercom\control\ProviderControl;
-use tercom\control\ProviderContactControl;
-use tercom\core\System;
-use tercom\entities\Provider;
+use tercom\api\site\results\ApiResultObject;
 use tercom\api\site\results\ApiResultProviderSettings;
-use tercom\api\site\results\ApiResultProvider;
-use tercom\api\site\results\ApiResultProviders;
-use tercom\api\site\results\ApiResultProviderPage;
 use tercom\api\site\results\ApiResultSimpleValidation;
+use tercom\api\site\results\ProvidersPageResult;
+use tercom\api\exceptions\ProviderException;
+use tercom\api\exceptions\ParameterException;
+use tercom\api\exceptions\FilterException;
+use tercom\control\ControlValidationException;
+use tercom\entities\Provider;
 
 /**
  * <h1>Serviço de Fornecedor</h1>
@@ -33,19 +30,6 @@ use tercom\api\site\results\ApiResultSimpleValidation;
 
 class ProviderService extends DefaultSiteService
 {
-	/**
-	 * @var int código para remover telefone comercial.
-	 */
-	public const REMOVE_COMMERCIAL_PHONE = 1;
-	/**
-	 * @var int código para remover telefone secundário.
-	 */
-	public const REMOVE_OTHER_PHONE = 2;
-	/**
-	 * @var int código para remover ambos telefones (comercial e secundário).
-	 */
-	public const REMOVE_ALL_PHONES = 3;
-
 	/**
 	 * Ação para se obter as configurações de limites de cada atributo referente aos fornecedores.
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
@@ -63,10 +47,11 @@ class ProviderService extends DefaultSiteService
 	 * Por padrão forencedores serão adicionados como ativos.
 	 * @ApiAnnotation({"method":"post"})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
-	 * @return ApiResult aquisição do resultado contendo os dados do fornecedor adicionado.
+	 * @throws ParameterException ocorre apenas se houver parâmetros faltando.
+	 * @return ApiResultObject aquisição do resultado contendo os dados do fornecedor adicionado.
 	 */
 
-	public function actionAdd(ApiContent $content): ApiResult
+	public function actionAdd(ApiContent $content): ApiResultObject
 	{
 		$POST = $content->getPost();
 
@@ -81,14 +66,14 @@ class ProviderService extends DefaultSiteService
 			$provider->setInactive(false);
 
 		} catch (ArrayDataException $e) {
-			return new ApiMissParam($e);
+			throw new ParameterException($e);
 		}
 
-		$providerControl = new ProviderControl(System::getWebConnection());
+		$providerControl = $this->newProviderControl();
 		$providerControl->add($provider);
 
-		$result = new ApiResultProvider();
-		$result->setProvider($provider);
+		$result = new ApiResultObject();
+		$result->setResult($provider, 'fornecedor adicionado com êxito');
 
 		return $result;
 	}
@@ -98,41 +83,43 @@ class ProviderService extends DefaultSiteService
 	 * Nenhum dado é obrigatório ser atualizado, porém se informado será considerado.
 	 * @ApiAnnotation({"method":"post", "params":["idProvider"]})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
-	 * @throws ApiException fornecedor não encontrado.
-	 * @return ApiResult aquisição do resultado com os dados do fornecedor atualizados.
+	 * @throws ParameterException código do fornecedor não informado ou inválido.
+	 * @throws ProviderException fornecedor não encontrado.
+	 * @return ApiResultObject aquisição do resultado com os dados do fornecedor atualizados.
 	 */
 
-	public function actionSet(ApiContent $content): ApiResult
+	public function actionSet(ApiContent $content): ApiResultObject
 	{
-		$POST = $content->getPost();
-
-		$providerID = $this->parseProviderID($content);
-		$providerControl = new ProviderControl(System::getWebConnection());
-
-		if (($provider = $providerControl->get($providerID)) == null)
-			throw new ApiException('fornecedor não encontrado');
-
-		$phoneControl = new PhoneControl(System::getWebConnection());
-		$phoneControl->loadPhones($provider->getPhones());
+		$post = $content->getPost();
 
 		try {
 
-			if ($POST->isSetted('cnpj')) $provider->setCNPJ($POST->getString('cnpj'));
-			if ($POST->isSetted('companyName')) $provider->setCompanyName($POST->getString('companyName'));
-			if ($POST->isSetted('fantasyName')) $provider->setFantasyName($POST->getString('fantasyName'));
-			if ($POST->isSetted('spokesman')) $provider->setSpokesman($POST->getString('spokesman'));
-			if ($POST->isSetted('site')) $provider->setSite($POST->getString('site'));
-			if ($POST->isSetted('inactive')) $provider->setSite($POST->getBoolean('inactive'));
+			$providerID = $content->getParameters()->getInt('idProvider');
+			$providerControl = $this->newProviderControl();
+
+			if (($provider = $providerControl->get($providerID)) == null)
+				throw ProviderException::newNotFound();
+
+			$phoneControl = $this->newPhoneControl();
+			$phoneControl->loadPhones($provider->getPhones());
+
+			if ($post->isSetted('cnpj')) $provider->setCNPJ($post->getString('cnpj'));
+			if ($post->isSetted('companyName')) $provider->setCompanyName($post->getString('companyName'));
+			if ($post->isSetted('fantasyName')) $provider->setFantasyName($post->getString('fantasyName'));
+			if ($post->isSetted('spokesman')) $provider->setSpokesman($post->getString('spokesman'));
+			if ($post->isSetted('site')) $provider->setSite($post->getString('site'));
+			if ($post->isSetted('inactive')) $provider->setSite($post->getBoolean('inactive'));
 
 		} catch (ArrayDataException $e) {
-			return new ApiMissParam($e);
+			throw new ParameterException($e);
 		}
 
-		$provider->setInactive(false);
-		$providerControl->set($provider);
+		$result = new ApiResultObject();
 
-		$result = new ApiResultProvider();
-		$result->setProvider($provider);
+		if ($providerControl->set($provider))
+			$result->setResult($provider, 'dados do fornecedor atualizado com êxito');
+		else
+			$result->setResult($provider, 'nnehum dado alterado no fornecedor');
 
 		return $result;
 	}
@@ -141,25 +128,33 @@ class ProviderService extends DefaultSiteService
 	 * Obtém os dados de um fornecedor através do seu código de identificação.
 	 * @ApiAnnotation({"params":["idProvider"]})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
-	 * @throws ApiException fornecedor não encontrado.
-	 * @return ApiResult aquisição do resultado com os dados do fornecedor obtido.
+	 * @throws ParameterException código do fornecedor não informado ou inválido.
+	 * @throws ProviderException fornecedor não encontrado.
+	 * @return ApiResultObject aquisição do resultado com os dados do fornecedor obtido.
 	 */
 
-	public function actionGet(ApiContent $content): ApiResult
+	public function actionGet(ApiContent $content): ApiResultObject
 	{
-		$providerID = $this->parseProviderID($content);
-		$providerControl = new ProviderControl(System::getWebConnection());
-		$providerContactControl = new ProviderContactControl(System::getWebConnection());
+		try {
+
+			$providerID = $content->getParameters()->getInt('idProvider');
+			$providerControl = $this->newProviderControl();
+
+		} catch (ArrayDataException $e) {
+			throw new ParameterException($e);
+		}
 
 		if (($provider = $providerControl->get($providerID)) == null)
-			throw new ApiException('fornecedor não encontrado');
+			throw ProviderException::newNotFound();
 
-		$phoneControl = new PhoneControl(System::getWebConnection());
+		$phoneControl = $this->newPhoneControl();
 		$phoneControl->loadPhones($provider->getPhones());
 
+		$providerContactControl = $this->newProviderContactControl();
 		$providerContactControl->loadProviderContacts($provider);
-		$result = new ApiResultProvider();
-		$result->setProvider($provider);
+
+		$result = new ApiResultObject();
+		$result->setResult($provider, 'fornecedor obtido com êxito');
 
 		return $result;
 	}
@@ -167,17 +162,16 @@ class ProviderService extends DefaultSiteService
 	/**
 	 * Obtém uma lista contendo todos os fornecedores registrados no sistema.
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
-	 * @throws ApiException método de pesquisa desconhecido.
 	 * @return ApiResult aquisição do resultado com a lista de fornecedores encontrados.
 	 */
 
 	public function actionGetAll(ApiContent $content): ApiResult
 	{
-		$providerControl = new ProviderControl(System::getWebConnection());
+		$providerControl = $this->newProviderControl();
 		$providers = $providerControl->getAll();
 
-		$result = new ApiResultProviders();
-		$result->setProviders($providers);
+		$result = new ApiResultObject();
+		$result->setResult($providers, 'carregado %d fornecedores', $providers->size());
 
 		return $result;
 	}
@@ -187,24 +181,23 @@ class ProviderService extends DefaultSiteService
 	 * A página irá determinar quais fornecedores são necessários no retorno.
 	 * @ApiAnnotation({"params":["page"]})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
-	 * @throws ApiException método de pesquisa desconhecido.
 	 * @return ApiResult aquisição do resultado com a lista de fornecedores encontrados.
 	 */
 
 	public function actionList(ApiContent $content): ApiResult
 	{
-		if ($content->getParameters()->getString('page') === 'all')
-			$page = -1;
-		else
-			$page = $content->getParameters()->getInt('page');
+		$page = $content->getParameters()->getInt('page');
 
-		$providerControl = new ProviderControl(System::getWebConnection());
-		$providers = $providerControl->listByPage($page);
+		$providerControl = $this->newProviderControl();
+		$providers = $providerControl->getByPage($page);
 		$pageCount = $providerControl->getPageCount();
 
-		$result = new ApiResultProviderPage();
-		$result->setProviders($providers);
-		$result->setPageCount($pageCount);
+		$providersPage = new ProvidersPageResult();
+		$providersPage->setProviders($providers);
+		$providersPage->setPageCount($pageCount);
+
+		$result = new ApiResultObject();
+		$result->setResult($providersPage, 'carregado %d fornecedores e encontrado %d páginas', $providers->size(), $pageCount);
 
 		return $result;
 	}
@@ -214,7 +207,7 @@ class ProviderService extends DefaultSiteService
 	 * Os filtros são <i>cnpj</i> (CNPJ) e <i>fantasyName</i> (nome fantasia).
 	 * @ApiAnnotation({"params":["filter","value"]})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
-	 * @throws ApiException método de pesquisa desconhecido.
+	 * @throws ProviderException filtro de pesquisa desconhecido.
 	 * @return ApiResult aquisição do resultado com a lista de fornecedores encontrados.
 	 */
 
@@ -228,7 +221,7 @@ class ProviderService extends DefaultSiteService
 			case 'fantasyName': return $this->actionSearchByFantasyName($content);
 		}
 
-		throw new ApiException('método de pesquisa desconhecido');
+		throw new FilterException($filter);
 	}
 
 	/**
@@ -241,11 +234,11 @@ class ProviderService extends DefaultSiteService
 	private function actionSearchByCNPJ(ApiContent $content): ApiResult
 	{
 		$cnpj = $content->getParameters()->getString('value');
-		$providerControl = new ProviderControl(System::getWebConnection());
-		$providers = $providerControl->listByCNPJ($cnpj);
+		$providerControl = $this->newProviderControl();
+		$providers = $providerControl->filterByCNPJ($cnpj);
 
-		$result = new ApiResultProviders();
-		$result->setProviders($providers);
+		$result = new ApiResultObject();
+		$result->setResult($providers, 'encontrado %d fornecedores', $providers->size());
 
 		return $result;
 	}
@@ -260,11 +253,11 @@ class ProviderService extends DefaultSiteService
 	private function actionSearchByFantasyName(ApiContent $content): ApiResult
 	{
 		$fantasyName = $content->getParameters()->getString('value');
-		$providerControl = new ProviderControl(System::getWebConnection());
+		$providerControl = $this->newProviderControl();
 		$providers = $providerControl->listByFantasyName($fantasyName);
 
-		$result = new ApiResultProviders();
-		$result->setProviders($providers);
+		$result = new ApiResultObject();
+		$result->setResult($providers, 'encontrado %d fornecedores', $providers->size());
 
 		return $result;
 	}
@@ -275,37 +268,36 @@ class ProviderService extends DefaultSiteService
 	 * porém necessário definir ao menos um dos dois telefones.
 	 * @ApiAnnotation({"method":"post","params":["idProvider"]})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
-	 * @throws ApiException fornecedor não encontrado.
+	 * @throws ProviderException fornecedor não encontrado.
 	 * @return ApiResult aquisição do resultado com os dados de fornecedor com telefone(s) atualizado(s).
 	 */
 
 	public function actionSetPhones(ApiContent $content): ApiResult
 	{
-		$POST = $content->getPost();
-
-		$providerID = $this->parseProviderID($content);
-		$providerControl = new ProviderControl(System::getWebConnection());
-
-		if (($provider = $providerControl->get($providerID)) == null)
-			throw new ApiException('fornecedor não encontrado');
-
-		$phoneControl = new PhoneControl(System::getWebConnection());
-		$phoneControl->loadPhones($provider->getPhones());
-
 		try {
 
-			if ($POST->isSetted('commercial'))
+			$post = $content->getPost();
+			$providerID = $content->getParameters()->getInt('idProvider');
+			$providerControl = $this->newProviderControl();
+
+			if (($provider = $providerControl->get($providerID)) == null)
+				throw ProviderException::newNotFound();
+
+			$phoneControl = $this->newPhoneControl();
+			$phoneControl->loadPhones($provider->getPhones());
+
+			if ($post->isSetted('commercial'))
 			{
-				$commercialData = $POST->newArrayData('commercial');
+				$commercialData = $post->newArrayData('commercial');
 
 				$provider->getCommercial()->setDDD($commercialData->getInt('ddd'));
 				$provider->getCommercial()->setNumber($commercialData->getString('number'));
 				$provider->getCommercial()->setType($commercialData->getString('type'));
 			}
 
-			if ($POST->isSetted('otherphone'))
+			if ($post->isSetted('otherphone'))
 			{
-				$otherphoneData = $POST->newArrayData('otherphone');
+				$otherphoneData = $post->newArrayData('otherphone');
 
 				$provider->getOtherPhone()->setDDD($otherphoneData->getInt('ddd'));
 				$provider->getOtherPhone()->setNumber($otherphoneData->getString('number'));
@@ -313,61 +305,85 @@ class ProviderService extends DefaultSiteService
 			}
 
 		} catch (Exception $e) {
-			return new ApiMissParam($e->getMessage());
+			throw new ParameterException($e);
 		}
 
-		$providerControl->setPhones($provider);
+		$result = new ApiResultObject();
 
-		$result = new ApiResultProvider();
-		$result->setProvider($provider);
+		if ($providerControl->setPhones($provider))
+			$result->setResult($provider, 'telefone(s) do fornecedor atualizado(s) com êxito');
+		else
+			$result->setResult($provider, 'nenhum dado alterado no(s) telefone(s) do fornecedor');
 
 		return $result;
 	}
 
 	/**
-	 * Excluí os dados de telefone de um dos fornecedores através do seu código identificação.
-	 * Necessário também informar por parâmetro qual o telefonse será excluído, <code>REMOVE_*_PHONE</code>
-	 * @ApiAnnotation({"params":["idProvider", "phone"]})
+	 * Excluí o telefone comercial de um dos fornecedores através do seu código identificação.
+	 * @ApiAnnotation({"params":["idProvider"]})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
-	 * @throws ApiException fornecedor não encontrado; telefone não definido; telefone inválido.
-	 * @return ApiResult aquisição dos dados do fornecedor com o(s) telefone(s) removido(s).
+	 * @throws ParameterException ocorre apenas se houver parâmetros faltando.
+	 * @return ApiResult aquisição dos dados do fornecedor atualizados com o telefone excluído.
 	 */
 
-	public function actionRemovePhone(ApiContent $content): ApiResult
+	public function actionRemoveCommercial(ApiContent $content): ApiResultObject
 	{
-		$providerID = $this->parseProviderID($content);
-		$providerControl = new ProviderControl(System::getWebConnection());
+		try {
 
-		if (($provider = $providerControl->get($providerID)) == null)
-			throw new ApiException('fornecedor não encontrado');
+			$providerID = $this->parseProviderID($content);
+			$providerControl = $this->newProviderControl();
 
-		$phoneControl = new PhoneControl(System::getWebConnection());
-		$phoneControl->loadPhones($provider->getPhones());
+			if (($provider = $providerControl->get($providerID)) == null)
+				throw ProviderException::newNotFound();
 
-		if (!$content->getParameters()->isSetted('phone'))
-			throw new ApiException('telefone não definido');
+			$phoneControl = $this->newPhoneControl();
+			$phoneControl->loadPhones($provider->getPhones());
 
-		$result = new ApiResultProvider();
-
-		switch ($content->getParameters()->getString('phone'))
-		{
-			case 'commercial':
-				if (!$providerControl->removeCommercial($provider))
-					$result->setMessage('telefone comercial não definido');
-				else
-					$result->setMessage('telefone comercial excluído');
-				break;
-
-			case 'otherphone':
-				if (!$providerControl->removeOtherphone($provider))
-					$result->setMessage('telefone secundário não definido');
-				else
-					$result->setMessage('telefone secundário excluído');
-				break;
-
-			default:
-				throw new ApiException('telefone inválido');
+		} catch (ArrayDataException $e) {
+			throw new ParameterException($e);
 		}
+
+		$result = new ApiResultObject();
+
+		if (!$providerControl->removeCommercial($provider))
+			$result->setResult($provider, 'telefone comercial não definido');
+		else
+			$result->setResult($provider, 'telefone comercial excluído');
+
+		return $result;
+	}
+
+	/**
+	 * Excluí o telefone secundário de um dos fornecedores através do seu código identificação.
+	 * @ApiAnnotation({"params":["idProvider"]})
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @throws ParameterException ocorre apenas se houver parâmetros faltando.
+	 * @return ApiResult aquisição dos dados do fornecedor atualizados com o telefone excluído.
+	 */
+
+	public function actionRemoveOtherphone(ApiContent $content): ApiResultObject
+	{
+		try {
+
+			$providerID = $this->parseProviderID($content);
+			$providerControl = $this->newProviderControl();
+
+			if (($provider = $providerControl->get($providerID)) == null)
+				throw ProviderException::newNotFound();
+
+			$phoneControl = $this->newPhoneControl();
+			$phoneControl->loadPhones($provider->getPhones());
+
+		} catch (ArrayDataException $e) {
+			throw new ParameterException($e);
+		}
+
+		$result = new ApiResultObject();
+
+		if (!$providerControl->removeOtherphone($provider))
+			$result->setResult($provider, 'telefone secundário não definido');
+		else
+			$result->setResult($provider, 'telefone secundário excluído');
 
 		$result->setProvider($provider);
 
@@ -375,21 +391,31 @@ class ProviderService extends DefaultSiteService
 	}
 
 	/**
-	 * @ApiAnnotation({"params":["attribute","value","idProvider"]})
+	 * Verifica a disponibilidade de um dado para fornecedor conforme especificações.
+	 * Por obrigatoriedade será necessário informar um filtro e valor.
+	 * Opcionalmente pode ser informado o código de identificação do fornecedor,
+	 * caso seja informado irá desconsiderar a ideia de disponível se for do mesmo.
+	 * @ApiAnnotation({"params":["filter","value","idProvider"]})
 	 * @param ApiContent $content
 	 * @return ApiResult
 	 */
 
-	public function actionValidate(ApiContent $content): ApiResult
+	public function actionAvaiable(ApiContent $content): ApiResult
 	{
-		$attribute = $content->getParameters()->getString('attribute');
+		try {
 
-		switch ($attribute)
-		{
-			case 'cnpj': return $this->validateCNPJ($content);
+			$filter = $content->getParameters()->getString('attribute');
+
+			switch ($filter)
+			{
+				case 'cnpj': return $this->avaiableCNPJ($content);
+			}
+
+		} catch (ArrayDataException $e) {
+			throw new ParameterException($e);
 		}
 
-		throw new ApiException('tipo de validação desconhecida');
+		throw new FilterException($filter);
 	}
 
 	/**
@@ -397,11 +423,11 @@ class ProviderService extends DefaultSiteService
 	 * @return ApiResult
 	 */
 
-	private function validateCNPJ(ApiContent $content): ApiResult
+	private function avaiableCNPJ(ApiContent $content): ApiResult
 	{
 		$cnpj = $content->getParameters()->getString('value');
 		$idProvider = $content->getParameters()->isSetted('idProvider') ? $content->getParameters()->getInt('idProvider') : 0;
-		$providerControl = new ProviderControl(System::getWebConnection());
+		$providerControl = $this->newProviderControl();
 		$result = new ApiResultSimpleValidation();
 
 		try {
@@ -411,32 +437,11 @@ class ProviderService extends DefaultSiteService
 			else
 				$result->setOkMessage(true, 'CNPJ disponível');
 
-		} catch (Exception $e) {
+		} catch (ControlValidationException $e) {
 			$result->setOkMessage(false, $e->getMessage());
 		}
 
 		return $result;
-	}
-
-	/**
-	 * Procedimento interno que realiza a validação de uma ação do serviço que
-	 * seja necessário ser informado o código de identificação do fornecedor.
-	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
-	 * @throws ApiException fornecedor não identificado; indentificação inválida.
-	 * @return int aquisição do código de identificação do fornecedor informado.
-	 */
-
-	private function parseProviderID(ApiContent $content): int
-	{
-		try {
-			return $content->getParameters()->getInt('idProvider');
-		} catch (ArrayDataException $e) {
-			if ($e->getCode() === ArrayDataException::MISS_PARAM)
-				throw new ApiException('fornecedor não identificado');
-			if ($e->getCode() === ArrayDataException::PARSE_TYPE)
-				throw new ApiException('identificação inválida');
-			throw new ApiException($e->getMessage());
-		}
 	}
 }
 
