@@ -2,29 +2,7 @@
 
 require_once '../../include.php';
 
-use dProject\Primitive\GlobalFunctions;
-use dProject\restful\ApiSettings;
-use dProject\restful\ApiConnection;
-use tercom\boundary\dashboard\BoundaryListener;
-use tercom\boundary\dashboard\DashboardTemplate;
+use tercom\core\System;
 
-GlobalFunctions::init();
-DashboardTemplate::setDirectory(sprintf('%s/%s', __DIR__, 'boundaries'));
+System::initDashboard();
 
-$listener = new BoundaryListener();
-
-$settings = new ApiSettings();
-$settings->setParametersOffset(0);
-$settings->setEnableDebug(true);
-$settings->setEnableTimeUp(true);
-$settings->setEnableResultClass(true);
-$settings->setEnableContentLength(true);
-$settings->setApiNameSpace(namespaceOf($listener));
-$settings->setResponseType(ApiSettings::RESPONSE_TEMPLATE);
-
-$apiConnection = ApiConnection::getInstance();
-$apiConnection->setSettings($settings);
-$apiConnection->setListener($listener);
-$apiConnection->start();
-
-?>

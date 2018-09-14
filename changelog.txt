@@ -20,6 +20,12 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+14.09.2018 - 0.1.9.67
+- Movido a configuração do restful da api e do dashboard para System.
+- Removido todo o conteúdo de 'tercom/boostrap', não será utilizado em nenhum caso.
+- Os sistemas restful não estavam a inicializar o sistema em System::init().
+- Agora será possível configurar o retorno simples ou avançado dos objetos em JSON, System.
+
 13.09.2018 - 0.1.9.66
 - Modificado página inicial para redirecionar para o dashboard.
 - Implementação das páginas para listar, adicionar e atualizar unidades de produtos.

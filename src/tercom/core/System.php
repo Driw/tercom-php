@@ -4,14 +4,14 @@ namespace tercom\core;
 
 use dProject\MySQL\MySQL;
 use dProject\Primitive\Config;
-use dProject\Primitive\Cookie;
-use dProject\Primitive\FriendlyPage;
 use dProject\Primitive\Session;
-use dProject\Primitive\UrlFriendly;
-use tercom\bootstrap\navbar\Navbar;
-use tercom\bootstrap\navbar\NavbarItem;
-use tercom\bootstrap\navbar\NavbarItems;
+use dProject\Primitive\GlobalFunctions;
+use dProject\restful\ApiConnection;
+use dProject\restful\ApiSettings;
 use tercom\Functions;
+use tercom\api\ApiListener;
+use tercom\boundary\dashboard\BoundaryListener;
+use tercom\boundary\dashboard\DashboardTemplate;
 
 /**
  * <p><h1>Sistema</h1></p>
@@ -36,10 +36,9 @@ class System
 	 */
 	private static $webConnection;
 	/**
-	 * Barra de Navegação.
-	 * @var Navbar
+	 * @var bool objetos informados na API terão formato simples ou avançado.
 	 */
-	private static $navbar;
+	private static $apiOnlyProperties;
 
 	/**
 	 * Tem como finalidade garantir algumas funcionalidades do sistema do site.
@@ -49,10 +48,66 @@ class System
 
 	public static function init()
 	{
+		GlobalFunctions::init();
+
 		self::initConfigs();
+		self::setApiOnlyProperties(false);
 
 		setlocale(LC_ALL, self::$config->getLocale());
 		date_default_timezone_set(self::$config->getTimeZone());
+	}
+
+	/**
+	 *
+	 */
+
+	public static function initApi()
+	{
+		self::init();
+
+		$listener = new ApiListener();
+
+		$settings = new ApiSettings();
+		$settings->setParametersOffset(1);
+		$settings->setEnableDebug(true);
+		$settings->setEnableTimeUp(true);
+		$settings->setEnableResultClass(true);
+		$settings->setEnableContentLength(true);
+		$settings->setApiNameSpace(namespaceOf($listener));
+		$settings->setResponseType(ApiSettings::RESPONSE_JSON);
+
+		$apiConnection = ApiConnection::getInstance();
+		$apiConnection->setSettings($settings);
+		$apiConnection->setListener($listener);
+		$apiConnection->start();
+	}
+
+	/**
+	 *
+	 */
+
+	public static function initDashboard()
+	{
+		self::init();
+
+		DashboardTemplate::setDirectory(sprintf('%s/%s', __DIR__, 'boundaries'));
+		System::init();
+
+		$listener = new BoundaryListener();
+
+		$settings = new ApiSettings();
+		$settings->setParametersOffset(0);
+		$settings->setEnableDebug(true);
+		$settings->setEnableTimeUp(true);
+		$settings->setEnableResultClass(true);
+		$settings->setEnableContentLength(true);
+		$settings->setApiNameSpace(namespaceOf($listener));
+		$settings->setResponseType(ApiSettings::RESPONSE_TEMPLATE);
+
+		$apiConnection = ApiConnection::getInstance();
+		$apiConnection->setSettings($settings);
+		$apiConnection->setListener($listener);
+		$apiConnection->start();
 	}
 
 	/**
@@ -95,25 +150,6 @@ class System
 	public static function verifySession()
 	{
 		Session::getInstance()->start();
-	}
-
-	/**
-	 * Tem como finalidade verificar qual é o modelo preferêncial do sistema e/ou usuário.
-	 * A partir deste, determinar qual deverá ser o modelo de fato a ser ustilizado.
-	 */
-
-	public static function verifyTemplate()
-	{
-		$path = 'pages/';
-
-		if (Cookie::getInstance()->isSetted('template'))
-			$path = Cookie::getInstance()->getString('template');
-
-		if (!is_dir($path))
-			$path = '/';
-
-		FriendlyPage::getInstance()->setPagePath($path);
-		define('DIR_PAGES', $path);
 	}
 
 	/**
@@ -178,46 +214,21 @@ class System
 	}
 
 	/**
-	 * Se não houver a barra de navegação criada irá criar uma nova barra de nevagação com os itens pré-definidos.
-	 * @return Navbar aquisição da barra de navegação principal do site.
+	 * @return bool
 	 */
 
-	public static function getNavbar()
+	public static function isApiOnlyProperties(): bool
 	{
-		if (self::$navbar == null)
-		{
-			$navbar = new Navbar('TERCOM');
+		return self::$apiOnlyProperties;
+	}
 
-			// Com um item ou sem nenhum, sempre mostramos a página inicial
-			if (UrlFriendly::getBaseLevel() >= 2)
-			{
-				$navbar->getNavbarBrand()->setLink(UrlFriendly::getBaseBack(1));
-				$navbar->getNavbarBrand()->setName(UrlFriendly::getPageName(1));
-				echo $navbar->getNavbarBrand();
-			}
+	/**
+	 * @param boolean $apiOnlyProperties
+	 */
 
-			else
-				$navbar->getNavbarBrand()->setLink('/');
-
-			$navbarFornecedores = new NavbarItems('Fornecedores');
-			$navbar->getNavbarItems()->add($navbarFornecedores);
-
-			$niFornecedorListar = new NavbarItem('Listar');
-			$niFornecedorListar->setLink('/fornecedor/listar');
-			$navbarFornecedores->add($niFornecedorListar);
-
-			$niFornecedorConsultar = new NavbarItem('Projetos');
-			$niFornecedorConsultar->setLink('/fornecedor/consultar');
-			$navbarFornecedores->add($niFornecedorConsultar);
-
-			$niFornecedorAdicionar = new NavbarItem('Adicionar');
-			$niFornecedorAdicionar->setLink('/fornecedor/adicionar');
-			$navbarFornecedores->add($niFornecedorAdicionar);
-
-			self::$navbar = $navbar;
-		}
-
-		return self::$navbar;
+	public static function setApiOnlyProperties(bool $apiOnlyProperties)
+	{
+		self::$apiOnlyProperties = $apiOnlyProperties;
 	}
 }
 

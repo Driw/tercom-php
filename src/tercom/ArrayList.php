@@ -134,7 +134,7 @@ class ArrayList extends AdvancedObject implements Iterator
 	 * @return array aquisição de um vetor com os elementos da lista.
 	 */
 
-	public function toElementsArray():array
+	public function toElementsArray(): array
 	{
 		return $this->elements;
 	}
@@ -149,10 +149,10 @@ class ArrayList extends AdvancedObject implements Iterator
 	}
 
 	/**
-	 * @return number aquisição da quantidade de elementos na lista.
+	 * @return int aquisição da quantidade de elementos na lista.
 	 */
 
-	public function size()
+	public function size(): int
 	{
 		return count($this->elements);
 	}
