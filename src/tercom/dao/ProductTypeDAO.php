@@ -106,7 +106,7 @@ class ProductTypeDAO extends GenericDAO
 		return intval($productType['qtd']) === 1;
 	}
 
-	public function existName(string $name, int $idProductType = 0): bool
+	public function existName(string $name, int $idProductType): bool
 	{
 		$sql = "SELECT COUNT(*) AS qtd
 				FROM product_types

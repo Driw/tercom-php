@@ -4,7 +4,7 @@
 			"service": "home",
 			"Name": "Inicio",
 			"Icon": "fas fa-home",
-			"Url": "/",
+			"Url": "/dashboard",
 			"Class": ""
 		}
 	},
@@ -39,7 +39,7 @@
 	{
 		"Dropdown": {
 			"service": "product.categories",
-			"Name": "Produto Categorias",
+			"Name": "Categorias de Produto",
 			"Icon": "fas fa-layer-group",
 			"ID": "dropdown-product-categories",
 			"Class": "",
@@ -54,7 +54,7 @@
 	{
 		"Dropdown": {
 			"service": "productPackage",
-			"Name": "Produto Embalagens",
+			"Name": "Embalagens de Produto",
 			"Icon": "fas fa-cube",
 			"ID": "dropdown-product-packages",
 			"Class": "",
@@ -66,14 +66,14 @@
 	},
 	{
 		"Dropdown": {
-			"service": "product.units",
-			"Name": "Produto Unidades",
+			"service": "productUnit",
+			"Name": "Unidades de Produto",
 			"Icon": "fas fa-ruler",
 			"ID": "dropdown-product-units",
 			"Class": "",
 			"Itens": [
-				{ "Name": "Listar", "Icon": "fas fa-list-ul", "Url": "product/unit/list" },
-				{ "Name": "Adicionar", "Icon": "fas fa-plus", "Url": "product/unit/add" }
+				{ "Name": "Listar", "Icon": "fas fa-list-ul", "Url": "productUnit/list" },
+				{ "Name": "Adicionar", "Icon": "fas fa-plus", "Url": "productUnit/add" }
 			]
 		}
 	},

@@ -21,6 +21,14 @@ class ApiResultProductUnitSettings extends AdvancedObject implements ApiResult
 	 * @var int
 	 */
 	private $maxNameLen;
+	/**
+	 * @var int
+	 */
+	private $minShortNameLen;
+	/**
+	 * @var int
+	 */
+	private $maxShortNameLen;
 
 	/**
 	 *
@@ -30,6 +38,8 @@ class ApiResultProductUnitSettings extends AdvancedObject implements ApiResult
 	{
 		$this->minNameLen = ProductUnit::MIN_NAME_LEN;
 		$this->maxNameLen = ProductUnit::MAX_NAME_LEN;
+		$this->minShortNameLen = ProductUnit::MIN_SHORT_NAME_LEN;
+		$this->maxShortNameLen = ProductUnit::MAX_SHORT_NAME_LEN;
 	}
 
 	/**

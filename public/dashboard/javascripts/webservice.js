@@ -100,15 +100,6 @@ Webservice.prototype.manufacturer_getAll = function(target, listener)
 	});
 };
 
-Webservice.prototype.productUnit_getAll = function(target, listener)
-{
-	this.setOptionsAndExecute({
-		'webservice': 'productUnit/getAll',
-		'target': target,
-		'listener': listener,
-		'errorMessage': this.newBaseErrorMessage('obter unidades de produto'),
-	});
-};
 Webservice.prototype.productFamily_getAll = function(target, listener)
 {
 	this.setOptionsAndExecute({
@@ -194,6 +185,57 @@ Webservice.prototype.productPackage_getAll = function(target, listener)
 		'target': target,
 		'listener': listener,
 		'errorMessage': this.newBaseErrorMessage('obter as embalagens de produto'),
+	});
+};
+
+// -- ProductUnit
+
+Webservice.prototype.productUnit_settings = function(target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'productUnit/settings',
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter configuração para unidade de produto'),
+	});
+};
+Webservice.prototype.productUnit_add = function(form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'productUnit/add',
+		'form': form,
+		'target': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('adicionar unidade de produto'),
+	});
+};
+Webservice.prototype.productUnit_set = function(idProductUnit, form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'productUnit/set/' +idProductUnit,
+		'form': form,
+		'target': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('atualizar unidade de produto'),
+	});
+};
+Webservice.prototype.productUnit_get = function(idProductUnit, form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'productUnit/get/' +idProductUnit,
+		'form': form,
+		'target': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter unidade de produto'),
+	});
+};
+Webservice.prototype.productUnit_getAll = function(target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'productUnit/getAll',
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter unidades de produto'),
 	});
 };
 

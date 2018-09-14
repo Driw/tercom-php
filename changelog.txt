@@ -20,6 +20,12 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+13.09.2018 - 0.1.9.66
+- Modificado página inicial para redirecionar para o dashboard.
+- Implementação das páginas para listar, adicionar e atualizar unidades de produtos.
+- Adicionada nova ação 'avaiable' para verificar disponibilidade de dados para unidades de produto.
+- Atualizado ApiResultProductUnitSettings para que seja especificado 'shortName'.
+
 13.09.2018 - 0.1.8.65
 - Implementação das páginas para listar, adicionar e atualizar embalagens de produtos.
 - Adicionada nova ação 'avaiable' para verificar disponibilidade de dados para embalagens de produto.

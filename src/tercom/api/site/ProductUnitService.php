@@ -13,6 +13,7 @@ use tercom\api\site\results\ApiResultProductUnitSettings;
 use tercom\entities\ProductUnit;
 use tercom\control\ProductUnitControl;
 use tercom\core\System;
+use tercom\api\site\results\ApiResultSimpleValidation;
 
 /**
  * @see DefaultSiteService
@@ -189,6 +190,70 @@ class ProductUnitService extends DefaultSiteService
 
 		$result = new ApiResultProductUnits();
 		$result->setProductUnits($productUnits);
+
+		return $result;
+	}
+
+	/**
+	 * @ApiAnnotation({"params":["filter","value","idProductUnit"]})
+	 * @param ApiContent $content
+	 * @throws ApiException
+	 * @return ApiResult
+	 */
+
+	public function actionAvaiable(ApiContent $content):ApiResult
+	{
+		$filter = $content->getParameters()->getString('filter');
+
+		switch ($filter)
+		{
+			case 'name': return $this->avaiableName($content);
+			case 'shortName': return $this->avaiableShortName($content);
+		}
+
+		throw new ApiException('opção inexistente');
+	}
+
+	/**
+	 * @param ApiContent $content
+	 * @return ApiResult
+	 */
+
+	private function avaiableName(ApiContent $content): ApiResult
+	{
+		$parameters = $content->getParameters();
+		$name = $parameters->getString('value');
+		$idProductUnit = $this->parseNullToInt($parameters->getInt('idProductUnit', false));
+		$productUnitControl = new ProductUnitControl(System::getWebConnection());
+
+		$result = new ApiResultSimpleValidation();
+
+		if ($productUnitControl->hasAvaiableName($name, $idProductUnit))
+			$result->setOkMessage(true, 'unidade disponível');
+		else
+			$result->setOkMessage(false, 'unidade indisponível');
+
+		return $result;
+	}
+
+	/**
+	 * @param ApiContent $content
+	 * @return ApiResult
+	 */
+
+	private function avaiableShortName(ApiContent $content): ApiResult
+	{
+		$parameters = $content->getParameters();
+		$shortName = $parameters->getString('value');
+		$idProductUnit = $this->parseNullToInt($parameters->getInt('idProductUnit', false));
+		$productUnitControl = new ProductUnitControl(System::getWebConnection());
+
+		$result = new ApiResultSimpleValidation();
+
+		if ($productUnitControl->hasAvaiableShortName($shortName, $idProductUnit))
+			$result->setOkMessage(true, 'abreviação de unidade disponível');
+		else
+			$result->setOkMessage(false, 'abreviação de unidade indisponível');
 
 		return $result;
 	}

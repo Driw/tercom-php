@@ -85,5 +85,10 @@ class ProductUnitControl extends GenericControl
 	{
 		return !$this->productUnitDAO->existName($name, $idProductUnit);
 	}
+
+	public function hasAvaiableShortName(string $shortName, int $idProductUnit = 0): bool
+	{
+		return !$this->productUnitDAO->existShortName($shortName, $idProductUnit);
+	}
 }
 

@@ -1,5 +1,1 @@
-<?php
-
-echo 'public index';
-
-?>
+<?php header('Location: dashboard'); ?>

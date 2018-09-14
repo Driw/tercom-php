@@ -124,6 +124,22 @@ class ProductUnitDAO extends GenericDAO
 		return intval($productUnit['qtd']) === 1;
 	}
 
+	public function existShortName(string $shorName, int $idProductUnit): bool
+	{
+		$sql = "SELECT COUNT(*) AS qtd
+				FROM product_units
+				WHERE shortName = ? AND id <> ?";
+
+		$query = $this->createQuery($sql);
+		$query->setString(1, $shorName);
+		$query->setInteger(2, $idProductUnit);
+
+		$result = $query->execute();
+		$productUnit = $result->next();
+
+		return intval($productUnit['qtd']) === 1;
+	}
+
 	private function parseProductUnit(Result $result): ?ProductUnit
 	{
 		if (!$result->hasNext())
