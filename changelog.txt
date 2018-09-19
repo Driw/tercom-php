@@ -20,6 +20,9 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+14.09.2018 - 0.1.10.69
+- Corrigido modificações em System que estava impossibilitando o uso do dashboard.
+
 14.09.2018 - 0.1.10.68
 - Adicionada novas exceptions para aumentar a dinâmica em questões de erros no sistema.
 	- Alguns erros como problema com parâmetros e filtros inválidos são comuns entre as APIs.

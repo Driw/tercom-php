@@ -58,7 +58,7 @@ class System
 	}
 
 	/**
-	 *
+	 * Inicializa o sistema executando a API (Webservices TERCOM).
 	 */
 
 	public static function initApi()
@@ -83,15 +83,14 @@ class System
 	}
 
 	/**
-	 *
+	 * Inicializa o sistema executando o Dashboard (Painel de Controle TERCOM).
 	 */
 
 	public static function initDashboard()
 	{
 		self::init();
 
-		DashboardTemplate::setDirectory(sprintf('%s/%s', __DIR__, 'boundaries'));
-		System::init();
+		DashboardTemplate::setDirectory(sprintf('%s/dashboard/boundaries', $_SERVER['DOCUMENT_ROOT']));
 
 		$listener = new BoundaryListener();
 
