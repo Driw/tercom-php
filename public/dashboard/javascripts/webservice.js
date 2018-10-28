@@ -39,6 +39,44 @@ Webservice.prototype.newBaseErrorMessage = function(message)
 
 // -- Provider
 
+Webservice.prototype.provider_settings = function(target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'provider/settings',
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter configuração para fornecedor'),
+	});
+};
+Webservice.prototype.provider_add = function(form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'provider/add',
+		'form': form,
+		'target': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter configuração para fornecedor'),
+	});
+};
+Webservice.prototype.provider_set = function(idProvider, form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'provider/set/' +idProvider,
+		'form': form,
+		'target': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('atualizar fornecedor'),
+	});
+};
+Webservice.prototype.provider_get = function(idProvider, form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'provider/get/' +idProvider,
+		'target': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter fornecedor'),
+	});
+};
 Webservice.prototype.provider_getAll = function(target, listener)
 {
 	this.setOptionsAndExecute({

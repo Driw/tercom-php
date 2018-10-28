@@ -3,6 +3,8 @@ const DEV = window.location.host === 'tercom.localhost';
 const BASE_URL = window.location.protocol+ '//' +window.location.host+ '/';
 const API_STATUS_SUCCESS = 1;
 const NO_VALUE = '-';
+const DEFAULT_FADE = 'fast';
+const DEFAULT_TIMEOUT = 3000;
 
 $(document).ready(function()
 {
@@ -278,6 +280,12 @@ var Util = Util ||
 			window.location = url;
 		else
 			window.open(url, '_blank');
+	},
+	hiddenTimeout: function(target, duration)
+	{
+		target.show(DEFAULT_FADE);
+
+		setTimeout(function() { target.hide(DEFAULT_FADE) }, duration === undefined ? DEFAULT_TIMEOUT : duration);
 	},
 	showChecked: function(bool)
 	{

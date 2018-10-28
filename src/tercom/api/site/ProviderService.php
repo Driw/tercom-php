@@ -404,7 +404,7 @@ class ProviderService extends DefaultSiteService
 	{
 		try {
 
-			$filter = $content->getParameters()->getString('attribute');
+			$filter = $content->getParameters()->getString('filter');
 
 			switch ($filter)
 			{

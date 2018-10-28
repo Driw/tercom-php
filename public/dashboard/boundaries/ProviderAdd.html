@@ -1,15 +1,17 @@
-					<!-- Card para ADicionar Fornecedor -->
+					<!-- Adicionar Fornecedor -->
 					<section class="dashboard-counts">
 						<div class="container-fluid">
-							<div class="row justify-content-center">
-								<div class="card col-8 pl-0 pr-0">
+							<div class="card-container">
+								<div class="card card-sm">
 									<div class="card-header d-flex align-items-center">
 										<h3 class="h4">Adicionar Fornecedor</h3>
 									</div>
 									<div class="card-body">
-										<p id="formLastProviderParagraph" style="display: none;">Último fornecedor adicionado <b id="formLastProviderName"></b>.</p>
-										<form id="form-view" class="tercom-form tercom-form-md form-horizontal">
-											<fieldset class="form-group row">
+										<form class="form-horizontal tercom-form tercom-form-sm" id="form-provider-add">
+											<fieldset>
+												<div class="form-group">
+													<p>* Campos opcionais</p>
+												</div>
 												<div class="form-group">
 													<div class="input-group">
 														<div class="input-group-prepend">
@@ -37,7 +39,7 @@
 												<div class="form-group">
 													<div class="input-group">
 														<div class="input-group-prepend">
-															<span class="input-group-text">Representante</span>
+															<span class="input-group-text">*Representante</span>
 														</div>
 														<input type="text" class="form-control mask-alphabetic" name="spokesman">
 													</div>
@@ -45,42 +47,23 @@
 												<div class="form-group">
 													<div class="input-group">
 														<div class="input-group-prepend">
-															<span class="input-group-text">Site</span>
+															<span class="input-group-text">*Site</span>
 														</div>
 														<input type="url" class="form-control" name="site">
 													</div>
 												</div>
 												<div class="form-group text-center">
 													<div class="btn-group">
-														<button type="button" class="btn btn-primary" id="controller-add">Adicionar</button>
+														<button type="submit" class="btn btn-primary" id="controller-add">Adicionar</button>
 													</div>
 												</div>
 											</fieldset>
 										</form>
+										<div class="row" style="display: none;" id="row-message">
+											<p class="alert alert-success col-12">Último fornecedor adicionado: <span id="row-message-span"></span></p>
+										</div>
 									</div>
 								</div>
 							</div>
 						</div>
 					</section>
-
-					<!-- Modal Formulário -->
-					<div class="modal fade" id="formConfirmModal" tabindex="-1" role="dialog" aria-labelledby="formConfirmModalLabel" aria-hidden="true">
-						<div class="modal-dialog modal-lg" role="document">
-							<div class="modal-content">
-								<div class="modal-header">
-									<h5 class="modal-title" id="formConfirmModalLabel"></h5>
-									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-										<span aria-hidden="true">&times;</span>
-									</button>
-								</div>
-								<div class="modal-body">
-									<p id="formConfirmModalMessage"></p>
-									<p>O que deseja fazer em seguida?</p>
-								</div>
-								<div class="modal-footer">
-									<button type="button" class="btn btn-primary" id="controller-view">Ver Fornecedor</button>
-									<button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-								</div>
-							</div>
-						</div>
-					</div>

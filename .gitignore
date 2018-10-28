@@ -1,0 +1,8 @@
+/public/test/dashboard
+/vendor
+/logs
+*.min.js
+*.min.css
+*.min.css.map
+/composer.lock
+/composer.phar

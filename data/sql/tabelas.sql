@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS phones
 	id INT AUTO_INCREMENT,
 	ddd TINYINT(2) NOT NULL,
 	number VARCHAR(9) NOT NULL,
-	type ENUM('residential', 'cellphone', 'commercial'),
+	type ENUM('residential', 'cellphone', 'commercial', 'whatsapp'),
 
 	CONSTRAINT phones_pk PRIMARY KEY(id)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_general_ci;

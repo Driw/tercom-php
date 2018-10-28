@@ -39,14 +39,53 @@
 
 section.dashboard-counts {
 	.container-fluid {
-		.card {
-			&:extend(.pl-0);
-			&:extend(.pr-0);
+		.card-container {
+			&:extend(.row);
+			&:extend(.justify-content-center);
 
-			.card-header {
-			}
-			.card-body {
+			.card {
+				&:extend(.pl-0);
+				&:extend(.pr-0);
 
+				@media @screen-min-lg {
+			        &.card-xl { width: @card-xl; }
+			        &.card-lg { width: @card-lg; }
+			        &.card-md { width: @card-md; }
+			        &.card-sm { width: @card-sm; }
+			        &.card-xs { width: @card-xs; }
+				}
+
+				@media @screen-lg {
+			        &.card-xl { width: @card-lg; }
+			        &.card-lg { width: @card-lg; }
+			        &.card-md { width: @card-md; }
+			        &.card-sm { width: @card-sm; }
+			        &.card-xs { width: @card-xs; }
+				}
+
+				@media @screen-md {
+			        &.card-xl { width: @card-md; }
+			        &.card-lg { width: @card-md; }
+			        &.card-md { width: @card-md; }
+			        &.card-sm { width: @card-sm; }
+			        &.card-xs { width: @card-xs; }
+				}
+
+				@media @screen-sm {
+			        &.card-xl { width: @card-sm; }
+			        &.card-lg { width: @card-sm; }
+			        &.card-md { width: @card-sm; }
+			        &.card-sm { width: @card-sm; }
+			        &.card-xs { width: @card-xs; }
+				}
+
+				@media @screen-xs {
+			        &.card-xl { width: @card-xs; }
+			        &.card-lg { width: @card-xs; }
+			        &.card-md { width: @card-xs; }
+			        &.card-sm { width: @card-xs; }
+			        &.card-xs { width: @card-xs; }
+				}
 			}
 		}
 	}
@@ -83,36 +122,44 @@ form {
 	        &:extend(.invalid-tooltip);
 	    }
 
-		@media @screen-min-lg {
-		        &.tercom-form-xl { max-width: 1080px; }
-		        &.tercom-form-lg { max-width: 960px; }
-		        &.tercom-form-md { max-width: 720px; }
-		        &.tercom-form-sm { max-width: 480px; }
-		        &.tercom-form-xs { max-width: 320px; }
+		@media @screen-lx {
+	        &.tercom-form-xl { max-width: @form-xl; }
+	        &.tercom-form-lg { max-width: @form-lg; }
+	        &.tercom-form-md { max-width: @form-md; }
+	        &.tercom-form-sm { max-width: @form-sm; }
+	        &.tercom-form-xs { max-width: @form-xs; }
+		}
+
+		@media @screen-lg {
+	        &.tercom-form-xl { max-width: @form-lg; }
+	        &.tercom-form-lg { max-width: @form-lg; }
+	        &.tercom-form-md { max-width: @form-md; }
+	        &.tercom-form-sm { max-width: @form-sm; }
+	        &.tercom-form-xs { max-width: @form-xs; }
 		}
 
 		@media @screen-md {
-		        &.tercom-form-xl { max-width: 720px; }
-		        &.tercom-form-lg { max-width: 720px; }
-		        &.tercom-form-md { max-width: 720px; }
-		        &.tercom-form-sm { max-width: 480px; }
-		        &.tercom-form-xs { max-width: 320px; }
+	        &.tercom-form-xl { max-width: @form-md; }
+	        &.tercom-form-lg { max-width: @form-md; }
+	        &.tercom-form-md { max-width: @form-md; }
+	        &.tercom-form-sm { max-width: @form-sm; }
+	        &.tercom-form-xs { max-width: @form-xs; }
 		}
 
 		@media @screen-sm {
-		        &.tercom-form-xl { max-width: 480px; }
-		        &.tercom-form-lg { max-width: 480px; }
-		        &.tercom-form-md { max-width: 480px; }
-		        &.tercom-form-sm { max-width: 480px; }
-		        &.tercom-form-xs { max-width: 320px; }
+	        &.tercom-form-xl { max-width: @form-sm; }
+	        &.tercom-form-lg { max-width: @form-sm; }
+	        &.tercom-form-md { max-width: @form-sm; }
+	        &.tercom-form-sm { max-width: @form-sm; }
+	        &.tercom-form-xs { max-width: @form-xs; }
 		}
 
 		@media @screen-xs {
-		        &.tercom-form-xl { max-width: 320px; }
-		        &.tercom-form-lg { max-width: 320px; }
-		        &.tercom-form-md { max-width: 320px; }
-		        &.tercom-form-sm { max-width: 320px; }
-		        &.tercom-form-xs { max-width: 320px; }
+	        &.tercom-form-xl { max-width: @form-xs; }
+	        &.tercom-form-lg { max-width: @form-xs; }
+	        &.tercom-form-md { max-width: @form-xs; }
+	        &.tercom-form-sm { max-width: @form-xs; }
+	        &.tercom-form-xs { max-width: @form-xs; }
 		}
 	}
 }
