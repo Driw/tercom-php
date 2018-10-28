@@ -1,4 +1,4 @@
-/public/test/dashboard
+/public_html/test/dashboard
 /vendor
 /logs
 *.min.js
