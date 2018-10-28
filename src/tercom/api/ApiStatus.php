@@ -11,5 +11,11 @@ class ApiStatus
 	public const FILTER = 4;
 
 	public const PROVIDER_NOTFOUND = 101;
+
+	public const SERVICE_NOT_ADD = 401;
+	public const SERVICE_NOT_SET = 402;
+	public const SERVICE_NOT_FOUND = 403;
+	public const SERVICE_FILTER = 404;
+	public const SERVICE_FIELD = 405;
 }
 

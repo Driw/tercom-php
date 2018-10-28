@@ -20,6 +20,15 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+28.10.2018 - 0.1.10.73
+- Adicionada as novas tabelas para 'serviços', 'preços de serviços' e 'limites de serviços'.
+- Implementação do webservice, controle e DAO para gerenciamento dos serviços.
+
+28.10.2018 - 0.1.10.72
+- Renomeado 'type' para 'productType' e 'package' para 'productPackage', ProductPrice.
+- Devido a atualização de 'dproject\mysql' foi necessário configurar setlocale() para 'LC_MONETARY' e 'LC_NUMERIC'.
+- Excluido arquivo 'base de dados.sql', não está mais sendo utilizado.
+
 28.10.2018 - 0.1.10.71
 - Renomeado diretório 'public' para 'public_html'.
 

@@ -2,7 +2,9 @@
 
 namespace tercom\control;
 
-class ControlException extends \Exception
+use Exception;
+
+class ControlException extends Exception
 {
 	public function __construct($message = null, $code = null, $previous = null)
 	{
