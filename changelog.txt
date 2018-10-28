@@ -20,6 +20,9 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+28.10.2018 - 0.1.10.74
+- Adicionado scripts de testes dos webservices para gerenciamento dos serviços.
+
 28.10.2018 - 0.1.10.73
 - Adicionada as novas tabelas para 'serviços', 'preços de serviços' e 'limites de serviços'.
 - Implementação do webservice, controle e DAO para gerenciamento dos serviços.
