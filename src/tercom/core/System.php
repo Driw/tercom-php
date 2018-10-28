@@ -54,6 +54,8 @@ class System
 		self::setApiOnlyProperties(false);
 
 		setlocale(LC_ALL, self::$config->getLocale());
+		setlocale(LC_MONETARY, 'en_US');
+		setlocale(LC_NUMERIC, 'en_US');
 		date_default_timezone_set(self::$config->getTimeZone());
 	}
 

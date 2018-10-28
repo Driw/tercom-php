@@ -63,14 +63,14 @@ class ProductPriceControl extends GenericControl
 		if ($productPrice->getProduct()->getID() === 0) throw new ControlException('produto não informado');
 		if ($productPrice->getManufacture()->getID() === 0) throw new ControlException('fabricante não informado');
 		if ($productPrice->getProvider()->getID() === 0) throw new ControlException('fornecedor não informado');
-		if ($productPrice->getPackage()->getID() === 0) throw new ControlException('tipo de pacote não informado');
-		if ($productPrice->getType()->getID() === 0) throw new ControlException('tipo de produto não informado');
+		if ($productPrice->getProductPackage()->getID() === 0) throw new ControlException('tipo de pacote não informado');
+		if ($productPrice->getProductType()->getID() === 0) throw new ControlException('tipo de produto não informado');
 
 		if (!$this->productControl->has($productPrice->getProduct()->getID())) throw new ControlException('produto não encontrado');
 		if (!$this->providerControl->has($productPrice->getProvider()->getID())) throw new ControlException('fornecedor não encontrado');
 		if (!$this->manufactureControl->has($productPrice->getManufacture()->getID())) throw new ControlException('fabricante não encontrado');
-		if (!$this->productPackageControl->has($productPrice->getPackage()->getID())) throw new ControlException('embalagem de produto não encontrado');
-		if (!$this->productTypeControl->has($productPrice->getType()->getID())) throw new ControlException('tipo de produto não encontrado');
+		if (!$this->productPackageControl->has($productPrice->getProductPackage()->getID())) throw new ControlException('embalagem de produto não encontrado');
+		if (!$this->productTypeControl->has($productPrice->getProductType()->getID())) throw new ControlException('tipo de produto não encontrado');
 	}
 
 	public function add(ProductPrice $productPrice): bool

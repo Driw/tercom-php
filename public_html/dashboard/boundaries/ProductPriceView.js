@@ -112,7 +112,7 @@ var ProductPriceView = ProductPriceView ||
 		$(form.idProvider).val(productPrice.provider.id).selectpicker('refresh');
 		$(form.idManufacture).val(productPrice.manufacture.id).selectpicker('refresh');
 		$(form.idProductPackage).val(productPrice['package'].id).selectpicker('refresh');
-		$(form.idProductType).val(productPrice.type.id).selectpicker('refresh');
+		$(form.idProductType).val(productPrice.productType.id).selectpicker('refresh');
 
 		ws.product_get(productPrice.product.id, ProductPriceView.formProduct, ProductPriceView.onLoadProduct);
 	},
@@ -180,7 +180,7 @@ var ProductPriceView = ProductPriceView ||
 		ProductPriceView.productTypes = productTypes.elements;
 		ProductPriceView.productTypes.forEach(function(productType)
 		{
-			var selected = ProductPriceView.productPrice !== undefined && ProductPriceView.productPrice.type.id === productType.id;
+			var selected = ProductPriceView.productPrice !== undefined && ProductPriceView.productPrice.productType.id === productType.id;
 			var option = Util.createElementOption(productType.name, productType.id, selected);
 			ProductPriceView.selectProductType.append(option);
 		});

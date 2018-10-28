@@ -60,11 +60,11 @@ class ProductPrice extends AdvancedObject
 	/**
 	 * @var ProductPackage
 	 */
-	private $package;
+	private $productPackage;
 	/**
 	 * @var ProductType
 	 */
-	private $type;
+	private $productType;
 	/**
 	 * @var string
 	 */
@@ -91,8 +91,8 @@ class ProductPrice extends AdvancedObject
 		$this->id = 0;
 		$this->product = new Product();
 		$this->provider = new Provider();
-		$this->type = new ProductType();
-		$this->package = new ProductPackage();
+		$this->productType = new ProductType();
+		$this->productPackage = new ProductPackage();
 		$this->manufacture = new Manufacture();
 		$this->lastUpdate = new DateTime();
 		$this->amount = 0;
@@ -175,36 +175,36 @@ class ProductPrice extends AdvancedObject
 	 * @return ProductPackage
 	 */
 
-	public function getPackage(): ProductPackage
+	public function getProductPackage(): ProductPackage
 	{
-		return $this->package;
+		return $this->productPackage;
 	}
 
 	/**
-	 * @param ProductPackage $package
+	 * @param ProductPackage $productPackage
 	 */
 
-	public function setPackage(ProductPackage $package)
+	public function setProductPackage(ProductPackage $productPackage)
 	{
-		$this->package = $package;
+		$this->productPackage = $productPackage;
 	}
 
 	/**
 	 * @return ProductType
 	 */
 
-	public function getType(): ProductType
+	public function getProductType(): ProductType
 	{
-		return $this->type;
+		return $this->productType;
 	}
 
 	/**
-	 * @param ProductType $type
+	 * @param ProductType $productType
 	 */
 
-	public function setType(ProductType $type)
+	public function setProductType(ProductType $productType)
 	{
-		$this->type = $type;
+		$this->productType = $productType;
 	}
 
 	/**
@@ -322,8 +322,8 @@ class ProductPrice extends AdvancedObject
 			'product' => Product::class,
 			'provider' => Provider::class,
 			'manufacture' => Manufacture::class,
-			'package' => ProductPackage::class,
-			'type' => ProductType::class,
+			'productPackage' => ProductPackage::class,
+			'productType' => ProductType::class,
 			'name' => ObjectUtil::TYPE_STRING,
 			'amount' => ObjectUtil::TYPE_INTEGER,
 			'price' => ObjectUtil::TYPE_FLOAT,

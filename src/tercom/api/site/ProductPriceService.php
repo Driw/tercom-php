@@ -48,8 +48,8 @@ class ProductPriceService extends DefaultSiteService
 			$productPrice->setProduct($product);
 			$productPrice->getProvider()->setID($post->getInt('idProvider'));
 			$productPrice->getManufacture()->setID($post->getInt('idManufacture'));
-			$productPrice->getPackage()->setID($post->getInt('idProductPackage'));
-			$productPrice->getType()->setID($post->getInt('idProductType'));
+			$productPrice->getProductPackage()->setID($post->getInt('idProductPackage'));
+			$productPrice->getProductType()->setID($post->getInt('idProductType'));
 			$productPrice->setName($product->getName());
 			$productPrice->setAmount($post->getInt('amount'));
 			$productPrice->setPrice($post->getFloat('price'));
@@ -92,8 +92,8 @@ class ProductPriceService extends DefaultSiteService
 			if ($post->isSetted('idProduct')) $productPrice->getProduct()->setID($post->getInt('idProduct'));
 			if ($post->isSetted('idProvider')) $productPrice->getProvider()->setID($post->getInt('idProvider'));
 			if ($post->isSetted('idManufacture')) $productPrice->getManufacture()->setID($post->getInt('idManufacture'));
-			if ($post->isSetted('idProductPackage')) $productPrice->getPackage()->setID($post->getInt('idProductPackage'));
-			if ($post->isSetted('idProductType')) $productPrice->getType()->setID($post->getInt('idProductType'));
+			if ($post->isSetted('idProductPackage')) $productPrice->getProductPackage()->setID($post->getInt('idProductPackage'));
+			if ($post->isSetted('idProductType')) $productPrice->getProductType()->setID($post->getInt('idProductType'));
 			if ($post->isSetted('amount')) $productPrice->setAmount($post->getInt('amount'));
 			if ($post->isSetted('price')) $productPrice->setPrice($post->getFloat('price'));
 			if ($post->isSetted('name')) $productPrice->setName($post->getString('name'));

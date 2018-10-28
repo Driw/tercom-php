@@ -58,8 +58,8 @@ class ProductPriceDAO extends GenericDAO
 		$query->setInteger(1, $productPrice->getProduct()->getID());
 		$query->setInteger(2, $productPrice->getProvider()->getID());
 		$query->setInteger(3, $productPrice->getManufacture()->getID());
-		$query->setInteger(4, $productPrice->getPackage()->getID());
-		$query->setInteger(5, $productPrice->getType()->getID());
+		$query->setInteger(4, $productPrice->getProductPackage()->getID());
+		$query->setInteger(5, $productPrice->getProductType()->getID());
 		$query->setString(6, $productPrice->getName());
 		$query->setInteger(7, $productPrice->getAmount());
 		$query->setFloat(8, $productPrice->getPrice());
@@ -84,8 +84,8 @@ class ProductPriceDAO extends GenericDAO
 		$query = $this->createQuery($sql);
 		$query->setInteger(1, $productPrice->getProvider()->getID());
 		$query->setInteger(2, $productPrice->getManufacture()->getID());
-		$query->setInteger(3, $productPrice->getPackage()->getID());
-		$query->setInteger(4, $productPrice->getType()->getID());
+		$query->setInteger(3, $productPrice->getProductPackage()->getID());
+		$query->setInteger(4, $productPrice->getProductType()->getID());
 		$query->setString(5, $productPrice->getName());
 		$query->setInteger(6, $productPrice->getAmount());
 		$query->setFloat(7, $productPrice->getPrice());
@@ -206,8 +206,8 @@ class ProductPriceDAO extends GenericDAO
 		$productPrice->getProduct()->getCategory()->getSector()->fromArray(Functions::parseEntrySQL($array, 'productSector'));
 		$productPrice->getProvider()->fromArray(Functions::parseEntrySQL($array, 'provider'));
 		$productPrice->getManufacture()->fromArray(Functions::parseEntrySQL($array, 'productManufacturer'));
-		$productPrice->getPackage()->fromArray(Functions::parseEntrySQL($array, 'productPackage'));
-		$productPrice->getType()->fromArray(Functions::parseEntrySQL($array, 'productType'));
+		$productPrice->getProductPackage()->fromArray(Functions::parseEntrySQL($array, 'productPackage'));
+		$productPrice->getProductType()->fromArray(Functions::parseEntrySQL($array, 'productType'));
 
 		return $productPrice;
 	}

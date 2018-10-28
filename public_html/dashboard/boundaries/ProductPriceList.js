@@ -52,7 +52,7 @@ var ProductPriceList = ProductPriceList ||
 			productPrice.amount,
 			productPrice.price,
 			productPrice['package'].name,
-			productPrice.type.name,
+			productPrice.productType.name,
 			'<div class="btn-group">' + btnView + btnRemove + '</div>',
 		];
 	},

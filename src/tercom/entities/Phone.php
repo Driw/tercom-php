@@ -11,7 +11,7 @@ use tercom\Functions;
 /**
  * <h1>Telefone</h1>
  *
- * <p>Um telefone é constituído pelo seu número de discagem direta à distância (DDD), número e type.
+ * <p>Um telefone é constituído pelo seu número de discagem direta à distância (DDD), número e tipo.
  * Os tipos de telefone disponíveis são> <code>TYPE_PHONE</code>, <code>TYPE_COMMERCIAL</code> e <code>TYPE_RESIDENTIAL</code></p>.
  *
  * @see AdvancedObject
@@ -38,15 +38,15 @@ class Phone extends AdvancedObject
 	public const MAX_NUMBER_LEN = 9;
 
 	/**
-	 * @var string type de telefone celular.
+	 * @var string tipo de telefone celular.
 	 */
 	public const TYPE_PHONE = 'cellphone';
 	/**
-	 * @var string type de telefone comercial.
+	 * @var string tipo de telefone comercial.
 	 */
 	public const TYPE_COMMERCIAL = 'commercial';
 	/**
-	 * @var string type de telefone residêncial.
+	 * @var string tipo de telefone residêncial.
 	 */
 	public const TYPE_RESIDENTIAL = 'residential';
 
@@ -63,7 +63,7 @@ class Phone extends AdvancedObject
 	 */
 	private $number;
 	/**
-	 * @var string type de telefone.
+	 * @var string tipo de telefone.
 	 */
 	private $type;
 
@@ -143,7 +143,7 @@ class Phone extends AdvancedObject
 	}
 
 	/**
-	 * @return string aquisição do type de telefone.
+	 * @return string aquisição do tipo de telefone.
 	 */
 
 	public function getType(): ?string
@@ -177,8 +177,8 @@ class Phone extends AdvancedObject
 	}
 
 	/**
-	 * Verifica se um determinado type de telefone é válido.
-	 * @param string $type nome do type de telefone à validar.
+	 * Verifica se um determinado tipo de telefone é válido.
+	 * @param string $type nome do tipo de telefone à validar.
 	 * @return bool true se for válido ou false caso contrário.
 	 */
 
