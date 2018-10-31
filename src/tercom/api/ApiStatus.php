@@ -17,5 +17,11 @@ class ApiStatus
 	public const SERVICE_NOT_FOUND = 403;
 	public const SERVICE_FILTER = 404;
 	public const SERVICE_FIELD = 405;
+
+	public const SERVICE_PRICE_SERVICE = 451;
+	public const SERVICE_PRICE_PROVIDER = 452;
+	public const SERVICE_PRICE_NOT_ADD = 453;
+	public const SERVICE_PRICE_NOT_SET = 454;
+	public const SERVICE_PRICE_NOT_FOUND = 455;
 }
 
