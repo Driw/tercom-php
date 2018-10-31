@@ -16,7 +16,8 @@ class GeradorDeDados
 		}
 
 		$post = http_build_query($parameters);
-		$url = sprintf("http://%s/api/site/$webservice", $_SERVER['SERVER_NAME']);
+		$endpoint = sprintf('http://%s/api/site', $_SERVER['SERVER_NAME']);
+		$url = "$endpoint/$webservice";
 
 		$curl = curl_init();
 		curl_setopt($curl, CURLOPT_URL, $url);
@@ -34,10 +35,16 @@ class GeradorDeDados
 		if (!empty($error))
 			return "curl_error: $error";
 
-		$json = json_decode($response, true);
+		$jsonResponse = json_decode($response, true);
 
 		if (json_last_error() == JSON_ERROR_NONE)
-			return $json;
+			return [
+				'endpoint' => $endpoint,
+				'websercice' => $webservice,
+				'fullUrl' => $url,
+				'post' => $parameters,
+				'response' => $jsonResponse,
+			];
 
 		header('Content-type: text/html; charset=utf-8');
 
