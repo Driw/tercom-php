@@ -20,6 +20,9 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+30.10.2018 - 0.1.10.78
+- Adicionado scripts de testes dos webservices para gerenciamento dos preços de serviços.
+
 30.10.2018 - 0.1.10.77
 - Atualizado 'tabela.sql' conforme a rev74.
 - Implementação do webservice, controle, DAO e entidades para gerenciar os preços de serviços, ServicePrice.
