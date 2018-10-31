@@ -254,7 +254,7 @@ class ProviderService extends DefaultSiteService
 	{
 		$fantasyName = $content->getParameters()->getString('value');
 		$providerControl = $this->newProviderControl();
-		$providers = $providerControl->listByFantasyName($fantasyName);
+		$providers = $providerControl->filterByFantasyName($fantasyName);
 
 		$result = new ApiResultObject();
 		$result->setResult($providers, 'encontrado %d fornecedores', $providers->size());

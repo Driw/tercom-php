@@ -20,6 +20,12 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+30.10.2018 - 0.1.10.76
+- Corrigido problema ao procurar fornecedores pelo nome fantasia.
+
+28.10.2018 - 0.1.10.75
+- Corrigido 'rev67.sql'.
+
 28.10.2018 - 0.1.10.74
 - Adicionado scripts de testes dos webservices para gerenciamento dos serviços.
 
