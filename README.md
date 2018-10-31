@@ -3,10 +3,10 @@
 ## STATUS
 
 - [x] Core
-- [ ] Fornecedores
-- [ ] Fabricantes
-- [ ] Produtos
-- [ ] Serviços
+- [x] Fornecedores
+- [x] Fabricantes
+- [x] Produtos
+- [x] Serviços
 - [ ] Clientes
 - [ ] Funcionários
 - [ ] Cotação
@@ -38,8 +38,8 @@
 
 ```
 <VirtualHost localhost:80>
-	DocumentRoot "D:/Andrew/Workspace/PHP/Tercom/trunk"
-	<Directory "D:/Andrew/Workspace/PHP/Tercom/trunk">
+	DocumentRoot "D:/Andrew/Workspace/PHP/Tercom/trunk/public_html"
+	<Directory "D:/Andrew/Workspace/PHP/Tercom/trunk/public_html">
 		Options Indexes FollowSymLinks Includes ExecCGI
 		AllowOverride All
 		Require all granted
@@ -51,8 +51,8 @@
 </VirtualHost>
 
 <VirtualHost localhost:443>
-	DocumentRoot "D:/Andrew/Workspace/PHP/Tercom/trunk"
-	<Directory "D:/Andrew/Workspace/PHP/Tercom/trunk">
+	DocumentRoot "D:/Andrew/Workspace/PHP/Tercom/trunk/public_html"
+	<Directory "D:/Andrew/Workspace/PHP/Tercom/trunk/public_html">
 		Options Indexes FollowSymLinks Includes ExecCGI
 		AllowOverride All
 		Require all granted

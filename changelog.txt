@@ -20,6 +20,12 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+30.10.2018 - 0.1.10.80
+- Atualização do README conforme desenvolvimento atual do projeto.
+
+30.10.2018 - 0.1.10.79
+- Aprimorado GeradorDeDados para que exemplifique melhor a execução dos scripts de teste.
+
 30.10.2018 - 0.1.10.78
 - Adicionado scripts de testes dos webservices para gerenciamento dos preços de serviços.
 
