@@ -28,5 +28,24 @@ class Addresses extends ArrayList
 	{
 		return parent::current();
 	}
+
+	/**
+	 *
+	 * @param Address $address
+	 * @return bool
+	 */
+	public function replace(Address $address): bool
+	{
+		for ($i = 0; $i < $this->size(); $i++)
+			if (($element = $this->elements[$i]) !== null && $element instanceof Address)
+				if ($element->getId() === $address->getId())
+				{
+					$this->elements[$i] = $address;
+					return true;
+				}
+
+		$this->add($address);
+		return false;
+	}
 }
 

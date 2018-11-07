@@ -5,6 +5,7 @@ namespace tercom\control;
 use tercom\dao\AddressDAO;
 use tercom\entities\Address;
 use tercom\entities\Customer;
+use tercom\dao\CustomerAddressDAO;
 
 /**
  * @see AddressDAO
@@ -16,6 +17,10 @@ class AddressControl extends GenericControl
 	 * @var AddressDAO
 	 */
 	private $addressDAO;
+	/**
+	 * @var CustomerAddressDAO
+	 */
+	private $customerAddressDAO;
 
 	/**
 	 *
@@ -23,74 +28,80 @@ class AddressControl extends GenericControl
 	public function __construct()
 	{
 		$this->addressDAO = new AddressDAO();
-	}
-
-	/**
-	 *
-	 * @param Address $address
-	 * @throws ControlException
-	 */
-	public function add(Address $address): void
-	{
-		if (!$this->addressDAO->insert($address))
-			throw new ControlException('não foi possível adicionar o endereço');
-	}
-
-	/**
-	 *
-	 * @param Address $address
-	 * @return bool
-	 */
-	public function set(Address $address): bool
-	{
-		return $this->addressDAO->update($address);
-	}
-
-	/**
-	 *
-	 * @param Address $address
-	 * @return bool
-	 */
-	public function remove(Address $address): bool
-	{
-		return $this->addressDAO->delete($address) > 0;
-	}
-
-	/**
-	 *
-	 * @param int $idAddress
-	 * @throws ControlException
-	 * @return Address
-	 */
-	public function get(int $idAddress): Address
-	{
-		if (($address = $this->addressDAO->select($idAddress)) === null)
-			throw new ControlException('endereço não encontrado');
-
-		return $address;
+		$this->customerAddressDAO = new CustomerAddressDAO();
 	}
 
 	/**
 	 *
 	 * @param Customer $customer
-	 * @return int
+	 * @param Address $address
+	 * @return bool
 	 */
-	public function saveCustomerAddresses(Customer $customer): int
+	public function addCustomerAddress(Customer $customer, Address $address): bool
+	{
+		$this->addressDAO->beginTransaction();
+		{
+			if (!$this->addressDAO->insert($address) || !$this->customerAddressDAO->insert($customer, $address))
+				$this->addressDAO->rollback();
+		}
+		$this->addressDAO->commit();
+
+		$customer->getAddresses()->add($address);
+		return true;
+	}
+
+	/**
+	 *
+	 * @param Customer $customer
+	 * @param Address $address
+	 * @throws ControlException
+	 * @return bool
+	 */
+	public function updateCustomerAddress(Customer $customer, Address $address): bool
+	{
+		if (!$this->customerAddressDAO->has($customer, $address))
+			throw new ControlException('endereço não vinculado ao cliente');
+
+		return $this->addressDAO->update($address);
+	}
+
+	/**
+	 *
+	 * @param Customer $customer
+	 * @param Address $address
+	 * @throws ControlException
+	 * @return bool
+	 */
+	public function removeCustomerAddress(Customer $customer, Address $address): bool
+	{
+		if (!$this->customerAddressDAO->has($customer, $address))
+			throw new ControlException('endereço não vinculado ao cliente');
+
+		if (!$this->addressDAO->delete($address))
+			return false;
+
+		$customer->getAddresses()->removeElement($address);
+		return true;
+	}
+
+	/**
+	 *
+	 * @param Customer $customer
+	 * @param int $idAddress
+	 * @throws ControlException
+	 */
+	public function getCustomerAddresses(Customer $customer, int $idAddress): Address
 	{
 		$this->validateCustomer($customer);
 
-		foreach ($customer->getAddresses() as $address)
-		{
-			if ($address->getId() === 0) {
-				if (!$this->addressDAO->insert($address))
-					throw ControlException::new("não foi possível inserir o endereço $address");
-			} else {
-				if (!$this->addressDAO->update($address))
-					throw ControlException::new("não foi possível atualizar o endereço $address");
-			}
-		}
+		if (($address = $this->addressDAO->select($idAddress)) === null)
+			throw new ControlException('endereço não encontrado');
 
-		return $customer->getAddresses()->size();
+		if (!$this->customerAddressDAO->has($customer, $address))
+			throw new ControlException('endereço não encontrado no cliente');
+
+		$customer->getAddresses()->replace($address);
+		return $address;
 	}
 
 	/**
@@ -102,7 +113,7 @@ class AddressControl extends GenericControl
 	public function loadCustomerAddresses(Customer $customer): int
 	{
 		$this->validateCustomer($customer);
-		$addresses = $this->addressDAO->selectByCustomer($customer);
+		$addresses = $this->customerAddressDAO->select($customer);
 		$customer->setAddresses($addresses);
 
 		return $addresses->size();

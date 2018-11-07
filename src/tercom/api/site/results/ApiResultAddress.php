@@ -41,7 +41,6 @@ class ApiResultAddress implements ApiResult
 	/**
 	 * @param string $message mensagem personalidade do resultado.
 	 */
-
 	public function setMessage($message)
 	{
 		$this->message = $message;

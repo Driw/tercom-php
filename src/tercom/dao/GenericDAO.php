@@ -99,6 +99,36 @@ class GenericDAO
 	{
 		return $id === 0 ? null : $id;
 	}
+
+	public function beginTransaction()
+	{
+		$sql = "START TRANSACTION";
+		$query = $this->createQuery($sql);
+		$query->execute();
+
+		if (!($query->execute())->isSuccessful())
+			throw new DAOException('não foi possível realizar uma nova transação');
+	}
+
+	public function commit()
+	{
+		$sql = "COMMIT";
+		$query = $this->createQuery($sql);
+		$query->execute();
+
+		if (!($query->execute())->isSuccessful())
+			throw new DAOException('não foi possível realizar o commit da transação');
+	}
+
+	public function rollback()
+	{
+		$sql = "ROLLBACK";
+		$query = $this->createQuery($sql);
+		$query->execute();
+
+		if (!($query->execute())->isSuccessful())
+			throw new DAOException('não foi possível realizar o rollback da transação');
+	}
 }
 
 ?>

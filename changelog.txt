@@ -20,6 +20,14 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+07.11.2018 - 0.2.1.87
+- Modificado estrutura de AddressService para que seja dinâmico conforme relações com outras tabelas.
+	- Desta forma o webservice de endereços vai cuidar de qualquer relação de endereço com terceiros.
+- Modificado AddressControl para que não seja mais possível realizar ações de CRUD diretamente (sem relacionamento).
+- Adicionado CustomerAddressDAO para gerenciar o banco de dados para relação de cliente com endereço.
+- Aprimoramento em GenericDAO para que seja possível efetuar 'rollback' nas queries executadas.
+	- Utilizado por exemplo quando necessário adicionar um registro e relacioná-lo após ser adicionado.
+
 07.11.2018 - 0.2.1.86
 - Adicionado scripts de testes dos webservices para gerenciamento dos clientes.
 - Ajustes em genEmpresa() para que seja gerado um 'nome fantasia', GeradorDeDados.

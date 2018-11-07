@@ -6,6 +6,9 @@ use dProject\restful\ApiContent;
 use tercom\api\site\results\ApiResultAddress;
 use tercom\api\site\results\ApiResultAddressSettings;
 use tercom\entities\Address;
+use tercom\api\exceptions\RelationshipException;
+use tercom\api\site\results\ApiResultAddresses;
+use dProject\restful\ApiResult;
 
 /**
  * @see DefaultSiteService
@@ -14,6 +17,11 @@ use tercom\entities\Address;
  */
 class AddressService extends DefaultSiteService
 {
+	/**
+	 * @var string
+	 */
+	public const RELATIONSHIP_CUSTOMER = 'customer';
+
 	/**
 	 *
 	 * @param ApiContent $content
@@ -26,13 +34,32 @@ class AddressService extends DefaultSiteService
 
 	/**
 	 *
-	 * @ApiAnnotation({"method":"post"})
+	 * @ApiAnnotation({"method":"post","params":["relationship"]})
 	 * @param ApiContent $content
 	 * @return ApiResultAddress
 	 */
 	public function actionAdd(ApiContent $content): ApiResultAddress
 	{
+		$relationship = $content->getParameters()->getString('relationship');
+
+		switch ($relationship)
+		{
+			case self::RELATIONSHIP_CUSTOMER: return $this->addCustomerAddress($content);
+		}
+
+		throw new RelationshipException($relationship);
+	}
+
+	/**
+	 *
+	 * @param ApiContent $content
+	 * @return ApiResultAddress
+	 */
+	private function addCustomerAddress(ApiContent $content): ApiResultAddress
+	{
 		$post = $content->getPost();
+		$idCustomer = $post->getInt('idCustomer');
+		$customer = $this->getCustomerControl()->get($idCustomer);
 
 		$address = new Address();
 		$address->setState($post->getString('state'));
@@ -42,26 +69,47 @@ class AddressService extends DefaultSiteService
 		$address->setStreet($post->getString('street'));
 		$address->setNumber($post->getInt('number'));
 		$address->setComplement($post->getString('complement', false));
-		$this->getAddressControl()->add($address);
+		$this->getAddressControl()->addCustomerAddress($customer, $address);
 
 		$result = new ApiResultAddress();
 		$result->setAddress($address);
-		$result->setMessage('endereço adicionado com êxito');
+		$result->setMessage('novo endereço para o cliente "%s"', $customer->getFantasyName());
 
 		return $result;
 	}
 
 	/**
 	 *
-	 * @ApiAnnotation({"method":"post","params":["idAddress"]})
+	 * @ApiAnnotation({"method":"post","params":["relationship","idAddress"]})
 	 * @param ApiContent $content
+	 * @throws RelationshipException
 	 * @return ApiResultAddress
 	 */
 	public function actionSet(ApiContent $content): ApiResultAddress
 	{
-		$post = $content->getPost();
+		$relationship = $content->getParameters()->getString('relationship');
+
+		switch ($relationship)
+		{
+			case self::RELATIONSHIP_CUSTOMER: return $this->setCustomerAddress($content);
+		}
+
+		throw new RelationshipException($relationship);
+	}
+
+	/**
+	 *
+	 * @param ApiContent $content
+	 * @return ApiResultAddress
+	 */
+	private function setCustomerAddress(ApiContent $content): ApiResultAddress
+	{
 		$idAddress = $content->getParameters()->getInt('idAddress');
-		$address = $this->getAddressControl()->get($idAddress);
+		$post = $content->getPost();
+		$idCustomer = $post->getInt('idCustomer');
+
+		$customer = $this->getCustomerControl()->get($idCustomer);
+		$address = $this->getAddressControl()->getCustomerAddresses($customer, $idAddress);
 
 		if ($post->isSetted('state')) $address->setState($post->getString('state'));
 		if ($post->isSetted('city')) $address->setCity($post->getString('city'));
@@ -71,26 +119,49 @@ class AddressService extends DefaultSiteService
 		if ($post->isSetted('number')) $address->setNumber($post->getInt('number'));
 		if ($post->isSetted('complement')) $address->setComplement($post->getString('complement'));
 
-		$this->getAddressControl()->set($address);
-
 		$result = new ApiResultAddress();
 		$result->setAddress($address);
-		$result->setMessage('endereço atualizado com êxito');
+
+		if ($this->getAddressControl()->updateCustomerAddress($customer, $address))
+			$result->setMessage('endereço atualizado com êxito');
+		else
+			$result->setMessage('nenhum dado alterado no endereço');
 
 		return $result;
 	}
 
 	/**
 	 *
-	 * @ApiAnnotation({"params":["idAddress"]})
+	 * @ApiAnnotation({"method":"post","params":["relationship","idAddress"]})
 	 * @param ApiContent $content
 	 * @return ApiResultAddress
 	 */
 	public function actionRemove(ApiContent $content): ApiResultAddress
 	{
+		$relationship = $content->getParameters()->getString('relationship');
+
+		switch ($relationship)
+		{
+			case self::RELATIONSHIP_CUSTOMER: return $this->removeCustomerAddress($content);
+		}
+
+		throw new RelationshipException($relationship);
+	}
+
+	/**
+	 *
+	 * @param ApiContent $content
+	 * @return ApiResultAddress
+	 */
+	public function removeCustomerAddress(ApiContent $content): ApiResultAddress
+	{
 		$idAddress = $content->getParameters()->getInt('idAddress');
-		$address = $this->getAddressControl()->get($idAddress);
-		$this->getAddressControl()->remove($address);
+		$post = $content->getPost();
+		$idCustomer = $post->getInt('idCustomer');
+
+		$customer = $this->getCustomerControl()->get($idCustomer);
+		$address = $this->getAddressControl()->getCustomerAddresses($customer, $idAddress);
+		$this->getAddressControl()->removeCustomerAddress($customer, $address);
 
 		$result = new ApiResultAddress();
 		$result->setAddress($address);
@@ -101,18 +172,67 @@ class AddressService extends DefaultSiteService
 
 	/**
 	 *
-	 * @ApiAnnotation({"params":["idAddress"]})
+	 * @ApiAnnotation({"method":"post","params":["relationship","idRelationship"]})
+	 * @param ApiContent $content
+	 * @return ApiResult
+	 */
+	public function actionGet(ApiContent $content): ApiResult
+	{
+		$relationship = $content->getParameters()->getString('relationship');
+
+		if ($content->getParameters()->isSetted('idRelationship'))
+		{
+			switch ($relationship)
+			{
+				case self::RELATIONSHIP_CUSTOMER: return $this->getCustomerAddress($content);
+			}
+		}
+
+		else
+		{
+			switch ($relationship)
+			{
+				case self::RELATIONSHIP_CUSTOMER: return $this->getCustomerAddresses($content);
+			}
+		}
+
+		throw new RelationshipException($relationship);
+	}
+
+	/**
+	 *
 	 * @param ApiContent $content
 	 * @return ApiResultAddress
 	 */
-	public function actionGet(ApiContent $content): ApiResultAddress
+	public function getCustomerAddress(ApiContent $content): ApiResultAddress
 	{
-		$idAddress = $content->getParameters()->getInt('idAddress');
-		$address = $this->getAddressControl()->get($idAddress);
+		$idCustomer = $content->getPost()->getInt('idCustomer');
+		$idAddress = $content->getParameters()->getInt('idRelationship');
+		$customer = $this->getCustomerControl()->get($idCustomer);
+		$address = $this->getAddressControl()->getCustomerAddresses($customer, $idAddress);
 
 		$result = new ApiResultAddress();
 		$result->setAddress($address);
-		$result->setMessage('endereço atualizado com êxito');
+		$result->setMessage('endereço carregado com êxito');
+
+		return $result;
+	}
+
+	/**
+	 *
+	 * @param ApiContent $content
+	 * @return ApiResultAddress
+	 */
+	public function getCustomerAddresses(ApiContent $content): ApiResultAddresses
+	{
+		$post = $content->getPost();
+		$idCustomer = $post->getInt('idCustomer');
+		$customer = $this->getCustomerControl()->get($idCustomer);
+		$this->getAddressControl()->loadCustomerAddresses($customer);
+
+		$result = new ApiResultAddresses();
+		$result->setAddresses($customer->getAddresses());
+		$result->setMessage('encontrado %d endereços no banco de dados', $customer->getAddresses()->size());
 
 		return $result;
 	}
