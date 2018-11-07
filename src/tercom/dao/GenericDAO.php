@@ -3,20 +3,28 @@
 namespace tercom\dao;
 
 use dProject\MySQL\MySQL;
+use dProject\MySQL\MySQLException;
+use dProject\MySQL\Query;
 use dProject\MySQL\Result;
 use dProject\Primitive\StringUtil;
-use dProject\MySQL\Query;
+use tercom\core\System;
+use tercom\dao\exceptions\DAOException;
 
 class GenericDAO
 {
-	/**
-	 *
-	 * @var MySQL
-	 */
 	protected $mysql;
 
-	public function __construct(MySQL $mysql)
+	public function __construct(?MySQL $mysql = null)
 	{
+		if ($mysql === null)
+		{
+			try {
+				$mysql = System::getWebConnection();
+			} catch (MySQLException $e) {
+				throw DAOException::newMySqlConnection($e);
+			}
+		}
+
 		$this->mysql = $mysql;
 	}
 

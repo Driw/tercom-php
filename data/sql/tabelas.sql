@@ -181,16 +181,7 @@ CREATE TABLE IF NOT EXISTS services
 	CONSTRAINT services_pk PRIMARY KEY (id)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_general_ci;
 
-CREATE TABLE IF NOT EXISTS service_timelimits
-(
-	id INT AUTO_INCREMENT,
-	duration BIGINT NOT NULL COMMENT 'milliseconds',
-	type TINYINT NOT NULL,
-
-	CONSTRAINT services_pk PRIMARY KEY (id)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_general_ci;
-
-CREATE TABLE IF NOT EXISTS service_values
+CREATE TABLE IF NOT EXISTS service_prices
 (
 	id INT AUTO_INCREMENT,
 	idService INT NOT NULL,
@@ -199,7 +190,7 @@ CREATE TABLE IF NOT EXISTS service_values
 	additionalDescription VARCHAR(256) NULL DEFAULT NULL,
 	price DECIMAL(10, 2) NOT NULL,
 
-	CONSTRAINT service_values_pk PRIMARY KEY (id),
-	CONSTRAINT service_values_product_fk FOREIGN KEY (idService) REFERENCES services(id) ON DELETE RESTRICT,
-	CONSTRAINT service_values_provider_fk FOREIGN KEY (idProvider) REFERENCES providers(id) ON DELETE CASCADE
+	CONSTRAINT service_prices_pk PRIMARY KEY (id),
+	CONSTRAINT service_prices_product_fk FOREIGN KEY (idService) REFERENCES services(id) ON DELETE RESTRICT,
+	CONSTRAINT service_prices_provider_fk FOREIGN KEY (idProvider) REFERENCES providers(id) ON DELETE CASCADE
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_general_ci;

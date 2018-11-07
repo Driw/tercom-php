@@ -2,14 +2,23 @@
 
 namespace tercom\control;
 
-use Exception;
+use tercom\TercomException;
 
-class ControlException extends Exception
+/**
+ * @see TercomException
+ * @author andrews
+ */
+class ControlException extends TercomException
 {
-	public function __construct($message = null, $code = null, $previous = null)
+	/**
+	 *
+	 * @param string $format
+	 * @param array ...$args
+	 * @return ControlException
+	 */
+	public static function new($format, ... $args): ControlException
 	{
-		parent::__construct($message, $code, $previous);
+		return new ControlException(vsprintf($format, $args));
 	}
 }
 
-?>

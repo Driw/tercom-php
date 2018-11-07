@@ -48,7 +48,7 @@ class GeradorDeDados
 
 		header('Content-type: text/html; charset=utf-8');
 
-		echo "<b>URL:</b> <a href='#'>$url</a><br>".PHP_EOL;
+		echo "<b>URL:</b> <a href='$url'>$url</a><br>".PHP_EOL;
 		echo "<b>JSON Error:</b> " .json_last_error_msg(). "<br>".PHP_EOL;
 		echo "<b>Response:</b> length(".strlen($response).")<br>".PHP_EOL;
 		echo "$response<br>".PHP_EOL;
@@ -181,6 +181,12 @@ class GeradorDeDados
 		$pessoa['telefone_fixo_ddd'] = self::randArray(self::getDDDs($pessoa['estado']));
 		$pessoa['celular'] = sprintf('9%d-%04d', rand(5000, 9999), rand(0, 9999));
 		$pessoa['celular_ddd'] = self::randArray(self::getDDDs($pessoa['estado']));
+		$endereco = explode(' ', $pessoa['endereco']);
+		$pessoa['endereco_complemento'] = '';
+		if (rand(0, 100) <= 20)
+		$pessoa['endereco_complemento'] = sprintf('Apto %d%d', rand(1, 24), rand(1, 6));
+		$pessoa['endereco_numero'] = intval(array_pop($endereco));
+		$pessoa['endereco_rua'] = implode(' ', $endereco);
 
 		return $pessoa;
 	}
@@ -199,6 +205,7 @@ class GeradorDeDados
 		$empresa['idade'] = $idade;
 		$empresa['telefone_fixo_ddd'] = self::randArray(self::getDDDs($empresa['estado']));
 		$empresa['celular_ddd'] = self::randArray(self::getDDDs($empresa['estado']));
+		$empresa['complemento'] = (rand(0, 100) <= 10) ? sprintf('Cj %d%d', rand(1, 24), rand(1, 8)) : '';
 
 		return $empresa;
 	}

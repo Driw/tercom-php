@@ -6,12 +6,13 @@ use dProject\restful\ApiConnection;
 use dProject\restful\ApiResult;
 use dProject\restful\ApiServiceInterface;
 use dProject\MySQL\MySQL;
+use tercom\control\AddressControl;
+use tercom\control\PhoneControl;
 use tercom\control\ProviderContactControl;
 use tercom\control\ProviderControl;
-use tercom\control\PhoneControl;
-use tercom\core\System;
 use tercom\control\ServiceControl;
 use tercom\control\ServicePriceControl;
+use tercom\core\System;
 
 /**
  * @see ApiServiceInterface
@@ -32,6 +33,10 @@ class DefaultSiteService extends ApiServiceInterface
 	 * @var ServicePriceControl
 	 */
 	private $servicePriceControl;
+	/**
+	 * @var AddressControl
+	 */
+	private $addressControl;
 
 	/**
 	 * Cria uma nova instância de um serviço para gerenciamento de stores dos produtos no sistema.
@@ -123,6 +128,14 @@ class DefaultSiteService extends ApiServiceInterface
 	protected function getServicePriceControl(): ServicePriceControl
 	{
 		return $this->servicePriceControl === null ? ($this->servicePriceControl = new ServicePriceControl($this->getMySQL())) : $this->servicePriceControl;
+	}
+
+	/**
+	 * @return AddressControl
+	 */
+	protected function getAddressControl(): AddressControl
+	{
+		return $this->addressControl === null ? ($this->addressControl = new AddressControl()) : $this->addressControl;
 	}
 }
 

@@ -4,6 +4,7 @@ namespace tercom\dao;
 
 use dProject\MySQL\MySQL;
 use dProject\MySQL\Result;
+use tercom\dao\exceptions\DAOException;
 use tercom\entities\ProviderContact;
 use tercom\entities\Provider;
 use tercom\entities\lists\ProviderContacts;

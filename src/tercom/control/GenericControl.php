@@ -2,6 +2,9 @@
 
 namespace tercom\control;
 
+/**
+ * @author Andrew
+ */
 class GenericControl
 {
 	/**
