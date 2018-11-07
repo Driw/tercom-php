@@ -10,7 +10,7 @@ use tercom\entities\Address;
 /**
  * @see DefaultSiteService
  * @see AddressControl
- * @author andrews
+ * @author Andrew
  */
 class AddressService extends DefaultSiteService
 {

@@ -1,4 +1,4 @@
-INSERT INTO manufactures (fantasyName) VALUES
+INSERT INTO manufacturers (fantasyName) VALUES
 ('ACTIMEL'),
 ('ACTIVIA'),
 ('ADES'),

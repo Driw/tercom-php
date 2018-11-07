@@ -8,7 +8,7 @@ use tercom\entities\Address;
 /**
  * @see Address
  * @see ArrayList
- * @author andrews
+ * @author Andrew
  */
 class Addresses extends ArrayList
 {

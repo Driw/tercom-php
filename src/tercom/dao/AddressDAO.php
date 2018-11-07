@@ -7,6 +7,7 @@ use dProject\Primitive\StringUtil;
 use tercom\dao\exceptions\AddressDAOException;
 use tercom\dao\exceptions\DAOException;
 use tercom\entities\Address;
+use tercom\entities\Customer;
 use tercom\entities\lists\Addresses;
 
 /**
@@ -113,6 +114,19 @@ class AddressDAO extends GenericDAO
 
 	/**
 	 *
+	 * @return string
+	 */
+	private function newSqlCustomerAddresses(): string
+	{
+		$addressColumns = $this->buildQuery(self::ALL_COLUMNS, 'addresses');
+
+		return "SELECT $addressColumns
+				FROM addresses
+				INNER JOIN customer_addresses ON customer_addresses.idAddress = address.id";
+	}
+
+	/**
+	 *
 	 * @param int $idAddress
 	 * @return Address|NULL
 	 */
@@ -128,6 +142,23 @@ class AddressDAO extends GenericDAO
 		$result = $query->execute();
 
 		return $this->parseAddress($result);
+	}
+
+	/**
+	 *
+	 * @param Customer $customer
+	 * @return Addresses
+	 */
+	public function selectByCustomer(Customer $customer): Addresses
+	{
+		$sqlCustomerAddresses = $this->newSqlCustomerAddresses();
+		$sql = "$sqlCustomerAddresses
+				WHERE customer_addresses.idCustomer = ?";
+
+		$query = $this->createQuery($sql);
+		$result = $query->execute();
+
+		return $this->parseAddresses($result);
 	}
 
 	/**

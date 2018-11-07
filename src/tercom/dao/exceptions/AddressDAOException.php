@@ -3,7 +3,7 @@
 namespace tercom\dao\exceptions;
 
 /**
- * @author andrews
+ * @author Andrew
  */
 class AddressDAOException extends DAOException
 {

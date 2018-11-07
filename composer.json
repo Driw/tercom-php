@@ -1,9 +1,9 @@
 {
-	"name" : "tercom/wen-php",
-	"description" : "WEB System.",
+	"name" : "tercom\\web",
+	"description" : "Sismtema de gerenciamento para a TERCOM.",
 	"type" : "project",
 	"version" : "1.0",
-	"homepage" : "http://tercom",
+	"homepage" : "https://tercom.diverproject.org",
 	"minimum-stability" : "dev",
 	"keywords" : [
 		"tercom"
@@ -28,7 +28,8 @@
 	},
 	"autoload" : {
 		"psr-4" : {
-			"tercom\\" : "src/tercom"
+			"tercom\\" : "src"
 		}
-	}
+	},
+	"support" : {}
 }

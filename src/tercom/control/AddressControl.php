@@ -8,7 +8,7 @@ use tercom\entities\Customer;
 
 /**
  * @see AddressDAO
- * @author andrews
+ * @author Andrew
  */
 class AddressControl extends GenericControl
 {
@@ -68,6 +68,55 @@ class AddressControl extends GenericControl
 			throw new ControlException('endereço não encontrado');
 
 		return $address;
+	}
+
+	/**
+	 *
+	 * @param Customer $customer
+	 * @return int
+	 */
+	public function saveCustomerAddresses(Customer $customer): int
+	{
+		$this->validateCustomer($customer);
+
+		foreach ($customer->getAddresses() as $address)
+		{
+			if ($address->getId() === 0) {
+				if (!$this->addressDAO->insert($address))
+					throw ControlException::new("não foi possível inserir o endereço $address");
+			} else {
+				if (!$this->addressDAO->update($address))
+					throw ControlException::new("não foi possível atualizar o endereço $address");
+			}
+		}
+
+		return $customer->getAddresses()->size();
+	}
+
+	/**
+	 *
+	 * @param Customer $customer
+	 * @throws ControlException
+	 * @return int
+	 */
+	public function loadCustomerAddresses(Customer $customer): int
+	{
+		$this->validateCustomer($customer);
+		$addresses = $this->addressDAO->selectByCustomer($customer);
+		$customer->setAddresses($addresses);
+
+		return $addresses->size();
+	}
+
+	/**
+	 *
+	 * @param Customer $customer
+	 * @throws ControlException
+	 */
+	private function validateCustomer(Customer $customer)
+	{
+		if ($customer->getId() === 0)
+			throw new ControlException('cliente não identificado');
 	}
 }
 
