@@ -202,6 +202,7 @@ class GeradorDeDados
 			'cep', 'endereco', 'numero', 'bairro', 'cidade', 'estado', 'telefone_fixo', 'celular'
 		);
 		$empresa = self::getAsArray('gerar_empresa', $parameters, $idElements, true);
+		$empresa['nomeFantasia'] = implode(' ', array_slice(explode(' ', $empresa['nome']), 0, -1));
 		$empresa['idade'] = $idade;
 		$empresa['telefone_fixo_ddd'] = self::randArray(self::getDDDs($empresa['estado']));
 		$empresa['celular_ddd'] = self::randArray(self::getDDDs($empresa['estado']));

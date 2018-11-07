@@ -20,6 +20,10 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+07.11.2018 - 0.2.1.86
+- Adicionado scripts de testes dos webservices para gerenciamento dos clientes.
+- Ajustes em genEmpresa() para que seja gerado um 'nome fantasia', GeradorDeDados.
+
 07.11.2018 - 0.2.1.85
 - Implementação do webservice, controle, DAO e entidade para gerenciar clientes.
 - Atualizado ApiListener para que trate adequadamente ArrayDataException caso não tenha sido tratado.

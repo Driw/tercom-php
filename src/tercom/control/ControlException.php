@@ -6,7 +6,7 @@ use tercom\TercomException;
 
 /**
  * @see TercomException
- * @author andrews
+ * @author Andrew
  */
 class ControlException extends TercomException
 {
