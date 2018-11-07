@@ -20,6 +20,9 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+07.11.2018 - 0.2.0.84
+- Removido newPhoneControl() e adicionado getPhoneControl() conforme nova estrutura para DefaultSiteService.
+
 07.11.2018 - 0.2.0.83
 - Corrigido a documentação das classes adicionadas na rev81 que estão com @author incorreto.
 - Atualização do 'composer.json', ajustes para gerar vendor automaticamente pelo 'Eclipse PHP', descrição e site.

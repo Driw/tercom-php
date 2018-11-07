@@ -100,8 +100,7 @@ class ProviderService extends DefaultSiteService
 			if (($provider = $providerControl->get($providerID)) == null)
 				throw ProviderException::newNotFound();
 
-			$phoneControl = $this->newPhoneControl();
-			$phoneControl->loadPhones($provider->getPhones());
+			$this->getPhoneControl()->loadPhones($provider->getPhones());
 
 			if ($post->isSetted('cnpj')) $provider->setCNPJ($post->getString('cnpj'));
 			if ($post->isSetted('companyName')) $provider->setCompanyName($post->getString('companyName'));
@@ -147,8 +146,7 @@ class ProviderService extends DefaultSiteService
 		if (($provider = $providerControl->get($providerID)) == null)
 			throw ProviderException::newNotFound();
 
-		$phoneControl = $this->newPhoneControl();
-		$phoneControl->loadPhones($provider->getPhones());
+		$this->getPhoneControl()->loadPhones($provider->getPhones());
 
 		$providerContactControl = $this->newProviderContactControl();
 		$providerContactControl->loadProviderContacts($provider);
@@ -283,8 +281,7 @@ class ProviderService extends DefaultSiteService
 			if (($provider = $providerControl->get($providerID)) == null)
 				throw ProviderException::newNotFound();
 
-			$phoneControl = $this->newPhoneControl();
-			$phoneControl->loadPhones($provider->getPhones());
+				$this->getPhoneControl()->loadPhones($provider->getPhones());
 
 			if ($post->isSetted('commercial'))
 			{
@@ -336,8 +333,7 @@ class ProviderService extends DefaultSiteService
 			if (($provider = $providerControl->get($providerID)) == null)
 				throw ProviderException::newNotFound();
 
-			$phoneControl = $this->newPhoneControl();
-			$phoneControl->loadPhones($provider->getPhones());
+				$this->getPhoneControl()->loadPhones($provider->getPhones());
 
 		} catch (ArrayDataException $e) {
 			throw new ParameterException($e);
@@ -371,8 +367,7 @@ class ProviderService extends DefaultSiteService
 			if (($provider = $providerControl->get($providerID)) == null)
 				throw ProviderException::newNotFound();
 
-			$phoneControl = $this->newPhoneControl();
-			$phoneControl->loadPhones($provider->getPhones());
+			$this->getPhoneControl()->loadPhones($provider->getPhones());
 
 		} catch (ArrayDataException $e) {
 			throw new ParameterException($e);
