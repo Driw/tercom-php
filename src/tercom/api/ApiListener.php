@@ -7,6 +7,7 @@ use dProject\restful\ApiConnection;
 use dProject\restful\ApiConnectionAdapter;
 use dProject\restful\ApiResponse;
 use tercom\Encryption;
+use dProject\Primitive\ArrayDataException;
 
 class ApiListener extends ApiConnectionAdapter
 {
@@ -39,14 +40,28 @@ class ApiListener extends ApiConnectionAdapter
 	{
 		$trace = jTraceEx($e);
 		$response = new ApiResponse();
-		{
-			if ($e instanceof ApiStatusException)
-				$response->setStatus($e->getCode());
-			else
-				$response->setStatus(ApiResponse::API_FAILURE);
-		}
 		$response->setMessage($e->getMessage());
 		$response->setResult(DEV ? explode(PHP_EOL, $trace) : [ (new Encryption())->encrypt($trace) ]);
+
+		if ($e instanceof ApiStatusException)
+			$response->setStatus($e->getCode());
+		else if ($e instanceof ArrayDataException)
+		{
+			switch ($e->getCode())
+			{
+				case ArrayDataException::MISS_PARAM:
+					$response->setStatus(ApiResponse::API_MISS_PARAM);
+					$response->setMessage(format('parâmetro %s não informado', $e->getMessage()));
+					break;
+
+				case ArrayDataException::PARSE_TYPE:
+					$response->setStatus(ApiResponse::API_MISS_PARAM);
+					$response->setMessage(format('parâmetro %s inválido', $e->getMessage()));
+					break;
+			}
+		}
+		else
+			$response->setStatus(ApiResponse::API_FAILURE);
 
 		$connection->showResponse($response);
 	}

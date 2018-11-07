@@ -63,7 +63,7 @@ class ApiResultSimpleValidation implements ApiResult
 
 	public function setMessage(string $message)
 	{
-		$this->message = $message;
+		$this->message = format(func_get_args());
 	}
 
 	/**
@@ -74,7 +74,7 @@ class ApiResultSimpleValidation implements ApiResult
 	public function setOkMessage(bool $ok, string $message)
 	{
 		$this->setOk($ok);
-		$this->setMessage($message);
+		$this->setMessage(format(array_slice(func_get_args(), 1)));
 	}
 
 	/**

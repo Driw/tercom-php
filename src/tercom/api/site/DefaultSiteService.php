@@ -45,7 +45,7 @@ class DefaultSiteService extends ApiServiceInterface
 	/**
 	 * @var CustomerControl
 	 */
-	private $customControl;
+	private $customerControl;
 
 	/**
 	 * Cria uma nova instância de um serviço para gerenciamento de stores dos produtos no sistema.
@@ -144,6 +144,14 @@ class DefaultSiteService extends ApiServiceInterface
 	protected function getAddressControl(): AddressControl
 	{
 		return $this->addressControl === null ? ($this->addressControl = new AddressControl()) : $this->addressControl;
+	}
+
+	/**
+	 * @return CustomerControl
+	 */
+	protected function getCustomerControl(): CustomerControl
+	{
+		return $this->customerControl === null ? ($this->customerControl = new CustomerControl()) : $this->customerControl;
 	}
 }
 

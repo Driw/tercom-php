@@ -20,6 +20,12 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+07.11.2018 - 0.2.1.85
+- Implementação do webservice, controle, DAO e entidade para gerenciar clientes.
+- Atualizado ApiListener para que trate adequadamente ArrayDataException caso não tenha sido tratado.
+- Aprimorado setMesssage() e setOkMessage() para que usem format() ao definir as mensagens, ApiResultSimpleValidation.
+- Atualizado DAOException para que seja do tipo TercomException, havia sido removido.
+
 07.11.2018 - 0.2.0.84
 - Removido newPhoneControl() e adicionado getPhoneControl() conforme nova estrutura para DefaultSiteService.
 
