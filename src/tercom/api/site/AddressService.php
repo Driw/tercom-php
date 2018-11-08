@@ -3,12 +3,12 @@
 namespace tercom\api\site;
 
 use dProject\restful\ApiContent;
+use dProject\restful\ApiResult;
+use tercom\api\exceptions\RelationshipException;
 use tercom\api\site\results\ApiResultAddress;
+use tercom\api\site\results\ApiResultAddresses;
 use tercom\api\site\results\ApiResultAddressSettings;
 use tercom\entities\Address;
-use tercom\api\exceptions\RelationshipException;
-use tercom\api\site\results\ApiResultAddresses;
-use dProject\restful\ApiResult;
 
 /**
  * @see DefaultSiteService
@@ -122,7 +122,7 @@ class AddressService extends DefaultSiteService
 		$result = new ApiResultAddress();
 		$result->setAddress($address);
 
-		if ($this->getAddressControl()->updateCustomerAddress($customer, $address))
+		if ($this->getAddressControl()->setCustomerAddress($customer, $address))
 			$result->setMessage('endereço atualizado com êxito');
 		else
 			$result->setMessage('nenhum dado alterado no endereço');
@@ -172,28 +172,20 @@ class AddressService extends DefaultSiteService
 
 	/**
 	 *
-	 * @ApiAnnotation({"method":"post","params":["relationship","idRelationship"]})
+	 * @ApiAnnotation({"params":["relationship","idRelationship","idAddress"]})
 	 * @param ApiContent $content
 	 * @return ApiResult
 	 */
 	public function actionGet(ApiContent $content): ApiResult
 	{
-		$relationship = $content->getParameters()->getString('relationship');
+		$parameters = $content->getParameters();
+		$relationship = $parameters->getString('relationship');
+		$idRelationship = $parameters->getInt('idRelationship');
+		$idAddress = $parameters->getInt('idAddress');
 
-		if ($content->getParameters()->isSetted('idRelationship'))
+		switch ($relationship)
 		{
-			switch ($relationship)
-			{
-				case self::RELATIONSHIP_CUSTOMER: return $this->getCustomerAddress($content);
-			}
-		}
-
-		else
-		{
-			switch ($relationship)
-			{
-				case self::RELATIONSHIP_CUSTOMER: return $this->getCustomerAddresses($content);
-			}
+			case self::RELATIONSHIP_CUSTOMER: return $this->getCustomerAddress($content, $idRelationship, $idAddress);
 		}
 
 		throw new RelationshipException($relationship);
@@ -202,12 +194,12 @@ class AddressService extends DefaultSiteService
 	/**
 	 *
 	 * @param ApiContent $content
+	 * @param int $idCustomer
+	 * @param int $idAddress
 	 * @return ApiResultAddress
 	 */
-	public function getCustomerAddress(ApiContent $content): ApiResultAddress
+	public function getCustomerAddress(ApiContent $content, int $idCustomer, int $idAddress): ApiResultAddress
 	{
-		$idCustomer = $content->getPost()->getInt('idCustomer');
-		$idAddress = $content->getParameters()->getInt('idRelationship');
 		$customer = $this->getCustomerControl()->get($idCustomer);
 		$address = $this->getAddressControl()->getCustomerAddresses($customer, $idAddress);
 
@@ -220,19 +212,38 @@ class AddressService extends DefaultSiteService
 
 	/**
 	 *
+	 * @ApiAnnotation({"params":["relationship","idRelationship"]})
 	 * @param ApiContent $content
-	 * @return ApiResultAddress
+	 * @return ApiResult
 	 */
-	public function getCustomerAddresses(ApiContent $content): ApiResultAddresses
+	public function actionGetAll(ApiContent $content): ApiResult
 	{
-		$post = $content->getPost();
-		$idCustomer = $post->getInt('idCustomer');
+		$parameters = $content->getParameters();
+		$relationship = $parameters->getString('relationship');
+		$idRelationship = $parameters->getInt('idRelationship');
+
+		switch ($relationship)
+		{
+			case self::RELATIONSHIP_CUSTOMER: return $this->getCustomerAddresses($content, $idRelationship);
+		}
+
+		throw new RelationshipException($relationship);
+	}
+
+	/**
+	 *
+	 * @param ApiContent $content
+	 * @param int $idCustomer
+	 * @return ApiResultAddresses
+	 */
+	public function getCustomerAddresses(ApiContent $content, int $idCustomer): ApiResultAddresses
+	{
 		$customer = $this->getCustomerControl()->get($idCustomer);
 		$this->getAddressControl()->loadCustomerAddresses($customer);
 
 		$result = new ApiResultAddresses();
 		$result->setAddresses($customer->getAddresses());
-		$result->setMessage('encontrado %d endereços no banco de dados', $customer->getAddresses()->size());
+		$result->setMessage('encontrado %d endereços para "%s"', $customer->getAddresses()->size(), $customer->getFantasyName());
 
 		return $result;
 	}

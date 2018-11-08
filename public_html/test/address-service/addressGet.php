@@ -23,17 +23,11 @@ include '../include.php';
 			exit;
 		}
 
-		$parameters = [];
+		$relationship = $_GET['relationship'];
 		$idAddress = $_GET['idAddress'];
+		$idRelationship = $_GET['relationshipID'];
 
-		switch ($relationship = $_GET['relationship'])
-		{
-			case AddressService::RELATIONSHIP_CUSTOMER:
-				$parameters['idCustomer'] = $_GET['relationshipID'];
-				break;
-		}
-
-		return GeradorDeDados::callWebService("address/get/$relationship/$idAddress", $parameters);
+		return GeradorDeDados::callWebService("address/get/$relationship/$idRelationship/$idAddress", []);
 	}
 }
 include '../execute.php';

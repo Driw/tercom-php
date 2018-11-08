@@ -137,13 +137,7 @@ class AddressDAO extends GenericDAO
 	 */
 	private function parseAddress(Result $result): ?Address
 	{
-		if (!$result->hasNext())
-			return null;
-
-		$entry = $result->next();
-		$address = $this->newAddress($entry);
-
-		return $address;
+		return ($entry = $this->parseSingleResult($result)) === null ? null : $this->newAddress($entry);
 	}
 
 	/**
@@ -155,9 +149,8 @@ class AddressDAO extends GenericDAO
 	{
 		$addresses = new Addresses();
 
-		while ($result->hasNext())
+		foreach ($this->parseMultiplyResults($result) as $entry)
 		{
-			$entry = $result->next();
 			$address = $this->newAddress($entry);
 			$addresses->add($address);
 		}

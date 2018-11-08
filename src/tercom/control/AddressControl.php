@@ -57,7 +57,7 @@ class AddressControl extends GenericControl
 	 * @throws ControlException
 	 * @return bool
 	 */
-	public function updateCustomerAddress(Customer $customer, Address $address): bool
+	public function setCustomerAddress(Customer $customer, Address $address): bool
 	{
 		if (!$this->customerAddressDAO->has($customer, $address))
 			throw new ControlException('endereço não vinculado ao cliente');
