@@ -9,6 +9,7 @@ use dProject\restful\ApiServiceInterface;
 use tercom\control\CustomerAddressControl;
 use tercom\control\CustomerControl;
 use tercom\control\CustomerPhoneControl;
+use tercom\control\PermissionControl;
 use tercom\control\PhoneControl;
 use tercom\control\ProviderContactControl;
 use tercom\control\ProviderControl;
@@ -51,6 +52,10 @@ class DefaultSiteService extends ApiServiceInterface
 	 * @var CustomerPhoneControl
 	 */
 	private $customerPhoneControl;
+	/**
+	 * @var PermissionControl
+	 */
+	private $permissionControl;
 
 	/**
 	 * Cria uma nova instância de um serviço para gerenciamento de stores dos produtos no sistema.
@@ -175,6 +180,14 @@ class DefaultSiteService extends ApiServiceInterface
 		return $this->customerPhoneControl === null ?
 			($this->customerPhoneControl = new CustomerPhoneControl()) :
 			$this->customerPhoneControl;
+	}
+
+	/**
+	 * @return PermissionControl
+	 */
+	protected function getPermissionControl(): PermissionControl
+	{
+		return $this->permissionControl === null ? ($this->permissionControl = new PermissionControl()) : $this->permissionControl;
 	}
 }
 

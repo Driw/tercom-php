@@ -20,6 +20,15 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+08.11.2018 - 0.2.2.92b
+- Implementação do webservice, controle, DAO e entidade para gerenciar permissões no sistema.
+
+08.11.2018 - 0.2.1.92
+- Agora Address também é um Entity.
+- Renomeado AddressControl para CustomerAddressControl e implementado a interface RelationshipControl.
+- Modificado AddressService para que seja do tipo RelationshipService afim de simplificar a codificação.
+- Renomeado has() para exist() já que has é usado em controles, CustomerAddressDAO.
+
 08.11.2018 - 0.2.1.91
 - Adicionado scripts de teste para o webservice do gerenciamento de relações com telefones.
 
