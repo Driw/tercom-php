@@ -40,7 +40,7 @@ class ProviderControl extends GenericControl
 
 	public function removeCommercial(Provider $provider):bool
 	{
-		if ($provider->getCommercial()->getID() !== 0)
+		if ($provider->getCommercial()->getId() !== 0)
 			if ($this->phoneControl->removePhone($provider->getCommercial()))
 			{
 				$provider->setCommercial(new Phone());
@@ -52,7 +52,7 @@ class ProviderControl extends GenericControl
 
 	public function removeOtherphone(Provider $provider):bool
 	{
-		if ($provider->getOtherPhone()->getID() !== 0)
+		if ($provider->getOtherPhone()->getId() !== 0)
 			if ($this->phoneControl->removePhone($provider->getOtherPhone()))
 			{
 				$provider->setOtherPhone(new Phone());

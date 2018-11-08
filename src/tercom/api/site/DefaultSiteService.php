@@ -14,6 +14,7 @@ use tercom\control\ServiceControl;
 use tercom\control\ServicePriceControl;
 use tercom\core\System;
 use tercom\control\CustomerControl;
+use tercom\control\CustomerPhoneControl;
 
 /**
  * @see ApiServiceInterface
@@ -46,6 +47,10 @@ class DefaultSiteService extends ApiServiceInterface
 	 * @var CustomerControl
 	 */
 	private $customerControl;
+	/**
+	 * @var CustomerPhoneControl
+	 */
+	private $customerPhoneControl;
 
 	/**
 	 * Cria uma nova instância de um serviço para gerenciamento de stores dos produtos no sistema.
@@ -152,6 +157,14 @@ class DefaultSiteService extends ApiServiceInterface
 	protected function getCustomerControl(): CustomerControl
 	{
 		return $this->customerControl === null ? ($this->customerControl = new CustomerControl()) : $this->customerControl;
+	}
+
+	/**
+	 * @return CustomerPhoneControl
+	 */
+	protected function getCustomerPhoneControl(): CustomerPhoneControl
+	{
+		return $this->customerPhoneControl === null ? ($this->customerPhoneControl = new CustomerPhoneControl()) : $this->customerPhoneControl;
 	}
 }
 

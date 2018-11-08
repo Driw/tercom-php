@@ -4,6 +4,7 @@ namespace tercom\dao;
 
 use dProject\MySQL\Result;
 use tercom\entities\Phone;
+use tercom\entities\lists\Phones;
 
 /**
  * <h1>Telefone DAO</h1>
@@ -17,6 +18,11 @@ use tercom\entities\Phone;
 
 class PhoneDAO extends GenericDAO
 {
+	/**
+	 * @var array todas as colunas da tabela de telefones.
+	 */
+	public const ALL_COLUMNS = ['id', 'ddd', 'number', 'type'];
+
 	/**
 	 * Insere um novo telefone ao banco de dados.
 	 * Se bem sucedido atualiza o telefone com seu código de identificação único.
@@ -55,7 +61,7 @@ class PhoneDAO extends GenericDAO
 		$query->setInteger(1, $phone->getDDD());
 		$query->setString(2, $phone->getNumber());
 		$query->setString(3, $phone->getType());
-		$query->setInteger(4, $phone->getID());
+		$query->setInteger(4, $phone->getId());
 
 		$result = $query->execute();
 
@@ -73,7 +79,7 @@ class PhoneDAO extends GenericDAO
 		$sql = "DELETE FROM phones WHERE id = ?";
 
 		$query = $this->mysql->createQuery($sql);
-		$query->setInteger(1, $phone->getID());
+		$query->setInteger(1, $phone->getId());
 
 		$result = $query->execute();
 
@@ -107,7 +113,7 @@ class PhoneDAO extends GenericDAO
 	 * @return NULL|Phone aquisição do telefone selecionado ou null se não encontrado.
 	 */
 
-	public function selectByID(int $phoneID):Phone
+	public function selectByID(int $phoneID): ?Phone
 	{
 		$sql = "SELECT id, ddd, number, type FROM phones WHERE id = ?";
 
@@ -135,8 +141,9 @@ class PhoneDAO extends GenericDAO
 		$query->setString(1, implode("', '", $phoneIDs));
 
 		$result = $query->execute();
+		$phones = $this->parsePhones($result);
 
-		return $this->parsePhones($result);
+		return $phones->toElementsArray();
 	}
 
 	/**
@@ -146,29 +153,26 @@ class PhoneDAO extends GenericDAO
 	 * @return Phone aquisição do telefone do qual foi selecionado na consulta.
 	 */
 
-	private function parsePhone($result):Phone
+	private function parsePhone($result): ?Phone
 	{
-		$phoneArray = $this->parseSingleResult($result);
-
-		return $this->newPhone($phoneArray);
+		return ($entry = $this->parseSingleResult($result)) === null ? null : $this->newPhone($entry);
 	}
 
 	/**
 	 * Procedimento interno para analisar o resultado de uma consulta no banco de dados.
 	 * Esse resultado é esperado que haja uma lista de telefones, portanto é criado um vetor.
 	 * @param Result $result resultado obtido da seleção de telefones do banco de dados.
-	 * @return array vetor contendo todos os telefones do quão foram consultados.
+	 * @return Phones lista contendo todos os telefones do quão foram consultados.
 	 */
 
-	private function parsePhones(Result $result):array
+	private function parsePhones(Result $result): Phones
 	{
-		$phonesArray = $this->parseMultiplyResults($result);
-		$phones = [];
+		$phones = new Phones();
 
-		foreach ($phonesArray as $phoneArray)
+		foreach ($this->parseMultiplyResults($result) as $entry)
 		{
-			$phone = $this->newPhone($phoneArray);
-			array_push($phones, $phone);
+			$phone = $this->newPhone($entry);
+			$phones->add($phone);
 		}
 
 		return $phones;
@@ -180,7 +184,7 @@ class PhoneDAO extends GenericDAO
 	 * @return Phone aquisição do telefone com os dados carregados.
 	 */
 
-	private function newPhone(array $phoneArray):Phone
+	private function newPhone(array $phoneArray): Phone
 	{
 		$phone = new Phone();
 		$phone->fromArray($phoneArray);

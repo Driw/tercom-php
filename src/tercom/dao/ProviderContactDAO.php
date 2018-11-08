@@ -38,8 +38,8 @@ class ProviderContactDAO extends GenericDAO
 		$query->setString(1, $providerContact->getName());
 		$query->setString(2, $providerContact->getPosition());
 		$query->setString(3, $providerContact->getEmail());
-		$query->setInteger(4, $providerContact->getCommercial()->getID() > 0 ? $providerContact->getCommercial()->getID() : null);
-		$query->setInteger(5, $providerContact->getOtherPhone()->getID() > 0 ? $providerContact->getOtherPhone()->getID() : null);
+		$query->setInteger(4, $providerContact->getCommercial()->getId() > 0 ? $providerContact->getCommercial()->getId() : null);
+		$query->setInteger(5, $providerContact->getOtherPhone()->getId() > 0 ? $providerContact->getOtherPhone()->getId() : null);
 
 		$result = $query->execute(true);
 
@@ -59,8 +59,8 @@ class ProviderContactDAO extends GenericDAO
 		$query->setString(1, $providerContact->getName());
 		$query->setString(2, $providerContact->getPosition());
 		$query->setString(3, $providerContact->getEmail());
-		$query->setInteger(4, $providerContact->getCommercial()->getID() > 0 ? $providerContact->getCommercial()->getID() : null);
-		$query->setInteger(5, $providerContact->getOtherPhone()->getID() > 0 ? $providerContact->getOtherPhone()->getID() : null);
+		$query->setInteger(4, $providerContact->getCommercial()->getId() > 0 ? $providerContact->getCommercial()->getId() : null);
+		$query->setInteger(5, $providerContact->getOtherPhone()->getId() > 0 ? $providerContact->getOtherPhone()->getId() : null);
 		$query->setInteger(6, $providerContact->getID());
 
 		$result = $query->execute(true);
@@ -75,8 +75,8 @@ class ProviderContactDAO extends GenericDAO
 				WHERE id = ?";
 
 		$query = $this->mysql->createQuery($sql);
-		$query->setInteger(1, $providerContact->getCommercial()->getID() > 0 ? $providerContact->getCommercial()->getID() : null);
-		$query->setInteger(2, $providerContact->getOtherPhone()->getID() > 0 ? $providerContact->getOtherPhone()->getID() : null);
+		$query->setInteger(1, $providerContact->getCommercial()->getId() > 0 ? $providerContact->getCommercial()->getId() : null);
+		$query->setInteger(2, $providerContact->getOtherPhone()->getId() > 0 ? $providerContact->getOtherPhone()->getId() : null);
 		$query->setInteger(3, $providerContact->getID());
 
 		$result = $query->execute(true);

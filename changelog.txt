@@ -20,6 +20,17 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+08.11.2018 - 0.2.1.90
+- Nova interface Entity, utilizada por ListEntity, RelationshipControl e RelationshipService.
+	- O webservice abstrato RelationshipService deve simplificar a implementação de webservices de relações.
+	- RelationshipControl deve determinar as funções básicas para relações entre entidades.
+- Phone passa a ser do tipo Entity para que possa ser usado como item de uma relação com Customer.
+- Novo webservice para gerenciamento de entidades relacionadas a telefone, PhoneService.
+- Aprimorado GeradorDeDados apra que informe um 'tipo' conforme os tipos de telefones do sistema.
+- Renomeado getID() para getId() conforme o padrão gerador por getters/setters, Phone.
+- Agora getPhone() sempre vai retornar um telefone e caso não encontrado gera exceção, PhoneControl.
+- Simplificação da codificação de parsePhone() e parsePhones(), PhoneDAO.
+
 08.11.2018 - 0.2.1.89
 - Separado a opção para obter um dados de um endereço e lista de endereços em AddressService.
 	- Desta forma o chamado fica mais claro.

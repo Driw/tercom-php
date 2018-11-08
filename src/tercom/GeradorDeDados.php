@@ -2,6 +2,8 @@
 
 namespace tercom;
 
+use tercom\entities\Phone;
+
 IncludeThirdParty('simple_html_dom');
 
 class GeradorDeDados
@@ -218,6 +220,7 @@ class GeradorDeDados
 		$telefone = [
 			'ddd' => self::randArray(self::getDDDs($estado)),
 			'numero' => sprintf('%d-%04d', rand(1000, 5000), rand(0, 9999)),
+			'tipo' => array_rand(Phone::getTypes()),
 		];
 
 		return $telefone;

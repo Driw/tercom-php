@@ -2,7 +2,6 @@
 
 namespace tercom\control;
 
-use dProject\MySQL\MySQL;
 use tercom\dao\PhoneDAO;
 use tercom\entities\Phone;
 use tercom\entities\lists\Phones;
@@ -27,12 +26,10 @@ class PhoneControl extends GenericControl
 
 	/**
 	 * Cria uma nova instância de um controle para telefones.
-	 * @param MySQL $mysql conexão com o banco de dados com os telefones.
 	 */
-
-	function __construct(MySQL $mysql)
+	function __construct()
 	{
-		$this->phoneDAO = new PhoneDAO($mysql);
+		$this->phoneDAO = new PhoneDAO();
 	}
 
 	/**
@@ -45,10 +42,10 @@ class PhoneControl extends GenericControl
 	private function validate(Phone $phone, bool $validarID)
 	{
 		if ($validarID) {
-			if ($phone->getID() === 0)
+			if ($phone->getId() === 0)
 				throw new ControlException('telefone não identificado');
 		} else {
-			if ($phone->getID() !== 0)
+			if ($phone->getId() !== 0)
 				throw new ControlException('telefone já identificado');
 		}
 
@@ -92,12 +89,15 @@ class PhoneControl extends GenericControl
 	 * @return NULL|Phone aquisição do telefone conforme código ou nulo se não encontrado.
 	 */
 
-	public function getPhone(int $phoneID):Phone
+	public function getPhone(int $phoneID): Phone
 	{
 		if ($phoneID < 1)
 			throw new ControlException('identificação do telefone inválida');
 
-		return $this->phoneDAO->selectByID($phoneID);
+			if (($phone = $this->phoneDAO->selectByID($phoneID)) === null)
+			throw new ControlException('telefone não encontrado');
+
+		return $phone;
 	}
 
 	/**
@@ -125,10 +125,10 @@ class PhoneControl extends GenericControl
 
 	public function loadPhone(Phone $phone):bool
 	{
-		if ($phone->getID() === 0)
+		if ($phone->getId() === 0)
 			return false;
 
-		if (($dbphone = $this->getPhone($phone->getID())) === null)
+		if (($dbphone = $this->getPhone($phone->getId())) === null)
 			return false;
 
 		$phone->fromArray($dbphone->toArray());
@@ -162,7 +162,7 @@ class PhoneControl extends GenericControl
 
 	public function removePhone(Phone $phone):bool
 	{
-		if ($phone->getID() < 1)
+		if ($phone->getId() < 1)
 			throw new ControlException('identificação do telefone inválida');
 
 		return $this->phoneDAO->delete($phone);
@@ -180,8 +180,8 @@ class PhoneControl extends GenericControl
 		$phoneIDs = [];
 
 		foreach ($phones as $phone)
-			if ($phone->getID() > 0)
-				array_push($phoneIDs, $phone->getID());
+			if ($phone->getId() > 0)
+				array_push($phoneIDs, $phone->getId());
 
 		return $this->phoneDAO->deletePhones($phoneIDs);
 	}
@@ -196,10 +196,10 @@ class PhoneControl extends GenericControl
 
 	public function keepPhone(Phone $phone):bool
 	{
-		if ($phone->getID() === 0 && !empty($phone->getNumber()))
+		if ($phone->getId() === 0 && !empty($phone->getNumber()))
 			return $this->addPhone($phone);
 
-		else if ($phone->getID() !== 0)
+		else if ($phone->getId() !== 0)
 			return $this->setPhone($phone);
 
 		return false;

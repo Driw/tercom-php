@@ -38,8 +38,8 @@ class ProviderDAO extends GenericDAO
 		$query->setString(3, $provider->getFantasyName());
 		$query->setString(4, $provider->getSpokesman());
 		$query->setString(5, $provider->getSite());
-		$query->setInteger(6, $provider->getCommercial()->getID() > 0 ? $provider->getCommercial()->getID() : null);
-		$query->setInteger(7, $provider->getOtherPhone()->getID() > 0 ? $provider->getOtherPhone()->getID() : null);
+		$query->setInteger(6, $provider->getCommercial()->getId() > 0 ? $provider->getCommercial()->getId() : null);
+		$query->setInteger(7, $provider->getOtherPhone()->getId() > 0 ? $provider->getOtherPhone()->getId() : null);
 		$query->setBoolean(8, $provider->isInactive());
 
 		$result = $query->execute();
@@ -62,8 +62,8 @@ class ProviderDAO extends GenericDAO
 		$query->setString(3, $provider->getFantasyName());
 		$query->setString(4, $provider->getSpokesman());
 		$query->setString(5, $provider->getSite());
-		$query->setInteger(6, $provider->getCommercial()->getID() > 0 ? $provider->getCommercial()->getID() : null);
-		$query->setInteger(7, $provider->getOtherPhone()->getID() > 0 ? $provider->getOtherPhone()->getID() : null);
+		$query->setInteger(6, $provider->getCommercial()->getId() > 0 ? $provider->getCommercial()->getId() : null);
+		$query->setInteger(7, $provider->getOtherPhone()->getId() > 0 ? $provider->getOtherPhone()->getId() : null);
 		$query->setString(8, $provider->isInactive());
 		$query->setInteger(9, $provider->getID());
 
@@ -79,8 +79,8 @@ class ProviderDAO extends GenericDAO
 				WHERE id = ?";
 
 		$query = $this->mysql->createQuery($sql);
-		$query->setInteger(1, $provider->getCommercial()->getID() > 0 ? $provider->getCommercial()->getID() : null);
-		$query->setInteger(2, $provider->getOtherPhone()->getID() > 0 ? $provider->getOtherPhone()->getID() : null);
+		$query->setInteger(1, $provider->getCommercial()->getId() > 0 ? $provider->getCommercial()->getId() : null);
+		$query->setInteger(2, $provider->getOtherPhone()->getId() > 0 ? $provider->getOtherPhone()->getId() : null);
 		$query->setInteger(3, $provider->getID());
 
 		$result = $query->execute();

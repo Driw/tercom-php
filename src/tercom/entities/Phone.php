@@ -9,16 +9,17 @@ use dProject\Primitive\StringUtil;
 use tercom\Functions;
 
 /**
- * <h1>Telefone</h1>
+ * Telefone
  *
- * <p>Um telefone é constituído pelo seu número de discagem direta à distância (DDD), número e tipo.
- * Os tipos de telefone disponíveis são> <code>TYPE_PHONE</code>, <code>TYPE_COMMERCIAL</code> e <code>TYPE_RESIDENTIAL</code></p>.
+ * Um telefone é constituído pelo seu número de discagem direta à distância (DDD), número e tipo.
+ * Os tipos de telefone disponíveis são> <code>TYPE_PHONE</code>, <code>TYPE_COMMERCIAL</code> e <code>TYPE_RESIDENTIAL</code>.
  *
  * @see AdvancedObject
+ * @see Entity
  * @author Andrew
  */
 
-class Phone extends AdvancedObject
+class Phone extends AdvancedObject implements Entity
 {
 	/**
 	 * @var int valor mínimo permitido para o DDD.
@@ -80,8 +81,7 @@ class Phone extends AdvancedObject
 	/**
 	 * @return number aquisidção do código de identificação do telefone.
 	 */
-
-	public function getID(): int
+	public function getId(): int
 	{
 		return $this->id;
 	}
@@ -89,7 +89,6 @@ class Phone extends AdvancedObject
 	/**
 	 * @param number $id código de identificação do telefone.
 	 */
-
 	public function setID(int $id)
 	{
 		if ($id < 1)
@@ -101,7 +100,6 @@ class Phone extends AdvancedObject
 	/**
 	 * @return number aquisição do número da discagem direta à distância.
 	 */
-
 	public function getDDD():?int
 	{
 		return $this->ddd;
@@ -110,7 +108,6 @@ class Phone extends AdvancedObject
 	/**
 	 * @param number $ddd número da discagem direta à distância.
 	 */
-
 	public function setDDD(int $ddd)
 	{
 		if (!IntegerUtil::inInterval($ddd, self::MIN_DDD, self::MAX_DDD))
@@ -122,7 +119,6 @@ class Phone extends AdvancedObject
 	/**
 	 * @return string aquisição do número do telefone.
 	 */
-
 	public function getNumber(): ?string
 	{
 		return $this->number;
@@ -131,7 +127,6 @@ class Phone extends AdvancedObject
 	/**
 	 * @param string $number número do telefone.
 	 */
-
 	public function setNumber(string $number)
 	{
 		$number = Functions::parseOnlyNumbers($number);
@@ -145,7 +140,6 @@ class Phone extends AdvancedObject
 	/**
 	 * @return string aquisição do tipo de telefone.
 	 */
-
 	public function getType(): ?string
 	{
 		return $this->type;
@@ -154,7 +148,6 @@ class Phone extends AdvancedObject
 	/**
 	 * @param string $type tipo de telefone.
 	 */
-
 	public function setType(string $type)
 	{
 		if (!self::hasType($type))
@@ -166,7 +159,6 @@ class Phone extends AdvancedObject
 	/**
 	 * @return array aquisição de um vetor com todos os tipos de telefone.
 	 */
-
 	public static function getTypes(): array
 	{
 		return array(
@@ -181,7 +173,6 @@ class Phone extends AdvancedObject
 	 * @param string $type nome do tipo de telefone à validar.
 	 * @return bool true se for válido ou false caso contrário.
 	 */
-
 	public static function hasType(string $type):bool
 	{
 		return isset(self::getTypes()[$type]);
@@ -191,7 +182,6 @@ class Phone extends AdvancedObject
 	 * {@inheritDoc}
 	 * @see \dProject\Primitive\AdvancedObject::getAttributeTypes()
 	 */
-
 	public function getAttributeTypes(): array
 	{
 		return [
