@@ -2,19 +2,19 @@
 
 namespace tercom\api\site;
 
+use dProject\MySQL\MySQL;
 use dProject\restful\ApiConnection;
 use dProject\restful\ApiResult;
 use dProject\restful\ApiServiceInterface;
-use dProject\MySQL\MySQL;
-use tercom\control\AddressControl;
+use tercom\control\CustomerAddressControl;
+use tercom\control\CustomerControl;
+use tercom\control\CustomerPhoneControl;
 use tercom\control\PhoneControl;
 use tercom\control\ProviderContactControl;
 use tercom\control\ProviderControl;
 use tercom\control\ServiceControl;
 use tercom\control\ServicePriceControl;
 use tercom\core\System;
-use tercom\control\CustomerControl;
-use tercom\control\CustomerPhoneControl;
 
 /**
  * @see ApiServiceInterface
@@ -40,9 +40,9 @@ class DefaultSiteService extends ApiServiceInterface
 	 */
 	private $servicePriceControl;
 	/**
-	 * @var AddressControl
+	 * @var CustomerAddressControl
 	 */
-	private $addressControl;
+	private $customerAddressControl;
 	/**
 	 * @var CustomerControl
 	 */
@@ -124,7 +124,9 @@ class DefaultSiteService extends ApiServiceInterface
 	 */
 	protected function getProviderControl(): ProviderControl
 	{
-		return $this->providerControl === null ? ($this->providerControl = new ProviderControl($this->getMySQL())) : $this->providerControl;
+		return $this->providerControl === null ?
+			($this->providerControl = new ProviderControl($this->getMySQL())) :
+			$this->providerControl;
 	}
 
 	/**
@@ -132,7 +134,9 @@ class DefaultSiteService extends ApiServiceInterface
 	 */
 	protected function getServiceControl(): ServiceControl
 	{
-		return $this->serviceControl === null ? ($this->serviceControl = new ServiceControl($this->getMySQL())) : $this->serviceControl;
+		return $this->serviceControl === null ?
+			($this->serviceControl = new ServiceControl($this->getMySQL())) :
+			$this->serviceControl;
 	}
 
 	/**
@@ -140,15 +144,19 @@ class DefaultSiteService extends ApiServiceInterface
 	 */
 	protected function getServicePriceControl(): ServicePriceControl
 	{
-		return $this->servicePriceControl === null ? ($this->servicePriceControl = new ServicePriceControl($this->getMySQL())) : $this->servicePriceControl;
+		return $this->servicePriceControl === null ?
+			($this->servicePriceControl = new ServicePriceControl($this->getMySQL())) :
+			$this->servicePriceControl;
 	}
 
 	/**
-	 * @return AddressControl
+	 * @return CustomerAddressControl
 	 */
-	protected function getAddressControl(): AddressControl
+	protected function getCustomerAddressControl(): CustomerAddressControl
 	{
-		return $this->addressControl === null ? ($this->addressControl = new AddressControl()) : $this->addressControl;
+		return $this->customerAddressControl === null ?
+			($this->customerAddressControl = new CustomerAddressControl()) :
+			$this->customerAddressControl;
 	}
 
 	/**
@@ -164,7 +172,9 @@ class DefaultSiteService extends ApiServiceInterface
 	 */
 	protected function getCustomerPhoneControl(): CustomerPhoneControl
 	{
-		return $this->customerPhoneControl === null ? ($this->customerPhoneControl = new CustomerPhoneControl()) : $this->customerPhoneControl;
+		return $this->customerPhoneControl === null ?
+			($this->customerPhoneControl = new CustomerPhoneControl()) :
+			$this->customerPhoneControl;
 	}
 }
 

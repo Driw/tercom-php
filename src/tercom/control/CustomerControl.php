@@ -2,15 +2,15 @@
 
 namespace tercom\control;
 
+use dProject\Primitive\StringUtil;
+use tercom\Functions;
 use tercom\dao\CustomerDAO;
 use tercom\entities\Customer;
 use tercom\entities\lists\Customers;
-use tercom\Functions;
-use dProject\Primitive\StringUtil;
 
 /**
  * @see GenericControl
- * @see AddressControl
+ * @see CustomerAddressControl
  * @see PhoneControl
  * @see CustomerDAO
  * @author Andrew
@@ -31,9 +31,9 @@ class CustomerControl extends GenericControl
 	 */
 	private $customerDAO;
 	/**
-	 * @var AddressControl
+	 * @var CustomerAddressControl
 	 */
-	private $addressControl;
+	private $customerAddressControl;
 	/**
 	 * @var PhoneControl
 	 */
@@ -45,7 +45,7 @@ class CustomerControl extends GenericControl
 	public function __construct()
 	{
 		$this->customerDAO = new CustomerDAO();
-		$this->addressControl = new AddressControl();
+		$this->customerAddressControl = new CustomerAddressControl();
 		$this->phoneControl = new PhoneControl();
 	}
 
@@ -85,7 +85,7 @@ class CustomerControl extends GenericControl
 	 */
 	public function setRelationships(Customer $customer): int
 	{
-		return	$this->addressControl->saveCustomerAddresses($customer) +
+		return	$this->customerAddressControl->saveCustomerAddresses($customer) +
 				$this->phoneControl->saveCustomerPhones($customer);
 	}
 
@@ -113,7 +113,7 @@ class CustomerControl extends GenericControl
 
 		if ($full)
 		{
-			$this->addressControl->loadCustomerAddresses($customer);
+			$this->customerAddressControl->loadCustomerAddresses($customer);
 			$this->phoneControl->loadCustomerPhones($customer);
 		}
 

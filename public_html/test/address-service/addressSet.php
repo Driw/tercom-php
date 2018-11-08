@@ -16,7 +16,7 @@ include '../include.php';
 	Relação com: <select name="relationship">
 		<option value="customer">Endereço para Clientes</option>
 	</select><br>
-	Chave da Realação (ID): <input type="text" name="relationshipID"><br>
+	Chave da Realação (ID): <input type="text" name="idRelationship"><br>
 	<button type='submit'>Continuar</button>
 </form>
 <?php
@@ -33,16 +33,12 @@ include '../include.php';
 			'number' => $empresa['numero'],
 			'complement' => $empresa['complemento'],
 		];
+
 		$idAddress = $_GET['idAddress'];
+		$relationship = $_GET['relationship'];
+		$idRelationship = $_GET['idRelationship'];
 
-		switch ($relationship = $_GET['relationship'])
-		{
-			case AddressService::RELATIONSHIP_CUSTOMER:
-				$parameters['idCustomer'] = $_GET['relationshipID'];
-				break;
-		}
-
-		return GeradorDeDados::callWebService("address/set/$relationship/$idAddress", $parameters, true);
+		return GeradorDeDados::callWebService("address/set/$relationship/$idRelationship/$idAddress", $parameters, true);
 	}
 }
 include '../execute.php';

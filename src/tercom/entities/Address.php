@@ -9,7 +9,7 @@ use dProject\Primitive\ObjectUtil;
  * @see AdvancedObject
  * @author Andrew
  */
-class Address extends AdvancedObject
+class Address extends AdvancedObject implements Entity
 {
 	/**
 	 * @var int

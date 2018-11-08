@@ -88,7 +88,7 @@ class CustomerAddressDAO extends GenericDAO
 	 * @param Address $address
 	 * @return bool
 	 */
-	public function has(Customer $customer, Address $address): bool
+	public function exist(Customer $customer, Address $address): bool
 	{
 		$sql = "SELECT COUNT(*) qty
 				FROM customer_addresses

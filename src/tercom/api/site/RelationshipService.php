@@ -7,6 +7,7 @@ use dProject\restful\ApiResult;
 use tercom\api\exceptions\RelationshipException;
 
 /**
+ * @see DefaultSiteService
  * @author andrews
  */
 abstract class RelationshipService extends DefaultSiteService
