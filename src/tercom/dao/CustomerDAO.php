@@ -11,6 +11,8 @@ use tercom\entities\lists\Customers;
 /**
  * @see GenericDAO
  * @see Customer
+ * @see CustomerProfile
+ * @see CustomerProfiles
  * @author Andrew
  *
  */

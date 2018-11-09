@@ -20,6 +20,12 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+09.11.2018 - 0.2.2.94
+- Implementação do webservice, controle, DAO e entidades para gerenciar perfis de clientes.
+
+08.11.2018 - 0.2.2.93
+- Adicionado scripts de testes para o webservice de gerenciamento das permissões.
+
 08.11.2018 - 0.2.2.92b
 - Implementação do webservice, controle, DAO e entidade para gerenciar permissões no sistema.
 

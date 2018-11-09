@@ -16,6 +16,7 @@ use tercom\control\ProviderControl;
 use tercom\control\ServiceControl;
 use tercom\control\ServicePriceControl;
 use tercom\core\System;
+use tercom\control\CustomerProfileControl;
 
 /**
  * @see ApiServiceInterface
@@ -56,6 +57,10 @@ class DefaultSiteService extends ApiServiceInterface
 	 * @var PermissionControl
 	 */
 	private $permissionControl;
+	/**
+	 * @var CustomerProfileControl
+	 */
+	private $customerProfileControl;
 
 	/**
 	 * Cria uma nova instância de um serviço para gerenciamento de stores dos produtos no sistema.
@@ -188,6 +193,16 @@ class DefaultSiteService extends ApiServiceInterface
 	protected function getPermissionControl(): PermissionControl
 	{
 		return $this->permissionControl === null ? ($this->permissionControl = new PermissionControl()) : $this->permissionControl;
+	}
+
+	/**
+	 * @return CustomerProfileControl
+	 */
+	protected function getCustomerProfileControl(): CustomerProfileControl
+	{
+		return $this->customerProfileControl === null ?
+			($this->customerProfileControl = new CustomerProfileControl()) :
+			$this->customerProfileControl;
 	}
 }
 
