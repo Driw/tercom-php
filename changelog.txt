@@ -20,6 +20,9 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+22.11.2018 - 0.2.4.101
+- Substituído ApiResultPermission e ApiResultPermissions por ApiResultObject.
+
 22.11.2018 - 0.2.4.100
 - Adicionado scripts de testes para o webservice que gerencia as permissões no sistema por perfil de cliente.
 - Corrigido customerProfileRemove.php que estava usando o webservice de 'permission' ao invés do 'customerPermission'.

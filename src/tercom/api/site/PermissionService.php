@@ -2,10 +2,10 @@
 
 namespace tercom\api\site;
 
-use tercom\api\site\results\ApiResultPermissionSettings;
 use dProject\restful\ApiContent;
-use tercom\api\site\results\ApiResultPermission;
 use tercom\entities\Permission;
+use tercom\api\site\results\ApiResultObject;
+use tercom\api\site\results\ApiResultPermissionSettings;
 
 /**
  * @see DefaultSiteService
@@ -26,9 +26,9 @@ class PermissionService extends DefaultSiteService
 	 *
 	 * @ApiAnnotation({"method":"post"})
 	 * @param ApiContent $content
-	 * @return ApiResultPermission
+	 * @return ApiResultObject
 	 */
-	public function actionAdd(ApiContent $content): ApiResultPermission
+	public function actionAdd(ApiContent $content): ApiResultObject
 	{
 		$post = $content->getPost();
 
@@ -38,8 +38,8 @@ class PermissionService extends DefaultSiteService
 		$permission->setAssignmentLevel($post->getString('assignmentLevel'));
 		$this->getPermissionControl()->add($permission);
 
-		$result = new ApiResultPermission();
-		$result->setPermission($permission);
+		$result = new ApiResultObject();
+		$result->setObject($permission);
 		$result->setMessage('permissão para %s.%s adicionada com êxito', $permission->getPacket(), $permission->getAction());
 
 		return $result;
@@ -49,9 +49,9 @@ class PermissionService extends DefaultSiteService
 	 *
 	 * @ApiAnnotation({"method":"post","params":["idPermission"]})
 	 * @param ApiContent $content
-	 * @return ApiResultPermission
+	 * @return ApiResultObject
 	 */
-	public function actionSet(ApiContent $content): ApiResultPermission
+	public function actionSet(ApiContent $content): ApiResultObject
 	{
 		$post = $content->getPost();
 		$idPermission = $content->getParameters()->getInt('idPermission');
@@ -63,8 +63,8 @@ class PermissionService extends DefaultSiteService
 
 		$this->getPermissionControl()->set($permission);
 
-		$result = new ApiResultPermission();
-		$result->setPermission($permission);
+		$result = new ApiResultObject();
+		$result->setObject($permission);
 		$result->setMessage('permissão para %s.%s atualizada com êxito', $permission->getPacket(), $permission->getAction());
 
 		return $result;
@@ -74,16 +74,16 @@ class PermissionService extends DefaultSiteService
 	 *
 	 * @ApiAnnotation({"params":["idPermission"]})
 	 * @param ApiContent $content
-	 * @return ApiResultPermission
+	 * @return ApiResultObject
 	 */
-	public function actionRemove(ApiContent $content): ApiResultPermission
+	public function actionRemove(ApiContent $content): ApiResultObject
 	{
 		$idPermission = $content->getParameters()->getInt('idPermission');
 		$permission = $this->getPermissionControl()->get($idPermission);
 		$this->getPermissionControl()->remove($permission);
 
-		$result = new ApiResultPermission();
-		$result->setPermission($permission);
+		$result = new ApiResultObject();
+		$result->setObject($permission);
 		$result->setMessage('permissão para %s.%s excluída com êxito', $permission->getPacket(), $permission->getAction());
 
 		return $result;
@@ -93,15 +93,15 @@ class PermissionService extends DefaultSiteService
 	 *
 	 * @ApiAnnotation({"params":["idPermission"]})
 	 * @param ApiContent $content
-	 * @return ApiResultPermission
+	 * @return ApiResultObject
 	 */
-	public function actionGet(ApiContent $content): ApiResultPermission
+	public function actionGet(ApiContent $content): ApiResultObject
 	{
 		$idPermission = $content->getParameters()->getInt('idPermission');
 		$permission = $this->getPermissionControl()->get($idPermission);
 
-		$result = new ApiResultPermission();
-		$result->setPermission($permission);
+		$result = new ApiResultObject();
+		$result->setObject($permission);
 		$result->setMessage('permissão para %s.%s obtida com êxito', $permission->getPacket(), $permission->getAction());
 
 		return $result;
