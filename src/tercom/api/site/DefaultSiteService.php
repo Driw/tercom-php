@@ -17,6 +17,7 @@ use tercom\control\ServiceControl;
 use tercom\control\ServicePriceControl;
 use tercom\core\System;
 use tercom\control\CustomerProfileControl;
+use tercom\control\ProductCategoryControl;
 
 /**
  * @see ApiServiceInterface
@@ -33,6 +34,10 @@ class DefaultSiteService extends ApiServiceInterface
 	 * @var ProviderControl
 	 */
 	private $providerControl;
+	/**
+	 * @var ProductCategoryControl
+	 */
+	private $productCategoryControl;
 	/**
 	 * @var ServiceControl
 	 */
@@ -137,6 +142,16 @@ class DefaultSiteService extends ApiServiceInterface
 		return $this->providerControl === null ?
 			($this->providerControl = new ProviderControl($this->getMySQL())) :
 			$this->providerControl;
+	}
+
+	/**
+	 * @return ProductCategoryControl
+	 */
+	protected function getProductCategoryControl(): ProductCategoryControl
+	{
+		return $this->productCategoryControl === null ?
+			($this->productCategoryControl = new ProductCategoryControl($this->getMySQL())) :
+			$this->productCategoryControl;
 	}
 
 	/**

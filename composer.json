@@ -28,8 +28,7 @@
 	},
 	"autoload" : {
 		"psr-4" : {
-			"tercom\\" : "src"
+			"tercom\\" : "src/tercom"
 		}
-	},
-	"support" : {}
+	}
 }

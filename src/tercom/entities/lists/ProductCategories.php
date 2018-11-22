@@ -20,7 +20,6 @@ class ProductCategories extends ArrayList
 	/**
 	 * Cria uma nova lista de categorias.
 	 */
-
 	public function __construct()
 	{
 		parent::__construct(ProductCategory::class);
@@ -30,8 +29,7 @@ class ProductCategories extends ArrayList
 	 * {@inheritDoc}
 	 * @see \tercom\ArrayList::current()
 	 */
-
-	public function current():ProductCategory
+	public function current():  ProductCategory
 	{
 		return parent::current();
 	}

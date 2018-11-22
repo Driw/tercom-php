@@ -11,29 +11,29 @@ use dProject\Primitive\AdvancedObject;
  * Essa classe é criada para criar esse conjunto que irá categorizar o produto no sistema para filtros.</p>
  *
  * @see AdvancedObject
- * @see ProductFamily
- * @see ProductGroup
- * @see ProductSubGroup
- * @see ProductSector
+ * @see ProductCategory
+ * @see ProductCategory
+ * @see ProductCategory
+ * @see ProductCategory
  * @author Andrew
  */
 
 class ProductCategorySet extends AdvancedObject
 {
 	/**
-	 * @var ProductFamily categoria de família do produto.
+	 * @var ProductCategory categoria de família do produto.
 	 */
 	private $family;
 	/**
-	 * @var ProductGroup categoria de grupo do produto.
+	 * @var ProductCategory categoria de grupo do produto.
 	 */
 	private $group;
 	/**
-	 * @var ProductSubGroup categoria de subgrupo do produto.
+	 * @var ProductCategory categoria de subgrupo do produto.
 	 */
 	private $subgroup;
 	/**
-	 * @var ProductSector categoria de setor do produto.
+	 * @var ProductCategory categoria de setor do produto.
 	 */
 	private $sector;
 
@@ -43,109 +43,109 @@ class ProductCategorySet extends AdvancedObject
 
 	public function __construct()
 	{
-		$this->family = new ProductFamily();
-		$this->group = new ProductGroup();
-		$this->subgroup = new ProductSubGroup();
-		$this->sector = new ProductSector();
+		$this->family = new ProductCategory();
+		$this->group = new ProductCategory();
+		$this->subgroup = new ProductCategory();
+		$this->sector = new ProductCategory();
 	}
 
 	/**
-	 * @return ProductFamily aquisição da categoria de família do produto.
+	 * @return ProductCategory aquisição da categoria de família do produto.
 	 */
 
-	public function getFamily(): ProductFamily
+	public function getFamily(): ProductCategory
 	{
 		return $this->family;
 	}
 
 	/**
-	 * @param ProductFamily $family categoria de família do produto.
+	 * @param ProductCategory $family categoria de família do produto.
 	 * @throws EntityParseException grupo definido e não pertence a família à definir.
 	 */
 
-	public function setFamily(ProductFamily $family)
+	public function setFamily(ProductCategory $family)
 	{
 		if ($this->getGroup()->getID() !== 0)
-			if ($this->getGroup()->getProductFamilyID() !== $family->getID())
+			if ($this->getGroup()->getProductCategoryID() !== $family->getID())
 				throw new EntityParseException('conjunto com grupo fora da família à definir');
 
 		$this->family = $family;
 	}
 
 	/**
-	 * @return ProductGroup aquisição da categoria de grupo do produto.
+	 * @return ProductCategory aquisição da categoria de grupo do produto.
 	 */
 
-	public function getGroup(): ProductGroup
+	public function getGroup(): ProductCategory
 	{
 		return $this->group;
 	}
 
 	/**
-	 * @param ProductGroup $group categoria de grupo do produto.
+	 * @param ProductCategory $group categoria de grupo do produto.
 	 * @throws EntityParseException família definida e não possui o grupo à definir
 	 * ou subgrupo definido e não pertence ao grupo à definir.
 	 */
 
-	public function setGroup(ProductGroup $group)
+	public function setGroup(ProductCategory $group)
 	{
 		if ($this->getFamily()->getID() !== 0)
-			if ($this->getFamily()->getID() !== $group->getProductFamilyID())
+			if ($this->getFamily()->getID() !== $group->getProductCategoryID())
 				throw new EntityParseException('conjunto com família que não possui o grupo à definir');
 
 		if ($this->getSubgroup()->getID() !== 0)
-			if ($this->getSubgroup()->getProductGroupID() !== $group->getID())
+			if ($this->getSubgroup()->getProductCategoryID() !== $group->getID())
 				throw new EntityParseException('conjunto com subgrupo fora do grupo à definir');
 
 		$this->group = $group;
 	}
 
 	/**
-	 * @return ProductSubGroup aquisição da categoria de subgrupo do produto.
+	 * @return ProductCategory aquisição da categoria de subgrupo do produto.
 	 */
 
-	public function getSubgroup(): ProductSubGroup
+	public function getSubgroup(): ProductCategory
 	{
 		return $this->subgroup;
 	}
 
 	/**
-	 * @param ProductSubGroup $subgroup categoria de subgrupo do produto.
+	 * @param ProductCategory $subgroup categoria de subgrupo do produto.
 	 * @throws EntityParseException grupo definido e não possui o subgrupo à definir
 	 * ou setor definido e não pertence ao subgrupo à definir.
 	 */
 
-	public function setSubgroup(ProductSubGroup $subgroup)
+	public function setSubgroup(ProductCategory $subgroup)
 	{
 		if ($this->getGroup() !== null)
-			if ($this->getGroup()->getID() !== $subgroup->getProductGroupID())
+			if ($this->getGroup()->getID() !== $subgroup->getProductCategoryID())
 				throw new EntityParseException('conjunto com grupo que não possui o subgrupo à definir');
 
 		if ($this->getSector()->getID() !== 0)
-			if ($this->getSector()->getProductSubGroupID() !== $subgroup->getID())
+			if ($this->getSector()->getProductCategoryID() !== $subgroup->getID())
 				throw new EntityParseException('conjunto com setor fora do subgrupo à definir');
 
 		$this->subgroup = $subgroup;
 	}
 
 	/**
-	 * @return ProductSector aquisição da categoria de setor do produto.
+	 * @return ProductCategory aquisição da categoria de setor do produto.
 	 */
 
-	public function getSector(): ProductSector
+	public function getSector(): ProductCategory
 	{
 		return $this->sector;
 	}
 
 	/**
-	 * @param ProductSector $sector categoria de setor do produto.
+	 * @param ProductCategory $sector categoria de setor do produto.
 	 * @throws EntityParseException setor definido e não pertence ao subgrupo à definir.
 	 */
 
 	public function setSector($sector)
 	{
 		if ($this->getSubgroup()->getID() !== 0)
-			if ($this->getSubgroup()->getID() !== $sector->getProductSubGroupID())
+			if ($this->getSubgroup()->getID() !== $sector->getProductCategoryID())
 				throw new EntityParseException('conjunto com subgrupo que não possui o setor à definir');
 
 		$this->sector = $sector;
@@ -159,10 +159,10 @@ class ProductCategorySet extends AdvancedObject
 	public function getAttributeTypes(): array
 	{
 		return [
-			'family' => ProductFamily::class,
-			'group' => ProductGroup::class,
-			'subgroup' => ProductSubGroup::class,
-			'sector' => ProductSector::class,
+			'family' => ProductCategory::class,
+			'group' => ProductCategory::class,
+			'subgroup' => ProductCategory::class,
+			'sector' => ProductCategory::class,
 		];
 	}
 }

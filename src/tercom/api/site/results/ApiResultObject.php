@@ -26,30 +26,17 @@ class ApiResultObject implements ApiResult
 	/**
 	 * @param string $message
 	 */
-
 	public function setMessage(string $message)
 	{
-		$this->message = $message;
+		$this->message = format(func_get_args());
 	}
 
 	/**
 	 * @param AdvancedObject $object
 	 */
-
 	public function setObject(AdvancedObject $object)
 	{
 		$this->object = $object;
-	}
-
-	/**
-	 * @param AdvancedObject $object
-	 * @param string $message
-	 */
-
-	public function setResult(AdvancedObject $object, string $message)
-	{
-		$this->setObject($object);
-		$this->setMessage(vsprintf($message, array_slice(func_get_args(), 2)));
 	}
 
 	/**

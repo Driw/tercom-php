@@ -5,6 +5,7 @@ namespace tercom\entities;
 use dProject\Primitive\AdvancedObject;
 use dProject\Primitive\ObjectUtil;
 use dProject\Primitive\StringUtil;
+use tercom\entities\lists\ProductCategories;
 
 /**
  * <h1>Produto Folha</h1>
@@ -16,8 +17,7 @@ use dProject\Primitive\StringUtil;
  * @see AdvancedObject
  * @author Andrew
  */
-
-abstract class ProductCategory extends AdvancedObject
+class ProductCategory extends AdvancedObject
 {
 	/**
 	 * @var int quantidade mínima de caracteres necessário no nome.
@@ -57,24 +57,27 @@ abstract class ProductCategory extends AdvancedObject
 	 * @var int tipo de categoria.
 	 */
 	private $type;
+	/**
+	 * @var ProductCategories
+	 */
+	private $productCategories;
 
 	/**
 	 * Cria uma nova instância de um produto folha para representação de categorias.
 	 * @param int $type tipo de categoria que está sendo criada.
 	 */
-
-	public function __construct(int $type)
+	public function __construct(?int $type = null)
 	{
 		$this->id = 0;
 		$this->name = '';
 		$this->type = $type;
+		$this->productCategories = null;
 	}
 
 	/**
 	 * @return int aquisição do código de identificação da categoria.
 	 */
-
-	public function getID(): int
+	public function getId(): int
 	{
 		return $this->id;
 	}
@@ -82,8 +85,7 @@ abstract class ProductCategory extends AdvancedObject
 	/**
 	 * @param int $id código de identificação da categoria.
 	 */
-
-	public function setID(int $id)
+	public function setId(int $id)
 	{
 		$this->id = $id;
 	}
@@ -91,7 +93,6 @@ abstract class ProductCategory extends AdvancedObject
 	/**
 	 * @return string aquisição do nome da categoria.
 	 */
-
 	public function getName(): string
 	{
 		return $this->name;
@@ -100,7 +101,6 @@ abstract class ProductCategory extends AdvancedObject
 	/**
 	 * @param string $name nome da categoria.
 	 */
-
 	public function setName(string $name)
 	{
 		if (!StringUtil::hasBetweenLength($name, self::MIN_NAME_LEN, self::MAX_NAME_LEN))
@@ -112,17 +112,39 @@ abstract class ProductCategory extends AdvancedObject
 	/**
 	 * @return int aquisição do tipo de categoria.
 	 */
-
 	public function getType(): int
 	{
 		return $this->type;
 	}
 
 	/**
+	 * @param number $type
+	 */
+	public function setType(int $type)
+	{
+		$this->type = $type;
+	}
+
+	/**
+	 * @return ProductCategories
+	 */
+	public function getProductCategories(): ProductCategories
+	{
+		return $this->productCategories;
+	}
+
+	/**
+	 * @param ProductCategories $productCategories
+	 */
+	public function setProductCategories(ProductCategories $productCategories)
+	{
+		$this->productCategories = $productCategories;
+	}
+
+	/**
 	 * {@inheritDoc}
 	 * @see \dProject\Primitive\AdvancedObject::getAttributeTypes()
 	 */
-
 	public function getAttributeTypes(): array
 	{
 		return [

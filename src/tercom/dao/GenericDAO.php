@@ -12,6 +12,8 @@ use tercom\dao\exceptions\DAOException;
 
 class GenericDAO
 {
+	public const ER_ROW_IS_REFERENCED_2 = 1451;
+
 	protected $mysql;
 
 	public function __construct(?MySQL $mysql = null)

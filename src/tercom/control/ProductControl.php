@@ -2,11 +2,12 @@
 
 namespace tercom\control;
 
-use tercom\dao\ProductDAO;
 use dProject\MySQL\MySQL;
+use tercom\dao\ProductDAO;
 use tercom\entities\Product;
-use tercom\entities\lists\Products;
 use tercom\entities\ProductCategorySet;
+use tercom\entities\lists\Products;
+use tercom\entities\ProductCategory;
 
 class ProductControl extends GenericControl
 {
@@ -19,21 +20,9 @@ class ProductControl extends GenericControl
 	 */
 	private $productUnitControl;
 	/**
-	 * @var ProductFamilyControl
+	 * @var ProductCategoryControl
 	 */
-	private $productFamilyControl;
-	/**
-	 * @var ProductGroupControl
-	 */
-	private $productGroupControl;
-	/**
-	 * @var ProductSubGroupControl
-	 */
-	private $productSubGroupControl;
-	/**
-	 * @var ProductSectorControl
-	 */
-	private $productSectorControl;
+	private $productCategoryControl;
 
 	/**
 	 * @param MySQL $mysql
@@ -43,10 +32,7 @@ class ProductControl extends GenericControl
 	{
 		$this->productDAO = new ProductDAO($mysql);
 		$this->productUnitControl = new ProductUnitControl($mysql);
-		$this->productFamilyControl = new ProductFamilyControl($mysql);
-		$this->productGroupControl = new ProductGroupControl($mysql);
-		$this->productSubGroupControl = new ProductSubGroupControl($mysql);
-		$this->productSectorControl = new ProductSectorControl($mysql);
+		$this->productCategoryControl = new ProductCategoryControl();
 	}
 
 	private function validate(Product $product, bool $validateID)
@@ -66,19 +52,19 @@ class ProductControl extends GenericControl
 			throw new ControlException('unidade de produto não encontrada');
 
 		if ($product->getCategory()->getFamily()->getID() !== 0 &&
-			!$this->productFamilyControl->has($product->getCategory()->getFamily()->getID()))
+			!$this->productCategoryControl->has($product->getCategory()->getFamily()->getID(), ProductCategory::CATEGORY_FAMILY))
 			throw new ControlException('família de produto não encontrada');
 
 		if ($product->getCategory()->getGroup()->getID() !== 0 &&
-			!$this->productGroupControl->has($product->getCategory()->getGroup()->getID()))
+			!$this->productCategoryControl->has($product->getCategory()->getGroup()->getID(), ProductCategory::CATEGORY_GROUP))
 			throw new ControlException('grupo de produto não encontrada');
 
 		if ($product->getCategory()->getSubgroup()->getID() !== 0 &&
-			!$this->productSubGroupControl->has($product->getCategory()->getSubgroup()->getID()))
+			!$this->productCategoryControl->has($product->getCategory()->getSubgroup()->getID(), ProductCategory::CATEGORY_SUBGROUP))
 			throw new ControlException('subgrupo de produto não encontrada');
 
 		if ($product->getCategory()->getSector()->getID() !== 0 &&
-			!$this->productSectorControl->has($product->getCategory()->getSector()->getID()))
+			!$this->productCategoryControl->has($product->getCategory()->getSector()->getID(), ProductCategory::CATEGORY_SECTOR))
 			throw new ControlException('setor de produto não encontrada');
 	}
 
