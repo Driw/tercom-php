@@ -19,7 +19,7 @@ include '../include.php';
 		}
 
 		$idPermission = $_GET['idPermission'];
-		return GeradorDeDados::callWebService("permission/remove/$idPermission", []);
+		return GeradorDeDados::callWebService("customerProfile/remove/$idPermission", []);
 	}
 }
 include '../execute.php';
