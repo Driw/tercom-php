@@ -74,10 +74,10 @@ class ErrorTemplate extends DefaultDashboardBoundary
 		}
 
 		else
-		{
 			$this->exceptionMessage = nameOf($e);
-			$this->exceptionTrace = str_replace(PHP_EOL, '<br>'.PHP_EOL, jTraceEx($e));
-		}
+		
+		if (DEV)
+			$this->exceptionTrace .= '<br>' .str_replace(PHP_EOL, '<br>'.PHP_EOL, jTraceEx($e));
 	}
 
 	/**

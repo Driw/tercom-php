@@ -99,7 +99,7 @@ class CustomerPhoneControl extends GenericControl implements RelationshipControl
 	{
 		$this->validateCustomerPhone($customer, $phone);
 
-		if (!$this->phoneDAO->delete($phone))
+		if (!$this->phoneControl->removePhone($phone))
 			return false;
 
 		$customer->getPhones()->removeElement($phone);
