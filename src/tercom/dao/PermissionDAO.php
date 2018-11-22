@@ -16,6 +16,11 @@ use dProject\Primitive\StringUtil;
 class PermissionDAO extends GenericDAO
 {
 	/**
+	 * @var string[]
+	 */
+	public const ALL_COLUMNS = ['id', 'packet', 'action', 'assignmentLevel'];
+
+	/**
 	 *
 	 * @param Permission $permission
 	 * @param bool $validateID

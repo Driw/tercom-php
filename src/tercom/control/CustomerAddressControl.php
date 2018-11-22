@@ -71,7 +71,10 @@ class CustomerAddressControl extends GenericControl implements RelationshipContr
 		$this->addressDAO->beginTransaction();
 		{
 			if (!$this->addressDAO->insert($address) || !$this->customerAddressDAO->insert($customer, $address))
+			{
 				$this->addressDAO->rollback();
+				throw new ControlException('não foi possível vincular o endereço ao cliente');
+			}
 		}
 		$this->addressDAO->commit();
 

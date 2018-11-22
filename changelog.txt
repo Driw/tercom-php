@@ -20,6 +20,12 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+22.11.2018 - 0.2.4.99
+- Implementação do webservice para gerenciar as permissões no sistema por perfil de cliente.
+- Atualização de 'tabelas.sql' conforme revisões anteriores.
+- Corrigido ApiResultAddress onde setMessage() não estava funcionando como esperado.
+- Ajustado addRelationship() para exibir uma exception se necessário o rollback, CustomerAddressControl.
+
 22.11.2018 - 0.2.3.98
 - Corrigido removeRelationship() que estava chamando um método incorreto de PhoneDAO, PhoneControl.
 - Exceções geradas no dashboard agora exibe-se o trace em ambiente de desenvolvimento.

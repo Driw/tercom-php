@@ -43,7 +43,7 @@ class ApiResultAddress implements ApiResult
 	 */
 	public function setMessage($message)
 	{
-		$this->message = $message;
+		$this->message = format(func_get_args());
 	}
 
 	/**
