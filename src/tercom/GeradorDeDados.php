@@ -295,6 +295,22 @@ class GeradorDeDados
 		return "$nome$separador$sobrenome$dominio";
 	}
 
+	public static function genPassword($length = 6): string
+	{
+		$pass = [];
+		$alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+		$alphaLength = strlen($alphabet) - 1;
+
+		do {
+
+			for ($i = 0; $i < $length; $i++)
+				$pass[] = $alphabet[rand(0, $alphaLength)];
+
+		} while (preg_match(PATTERN_PASSWORD, ($password = implode($pass))) === 0);
+
+		return $password;
+	}
+
 	public static function getCidades($estado)
 	{
 		$parameters = array('cep_estado' => $estado);
