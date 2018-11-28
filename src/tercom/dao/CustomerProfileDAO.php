@@ -17,6 +17,11 @@ use tercom\entities\lists\CustomerProfiles;
 class CustomerProfileDAO extends GenericDAO
 {
 	/**
+	 * @var array
+	 */
+	public const ALL_COLUMNS = ['id', 'idCustomer', 'name', 'assignmentLevel'];
+
+	/**
 	 *
 	 * @param CustomerProfile $customerProfile
 	 * @param bool $validateID
@@ -181,6 +186,27 @@ class CustomerProfileDAO extends GenericDAO
 		$result = $query->execute();
 
 		return $this->parseCustomerProfiles($result);
+	}
+
+	/**
+	 *
+	 * @param int $idCustomerProfile
+	 * @return bool
+	 */
+	public function exist(int $idCustomerProfile): bool
+	{
+		$sql = "SELECT COUNT(*) qty
+				FROM customer_profiles
+				WHERE id = ?";
+
+		$query = $this->createQuery($sql);
+		$query->setInteger(1, $idCustomerProfile);
+
+		$result = $query->execute();
+		$entry = $result->next();
+		$result->free();
+
+		return intval($entry['qty']) === 1;
 	}
 
 	/**

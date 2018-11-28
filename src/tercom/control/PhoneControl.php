@@ -118,6 +118,16 @@ class PhoneControl extends GenericControl
 	}
 
 	/**
+	 *
+	 * @param int $idPhone
+	 * @return bool
+	 */
+	public function has(int $idPhone): bool
+	{
+		return $this->phoneDAO->exist($idPhone);
+	}
+
+	/**
 	 * Carrega os dados do banco de dados de um telefone já existente conforme:
 	 * @param Phone $phone referência do telefone, necessário ID especificado.
 	 * @return bool true se conseguir carregar os dados ou false caso contrário.

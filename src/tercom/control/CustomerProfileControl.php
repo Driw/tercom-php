@@ -137,6 +137,16 @@ class CustomerProfileControl extends GenericControl
 
 	/**
 	 *
+	 * @param int $idCustomerProfile
+	 * @return bool
+	 */
+	public function has(int $idCustomerProfile): bool
+	{
+		return $this->customerProfileDAO->exist($idCustomerProfile);
+	}
+
+	/**
+	 *
 	 * @param Customer $customer
 	 * @param string $name
 	 * @param int $idCustomerProfile

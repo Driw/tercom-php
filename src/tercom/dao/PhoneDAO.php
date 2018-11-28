@@ -147,6 +147,27 @@ class PhoneDAO extends GenericDAO
 	}
 
 	/**
+	 *
+	 * @param int $idPhone
+	 * @return bool
+	 */
+	public function exist(int $idPhone): bool
+	{
+		$sql = "SELECT COUNT(*) qty
+				FROM phones
+				WHERE id = ?";
+
+		$query = $this->createQuery($sql);
+		$query->setInteger(1, $idPhone);
+
+		$result = $query->execute();
+		$entry = $result->next();
+		$result->free();
+
+		return intval($entry['qty']) === 1;
+	}
+
+	/**
 	 * Procedimento interno para analisar o resultado de uma consulta no banco de addos.
 	 * Esse resultado é esperado que haja apena sum único telefone, portanto ignora outros.
 	 * @param Result $result resultado otvido da seleção de telefone do banco de dados.
