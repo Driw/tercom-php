@@ -122,7 +122,103 @@ class ManagePermissionsService extends RelationshipService
 
 		$result = new ApiResultObject();
 		$result->setObject($permissions);
-		$result->setMessage('encontrado %d permissões para o perfil de cliente', $permissions->size());
+		$result->setMessage('encontrado %d permissões no perfil', $permissions->size());
+
+		return $result;
+	}
+
+	/**
+	 *
+	 * @param ApiContent $content
+	 * @param int $idTercomProfile
+	 */
+	protected function addTercomPermission(ApiContent $content, int $idTercomProfile): ApiResultObject
+	{
+		$idPermission = $content->getPost()->getInt('idPermission');
+		$tercomProfile = $this->getTercomProfileControl()->get($idTercomProfile);
+		$permission = $this->getPermissionControl()->get($idPermission);
+		$this->getTercomPermissionControl()->addRelationship($tercomProfile, $permission);
+
+		$result = new ApiResultObject();
+		$result->setObject($permission);
+		$result->setMessage('permissão para "%s.%s" adicionada com êxito', $permission->getPacket(), $permission->getAction());
+
+		return $result;
+	}
+
+	/**
+	 *
+	 * @param ApiContent $content
+	 * @param int $idTercomProfile
+	 * @param int $idPermission
+	 */
+	protected function setTercomPermission(ApiContent $content, int $idTercomProfile, int $idPermission): ApiResultObject
+	{
+		$customerProfile = $this->getTercomProfileControl()->get($idTercomProfile);
+		$permission = $this->getPermissionControl()->get($idPermission);
+
+		$result = new ApiResultObject();
+		$result->setObject($permission);
+
+		if ($this->getTercomPermissionControl()->setRelationship($customerProfile, $permission))
+			$result->setMessage('permissão para "%s.%s" verificada com êxito', $permission->getPacket(), $permission->getAction());
+		else
+			$result->setMessage('permissão "%s.%s" desvinculada por nível de assinatura insuficiente', $permission->getPacket(), $permission->getAction());
+
+		return $result;
+	}
+
+	/**
+	 *
+	 * @param ApiContent $content
+	 * @param int $idTercomProfile
+	 * @param int $idPermission
+	 */
+	protected function removeTercomPermission(ApiContent $content, int $idTercomProfile, int $idPermission): ApiResultObject
+	{
+		$tercomProfile = $this->getTercomProfileControl()->get($idTercomProfile);
+		$permission = $this->getPermissionControl()->get($idPermission);
+		$this->getTercomPermissionControl()->removeRelationship($tercomProfile, $permission);
+
+		$result = new ApiResultObject();
+		$result->setObject($permission);
+		$result->setMessage('permissão para "%s.%s" excluída com êxito', $permission->getPacket(), $permission->getAction());
+
+		return $result;
+	}
+
+	/**
+	 *
+	 * @param ApiContent $content
+	 * @param int $idTercomProfile
+	 * @param int $idPermission
+	 */
+	protected function getTercomPermission(ApiContent $content, int $idTercomProfile, int $idPermission): ApiResultObject
+	{
+		$tercomProfile = $this->getTercomProfileControl()->get($idTercomProfile);
+		$permission = $this->getTercomPermissionControl()->getRelationship($tercomProfile, $idPermission);
+
+		$result = new ApiResultObject();
+		$result->setObject($permission);
+		$result->setMessage('permissão para "%s.%s" obtida com êxito', $permission->getPacket(), $permission->getAction());
+
+		return $result;
+	}
+
+	/**
+	 *
+	 * @param ApiContent $content
+	 * @param int $idTercomProfile
+	 * @param int $idPermission
+	 */
+	protected function getAllTercomPermission(ApiContent $content, int $idTercomProfile): ApiResultObject
+	{
+		$tercomProfile = $this->getTercomProfileControl()->get($idTercomProfile);
+		$permissions = $this->getTercomPermissionControl()->getRelationships($tercomProfile);
+
+		$result = new ApiResultObject();
+		$result->setObject($permissions);
+		$result->setMessage('encontrado %d permissões no perfil', $permissions->size());
 
 		return $result;
 	}
