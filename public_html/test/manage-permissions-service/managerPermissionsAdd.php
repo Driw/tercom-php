@@ -15,6 +15,7 @@ include '../include.php';
 	<p>Relação ID: <input type='text' name='idRelationship'></p>
 	<p>Relação: <select name='relationship'>
 		<option value="customer">Permissão para Cliente</option>
+		<option value="tercom">Permissão para Tercom</option>
 	</select></p>
 	<input type='submit' value='Continuar'>
 </form>

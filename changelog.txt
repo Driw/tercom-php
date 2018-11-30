@@ -20,10 +20,13 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
-30.11.2018 - 0.2.7.107
+30.11.2018 - 0.2.7.109
+- Atualizado scripts de testes para o webservice que gerencia as permissões para as de funcionários da TERCOM também.
+
+30.11.2018 - 0.2.7.108
 - Implementação do webservice para gerenciamento das permissões para funcionários da TERCOM.
 
-30.11.2018 - 0.2.7.105
+30.11.2018 - 0.2.7.107
 - Adicionado scripts de testes para o webservice que gerencia os funcionários da TERCOM.
 
 30.11.2018 - 0.2.7.106
