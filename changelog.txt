@@ -20,6 +20,9 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+30.11.2018 - 0.2.7.110
+- Corrigido CustomerPermissionDAO onde select() não estava considerando 'idPermission'.
+
 30.11.2018 - 0.2.7.109
 - Atualizado scripts de testes para o webservice que gerencia as permissões para as de funcionários da TERCOM também.
 

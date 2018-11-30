@@ -102,10 +102,11 @@ class CustomerPermissionDAO extends GenericDAO
 	{
 		$sqlPermission = $this->newSelectPermission();
 		$sql = "$sqlPermission
-				WHERE customer_profile_permissions.idCustomerProfile = ?";
+				WHERE customer_profile_permissions.idCustomerProfile = ? AND customer_profile_permissions.$idPermission = ?";
 
 		$query = $this->createQuery($sql);
 		$query->setInteger(1, $customerProfile->getId());
+		$query->setInteger(2, $idPermission);
 
 		$result = $query->execute();
 
