@@ -20,6 +20,7 @@ use tercom\control\ProviderContactControl;
 use tercom\control\ProviderControl;
 use tercom\control\ServiceControl;
 use tercom\control\ServicePriceControl;
+use tercom\control\TercomEmployeeControl;
 use tercom\control\TercomProfileControl;
 
 /**
@@ -81,6 +82,10 @@ class DefaultSiteService extends ApiServiceInterface
 	 * @var TercomProfileControl
 	 */
 	private $tercomProfileControl;
+	/**
+	 * @var TercomEmployeeControl
+	 */
+	private $tercomEmployeeControl;
 
 	/**
 	 * Cria uma nova instância de um serviço para gerenciamento de stores dos produtos no sistema.
@@ -263,6 +268,16 @@ class DefaultSiteService extends ApiServiceInterface
 		return $this->tercomProfileControl === null ?
 			($this->tercomProfileControl = new TercomProfileControl()) :
 			$this->tercomProfileControl;
+	}
+
+	/**
+	 * @return TercomEmployeeControl
+	 */
+	protected function getTercomEmployeeControl(): TercomEmployeeControl
+	{
+		return $this->tercomEmployeeControl === null ?
+			($this->tercomEmployeeControl = new TercomEmployeeControl()) :
+			$this->tercomEmployeeControl;
 	}
 }
 

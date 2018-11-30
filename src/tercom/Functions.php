@@ -12,6 +12,10 @@ class Functions
 	 * @var string padronização de formato para CNPJ.
 	 */
 	public const PATTERN_CNPJ = '/[0-9]{2}\.?[0-9]{3}\.?[0-9]{3}\/?[0-9]{4}\-?[0-9]{2}/';
+	/**
+	 * @var string padronização de formato para CNPJ.
+	 */
+	public const PATTERN_CPF = '/[0-9]{3}\.?[0-9]{3}\.?[0-9]{3}\-?[0-9]{2}/';
 
 	/**
 	 * Exibe um alerta em javascript visível apenas como mensagem.
@@ -271,7 +275,7 @@ class Functions
 	 */
 	public static function validateCPF(string &$cpf):bool
 	{
-		if (!preg_match(self::PATTERN_CNPJ, $cpf))
+		if (!preg_match(self::PATTERN_CPF, $cpf))
 			return false;
 
 		$cpf = preg_replace('/[^0-9]/', '', (string) $cpf);
