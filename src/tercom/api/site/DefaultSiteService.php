@@ -6,20 +6,21 @@ use dProject\MySQL\MySQL;
 use dProject\restful\ApiConnection;
 use dProject\restful\ApiResult;
 use dProject\restful\ApiServiceInterface;
+use tercom\core\System;
 use tercom\control\CustomerAddressControl;
 use tercom\control\CustomerControl;
+use tercom\control\CustomerEmployeeControl;
+use tercom\control\CustomerPermissionControl;
 use tercom\control\CustomerPhoneControl;
+use tercom\control\CustomerProfileControl;
 use tercom\control\PermissionControl;
 use tercom\control\PhoneControl;
+use tercom\control\ProductCategoryControl;
 use tercom\control\ProviderContactControl;
 use tercom\control\ProviderControl;
 use tercom\control\ServiceControl;
 use tercom\control\ServicePriceControl;
-use tercom\core\System;
-use tercom\control\CustomerProfileControl;
-use tercom\control\CustomerPermissionControl;
-use tercom\control\ProductCategoryControl;
-use tercom\control\CustomerEmployeeControl;
+use tercom\control\TercomProfileControl;
 
 /**
  * @see ApiServiceInterface
@@ -76,6 +77,10 @@ class DefaultSiteService extends ApiServiceInterface
 	 * @var CustomerEmployeeControl
 	 */
 	private $customerEmployeeControl;
+	/**
+	 * @var TercomProfileControl
+	 */
+	private $tercomProfileControl;
 
 	/**
 	 * Cria uma nova instância de um serviço para gerenciamento de stores dos produtos no sistema.
@@ -248,6 +253,16 @@ class DefaultSiteService extends ApiServiceInterface
 		return $this->customerEmployeeControl === null ?
 			($this->customerEmployeeControl = new CustomerEmployeeControl()) :
 			$this->customerEmployeeControl;
+	}
+
+	/**
+	 * @return TercomProfileControl
+	 */
+	protected function getTercomProfileControl(): TercomProfileControl
+	{
+		return $this->tercomProfileControl === null ?
+			($this->tercomProfileControl = new TercomProfileControl()) :
+			$this->tercomProfileControl;
 	}
 }
 

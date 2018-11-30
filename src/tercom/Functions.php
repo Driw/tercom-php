@@ -228,7 +228,6 @@ class Functions
 	 * @return bool true se for válido ou false caso contrário.
 	 * @link https://gist.github.com/guisehn/3276302
 	 */
-
 	public static function validateCNPJ(string &$cnpj):bool
 	{
 		if (!preg_match(self::PATTERN_CNPJ, $cnpj))
@@ -262,6 +261,41 @@ class Functions
 		$remainder = $sum % 11;
 
 		return $cnpj{13} == ($remainder < 2 ? 0 : 11 - $remainder);
+	}
+
+	/**
+	 * Procedimento para validar um número de CPF das pessoas no sistema.
+	 * @param string $cpf cadastro de pessoa física.
+	 * @return bool true se for válido ou false caso contrário.
+	 * @link https://gist.github.com/guisehn/3276015
+	 */
+	public static function validateCPF(string &$cpf):bool
+	{
+		if (!preg_match(self::PATTERN_CNPJ, $cpf))
+			return false;
+
+		$cpf = preg_replace('/[^0-9]/', '', (string) $cpf);
+
+		// Valida tamanho
+		if (strlen($cpf) != 11)
+			return false;
+
+		// Calcula e confere primeiro dígito verificador
+		for ($i = 0, $j = 10, $soma = 0; $i < 9; $i++, $j--)
+			$soma += $cpf{$i} * $j;
+
+		$resto = $soma % 11;
+
+		if ($cpf{9} != ($resto < 2 ? 0 : 11 - $resto))
+			return false;
+
+		// Calcula e confere segundo dígito verificador
+		for ($i = 0, $j = 11, $soma = 0; $i < 10; $i++, $j--)
+			$soma += $cpf{$i} * $j;
+
+		$resto = $soma % 11;
+
+		return $cpf{10} == ($resto < 2 ? 0 : 11 - $resto);
 	}
 
 	/**
