@@ -3,9 +3,11 @@
 namespace tercom\api\site;
 
 use dProject\restful\ApiContent;
+use tercom\api\exceptions\FilterException;
 use tercom\api\site\results\ApiResultObject;
-use tercom\entities\TercomEmployee;
+use tercom\api\site\results\ApiResultSimpleValidation;
 use tercom\api\site\results\ApiResultTercomEmployeeSettings;
+use tercom\entities\TercomEmployee;
 
 /**
  * @author Andrew
@@ -176,6 +178,62 @@ class TercomEmployeeService extends DefaultSiteService
 		$result = new ApiResultObject();
 		$result->setObject($tercomEmployees);
 		$result->setMessage('encontrado %d funcionários da TERCOM no perfil "%s"', $tercomEmployees->size(), $tercomProfile->getName());
+
+		return $result;
+	}
+
+	/**
+	 *
+	 * @ApiAnnotation({"params":["filter","value","idTercomEmployee"]})
+	 * @param ApiContent $content
+	 * @throws FilterException
+	 * @return ApiResultSimpleValidation
+	 */
+	public function actionAvaiable(ApiContent $content): ApiResultSimpleValidation
+	{
+		$filter = $content->getParameters()->getString('filter');
+
+		switch ($filter)
+		{
+			case 'cpf': return $this->avaiableCpf($content);
+			case 'email': return $this->avaiableEmail($content);
+		}
+
+		throw new FilterException($filter);
+	}
+
+	/**
+	 *
+	 * @param ApiContent $content
+	 * @return ApiResultSimpleValidation
+	 */
+	public function avaiableCpf(ApiContent $content): ApiResultSimpleValidation
+	{
+		$parameters = $content->getParameters();
+		$cpf = $parameters->getString('value');
+		$idTercomEmployee = $this->parseNullToInt($parameters->getInt('idTercomEmployee'));
+		$avaiable = $this->getTercomEmployeeControl()->avaiableCpf($cpf, $idTercomEmployee);
+
+		$result = new ApiResultSimpleValidation();
+		$result->setOkMessage($avaiable, 'CPF "%s" %s', $cpf, $avaiable ? 'disponível' : 'indisponível');
+
+		return $result;
+	}
+
+	/**
+	 *
+	 * @param ApiContent $content
+	 * @return ApiResultSimpleValidation
+	 */
+	public function avaiableEmail(ApiContent $content): ApiResultSimpleValidation
+	{
+		$parameters = $content->getParameters();
+		$email = $parameters->getString('value');
+		$idTercomEmployee = $this->parseNullToInt($parameters->getInt('idTercomEmployee'));
+		$avaiable = $this->getTercomEmployeeControl()->avaiableEmail($email, $idTercomEmployee);
+
+		$result = new ApiResultSimpleValidation();
+		$result->setOkMessage($avaiable, 'endereço de e-mail "%s" %s', $email, $avaiable ? 'disponível' : 'indisponível');
 
 		return $result;
 	}

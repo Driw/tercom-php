@@ -160,6 +160,9 @@ class CustomerEmployee extends AdvancedObject
 	 */
 	public function setEmail(string $email)
 	{
+		if (!filter_var($email, FILTER_VALIDATE_EMAIL))
+			throw new EntityParseException("endereço de e-mail inválido (email: $email)");
+
 		if (!StringUtil::hasMaxLength($email, self::MAX_EMAIL_LEN))
 			throw EntityParseException::new("endereço de e-mail deve possuir até %d caracteres", self::MAX_EMAIL_LEN);
 

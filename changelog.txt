@@ -20,6 +20,13 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+05.12.2018 - 0.2.7.111
+- Adicionado como campos únicos o endereço de e-mail para funcionário da TERCOM e funcionário do cliente.
+- Adciionado ações para o webservice de funcionário da TERCOM para verificar disponibilidade de CPF e endereço de e-mail.
+- Adciionado ações para o webservice de funcionário do cliente para verificar disponibilidade de endereço de e-mail.
+- Adicionado scripsts para testes das novas ações disponíveis nos webservices.
+- Atualização da 'tabela.sql' conforme revisões recentes.
+
 30.11.2018 - 0.2.7.110
 - Corrigido CustomerPermissionDAO onde select() não estava considerando 'idPermission'.
 

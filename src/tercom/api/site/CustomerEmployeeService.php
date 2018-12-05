@@ -3,7 +3,10 @@
 namespace tercom\api\site;
 
 use dProject\restful\ApiContent;
+use tercom\api\exceptions\FilterException;
+use tercom\api\site\results\ApiResultCustomerEmployeeSettings;
 use tercom\api\site\results\ApiResultObject;
+use tercom\api\site\results\ApiResultSimpleValidation;
 use tercom\entities\CustomerEmployee;
 
 /**
@@ -11,6 +14,16 @@ use tercom\entities\CustomerEmployee;
  */
 class CustomerEmployeeService extends DefaultSiteService
 {
+	/**
+	 *
+	 * @param ApiContent $content
+	 * @return ApiResultCustomerEmployeeSettings
+	 */
+	public function actionSettings(ApiContent $content): ApiResultCustomerEmployeeSettings
+	{
+		return new ApiResultCustomerEmployeeSettings();
+	}
+
 	/**
 	 *
 	 * @ApiAnnotation({"method":"post"})
@@ -182,6 +195,43 @@ class CustomerEmployeeService extends DefaultSiteService
 		$result = new ApiResultObject();
 		$result->setObject($customerEmployees);
 		$result->setMessage('encontrado %d funcionários no perfil "%s"', $customerEmployees->size(), $customerProfile->getName());
+
+		return $result;
+	}
+
+	/**
+	 *
+	 * @ApiAnnotation({"params":["filter","value","idCustomerEmployee"]})
+	 * @param ApiContent $content
+	 * @throws FilterException
+	 * @return ApiResultSimpleValidation
+	 */
+	public function actionAvaiable(ApiContent $content): ApiResultSimpleValidation
+	{
+		$filter = $content->getParameters()->getString('filter');
+
+		switch ($filter)
+		{
+			case 'email': return $this->avaiableEmail($content);
+		}
+
+		throw new FilterException($filter);
+	}
+
+	/**
+	 *
+	 * @param ApiContent $content
+	 * @return ApiResultSimpleValidation
+	 */
+	public function avaiableEmail(ApiContent $content): ApiResultSimpleValidation
+	{
+		$parameters = $content->getParameters();
+		$email = $parameters->getString('value');
+		$idCustomerEmployee = $this->parseNullToInt($parameters->getInt('idCustomerEmployee'));
+		$avaiable = $this->getCustomerEmployeeControl()->avaiableEmail($email, $idCustomerEmployee);
+
+		$result = new ApiResultSimpleValidation();
+		$result->setOkMessage($avaiable, 'endereço de e-mail "%s" %s', $email, $avaiable ? 'disponível' : 'indisponível');
 
 		return $result;
 	}

@@ -222,6 +222,28 @@ class CustomerEmployeeDAO extends GenericDAO
 
 	/**
 	 *
+	 * @param string $email
+	 * @param int $idCustomerEmployee
+	 * @return bool
+	 */
+	public function existEmail(string $email, int $idCustomerEmployee = 0): bool
+	{
+		$sql = "SELECT COUNT(*) qty
+				FROM customer_employees
+				WHERE email = ? AND id <> ?";
+
+		$query = $this->createQuery($sql);
+		$query->setString(1, $email);
+		$query->setInteger(2, $idCustomerEmployee);
+
+		$result = $query->execute();
+		$entry = $result->next();
+
+		return intval($entry['qty']) > 0;
+	}
+
+	/**
+	 *
 	 * @param Result $result
 	 * @return CustomerEmployee|NULL
 	 */

@@ -50,6 +50,9 @@ class CustomerEmployeeControl extends GenericControl
 		if (!$this->customerProfileControl->has($customerEmployee->getCustomerProfileId()))
 			throw new ControlException('perfil não encontrado');
 
+		if (!$this->avaiableEmail($customerEmployee->getEmail(), $customerEmployee->getId()))
+			throw new ControlException('CPF indisponível');
+
 		if ($customerEmployee->getPhone()->getId() !== 0)
 			if ($this->phoneControl->has($customerEmployee->getPhone()->getId()))
 				throw new ControlException('número de telefone não encontrado');
@@ -155,6 +158,20 @@ class CustomerEmployeeControl extends GenericControl
 	public function getByCustomerProfile(CustomerProfile $customerProfile): CustomerEmployees
 	{
 		return $this->customerEmployeeDAO->selectByProfile($customerProfile);
+	}
+
+	/**
+	 *
+	 * @param string $email
+	 * @param int $idCustomerEmployee
+	 * @return bool
+	 */
+	public function avaiableEmail(string $email, int $idCustomerEmployee = 0): bool
+	{
+		if (!filter_var($email, FILTER_VALIDATE_EMAIL))
+			throw new ControlException('endereço de e-mail inválido');
+
+		return !$this->customerEmployeeDAO->existEmail($email, $idCustomerEmployee);
 	}
 }
 

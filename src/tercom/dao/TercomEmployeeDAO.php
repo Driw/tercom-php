@@ -147,6 +147,25 @@ class TercomEmployeeDAO extends GenericDAO
 
 	/**
 	 *
+	 * @param string $email
+	 * @return TercomEmployee
+	 */
+	public function selectByEmail(string $email): ?TercomEmployee
+	{
+		$sqlSelectProfile = $this->newSelectProfile();
+		$sql = "$sqlSelectProfile
+				WHERE tercom_employees.email = ?";
+
+		$query = $this->createQuery($sql);
+		$query->setString(1, $email);
+
+		$result = $query->execute();
+
+		return $this->parseTercomEmployee($result);
+	}
+
+	/**
+	 *
 	 * @return TercomEmployees
 	 */
 	public function selectAll(): TercomEmployees
@@ -204,6 +223,7 @@ class TercomEmployeeDAO extends GenericDAO
 	/**
 	 *
 	 * @param string $cpf
+	 * @param int $idTercomEmployee
 	 * @return bool
 	 */
 	public function existCpf(string $cpf, int $idTercomEmployee = 0): bool
@@ -214,6 +234,28 @@ class TercomEmployeeDAO extends GenericDAO
 
 		$query = $this->createQuery($sql);
 		$query->setString(1, $cpf);
+		$query->setInteger(2, $idTercomEmployee);
+
+		$result = $query->execute();
+		$entry = $result->next();
+
+		return intval($entry['qty']) > 0;
+	}
+
+	/**
+	 *
+	 * @param string $email
+	 * @param int $idTercomEmployee
+	 * @return bool
+	 */
+	public function existEmail(string $email, int $idTercomEmployee = 0): bool
+	{
+		$sql = "SELECT COUNT(*) qty
+				FROM tercom_employees
+				WHERE email = ? AND id <> ?";
+
+		$query = $this->createQuery($sql);
+		$query->setString(1, $email);
 		$query->setInteger(2, $idTercomEmployee);
 
 		$result = $query->execute();

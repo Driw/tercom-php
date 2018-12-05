@@ -14,7 +14,7 @@ include '../include.php';
 			header('Content-type: text/html');
 ?>
 <form method='get'>
-	<p>Funcionário de Cliente ID: <input type='text' name='idTercomEmployee'></p>
+	<p>Funcionário da TERCOM ID: <input type='text' name='idTercomEmployee'></p>
 	<p>Perfil de Cliente ID: <input type='text' name='idTercomProfile'></p>
 	<p>CPF: <input type='text' name='cpf' value='<?php echo $pessoa['cpf']; ?>'></p>
 	<p>Nome: <input type='text' name='name' value='<?php echo $pessoa['nome']; ?>'></p>

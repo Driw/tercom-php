@@ -6,6 +6,7 @@ use tercom\dao\TercomEmployeeDAO;
 use tercom\entities\TercomEmployee;
 use tercom\entities\TercomProfile;
 use tercom\entities\lists\TercomEmployees;
+use tercom\Functions;
 
 /**
  * @see GenericControl
@@ -50,6 +51,9 @@ class TercomEmployeeControl extends GenericControl
 			throw new ControlException('perfil não encontrado');
 
 		if (!$this->avaiableCpf($tercomEmployee->getCpf(), $tercomEmployee->getId()))
+			throw new ControlException('CPF indisponível');
+
+		if (!$this->avaiableEmail($tercomEmployee->getEmail(), $tercomEmployee->getId()))
 			throw new ControlException('CPF indisponível');
 
 		if ($tercomEmployee->getPhone()->getId() !== 0)
@@ -116,6 +120,19 @@ class TercomEmployeeControl extends GenericControl
 
 	/**
 	 *
+	 * @param string $email
+	 * @return TercomEmployee
+	 */
+	public function getByEmail(string $email): TercomEmployee
+	{
+		if (($tercomEmployee = $this->tercomEmployeeDAO->selectByEmail($email)) === null)
+			throw new ControlException('endereço de e-mail não registrado');
+
+		return $tercomEmployee;
+	}
+
+	/**
+	 *
 	 * @throws ControlException
 	 * @return TercomEmployees
 	 */
@@ -146,13 +163,30 @@ class TercomEmployeeControl extends GenericControl
 
 	/**
 	 *
-	 * @param string $cpf
+	 * @param string $email
 	 * @param int $idTercomEmployee
 	 * @return bool
 	 */
 	public function avaiableCpf(string $cpf, int $idTercomEmployee = 0): bool
 	{
+		if (!Functions::validateCPF($cpf))
+			throw new ControlException('CPF inválido');
+
 		return !$this->tercomEmployeeDAO->existCpf($cpf, $idTercomEmployee);
+	}
+
+	/**
+	 *
+	 * @param string $email
+	 * @param int $idTercomEmployee
+	 * @return bool
+	 */
+	public function avaiableEmail(string $email, int $idTercomEmployee = 0): bool
+	{
+		if (!filter_var($email, FILTER_VALIDATE_EMAIL))
+			throw new ControlException('endereço de e-mail inválido');
+
+		return !$this->tercomEmployeeDAO->existEmail($email, $idTercomEmployee);
 	}
 }
 
