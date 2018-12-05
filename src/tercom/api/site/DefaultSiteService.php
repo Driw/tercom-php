@@ -13,6 +13,8 @@ use tercom\control\CustomerEmployeeControl;
 use tercom\control\CustomerPermissionControl;
 use tercom\control\CustomerPhoneControl;
 use tercom\control\CustomerProfileControl;
+use tercom\control\LoginCustomerControl;
+use tercom\control\LoginTercomControl;
 use tercom\control\PermissionControl;
 use tercom\control\PhoneControl;
 use tercom\control\ProductCategoryControl;
@@ -91,6 +93,14 @@ class DefaultSiteService extends ApiServiceInterface
 	 * @var TercomPermissionControl
 	 */
 	private $tercomPermissionControl;
+	/**
+	 * @var LoginTercomControl
+	 */
+	private $loginTercomControl;
+	/**
+	 * @var LoginCustomerControl
+	 */
+	private $loginCustomerControl;
 
 	/**
 	 * Cria uma nova instância de um serviço para gerenciamento de stores dos produtos no sistema.
@@ -293,6 +303,26 @@ class DefaultSiteService extends ApiServiceInterface
 		return $this->tercomPermissionControl === null ?
 			($this->tercomPermissionControl = new TercomPermissionControl()) :
 			$this->tercomPermissionControl;
+	}
+
+	/**
+	 * @return LoginTercomControl
+	 */
+	protected function getLoginTercomControl(): LoginTercomControl
+	{
+		return $this->loginTercomControl === null ?
+			($this->loginTercomControl = new LoginTercomControl()) :
+			$this->loginTercomControl;
+	}
+
+	/**
+	 * @return LoginCustomerControl
+	 */
+	protected function getLoginCustomerControl(): LoginCustomerControl
+	{
+		return $this->loginCustomerControl === null ?
+			($this->loginCustomerControl = new LoginCustomerControl()) :
+			$this->loginCustomerControl;
 	}
 }
 

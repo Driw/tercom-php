@@ -28,6 +28,7 @@ class GeradorDeDados
 		curl_setopt($curl, CURLOPT_POSTFIELDS, $post);
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($curl, CURLOPT_FRESH_CONNECT, true);
+		curl_setopt($curl, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);
 
 		$response = curl_exec($curl);
 		$error = curl_error($curl);

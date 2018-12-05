@@ -126,7 +126,7 @@ class CustomerEmployeeDAO extends GenericDAO
 
 	/**
 	 *
-	 * @param int $idCustomerEmployee
+	 * @param int $email
 	 * @return CustomerEmployee
 	 */
 	public function select(int $idCustomerEmployee): ?CustomerEmployee
@@ -137,6 +137,25 @@ class CustomerEmployeeDAO extends GenericDAO
 
 		$query = $this->createQuery($sql);
 		$query->setInteger(1, $idCustomerEmployee);
+
+		$result = $query->execute();
+
+		return $this->parseCustomerEmployee($result);
+	}
+
+	/**
+	 *
+	 * @param string $email
+	 * @return CustomerEmployee
+	 */
+	public function selectByEmail(string $email): ?CustomerEmployee
+	{
+		$sqlSelectProfile = $this->newSelectProfile();
+		$sql = "$sqlSelectProfile
+				WHERE customer_employees.email = ?";
+
+		$query = $this->createQuery($sql);
+		$query->setString(1, $email);
 
 		$result = $query->execute();
 
@@ -223,7 +242,7 @@ class CustomerEmployeeDAO extends GenericDAO
 	/**
 	 *
 	 * @param string $email
-	 * @param int $idCustomerEmployee
+	 * @param int $email
 	 * @return bool
 	 */
 	public function existEmail(string $email, int $idCustomerEmployee = 0): bool

@@ -20,6 +20,12 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+05.12.2018 - 0.2.7.112
+- Implementação dos webservices para acesso dos funcionários da TERCOM e funcionários de clientes.
+- Agora ao gerar dados será informado 'CURLOPT_USERAGENT' para considerar como 'navegador'.
+- Adicionado métodos para obter funcionários por endereço de e-mail em CustomerEmployeeDAO e TercomEmployeeDAO.
+- 
+
 05.12.2018 - 0.2.7.111
 - Adicionado como campos únicos o endereço de e-mail para funcionário da TERCOM e funcionário do cliente.
 - Adciionado ações para o webservice de funcionário da TERCOM para verificar disponibilidade de CPF e endereço de e-mail.

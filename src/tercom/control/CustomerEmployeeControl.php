@@ -122,6 +122,19 @@ class CustomerEmployeeControl extends GenericControl
 
 	/**
 	 *
+	 * @param string $email
+	 * @return CustomerEmployee
+	 */
+	public function getByEmail(string $email): CustomerEmployee
+	{
+		if (($customerEmployee = $this->customerEmployeeDAO->selectByEmail($email)) === null)
+			throw new ControlException('endereço de e-mail não registrado');
+
+		return $customerEmployee;
+	}
+
+	/**
+	 *
 	 * @throws ControlException
 	 * @return CustomerEmployees
 	 */
