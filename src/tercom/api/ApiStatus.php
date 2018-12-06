@@ -11,7 +11,13 @@ class ApiStatus
 	public const FILTER = 4;
 	public const RELATIONSHIP = 5;
 
-	public const PROVIDER_NOTFOUND = 101;
+	public const PROVIDER_IDENTIFIED = 101;
+	public const PROVIDER_NOT_IDENTIFIED = 102;
+	public const PROVIDER_CNPJ_EMPTY = 103;
+	public const PROVIDER_COMPANY_NAME_EMPTY = 104;
+	public const PROVIDER_FANTASY_NAME_EMPTY = 105;
+	public const PROVIDER_NOTFOUND = 106;
+	public const PROVIDER_CNPJ_UNAVAIABLE = 107;
 
 	public const SERVICE_NOT_ADD = 401;
 	public const SERVICE_NOT_SET = 402;

@@ -20,6 +20,19 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+06.12.2018 - 0.3.0.114
+- Removido trycatch em ProviderService, as exceptions hoje são tratadas por ApiListener.
+- Movido algumas verificações de ProviderService para ProviderControl.
+- Agora telefone comercial, secundário e lista de contados sempre serão nulas se não existirem.
+	- Antes o objeto era instanciado porém com valores em branco e id zero.
+- Substituído alguns ApiResult por ApiResultObject em ProviderService.
+- Movido scripts de teste dos webservices para a pasta 'provider-service'.
+	- Renomeado 'providerGenerator' para 'providerAdd' e 'providerUpdate' para 'providerSet'.
+- Agora as exceções geradas ao gerenciar Provider terá um status diferente para cada problema.
+- Corrigido ApiResult que não estava implementado o método setResult() esperado e utilizado.
+- Corrigido PhoneControl onde keepPhones() não retornava 'true' em nenhuma hipótese.
+- Novo método adicionado à GenericDAO para simplificar a instância de entidades, parseEntry().
+
 05.12.2018 - 0.2.7.113
 - Scripts de teste dos webservice para acesso dos funcionários da TERCOM e funcionários de clientes.
 

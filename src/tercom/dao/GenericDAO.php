@@ -102,6 +102,42 @@ class GenericDAO
 		return $id === 0 ? null : $id;
 	}
 
+	protected function parseEntry(array &$entry)
+	{
+		$prefixes = array_slice(func_get_args(), 1);
+
+		foreach ($prefixes as $prefix)
+			foreach ($entry as $field => $value)
+				if (StringUtil::startsWith($field, $prefix))
+				{
+					unset($entry[$field]);
+					$prefixField = substr($field, strlen($prefix) + 1);
+					$entry[$prefix][$prefixField] = $value;
+				}
+
+		$this->parseNullEntries($entry);
+	}
+
+	protected function parseNullEntries(array &$entry)
+	{
+		foreach ($entry as $field => $value)
+		{
+			if (!is_array($value))
+			{
+				if ($field === 'id' && $value === null)
+					return false;
+			}
+
+			else
+			{
+				if (!$this->parseNullEntries($value))
+					unset($entry[$field]);
+			}
+		}
+
+		return true;
+	}
+
 	public function beginTransaction()
 	{
 		$sql = "START TRANSACTION";
