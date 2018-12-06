@@ -242,7 +242,7 @@ class Provider extends AdvancedObject
 	/**
 	 * @param Phone $commercial número de telefone commercial.
 	 */
-	public function setCommercial(?Phone $commercial)
+	public function setCommercial(?Phone $commercial): void
 	{
 		$this->commercial = $commercial;
 	}
@@ -266,7 +266,7 @@ class Provider extends AdvancedObject
 	/**
 	 * @param Phone $otherPhone número de telefone secundário
 	 */
-	public function setOtherPhone(?Phone $otherPhone)
+	public function setOtherPhone(?Phone $otherPhone): void
 	{
 		$this->otherphone = $otherPhone;
 	}
@@ -303,7 +303,7 @@ class Provider extends AdvancedObject
 	/**
 	 * @param boolean $inactive fornecedor está ativo ou não no sistema.
 	 */
-	public function setInactive(bool $inactive)
+	public function setInactive(bool $inactive): void
 	{
 		$this->inactive = $inactive;
 	}
@@ -317,10 +317,18 @@ class Provider extends AdvancedObject
 	}
 
 	/**
+	 * @param ProviderContacts $providerContacts lista de contatos do fornecedor.
+	 */
+	public function setContacts(ProviderContacts $providerContacts): void
+	{
+		$this->contacts = $providerContacts;
+	}
+
+	/**
 	 * {@inheritDoc}
 	 * @see \dProject\Primitive\AdvancedObject::getParamTypes()
 	 */
-	public function getAttributeTypes():array
+	public function getAttributeTypes(): array
 	{
 		return [
 			'id' => ObjectUtil::TYPE_INTEGER,

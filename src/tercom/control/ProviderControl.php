@@ -87,13 +87,13 @@ class ProviderControl extends GenericControl
 
 	/**
 	 * Obtém um fornecedor no sistema através do seu código de identificação único.
-	 * @param int $providerID código de identificação único do fornecedor.
+	 * @param int $idProvider código de identificação único do fornecedor.
 	 * @throws ProviderException ocorre apenas se o fornecedor não existir.
 	 * @return Provider aquisição do objeto de fornecedor desejado.
 	 */
-	public function get(int $providerID): Provider
+	public function get(int $idProvider): Provider
 	{
-		if (($provider = $this->providerDAO->selectByID($providerID)) === null)
+		if (($provider = $this->providerDAO->selectByID($idProvider)) === null)
 			throw ProviderException::newNotFound();
 
 		return $provider;

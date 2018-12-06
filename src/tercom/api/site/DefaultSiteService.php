@@ -42,6 +42,10 @@ class DefaultSiteService extends ApiServiceInterface
 	 */
 	private $providerControl;
 	/**
+	 * @var ProviderContactControl
+	 */
+	private $providerContactControl;
+	/**
 	 * @var ProductCategoryControl
 	 */
 	private $productCategoryControl;
@@ -144,24 +148,6 @@ class DefaultSiteService extends ApiServiceInterface
 	}
 
 	/**
-	 * @return ProviderControl
-	 */
-
-	protected function newProviderControl(): ProviderControl
-	{
-		return new ProviderControl($this->getMySQL());
-	}
-
-	/**
-	 * @return ProviderControl
-	 */
-
-	protected function newProviderContactControl(): ProviderContactControl
-	{
-		return new ProviderContactControl($this->getMySQL());
-	}
-
-	/**
 	 * @return PhoneControl
 	 */
 	protected function getPhoneControl(): PhoneControl
@@ -177,6 +163,16 @@ class DefaultSiteService extends ApiServiceInterface
 		return $this->providerControl === null ?
 			($this->providerControl = new ProviderControl($this->getMySQL())) :
 			$this->providerControl;
+	}
+
+	/**
+	 * @return ProviderContactControl
+	 */
+	protected function getProviderContactControl(): ProviderContactControl
+	{
+		return $this->providerContactControl === null ?
+			($this->providerContactControl = new ProviderContactControl()) :
+			$this->providerContactControl;
 	}
 
 	/**

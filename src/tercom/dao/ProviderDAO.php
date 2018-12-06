@@ -21,6 +21,7 @@ use tercom\exceptions\ProviderException;
  *
  * @see GenericDAO
  * @see Provider
+ * @see Phone
  *
  * @author Andrew
  */
@@ -34,8 +35,8 @@ class ProviderDAO extends GenericDAO
 	/**
 	 * Procedimento interno para validação dos dados de um fornecedor ao inserir e/ou atualizar.
 	 * Fornecedores não podem possuir CNPJ, Razão Social e Nome Fantasia não definidos (em branco).
-	 * @param Provider $provider fornecedor do qual terá os dados validados.
-	 * @param bool $validateId true para ser necessário estar identificado ou false caso contrário.
+	 * @param Provider $provider objeto do tipo fornecedor à ser validado.
+	 * @param bool $validateId true para validar o código de identificação único ou false caso contrário.
 	 * @throws ProviderException caso algum dos dados do fornecedor não estejam de acordo.
 	 */
 	private function validate(Provider $provider, bool $validateId): void
@@ -60,7 +61,7 @@ class ProviderDAO extends GenericDAO
 
 	/**
 	 * Insere um novo fornecedor no banco de dados e atualiza o mesmo com o identificador gerado.
-	 * @param Provider $provider fornecedor do qual deseja adicionar.
+	 * @param Provider $provider objeto do tipo fornecedor à adicionar.
 	 * @return bool true se conseguir adicionar ou false caso contrário.
 	 */
 	public function insert(Provider $provider): bool
@@ -89,7 +90,7 @@ class ProviderDAO extends GenericDAO
 
 	/**
 	 * Atualiza os dados de um fornecedor já existente no banco de dados.
-	 * @param Provider $provider fornecedor do qual deseja atualizar.
+	 * @param Provider $provider objeto do tipo fornecedor à atualizar.
 	 * @return bool true se for atualizado ou false caso contrário.
 	 */
 	public function update(Provider $provider): bool
@@ -99,6 +100,7 @@ class ProviderDAO extends GenericDAO
 				WHERE id = ?";
 
 		$query = $this->createQuery($sql);
+		$query->setEmptyAsNull(true);
 		$query->setString(1, $provider->getCNPJ());
 		$query->setString(2, $provider->getCompanyName());
 		$query->setString(3, $provider->getFantasyName());
@@ -114,7 +116,7 @@ class ProviderDAO extends GenericDAO
 
 	/**
 	 * Atualiza a identificação dos telefones de um fornecedor no banco de dados.
-	 * @param Provider $provider fornecedor do qual deseja atualizar os telefones.
+	 * @param Provider $provider objeto do tipo fornecedor à atualizar.
 	 * @return bool true se atualizado ou false caso contrário.
 	 */
 	public function updatePhones(Provider $provider): bool

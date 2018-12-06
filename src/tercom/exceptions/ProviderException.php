@@ -2,15 +2,15 @@
 
 namespace tercom\exceptions;
 
-use dProject\restful\exception\ApiExceptionResult;
 use tercom\api\ApiStatus;
+use tercom\api\ApiStatusException;
 
 /**
  * @see ApiStatusException
  * @author Andrew
  */
 
-class ProviderException extends ApiExceptionResult
+class ProviderException extends ApiStatusException
 {
 	/**
 	 * @return ProviderException
@@ -58,6 +58,14 @@ class ProviderException extends ApiExceptionResult
 	public static function newCnpjUnavaiable(): ProviderException
 	{
 		return new ProviderException('CNPJ indisponível', ApiStatus::PROVIDER_CNPJ_UNAVAIABLE);
+	}
+
+	/**
+	 * @return ProviderException
+	 */
+	public static function newNotFound(): ProviderException
+	{
+		return new ProviderException('fornecedor não encontrado', ApiStatus::PROVIDER_NOT_FOUND);
 	}
 }
 

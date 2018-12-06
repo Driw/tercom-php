@@ -14,7 +14,7 @@ class GenericDAO
 {
 	public const ER_ROW_IS_REFERENCED_2 = 1451;
 
-	protected $mysql;
+	private $mysql;
 
 	public function __construct(?MySQL $mysql = null)
 	{
@@ -95,6 +95,15 @@ class GenericDAO
 				$sqlCampos[] = sprintf('%s.%s AS %s_%s', $table, $campo, $prefix, $campo);
 
 		return implode(", ", $sqlCampos);
+	}
+
+	protected function buildInQueryInt(array $ints)
+	{
+		foreach ($ints as $int)
+			if (!is_int($int))
+				throw new DAOException('parâmetro int esperado');
+
+		return implode(", ", $ints);
 	}
 
 	protected function parseNullID(int $id): ?int

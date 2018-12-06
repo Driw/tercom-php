@@ -20,6 +20,19 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+06.12.2018 - 0.3.0.115
+- Removido trycatch em ProviderContactService, as exceptions hoje são tratadas em ApiListener.
+- Movido algumas verificações de ProviderContactService para ProviderContactControl.
+- Agora telefone comercial e telefone secundário sempre serão nulos se não existirem.
+	- Antes o objeto era instanciado porém com valores em branco e id zero.
+- Substituído alguns ApiResult por ApiResultObject em ProviderContactService.
+- Movido scripts de teste dos webservices para a pasta 'provider-contact-service'.
+	- Renomeado 'providerContactGenerator' para 'providerContactAdd'.
+- Agora as exceções geradas ao gerenciar ProviderContact terá um status diferente para cada problema.
+- Corrigido problema ao excluir mais de um telefone em deletePhones(), PhoneDAO.
+- Pequenos ajustes em ProviderDAO e padronização na documentação.
+- Corrigido problema onde ProviderControl não conseguia achar o método inexsitete em ProviderException.
+
 06.12.2018 - 0.3.0.114
 - Removido trycatch em ProviderService, as exceptions hoje são tratadas por ApiListener.
 - Movido algumas verificações de ProviderService para ProviderControl.

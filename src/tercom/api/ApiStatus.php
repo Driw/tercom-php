@@ -18,6 +18,13 @@ class ApiStatus
 	public const PROVIDER_FANTASY_NAME_EMPTY = 105;
 	public const PROVIDER_NOTFOUND = 106;
 	public const PROVIDER_CNPJ_UNAVAIABLE = 107;
+	public const PROVIDER_NOT_FOUND = 108;
+
+	public const PROVIDER_CONTACT_NOT_IDENTIFIED = 201;
+	public const PROVIDER_CONTACT_IDENTIFIED = 202;
+	public const PROVIDER_CONTACT_NAME_EMPTY = 203;
+	public const PROVIDER_CONTACT_EMAIL_EMPTY = 204;
+	public const PROVIDER_CONTACT_NOT_FOUND = 205;
 
 	public const SERVICE_NOT_ADD = 401;
 	public const SERVICE_NOT_SET = 402;
