@@ -147,6 +147,15 @@ class GenericDAO
 		return true;
 	}
 
+	protected function parseQueryExist(Query $query): bool
+	{
+		$result = $query->execute();
+		$entry = $result->next();
+		$result->free();
+
+		return intval($entry['qty']) === 1;
+	}
+
 	public function beginTransaction()
 	{
 		$sql = "START TRANSACTION";

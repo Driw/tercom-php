@@ -1,0 +1,2 @@
+- renomeado 'Manufature' para 'Manufaturer'.
+- webservice 'manufacture' para 'manufacturer'.

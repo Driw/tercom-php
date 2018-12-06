@@ -301,10 +301,7 @@ class ProviderDAO extends GenericDAO
 		$query = $this->createQuery($sql);
 		$query->setInteger(1, $idProvider);
 
-		$result = $query->execute();
-		$providers = $result->next();
-
-		return intval($providers['qtd']) === 1;
+		return $this->parseQueryExist($query);
 	}
 
 	/**
@@ -324,10 +321,7 @@ class ProviderDAO extends GenericDAO
 		$query->setString(1, $cnpj);
 		$query->setInteger(2, $idProvider);
 
-		$result = $query->execute();
-		$providers = $result->next();
-
-		return intval($providers['qty']) !== 0;
+		return $this->parseQueryExist($query);
 	}
 
 	/**

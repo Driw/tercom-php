@@ -15,6 +15,7 @@ use tercom\control\CustomerPhoneControl;
 use tercom\control\CustomerProfileControl;
 use tercom\control\LoginCustomerControl;
 use tercom\control\LoginTercomControl;
+use tercom\control\ManufacturerControl;
 use tercom\control\PermissionControl;
 use tercom\control\PhoneControl;
 use tercom\control\ProductCategoryControl;
@@ -45,6 +46,10 @@ class DefaultSiteService extends ApiServiceInterface
 	 * @var ProviderContactControl
 	 */
 	private $providerContactControl;
+	/**
+	 * @var ManufacturerControl
+	 */
+	private $manufacturerControl;
 	/**
 	 * @var ProductCategoryControl
 	 */
@@ -168,11 +173,21 @@ class DefaultSiteService extends ApiServiceInterface
 	/**
 	 * @return ProviderContactControl
 	 */
-	protected function getProviderContactControl(): ProviderContactControl
+	protected function get(): ProviderContactControl
 	{
 		return $this->providerContactControl === null ?
 			($this->providerContactControl = new ProviderContactControl()) :
 			$this->providerContactControl;
+	}
+
+	/**
+	 * @return ManufacturerControl
+	 */
+	protected function getManufacturerControl(): ManufacturerControl
+	{
+		return $this->manufacturerControl === null ?
+			($this->manufacturerControl = new ManufacturerControl()) :
+			$this->manufacturerControl;
 	}
 
 	/**

@@ -7,21 +7,20 @@ use dProject\Primitive\ObjectUtil;
 use dProject\Primitive\StringUtil;
 
 /**
- * <h1>Fabricante</h1>
+ * Fabricante
  *
- * <p>Cada vlaor de produto no sistema deve ser vinculado a um fabrincate já que um mesmo produto pode ter vários.
- * Quanto ao fabrincate é necessário apenas o seu nome e que por regra de negócio é o seu nome fantasia.</p>
+ * Cada vlaor de produto no sistema deve ser vinculado a um fabrincate já que um mesmo produto pode ter vários.
+ * Quanto ao fabrincate é necessário apenas o seu nome e que por regra de negócio é o seu nome fantasia.
  *
  * @see AdvancedObject
  * @author Andrew
  */
-
-class Manufacture extends AdvancedObject
+class Manufacturer extends AdvancedObject
 {
 	/**
 	 * @var int quantidade mínima de caracteres necessário no nome fantasia.
 	 */
-	public const MIN_FANTASY_NAME_LEN = 6;
+	public const MIN_FANTASY_NAME_LEN = 2;
 	/**
 	 * @var int quantidade máxima de caracteres necessário no nome fantasia.
 	 */
@@ -49,8 +48,7 @@ class Manufacture extends AdvancedObject
 	/**
 	 * @return int aquisição do código de identificação.
 	 */
-
-	public function getID(): int
+	public function getId(): int
 	{
 		return $this->id;
 	}
@@ -58,8 +56,7 @@ class Manufacture extends AdvancedObject
 	/**
 	 * @param int $id código de identificação.
 	 */
-
-	public function setID(int $id)
+	public function setId(int $id)
 	{
 		$this->id = $id;
 	}
@@ -67,7 +64,6 @@ class Manufacture extends AdvancedObject
 	/**
 	 * @return string aquisição do nome fantasia da empresa.
 	 */
-
 	public function getFantasyName(): string
 	{
 		return $this->fantasyName;
@@ -76,7 +72,6 @@ class Manufacture extends AdvancedObject
 	/**
 	 * @param string $name nome fantasia da empresa.
 	 */
-
 	public function setFantasyName(string $fantasyName)
 	{
 		if (!StringUtil::hasBetweenLength($fantasyName, self::MIN_FANTASY_NAME_LEN, self::MAX_FANTASY_NAME_LEN))
@@ -89,8 +84,7 @@ class Manufacture extends AdvancedObject
 	 * {@inheritDoc}
 	 * @see \dProject\Primitive\AdvancedObject::getAttributeTypes()
 	 */
-
-	public function getAttributeTypes():array
+	public function getAttributeTypes(): array
 	{
 		return [
 			'id' => ObjectUtil::TYPE_INTEGER,

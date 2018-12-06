@@ -3,38 +3,36 @@
 namespace tercom\entities\lists;
 
 use tercom\ArrayList;
-use tercom\entities\Manufacture;
+use tercom\entities\Manufacturer;
 
 /**
- * <h1>Telefones</h1>
+ * Lista de Fabricantes
  *
- * <p>Classe para especializar a lista no tipo de lista para aceitar apenas telefones.</p>
+ * Classe para especializar a lista no tipo de lista para aceitar apenas telefones.
  *
  * @see ArrayList
- * @see Manufacture
+ * @see Manufacturer
+ *
  * @author Andrew
  */
 
-class Manufactures extends ArrayList
+class Manufacturers extends ArrayList
 {
 	/**
 	 * Cria uma nova lista de telefones definindo o tipo da lista como telefone.
 	 */
-
 	public function __construct()
 	{
-		parent::__construct(Manufacture::class);
+		parent::__construct(Manufacturer::class);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 * @see \tercom\ArrayList::current()
 	 */
-
-	public function current():Manufacture
+	public function current():Manufacturer
 	{
 		return parent::current();
 	}
 }
 
-?>

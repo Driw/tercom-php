@@ -6,6 +6,7 @@ use tercom\dao\ProductPriceDAO;
 use tercom\entities\ProductPrice;
 use tercom\entities\lists\ProductPrices;
 use dProject\MySQL\MySQL;
+use tercom\core\System;
 
 class ProductPriceControl extends GenericControl
 {
@@ -22,9 +23,9 @@ class ProductPriceControl extends GenericControl
 	 */
 	private $providerControl;
 	/**
-	 * @var ManufactureControl
+	 * @var ManufacturerControl
 	 */
-	private $manufactureControl;
+	private $manufacturerControl;
 	/**
 	 * @var ProductPackageControl
 	 */
@@ -38,12 +39,13 @@ class ProductPriceControl extends GenericControl
 	 * @param MySQL $mysql
 	 */
 
-	public function __construct(MySQL $mysql)
+	public function __construct()
 	{
-		$this->productPriceDAO = new ProductPriceDAO($mysql);
+		$mysql = System::getWebConnection();
+		$this->productPriceDAO = new ProductPriceDAO();
 		$this->productControl = new ProductControl($mysql);
 		$this->providerControl = new ProviderControl($mysql);
-		$this->manufactureControl = new ManufactureControl($mysql);
+		$this->manufacturerControl = new ManufacturerControl($mysql);
 		$this->productPackageControl = new ProductPackageControl($mysql);
 		$this->productTypeControl = new ProductTypeControl($mysql);
 	}
@@ -68,7 +70,7 @@ class ProductPriceControl extends GenericControl
 
 		if (!$this->productControl->has($productPrice->getProduct()->getID())) throw new ControlException('produto não encontrado');
 		if (!$this->providerControl->has($productPrice->getProvider()->getID())) throw new ControlException('fornecedor não encontrado');
-		if (!$this->manufactureControl->has($productPrice->getManufacture()->getID())) throw new ControlException('fabricante não encontrado');
+		if (!$this->manufacturerControl->has($productPrice->getManufacture()->getID())) throw new ControlException('fabricante não encontrado');
 		if (!$this->productPackageControl->has($productPrice->getProductPackage()->getID())) throw new ControlException('embalagem de produto não encontrado');
 		if (!$this->productTypeControl->has($productPrice->getProductType()->getID())) throw new ControlException('tipo de produto não encontrado');
 	}
