@@ -32,6 +32,19 @@ class ApiStatus
 	public const MANUFACTURER_NOT_FOUND = 205;
 	public const MANUFACTURER_HAS_USES = 206;
 
+	public const PRODUCT_UNIT_IDENTIFIED = 251;
+	public const PRODUCT_UNIT_NOT_IDENTIFIED = 252;
+	public const PRODUCT_UNIT_NAME_EMPTY = 253;
+	public const PRODUCT_UNIT_SHORT_NAME_EMPTY = 254;
+	public const PRODUCT_UNIT_NAME_UNAVAIABLE = 255;
+	public const PRODUCT_UNIT_SHORT_NAME_UNAVAIABLE = 256;
+	public const PRODUCT_UNIT_NOT_FOUND = 257;
+	public const PRODUCT_UNIT_HAS_USES = 258;
+	public const PRODUCT_UNIT_INSERTED = 259;
+	public const PRODUCT_UNIT_UPDATED = 260;
+	public const PRODUCT_UNIT_DELETED = 261;
+	public const PRODUCT_UNIT_SELECTED = 262;
+
 	public const SERVICE_NOT_ADD = 401;
 	public const SERVICE_NOT_SET = 402;
 	public const SERVICE_NOT_FOUND = 403;

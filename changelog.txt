@@ -20,6 +20,18 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+07.12.2018 - 0.3.0.117
+- Removido trycatch em ProductUnitService, as exceptions hoje são tratadas em ApiListener.
+- Movido algumas verificações de ProductUnitService para ProductUnitControl.
+- Ao excluir unidades de produto será verificado anteriormente a existência de dependências.
+- Substituído alguns ApiResult por ApiResultObject em ProductUnitService.
+- Movido scripts de teste dos webservices para a pasta 'product-unit-service'.
+- Agora as exceções geradas ao gerenciar ProductUnit terá um status diferente para cada problema.
+- Atualizado 'product_units' para que 'name' e 'shortName' sejam UNIQUE KEY.
+	- Atualizado para verificações de unique key au adicionar e atualizar.
+- Atualizado parseEntrySQL() para que exclua os valores analisados (movido para outros atributos).
+- Modificado parseQueryExist() para que considere mais de um registro ao invés de um registro, GenericDAO.
+
 06.12.2018 - 0.3.0.116
 - Renomeado atributos e classes referente ao fabricante (Manufacturer) que estava como Manufacture.
 - Removido trycatch em ManufacturerService, as exceptions hoje são tratadas em ApiListener.

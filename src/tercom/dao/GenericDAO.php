@@ -153,7 +153,7 @@ class GenericDAO
 		$entry = $result->next();
 		$result->free();
 
-		return intval($entry['qty']) === 1;
+		return intval($entry['qty']) > 0;
 	}
 
 	public function beginTransaction()
@@ -187,4 +187,3 @@ class GenericDAO
 	}
 }
 
-?>

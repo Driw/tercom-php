@@ -7,10 +7,10 @@ use tercom\entities\ProductUnit;
 use dProject\Primitive\AdvancedObject;
 
 /**
+ * @see AdvancedObject
  * @see ApiResult
  * @author Andrew
  */
-
 class ApiResultProductUnitSettings extends AdvancedObject implements ApiResult
 {
 	/**
@@ -33,7 +33,6 @@ class ApiResultProductUnitSettings extends AdvancedObject implements ApiResult
 	/**
 	 *
 	 */
-
 	public function __construct()
 	{
 		$this->minNameLen = ProductUnit::MIN_NAME_LEN;
@@ -46,7 +45,6 @@ class ApiResultProductUnitSettings extends AdvancedObject implements ApiResult
 	 * {@inheritDoc}
 	 * @see \dProject\restful\ApiResult::toApiArray()
 	 */
-
 	public function toApiArray()
 	{
 		return $this->toArray();

@@ -15,6 +15,8 @@ define('MAX_PRODUCT_UNIT_LEN',		32);
 define('MIN_PRODUCT_INITIALS_LEN',	1);
 define('MAX_PRODUCT_INITIALS_LEN',	6);
 
+define('TINYTEXT_LEN',				256);
+
 define('PATTERN_PASSWORD',			'/^((?=\S*?[A-Z])(?=\S*?[a-z])(?=\S*?[0-9]).{6,})\S$/');
 
 ?>

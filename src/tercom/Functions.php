@@ -350,14 +350,17 @@ class Functions
 	 * @return string[]
 	 */
 
-	public static function parseEntrySQL(array $entry, string $prefix)
+	public static function parseEntrySQL(array &$entry, string $prefix)
 	{
 		$filtrado = [];
 		$prefix .= '_';
 
 		foreach ($entry as $campo => $value)
 			if (StringUtil::startsWith($campo, $prefix))
+			{
 				$filtrado[substr($campo, strlen($prefix))] = $value;
+				unset($entry[$campo]);
+			}
 
 		return $filtrado;
 	}

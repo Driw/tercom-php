@@ -19,6 +19,8 @@ use tercom\control\ManufacturerControl;
 use tercom\control\PermissionControl;
 use tercom\control\PhoneControl;
 use tercom\control\ProductCategoryControl;
+use tercom\control\ProductControl;
+use tercom\control\ProductUnitControl;
 use tercom\control\ProviderContactControl;
 use tercom\control\ProviderControl;
 use tercom\control\ServiceControl;
@@ -54,6 +56,14 @@ class DefaultSiteService extends ApiServiceInterface
 	 * @var ProductCategoryControl
 	 */
 	private $productCategoryControl;
+	/**
+	 * @var ProductUnitControl
+	 */
+	private $productUnitControl;
+	/**
+	 * @var ProductControl
+	 */
+	private $productControl;
 	/**
 	 * @var ServiceControl
 	 */
@@ -124,6 +134,15 @@ class DefaultSiteService extends ApiServiceInterface
 	}
 
 	/**
+	 * @param bool $avaiable
+	 * @return string
+	 */
+	protected function getMessageAvaiable(bool $avaiable)
+	{
+		return $avaiable ? 'disponível' : 'indisponível';
+	}
+
+	/**
 	 * {@inheritDoc}
 	 * @see \dProject\restful\ApiServiceInterface::execute()
 	 */
@@ -166,7 +185,7 @@ class DefaultSiteService extends ApiServiceInterface
 	protected function getProviderControl(): ProviderControl
 	{
 		return $this->providerControl === null ?
-			($this->providerControl = new ProviderControl($this->getMySQL())) :
+			($this->providerControl = new ProviderControl()) :
 			$this->providerControl;
 	}
 
@@ -196,8 +215,28 @@ class DefaultSiteService extends ApiServiceInterface
 	protected function getProductCategoryControl(): ProductCategoryControl
 	{
 		return $this->productCategoryControl === null ?
-			($this->productCategoryControl = new ProductCategoryControl($this->getMySQL())) :
+			($this->productCategoryControl = new ProductCategoryControl()) :
 			$this->productCategoryControl;
+	}
+
+	/**
+	 * @return ProductUnitControl
+	 */
+	protected function getProductUnitControl(): ProductUnitControl
+	{
+		return $this->productUnitControl === null ?
+			($this->productUnitControl = new ProductUnitControl()) :
+			$this->productUnitControl;
+	}
+
+	/**
+	 * @return ProductControl
+	 */
+	protected function getProductControl(): ProductControl
+	{
+		return $this->productControl === null ?
+			($this->productControl = new ProductControl()) :
+			$this->productControl;
 	}
 
 	/**

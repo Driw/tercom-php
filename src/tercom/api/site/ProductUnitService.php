@@ -2,206 +2,175 @@
 
 namespace tercom\api\site;
 
-use dProject\Primitive\ArrayDataException;
 use dProject\restful\ApiContent;
-use dProject\restful\ApiResult;
-use dProject\restful\exception\ApiException;
-use dProject\restful\exception\ApiMissParam;
-use tercom\api\site\results\ApiResultProductUnit;
-use tercom\api\site\results\ApiResultProductUnits;
+use tercom\api\exceptions\FilterException;
+use tercom\api\site\results\ApiResultObject;
 use tercom\api\site\results\ApiResultProductUnitSettings;
-use tercom\entities\ProductUnit;
-use tercom\control\ProductUnitControl;
-use tercom\core\System;
 use tercom\api\site\results\ApiResultSimpleValidation;
+use tercom\entities\ProductUnit;
 
 /**
+ * Serviço de Unidade de Produto
+ *
+ * Este serviço realiza a comunicação do clietne para com o sistema relação aos dados de unidades de produto.
+ * Como serviço, oferece as possibilidades de adicionar, atualizar, excluir, selecionar e buscar por unidades de produto,
+ * além de ser possível verificar a disponibilidade de nome e abreviação para unidades de produto.
+ *
  * @see DefaultSiteService
- * @see ApiResultProductUnit
- * @see ApiResultProductUnits
+ * @see ApiResultObject
  * @see ApiResultProductUnitSettings
+ *
  * @author Andrew
  */
-
 class ProductUnitService extends DefaultSiteService
 {
 	/**
-	 * @param ApiContent $content
-	 * @return ApiResultProductUnitSettings
+	 * Ação para se obter as configurações de limites de cada atributo referente a unidade de produto.
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @return ApiResultProductUnitSettings aquisição do resultado com as configurações.
 	 */
-
 	public function actionSettings(ApiContent $content): ApiResultProductUnitSettings
 	{
 		return new ApiResultProductUnitSettings();
 	}
 
 	/**
-	 * @param ApiContent $content
-	 * @return ApiResult
+	 * Adiciona uma nova unidade de produto sendo necessário informar os seguintes dados:
+	 * nome e abreviação sendo ambas obrigatórias e individualmente únicas.
+	 * @ApiAnnotation({"method":"post"})
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @return ApiResultObject aquisição do resultado contendo os dados da unidade de produto adicionada.
 	 */
-
-	public function actionAdd(ApiContent $content): ApiResult
+	public function actionAdd(ApiContent $content): ApiResultObject
 	{
 		$post = $content->getPost();
 
-		try {
+		$productUnit = new ProductUnit();
+		$productUnit->setName($post->getString('name'));
+		$productUnit->setShortName($post->getString('shortName'));
+		$this->getProductUnitControl()->add($productUnit);
 
-			$productUnit = new ProductUnit();
-			$productUnit->setName($post->getString('name'));
-			$productUnit->setShortName($post->getString('shortName'));
-
-		} catch (ArrayDataException $e) {
-			return new ApiMissParam($e);
-		}
-
-		$productUnitControl = new ProductUnitControl(System::getWebConnection());
-		$productUnitControl->add($productUnit);
-
-		$result = new ApiResultProductUnit();
-		$result->setProductUnit($productUnit);
+		$result = new ApiResultObject();
+		$result->setResult($productUnit, 'unidade de produto "%s" adicionada com êxito', $productUnit->getName());
 
 		return $result;
 	}
 
 	/**
-	 * @ApiAnnotation({"params":["idProductUnit"]})
-	 * @param ApiContent $content
-	 * @return ApiResult
+	 * Atualiza os dados da unidade de produto através do seu código de identificação.
+	 * Nenhum dado é obrigatório ser atualizado, porém se informado será considerado.
+	 * @ApiAnnotation({"method":"post","params":["idProductUnit"]})
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @return ApiResultObject aquisição do resultado com os dados da unidade de produto atualizada.
 	 */
-
-	public function actionSet(ApiContent $content): ApiResult
+	public function actionSet(ApiContent $content): ApiResultObject
 	{
 		$post = $content->getPost();
 		$idProductUnit = $content->getParameters()->getInt('idProductUnit');
-		$productUnitControl = new ProductUnitControl(System::getWebConnection());
+		$productUnit = $this->getProductUnitControl()->get($idProductUnit);
 
-		if (($productUnit = $productUnitControl->get($idProductUnit)) === null)
-			throw new ApiException('unidade de produto não encontrado');
+		if ($post->isSetted('name')) $productUnit->setName($post->getString('name'));
+		if ($post->isSetted('shortName')) $productUnit->setShortName($post->getString('shortName'));
 
-		try {
+		$this->getProductUnitControl()->set($productUnit);
 
-			if ($post->isSetted('name')) $productUnit->setName($post->getString('name'));
-			if ($post->isSetted('shortName')) $productUnit->setShortName($post->getString('shortName'));
-
-		} catch (ArrayDataException $e) {
-			return new ApiMissParam($e);
-		}
-
-		$result = new ApiResultProductUnit();
-		$result->setProductUnit($productUnit);
-
-		if ($productUnitControl->set($productUnit))
-			$result->setMessage('unidade de produto atualizado');
-		else
-			$result->setMessage('nenhuma informação alterada');
+		$result = new ApiResultObject();
+		$result->setResult($productUnit, 'unidade de produto "%s" atualizada com êxito', $productUnit->getName());
 
 		return $result;
 	}
 
 	/**
+	 * Exclui os dados de uma unidade de produto através do seu código de identificação.
 	 * @ApiAnnotation({"params":["idProductUnit"]})
-	 * @param ApiContent $content
-	 * @return ApiResult
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @return ApiResultObject aquisição do resultado com os dados da unidade de produto excluída.
 	 */
-
-	public function actionRemove(ApiContent $content): ApiResult
+	public function actionRemove(ApiContent $content): ApiResultObject
 	{
 		$idProductUnit = $content->getParameters()->getInt('idProductUnit');
-		$productUnitControl = new ProductUnitControl(System::getWebConnection());
+		$productUnit = $this->getProductUnitControl()->get($idProductUnit);
+		$this->getProductUnitControl()->remove($productUnit);
 
-		if (($productUnit = $productUnitControl->get($idProductUnit)) === null)
-			throw new ApiException('unidade de produto não encontrado');
-
-		$result = new ApiResultProductUnit();
-		$result->setProductUnit($productUnit);
-
-		if ($productUnitControl->remove($productUnit))
-			$result->setMessage('unidade de produto excluído');
-		else
-			$result->setMessage('unidade de produto não definido');
+		$result = new ApiResultObject();
+		$result->setResult($productUnit, 'unidade de produto "%s" excluída com êxito', $productUnit->getName());
 
 		return $result;
 	}
 
 	/**
+	 * Obtém os dados de uma unidade de produto através do seu código de identificação.
 	 * @ApiAnnotation({"params":["idProductUnit"]})
-	 * @param ApiContent $content
-	 * @return ApiResult
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @return ApiResultObject aquisição do resultado com os dados da unidade de produto obtido.
 	 */
-
-	public function actionGet(ApiContent $content): ApiResult
+	public function actionGet(ApiContent $content): ApiResultObject
 	{
 		$idProductUnit = $content->getParameters()->getInt('idProductUnit');
-		$productUnitControl = new ProductUnitControl(System::getWebConnection());
+		$productUnit = $this->getProductUnitControl()->get($idProductUnit);
 
-		if (($productUnit = $productUnitControl->get($idProductUnit)) === null)
-			throw new ApiException('unidade de produto não encontrado');
-
-		$result = new ApiResultProductUnit();
-		$result->setProductUnit($productUnit);
+		$result = new ApiResultObject();
+		$result->setResult($productUnit, 'unidade de produto "%s" obtida com êxito', $productUnit->getName());
 
 		return $result;
 	}
 
 	/**
-	 * @param ApiContent $content
-	 * @return ApiResult
+	 * Obtém uma lista com todas as unidades de produtos registradas no sistema.
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @return ApiResultObject aquisição do resultado com os dados das unidades de produto.
 	 */
-
-	public function actionGetAll(ApiContent $content): ApiResult
+	public function actionGetAll(ApiContent $content): ApiResultObject
 	{
-		$productUnitControl = new ProductUnitControl(System::getWebConnection());
-		$productUnits = $productUnitControl->getAll();
+		$productUnits = $this->getProductUnitControl()->getAll();
 
-		$result = new ApiResultProductUnits();
-		$result->setProductUnits($productUnits);
+		$result = new ApiResultObject();
+		$result->setResult($productUnits, 'há %d unidades de produto no banco de dados', $productUnits->size());
 
 		return $result;
 	}
 
 	/**
+	 * Obtém os dados as unidades de produtos filtradas a partir do seu nome.
 	 * @ApiAnnotation({"params":["filter","value"]})
-	 * @param ApiContent $content
-	 * @return ApiResult
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @return ApiResultObject aquisição do resultado com os dados das unidades de produto filtradas.
 	 */
-
-	public function actionSearch(ApiContent $content): ApiResultProductUnits
+	public function actionSearch(ApiContent $content): ApiResultObject
 	{
 		$filter = $content->getParameters()->getString('filter');
 
 		switch ($filter)
 		{
-			case 'name': return $this->onSearchByName($content);
+			case 'name': return $this->searchByName($content);
 		}
 
-		throw new ApiException('opção inexistente');
+		throw new FilterException($filter);
 	}
 
 	/**
-	 * @param ApiContent $content
-	 * @return ApiResultProductUnits
+	 * Procedimento interno usado para realizar a busca por unidades de produto pelo nome.
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @return ApiResultObject aquisição do resultado com os dados das unidades de produto encontradas.
 	 */
-
-	private function onSearchByname(ApiContent $content): ApiResultProductUnits
+	private function searchByName(ApiContent $content): ApiResultObject
 	{
-		$value = $content->getParameters()->getString('value');
-		$productUnitControl = new ProductUnitControl(System::getWebConnection());
-		$productUnits = $productUnitControl->filterByName($value);
+		$name = $content->getParameters()->getString('value');
+		$productUnits = $this->getProductUnitControl()->searchByName($name);
 
-		$result = new ApiResultProductUnits();
-		$result->setProductUnits($productUnits);
+		$result = new ApiResultObject();
+		$result->setResult($productUnits, 'encontrado %d unidades de produto com o nome "%s"', $productUnits->size(), $name);
 
 		return $result;
 	}
 
 	/**
+	 * Verifica a disponibilidade de algum valor de atributo para unidades de produto.
 	 * @ApiAnnotation({"params":["filter","value","idProductUnit"]})
-	 * @param ApiContent $content
-	 * @throws ApiException
-	 * @return ApiResult
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @return ApiResultObject aquisição do resultado com a validação da disponibilidade do dado.
 	 */
-
-	public function actionAvaiable(ApiContent $content):ApiResult
+	public function actionAvaiable(ApiContent $content): ApiResultObject
 	{
 		$filter = $content->getParameters()->getString('filter');
 
@@ -211,52 +180,43 @@ class ProductUnitService extends DefaultSiteService
 			case 'shortName': return $this->avaiableShortName($content);
 		}
 
-		throw new ApiException('opção inexistente');
+		throw new FilterException($filter);
 	}
 
 	/**
-	 * @param ApiContent $content
-	 * @return ApiResult
+	 * Procedimento interno para realizar a disponibilidade de um nome para unidade de produto.
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @return ApiResultObject aquisição do resultado com a validação da disponibilidade.
 	 */
-
-	private function avaiableName(ApiContent $content): ApiResult
+	private function avaiableName(ApiContent $content): ApiResultObject
 	{
 		$parameters = $content->getParameters();
 		$name = $parameters->getString('value');
 		$idProductUnit = $this->parseNullToInt($parameters->getInt('idProductUnit', false));
-		$productUnitControl = new ProductUnitControl(System::getWebConnection());
+		$avaiable = !$this->getProductUnitControl()->hasName($name, $idProductUnit);
 
 		$result = new ApiResultSimpleValidation();
-
-		if ($productUnitControl->hasAvaiableName($name, $idProductUnit))
-			$result->setOkMessage(true, 'unidade disponível');
-		else
-			$result->setOkMessage(false, 'unidade indisponível');
+		$result->setOkMessage($avaiable, 'nome "%s" %s', $name, $this->getMessageAvaiable($avaiable));
 
 		return $result;
 	}
 
 	/**
-	 * @param ApiContent $content
-	 * @return ApiResult
+	 * Procedimento interno para realizar a disponibilidade de uma abreviação para unidade de produto.
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @return ApiResultObject aquisição do resultado com a validação da disponibilidade.
 	 */
-
-	private function avaiableShortName(ApiContent $content): ApiResult
+	private function avaiableShortName(ApiContent $content): ApiResultObject
 	{
 		$parameters = $content->getParameters();
 		$shortName = $parameters->getString('value');
 		$idProductUnit = $this->parseNullToInt($parameters->getInt('idProductUnit', false));
-		$productUnitControl = new ProductUnitControl(System::getWebConnection());
+		$avaiable = !$this->getProductUnitControl()->hasShortName($shortName, $idProductUnit);
 
 		$result = new ApiResultSimpleValidation();
-
-		if ($productUnitControl->hasAvaiableShortName($shortName, $idProductUnit))
-			$result->setOkMessage(true, 'abreviação de unidade disponível');
-		else
-			$result->setOkMessage(false, 'abreviação de unidade indisponível');
+		$result->setOkMessage($avaiable, 'abreviação "%s" %s', $shortName, $this->getMessageAvaiable($avaiable));
 
 		return $result;
 	}
 }
 
-?>
