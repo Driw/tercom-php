@@ -20,6 +20,9 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+07.12.2018 - 0.3.0.118
+- Modificado as massas de dados para REPLACE ao invés de INSERT.
+
 07.12.2018 - 0.3.0.117
 - Removido trycatch em ProductUnitService, as exceptions hoje são tratadas em ApiListener.
 - Movido algumas verificações de ProductUnitService para ProductUnitControl.
