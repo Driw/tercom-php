@@ -5,51 +5,58 @@ namespace tercom\dao;
 use dProject\MySQL\Result;
 use tercom\entities\ProductCategory;
 use tercom\entities\lists\ProductCategories;
-use dProject\MySQL\MySQLException;
+use tercom\exceptions\ProductCategoryException;
+use dProject\MySQL\Query;
 
 class ProductCategoryDAO extends GenericDAO
 {
 	public const ALL_COLUMNS = ['id', 'name'];
-	public const ALL_TYPE_COLUMNS = ['id', 'name'];
 
-	private function validate(ProductCategory $productCategory, bool $validateID)
+	private function validate(ProductCategory $productCategory, bool $validateId)
 	{
-		if ($validateID) {
+		// PRIMARY KEY
+		if ($validateId) {
 			if ($productCategory->getId() === 0)
-				throw new DAOException('categoria de produto não identificado');
+				throw ProductCategoryException::newNotIdentified();
 		} else {
 			if ($productCategory->getID() !== 0)
-				throw new DAOException('categoria de produto já identificado');
+				throw ProductCategoryException::newIdentified();
 		}
 
-		if (empty($productCategory->getName())) throw new DAOException('nome da categoria não definida');
-		if ($productCategory->getType() === 0) throw new DAOException('tipo da categoria não definida');
-		if ($this->existName($productCategory->getName(), $productCategory->getId())) throw new DAOException('nome da categoria indisponível');
+		// NOT NULL
+		if (empty($productCategory->getName())) throw ProductCategoryException::newNameEmpty();
+		if ($productCategory->getType() === 0) throw ProductCategoryException::newTypeEmpty();
+
+		// UNIQUE KEY
+		if ($this->existName($productCategory->getName(), $productCategory->getId())) throw ProductCategoryException::newNameUnavaiable();
+
+		// FOREIGN KEY
+		if (!$this->existType($productCategory->getType())) throw ProductCategoryException::newTypeInvalid();
 	}
 
 	public function insert(ProductCategory $productCategory): bool
 	{
 		$this->validate($productCategory, false);
+
 		$sql = "INSERT INTO product_categories (name)
 				VALUES (?)";
 
 		$query = $this->createQuery($sql);
 		$query->setString(1, $productCategory->getName());
 
-		$result = $query->execute();
-
-		if ($result->isSuccessful())
+		if (($result = $query->execute())->isSuccessful())
 			$productCategory->setId($result->getInsertID());
 
-		return $result->isSuccessful();
+		return $productCategory->getId() !== 0;
 	}
 
 	public function replaceRelationship(ProductCategory $productCategory, ProductCategory $productCategoryParent): bool
 	{
 		if ($productCategoryParent->getId() === 0)
-			throw new DAOException('categoria de produto à vincular não identificado');
+			throw ProductCategoryException::newParentNotIdentified();
 
 		$this->validate($productCategory, true);
+
 		$sql = "REPLACE INTO product_category_relationships (idCategoryParent, idCategory, idCategoryType)
 				VALUES (?, ?, ?)";
 
@@ -67,6 +74,8 @@ class ProductCategoryDAO extends GenericDAO
 				SET name = ?
 				WHERE id = ?";
 
+		$this->validate($productCategory, true);
+
 		$query = $this->createQuery($sql);
 		$query->setString(1, $productCategory->getName());
 		$query->setInteger(2, $productCategory->getId());
@@ -76,22 +85,19 @@ class ProductCategoryDAO extends GenericDAO
 
 	public function delete(ProductCategory $productCategory): bool
 	{
+		if ($this->existOnRelationship($productCategory->getId()))
+			throw ProductCategoryException::newExistOnRelationship();
+
+		if ($this->existOnProduct($productCategory->getId()))
+			throw ProductCategoryException::newExistOnProduct();
+
 		$sql = "DELETE FROM product_categories
 				WHERE id = ?";
 
 		$query = $this->createQuery($sql);
 		$query->setInteger(1, $productCategory->getId());
 
-		try {
-			$result = $query->execute();
-			return $result->getAffectedRows() === 1;
-		} catch (MySQLException $e) {
-			switch ($e->getCode())
-			{
-				case self::ER_ROW_IS_REFERENCED_2:
-					throw new DAOException('categoria de produto possui vinculo com outra(s) categoria(s)');
-			}
-		}
+		return ($query->execute())->getAffectedRows() === 1;
 	}
 
 	public function deleteRelationship(ProductCategory $productCategory, int $idProductCategoryType): bool
@@ -103,9 +109,7 @@ class ProductCategoryDAO extends GenericDAO
 		$query->setInteger(1, $productCategory->getId());
 		$query->setInteger(2, $idProductCategoryType);
 
-		$result = $query->execute();
-
-		return $result->getAffectedRows() === 1;
+		return ($query->execute())->getAffectedRows() > 0;
 	}
 
 	private function newSelect(): string
@@ -118,20 +122,21 @@ class ProductCategoryDAO extends GenericDAO
 				LEFT JOIN product_category_types ON product_category_types.id = product_category_relationships.idCategoryType";
 	}
 
-	public function select(int $idProductCategory, int $idCategoryType = 0): ?ProductCategory
+	public function select(int $idProductCategory, int $idProductCategoryType = 0): ?ProductCategory
 	{
 		// Quando é família não vai possuir nenhuma relação de categoria parent, logo o tipo será nulo
-		if ($idCategoryType === ProductCategory::CATEGORY_FAMILY)
-			$idCategoryType = null;
+		if ($idProductCategoryType === ProductCategory::CATEGORY_FAMILY)
+			$idProductCategoryType = null;
 
+		$sqlType = $idProductCategoryType === null ? 'IS NULL' : '= ?';
 		$sqlSelect = $this->newSelect();
 		$sql = "$sqlSelect
-				WHERE product_categories.id = ? AND (product_category_types.id = ? OR ? = 0)";
+				WHERE product_categories.id = ? AND product_category_types.id $sqlType";
 
 		$query = $this->createQuery($sql);
 		$query->setInteger(1, $idProductCategory);
-		$query->setInteger(2, $idCategoryType);
-		$query->setInteger(3, $idCategoryType);
+		if ($idProductCategoryType !== null)
+		$query->setInteger(2, $idProductCategoryType);
 
 		$result = $query->execute();
 
@@ -163,37 +168,62 @@ class ProductCategoryDAO extends GenericDAO
 		return $this->parseProductCategories($result);
 	}
 
-	public function selectByCategory(ProductCategory $productCategory): ProductCategories
+	public function selectByCategory(ProductCategory $productCategory, int $idProductCategory): ProductCategories
 	{
-		$sqlType = $productCategory->getType() !== 0 ? format('AND product_category_relationships.idCategoryType = ?') : '';
-		$sql = "SELECT product_categories.id, product_categories.name, product_category_types.id type
-				FROM product_categories
-				INNER JOIN product_category_relationships ON product_category_relationships.idCategory = product_categories.id
-				INNER JOIN product_category_types ON product_category_types.id = product_category_relationships.idCategoryType
-				WHERE product_category_relationships.idCategoryParent = ?
-					$sqlType";
+		$sqlSelect = $this->newSelect();
+
+		switch ($productCategory->getType())
+		{
+			case ProductCategory::CATEGORY_FAMILY:
+				$sql = "$sqlSelect
+						WHERE product_category_relationships.idCategoryParent = ?
+							AND (product_category_relationships.idCategoryType = ? OR product_category_relationships.idCategoryType IS NULL)";
+				break;
+
+			default:
+				$sql = "$sqlSelect
+						WHERE product_category_relationships.idCategoryParent = ? AND product_category_relationships.idCategoryType = ?";
+				break;
+		}
 
 		$query = $this->createQuery($sql);
 		$query->setInteger(1, $productCategory->getId());
-		if ($productCategory->getType() !== 0)
-		$query->setInteger(2, $productCategory->getType());
+		$query->setInteger(2, $idProductCategory);
 
 		$result = $query->execute();
 
 		return $this->parseProductCategories($result);
 	}
 
-	public function selectLikeName(string $name, int $idCategoryType = 0): ProductCategories
+	public function selectLikeName(string $name, int $idProductCategoryType = 0): ProductCategories
 	{
 		$sqlSelect = $this->newSelect();
-		$sql = "$sqlSelect
-				WHERE product_categories.name LIKE ? AND (product_category_types.id = ? OR ? = 0)";
 
-		$query = $this->createQuery($sql);
-		$query->setString(1, "%$name%");
-		$query->setInteger(2, $idCategoryType);
-		$query->setInteger(3, $idCategoryType);
+		switch ($idProductCategoryType)
+		{
+			case 0:
+			case ProductCategory::CATEGORY_FAMILY:
+				$sqlFamily = $idProductCategoryType === ProductCategory::CATEGORY_FAMILY ? 'AND product_category_types.id IS NULL' : '';
+				$sql = "$sqlSelect
+				WHERE product_categories.name LIKE ? $sqlFamily";
+				$query = $this->createQuery($sql);
+				$query->setString(1, "%$name%");
+				break;
 
+			default:
+				$sql = "$sqlSelect
+				WHERE product_categories.name LIKE ? AND product_category_types.id = ?";
+				$query = $this->createQuery($sql);
+				$query->setString(1, "%$name%");
+				$query->setInteger(2, $idProductCategoryType);
+				break;
+		}
+
+		return $this->selectQuery($query);
+	}
+
+	private function selectQuery(Query $query): ProductCategories
+	{
 		$result = $query->execute();
 
 		return $this->parseProductCategories($result);
@@ -208,10 +238,7 @@ class ProductCategoryDAO extends GenericDAO
 		$query = $this->createQuery($sql);
 		$query->setInteger(1, $idProductCategory);
 
-		$result = $query->execute();
-		$entry = $result->next();
-
-		return intval($entry['qtd']) === 1;
+		return $this->parseQueryExist($query);
 	}
 
 	public function existName(string $name, int $idProductCategory = 0): bool
@@ -224,11 +251,7 @@ class ProductCategoryDAO extends GenericDAO
 		$query->setString(1, $name);
 		$query->setInteger(2, $idProductCategory);
 
-		$result = $query->execute();
-		$entry = $result->next();
-		$result->free();
-
-		return intval($entry['qty']) > 0;
+		return $this->parseQueryExist($query);
 	}
 
 	public function existRelationship(int $idProductCategory, int $idProductCategoryType): bool
@@ -241,42 +264,71 @@ class ProductCategoryDAO extends GenericDAO
 		$query->setString(1, $idProductCategory);
 		$query->setInteger(2, $idProductCategoryType);
 
-		$result = $query->execute();
-		$entry = $result->next();
-		$result->free();
+		return $this->parseQueryExist($query);
+	}
 
-		return intval($entry['qty']) > 0;
+	public function existType(int $idProductCategoryType): bool
+	{
+		$sql = "SELECT COUNT(*) qty
+				FROM product_category_types
+				WHERE id = ?";
+
+		$query = $this->createQuery($sql);
+		$query->setInteger(1, $idProductCategoryType);
+
+		return $this->parseQueryExist($query);
+	}
+
+	public function existOnRelationship(int $idProductCategory): bool
+	{
+		$sql = "SELECT COUNT(*) qty
+				FROM product_category_relationships
+				WHERE idCategoryParent = ? OR idCategory = ?";
+
+		$query = $this->createQuery($sql);
+		$query->setInteger(1, $idProductCategory);
+		$query->setInteger(2, $idProductCategory);
+
+		return $this->parseQueryExist($query);
+	}
+
+	public function existOnProduct(int $idProductCategory): bool
+	{
+		$sql = "SELECT COUNT(*) qty
+				FROM products
+				WHERE idProductCategory = ?";
+
+		$query = $this->createQuery($sql);
+		$query->setInteger(1, $idProductCategory);
+
+		return $this->parseQueryExist($query);
 	}
 
 	private function parseProductCategory(Result $result): ?ProductCategory
 	{
-		if (!$result->hasNext())
-			return null;
-
-		$array = $result->next();
-		$productCategory = $this->newProductCategory($array);
-
-		return $productCategory;
+		return ($entry = $this->parseSingleResult($result)) === null ? null : $this->newProductCategory($entry);
 	}
 
 	private function parseProductCategories(Result $result): ProductCategories
 	{
 		$productCategories = new ProductCategories();
 
-		while ($result->hasNext())
+		foreach ($this->parseMultiplyResults($result) as $entry)
 		{
-			$array = $result->next();
-			$productCategory = $this->newProductCategory($array);
+			$productCategory = $this->newProductCategory($entry);
 			$productCategories->add($productCategory);
 		}
 
 		return $productCategories;
 	}
 
-	private function newProductCategory(array $array): ProductCategory
+	private function newProductCategory(array $entry): ProductCategory
 	{
+		if (!isset($entry['type']) || $entry['type'] === null)
+			$entry['type'] = ProductCategory::CATEGORY_FAMILY;
+
 		$productCategory = new ProductCategory();
-		$productCategory->fromArray($array);
+		$productCategory->fromArray($entry);
 
 		return $productCategory;
 	}

@@ -6,21 +6,19 @@ use tercom\ArrayList;
 use tercom\entities\ProductUnit;
 
 /**
- * <h1>Telefones</h1>
+ * Lista para Unidade de Produto
  *
- * <p>Classe para especializar a lista no tipo de lista para aceitar apenas telefones.</p>
+ * Classe para especializar a lista no tipo de lista para aceitar apenas unidades de produto.
  *
  * @see ArrayList
  * @see ProductUnit
  * @author Andrew
  */
-
 class ProductUnits extends ArrayList
 {
 	/**
-	 * Cria uma nova lista de telefones definindo o tipo da lista como telefone.
+	 * Cria uma nova lista para objetos do tipo unidades de produto.
 	 */
-
 	public function __construct()
 	{
 		parent::__construct(ProductUnit::class);
@@ -30,11 +28,9 @@ class ProductUnits extends ArrayList
 	 * {@inheritDoc}
 	 * @see \tercom\ArrayList::current()
 	 */
-
 	public function current():ProductUnit
 	{
 		return parent::current();
 	}
 }
 
-?>

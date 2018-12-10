@@ -20,7 +20,15 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
-07.12.2018 - 0.3.0.118
+10.12.2018 - 0.3.0.119
+- Agora as ProductCategoryService será necessário especificar a sub categoria se houver.
+	- Modificado para que a categoria parent possa ser nenhuma como é o caso de 'família'.
+	- Ajustes para melhor funcionamento ao adicionar, atualizar e excluir categorias.
+- Movido scripts de teste dos webservices para as pastas 'product-{category}-service' respectivamente.
+- Diversas mudanças para funcionamento da DAO conforme nova estrutura definida para DAOs.
+- Agora as exceções geradas ao gerenciar ProductCategory terá um status diferente para cada problema.
+
+10.12.2018 - 0.3.0.118
 - Modificado as massas de dados para REPLACE ao invés de INSERT.
 
 07.12.2018 - 0.3.0.117

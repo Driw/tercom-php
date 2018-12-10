@@ -13,7 +13,7 @@ use tercom\exceptions\ProviderException;
  *
  * Classe responsável pela comunicação completa do sistema para com o banco de dados.
  * Sua responsabilidade é gerenciar os dados referentes aos fornecedores, incluindo todas operações.
- * Estas operações consiste em: adicionar, atualizar e buscar; <b>fornecedores não podem ser excluídos</b>.
+ * Estas operações consiste em: adicionar, atualizar e selecionar; <b>fornecedores não podem ser excluídos</b>.
  *
  * Fornecedores não podem repetir o CNPJ, portanto cada fornecedor precisa ter um CNPJ único e válido.
  * Razão social e nome fantasia além do CNPJ são os únicos campos obrigatórios, todos os outros são opcionais.

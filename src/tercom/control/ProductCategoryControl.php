@@ -2,10 +2,10 @@
 
 namespace tercom\control;
 
-use dProject\restful\exception\ApiException;
 use tercom\dao\ProductCategoryDAO;
 use tercom\entities\ProductCategory;
 use tercom\entities\lists\ProductCategories;
+use tercom\exceptions\ProductCategoryException;
 
 /**
  * @see GenericControl
@@ -32,82 +32,104 @@ class ProductCategoryControl extends GenericControl
 	/**
 	 *
 	 * @param ProductCategory $productCategory
-	 * @param ProductCategory $productCategoryParent
-	 * @throws ApiException
+	 * @throws ProductCategoryException
 	 */
-	public function add(ProductCategory $productCategory, ?ProductCategory $productCategoryParent = null)
+	public function add(ProductCategory $productCategory): void
 	{
-		if ($productCategory->getId() === 0) {
+		if ($productCategory->getId() === 0)
 			if (!$this->productCategoryDAO->insert($productCategory))
-				throw new ControlException('não foi possível inserir a categoria de produto');
-		} else {
-			if (!$this->productCategoryDAO->update($productCategory))
-				throw new ControlException('não foi possível atualizar a categoria de produto');
-		}
+				throw ProductCategoryException::newNotInserted();
+	}
 
-		if ($productCategoryParent !== null)
+	/**
+	 *
+	 * @param ProductCategory|NULL $productCategoryParent
+	 * @param ProductCategory $productCategory
+	 */
+	public function addRelationship(ProductCategory $productCategoryParent, ProductCategory $productCategory): void
+	{
+		$this->productCategoryDAO->beginTransaction();
 		{
-			if ($productCategoryParent->getId() === $productCategory->getId())
-				throw new ControlException('não é possível vincular uma categoria a ela mesma');
+			if ($productCategory->getId() === 0)
+				if (!$this->productCategoryDAO->insert($productCategory))
+					throw ProductCategoryException::newNotInserted();
 
 			if (!$this->productCategoryDAO->replaceRelationship($productCategory, $productCategoryParent))
-				return false;
+			{
+				$this->productCategoryDAO->rollback();
+				throw ProductCategoryException::newReplaceRelationship();
+			}
 		}
-
-		return true;
+		$this->productCategoryDAO->commit();
 	}
 
 	/**
 	 *
 	 * @param ProductCategory $productCategory
-	 * @throws ApiException
-	 * @return bool
+	 * @throws ProductCategoryException
 	 */
-	public function set(ProductCategory $productCategory, ?ProductCategory $productCategoryParent = null): bool
+	public function set(ProductCategory $productCategory): void
 	{
-		if ($this->productCategoryDAO->existName($productCategory->getName()))
-			throw new ApiException('categoria de produto já definida');
+		if (!$this->productCategoryDAO->update($productCategory))
+			throw ProductCategoryException::newNotUpdated();
+	}
 
-		if ($productCategoryParent !== null)
-			$this->productCategoryDAO->replaceRelationship($productCategory, $productCategoryParent);
-
-		return $this->productCategoryDAO->update($productCategory);
+	/**
+	 *
+	 * @param ProductCategory $productCategoryParent
+	 * @param ProductCategory $productCategory
+	 * @throws ProductCategoryException
+	 */
+	public function setRelationship(ProductCategory $productCategoryParent, ProductCategory $productCategory): void
+	{
+		if (!$this->productCategoryDAO->replaceRelationship($productCategory, $productCategoryParent))
+			throw ProductCategoryException::newReplaceRelationship();
 	}
 
 	/**
 	 *
 	 * @param ProductCategory $productCategory
 	 * @param int $idProductCategoryType
-	 * @return bool
 	 */
-	public function remove(ProductCategory $productCategory, int $idProductCategoryType): bool
+	public function remove(ProductCategory $productCategory, int $idProductCategoryType): void
 	{
-		return	$this->productCategoryDAO->deleteRelationship($productCategory, $idProductCategoryType) &&
-				$this->productCategoryDAO->delete($productCategory);
+		$this->productCategoryDAO->beginTransaction();
+		{
+			if ($this->productCategoryDAO->existRelationship($productCategory->getId(), $idProductCategoryType))
+				if (!$this->productCategoryDAO->deleteRelationship($productCategory, $idProductCategoryType))
+					throw ProductCategoryException::newNotDeletedRelationship();
+
+			if (!$this->productCategoryDAO->delete($productCategory))
+			{
+				$this->productCategoryDAO->rollback();
+				throw ProductCategoryException::newReplaceRelationship();
+			}
+		}
+		$this->productCategoryDAO->commit();
 	}
 
 	/**
 	 *
 	 * @param ProductCategory $productCategoryParent
 	 * @param int $idProductCategoryType
-	 * @return bool
 	 */
 	public function removeRelationship(ProductCategory $productCategoryParent, int $idProductCategoryType): bool
 	{
-		return $this->productCategoryDAO->deleteRelationship($productCategoryParent, $idProductCategoryType);
+		if (!$this->productCategoryDAO->deleteRelationship($productCategoryParent, $idProductCategoryType))
+			throw ProductCategoryException::newReplaceRelationship();
 	}
 
 	/**
 	 *
 	 * @param int $idProductCategory
 	 * @param int $idCategoryType
-	 * @throws ControlException
+	 * @throws ProductCategoryException
 	 * @return ProductCategory
 	 */
 	public function get(int $idProductCategory, int $idCategoryType = 0): ProductCategory
 	{
 		if (($productCategory = $this->productCategoryDAO->select($idProductCategory, $idCategoryType)) === null)
-			throw new ControlException('categoria de produto não encontrada');
+			throw ProductCategoryException::newNotSelected();
 
 		return $productCategory;
 	}
@@ -129,10 +151,14 @@ class ProductCategoryControl extends GenericControl
 	/**
 	 *
 	 * @param ProductCategory $productCategory
+	 * @param int $idProductCategory
 	 */
-	public function getCategories(ProductCategory $productCategory): ProductCategories
+	public function getCategories(ProductCategory $productCategory, int $idProductCategory): ProductCategories
 	{
-		return $this->productCategoryDAO->selectByCategory($productCategory);
+		if ($idProductCategory === 0)
+			throw ProductCategoryException::newInvalidType();
+
+		return $this->productCategoryDAO->selectByCategory($productCategory, $idProductCategory);
 	}
 
 	/**

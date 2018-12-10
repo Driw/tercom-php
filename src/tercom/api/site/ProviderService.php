@@ -12,23 +12,23 @@ use tercom\api\exceptions\FilterException;
 use tercom\entities\Provider;
 
 /**
- * <h1>Serviço de Fornecedor</h1>
+ * Serviço de Fornecedor
  *
- * <p>Este serviço realiza a comunicação do cliente para com o sistema em relação aos dados de fornecedores.
+ * Este serviço realiza a comunicação do cliente para com o sistema em relação aos dados de fornecedores.
  * Como serviço, oferece as possibilidades de acicionar fornecedor, atualizar fornecedor, definir telefones,
- * remover telefones, obter fornecedor, procurar por CNPJ e procurar por nome fantasia.</p>
+ * remover telefones, obter fornecedor, procurar por CNPJ e procurar por nome fantasia.
  *
- * @see ApiServiceInterface
- * @see ApiConnection
+ * @see DefaultSiteService
+ * @see ApiResultProviderSettings
+ * @see ApiResultObject
  * @author Andrew
  */
-
 class ProviderService extends DefaultSiteService
 {
 	/**
-	 * Ação para se obter as configurações de limites de cada atributo referente aos fornecedores.
+	 * Ação para se obter as configurações de limites de cada atributo referente ao fornecedor.
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
-	 * @return ApiResultProviderSettings aquisição do resultado com as configurações dos dados de fornecedores.
+	 * @return ApiResultProviderSettings aquisição do resultado com as configurações.
 	 */
 	public function actionSettings(ApiContent $content): ApiResultProviderSettings
 	{

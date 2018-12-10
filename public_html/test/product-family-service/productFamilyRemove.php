@@ -11,7 +11,7 @@ include '../include.php';
 			header('Content-type: text/html');
 ?>
 <form method='get'>
-	<p>Família ID: <input type='text' name='idProductFamily'></p>
+	<p>Família ID: <input type='text' name='idProductFamily' required></p>
 	<p><input type='submit' value='Continuar'></p>
 </form>
 <?php

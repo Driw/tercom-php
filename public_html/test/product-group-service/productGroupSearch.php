@@ -11,8 +11,8 @@ include '../include.php';
 			header('Content-type: text/html');
 ?>
 <form method='get'>
-	<p>Buscar por Grupo: <input type='text' name='value'></p>
-	<p>Filtro: <select name='filter'></p>
+	<p>Buscar por Grupo: <input type='text' name='value' required></p>
+	<p>Filtro: <select name='filter' required>
 		<option value='name'>nome</option>
 	</select>
 	<p><input type='submit' value='Continuar'></p>
@@ -22,7 +22,8 @@ include '../include.php';
 		}
 
 		$filter = $_GET['filter'];
-		$value = $_GET['value'];
+		$value = urlencode($_GET['value']);
+
 		return GeradorDeDados::callWebService("productGroup/search/$filter/$value", []);
 	}
 }

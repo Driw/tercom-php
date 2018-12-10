@@ -11,8 +11,8 @@ require_once '../include.php';
 			header('Content-type: text/html');
 ?>
 <form method='get'>
-	<p>Família ID: <input type='text' name='idProductFamily'></p>
-	<p>Grupo: <input type='text' name='name'></p>
+	<p>Família ID: <input type='text' name='idProductFamily' required></p>
+	<p>Grupo: <input type='text' name='name' required></p>
 	<p><input type='submit' value='Continuar'></p>
 </form>
 <?php

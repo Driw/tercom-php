@@ -74,6 +74,7 @@ CREATE TABLE IF NOT EXISTS product_categories
 	id INT AUTO_INCREMENT,
 	name VARCHAR(32) NOT NULL,
 
+	CONSTRAINT product_categories_name_uq UNIQUE KEY (name),
 	CONSTRAINT product_categories_pk PRIMARY KEY (id)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_general_ci;
 
