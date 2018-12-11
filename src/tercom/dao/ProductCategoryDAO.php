@@ -122,10 +122,10 @@ class ProductCategoryDAO extends GenericDAO
 				LEFT JOIN product_category_types ON product_category_types.id = product_category_relationships.idCategoryType";
 	}
 
-	public function select(int $idProductCategory, int $idProductCategoryType = 0): ?ProductCategory
+	public function select(int $idProductCategory, int $idProductCategoryType = ProductCategory::CATEGORY_NONE): ?ProductCategory
 	{
 		// Quando é família não vai possuir nenhuma relação de categoria parent, logo o tipo será nulo
-		if ($idProductCategoryType === ProductCategory::CATEGORY_FAMILY)
+		if ($idProductCategoryType === ProductCategory::CATEGORY_NONE || $idProductCategoryType === ProductCategory::CATEGORY_FAMILY)
 			$idProductCategoryType = null;
 
 		$sqlType = $idProductCategoryType === null ? 'IS NULL' : '= ?';

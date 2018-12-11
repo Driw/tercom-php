@@ -12,7 +12,6 @@ use tercom\entities\lists\ProductPrices;
  * @see ProductUnit
  * @author Andrew
  */
-
 class Product extends AdvancedObject
 {
 	/**
@@ -30,20 +29,16 @@ class Product extends AdvancedObject
 	/**
 	 * @var int quantidade máxima de caracteres permitido da descrição.
 	 */
-	public const MAX_DESCRIPTION_LEN = 128;
+	public const MAX_DESCRIPTION_LEN = TINYTEXT_LEN;
 	/**
 	 * @var int quantidade máxima de caracteres permitido na utilidade.
 	 */
-	public const MAX_UTILITY_LEN = 128;
+	public const MAX_UTILITY_LEN = TINYTEXT_LEN;
 
 	/**
 	 * @var int código de identificação único.
 	 */
 	private $id;
-	/**
-	 * @var ProductUnit unidade de produto padrão.
-	 */
-	private $unit;
 	/**
 	 * @var string nome do produto.
 	 */
@@ -61,18 +56,21 @@ class Product extends AdvancedObject
 	 */
 	private $inactive;
 	/**
-	 * @var ProductCategorySet conjunto de categorias para filtro.
+	 * @var ProductUnit unidade de produto padrão.
 	 */
-	private $category;
+	private $productUnit;
+	/**
+	 * @var ProductCategory categoria do produto.
+	 */
+	private $productCategory;
 	/**
 	 * @var ProductPrices lista de preços do produto.
 	 */
-	private $prices;
+	private $productPrices;
 
 	/**
 	 * Cria uma nova instância de um produto.
 	 */
-
 	public function __construct()
 	{
 		$this->id = 0;
@@ -80,16 +78,12 @@ class Product extends AdvancedObject
 		$this->description = '';
 		$this->utility = '';
 		$this->inactive = false;
-		$this->category = new ProductCategorySet();
-		$this->prices = new ProductPrices();
-		$this->unit = new ProductUnit();
 	}
 
 	/**
 	 * @return int aquisição do código de identificação.
 	 */
-
-	public function getID(): int
+	public function getId(): int
 	{
 		return $this->id;
 	}
@@ -97,34 +91,14 @@ class Product extends AdvancedObject
 	/**
 	 * @param int $id código de identificação.
 	 */
-
-	public function setID(int $id)
+	public function setId(int $id): void
 	{
 		$this->id = $id;
 	}
 
 	/**
-	 * @return ProductUnit aquisição da unidade de produto padrão.
-	 */
-
-	public function getUnit(): ProductUnit
-	{
-		return $this->unit;
-	}
-
-	/**
-	 * @param ProductUnit $unit unidade de produto padrão.
-	 */
-
-	public function setUnit(ProductUnit $unit)
-	{
-		$this->unit = $unit;
-	}
-
-	/**
 	 * @return string aquisição do nome do produto.
 	 */
-
 	public function getName(): string
 	{
 		return $this->name;
@@ -133,8 +107,7 @@ class Product extends AdvancedObject
 	/**
 	 * @param string $name nome do produto.
 	 */
-
-	public function setName(string $name)
+	public function setName(string $name): void
 	{
 		if (!StringUtil::hasBetweenLength($name, self::MIN_NAME_LEN, self::MAX_NAME_LEN))
 			throw EntityParseException::new("nome deve possuir de %d a %d caracteres (nome: $name)", self::MIN_NAME_LEN, self::MAX_NAME_LEN);
@@ -145,7 +118,6 @@ class Product extends AdvancedObject
 	/**
 	 * @return string aquisição da descrição sobre o produto.
 	 */
-
 	public function getDescription(): string
 	{
 		return $this->description;
@@ -154,8 +126,7 @@ class Product extends AdvancedObject
 	/**
 	 * @param string $description descrição sobre o produto
 	 */
-
-	public function setDescription(string $description)
+	public function setDescription(string $description): void
 	{
 		if (!StringUtil::hasBetweenLength($description, self::MIN_DESCRIPTION_LEN, self::MAX_DESCRIPTION_LEN))
 			throw EntityParseException::new("descrição deve possuir de %d a %d caracteres (descrição: $description)", self::MIN_DESCRIPTION_LEN, self::MAX_DESCRIPTION_LEN);
@@ -163,11 +134,9 @@ class Product extends AdvancedObject
 		$this->description = $description;
 	}
 
-
 	/**
 	 * @return string aquisição da descrição de como utilizar o produto.
 	 */
-
 	public function getUtility(): string
 	{
 		return $this->utility;
@@ -176,8 +145,7 @@ class Product extends AdvancedObject
 	/**
 	 * @param string $utility descrição de como utilizar o produto.
 	 */
-
-	public function setUtility(string $utility)
+	public function setUtility(string $utility): void
 	{
 		if (!StringUtil::hasMaxLength($utility, self::MAX_UTILITY_LEN))
 			throw EntityParseException::new("utilidade deve possuir até %d caracteres (utilidade: $utility)", self::MAX_UTILITY_LEN);
@@ -188,7 +156,6 @@ class Product extends AdvancedObject
 	/**
 	 * @return boolean produto está inativo.
 	 */
-
 	public function isInactive(): bool
 	{
 		return $this->inactive;
@@ -197,64 +164,90 @@ class Product extends AdvancedObject
 	/**
 	 * @param boolean $inactive inativar produto.
 	 */
-
-	public function setInactive(bool $inactive)
+	public function setInactive(bool $inactive): void
 	{
 		$this->inactive = $inactive;
 	}
 
 	/**
-	 * @return ProductCategorySet aquisição do conjunto de categorias para filtro.
+	 * @return ProductUnit aquisição da unidade de produto padrão.
 	 */
-
-	public function getCategory(): ProductCategorySet
+	public function getProductUnit(): ProductUnit
 	{
-		return $this->category;
+		return $this->productUnit === null ? ($this->productUnit = new ProductUnit()) : $this->productUnit;
 	}
 
 	/**
-	 * @param ProductCategorySet $category conjunto de categorias para filtro.
+	 * @return int aquisição do código de identificação da unidade do produto.
 	 */
-
-	public function setCategory(ProductCategorySet $category)
+	public function getProductUnitId(): int
 	{
-		$this->category = $category;
+		return $this->productUnit === null ? 0 : $this->productUnit->getId();
+	}
+
+	/**
+	 * @param ProductUnit $unit unidade de produto padrão.
+	 */
+	public function setProductUnit(ProductUnit $productUnit): void
+	{
+		$this->productUnit = $productUnit;
+	}
+
+	/**
+	 * @return ProductCategory aquisição do conjunto de categorias para filtro.
+	 */
+	public function getProductCategory(): ProductCategory
+	{
+		return $this->productCategory === null ? ($this->productCategory = new ProductCategory()) : $this->productCategory;
+	}
+
+	/**
+	 * @return int aquisição do código de identificação da categoria do produto.
+	 */
+	public function getProductCategoryId(): int
+	{
+		return $this->productCategory === null ? 0 : $this->productCategory->getId();
+	}
+
+	/**
+	 * @param ProductCategory $productCategory conjunto de categorias para filtro.
+	 */
+	public function setProductCategory(ProductCategory $productCategory): void
+	{
+		$this->productCategory = $productCategory;
 	}
 
 	/**
 	 * @return ProductPrices aquisição da lista de preços do produto.
 	 */
-
-	public function getValues(): ProductPrices
+	public function getProductPrices(): ProductPrices
 	{
-		return $this->prices;
+		return $this->productPrices === null ? ($this->productPrices = new ProductPrices()) : $this->productPrices;
 	}
 
 	/**
 	 * @param ProductPrices $prices lista de preços do produto.
 	 */
-
-	public function setValues(ProductPrices $prices)
+	public function setProductPrices(ProductPrices $prices): void
 	{
-		$this->prices = $prices;
+		$this->productPrices = $prices;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 * @see \dProject\Primitive\AdvancedObject::getAttributeTypes()
 	 */
-
 	public function getAttributeTypes(): array
 	{
 		return [
 			'id' => ObjectUtil::TYPE_INTEGER,
-			'unit' => ProductUnit::class,
 			'name' => ObjectUtil::TYPE_STRING,
 			'description' => ObjectUtil::TYPE_STRING,
 			'utility' => ObjectUtil::TYPE_STRING,
 			'inactive' => ObjectUtil::TYPE_BOOLEAN,
-			'category' => ProductCategorySet::class,
-			'prices' => ProductPrices::class,
+			'productUnit' => ProductUnit::class,
+			'productCategory' => ProductCategory::class,
+			'productPrices' => ProductPrices::class,
 		];
 	}
 }

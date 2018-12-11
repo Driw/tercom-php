@@ -2,81 +2,94 @@
 
 namespace tercom\dao;
 
-use tercom\entities\Product;
-use tercom\entities\lists\Products;
 use dProject\MySQL\Result;
-use tercom\Functions;
+use dProject\Primitive\StringUtil;
+use tercom\entities\Product;
+use tercom\entities\ProductCategory;
+use tercom\entities\lists\Products;
+use tercom\exceptions\ProductException;
 
 class ProductDAO extends GenericDAO
 {
+	public const ALL_COLUMNS = ['id', 'name', 'description', 'utility', 'inactive', 'idProductUnit', 'idProductCategory'];
+
 	private function newSelect(): string
 	{
-		$productColumns = ['id', 'name', 'description', 'utility', 'inactive', 'idProductUnit', 'idProductFamily', 'idProductGroup', 'idProductSubGroup', 'idProductSector'];
-		$productUnitColumns = ['id', 'name', 'shortName'];
-		$productFamilyColumns = ['id', 'name'];
-		$productGroupColumns = ['id', 'name'];
-		$productSubGroupColumns = ['id', 'name'];
-		$productSectorColumns = ['id', 'name'];
-		$productQuery = $this->buildQuery($productColumns, 'products');
-		$productUnitQuery = $this->buildQuery($productUnitColumns, 'product_units', 'productUnit');
-		$productFamilyQuery = $this->buildQuery($productFamilyColumns, 'product_families', 'productFamily');
-		$productGroupQuery = $this->buildQuery($productGroupColumns, 'product_groups', 'productGroup');
-		$productSubGroupQuery = $this->buildQuery($productSubGroupColumns, 'product_subgroups', 'productSubGroup');
-		$productSectorQuery = $this->buildQuery($productSectorColumns, 'product_sectores', 'productSector');
+		$productQuery = $this->buildQuery(self::ALL_COLUMNS, 'products');
+		$productUnitQuery = $this->buildQuery(ProductUnitDAO::ALL_COLUMNS, 'product_units', 'productUnit');
+		$productCategoryQuery = $this->buildQuery(ProductCategoryDAO::ALL_COLUMNS, 'product_categories', 'productCategory');
 
-		return "SELECT $productQuery, $productUnitQuery, $productFamilyQuery, $productGroupQuery, $productSubGroupQuery, $productSectorQuery
+		return "SELECT $productQuery, $productUnitQuery, $productCategoryQuery
 				FROM products
 				LEFT JOIN product_units ON products.idProductUnit = product_units.id
-				LEFT JOIN product_families ON products.idProductFamily = product_families.id
-				LEFT JOIN product_groups ON products.idProductGroup = product_groups.id
-				LEFT JOIN product_subgroups ON products.idProductSubGroup = product_subgroups.id
-				LEFT JOIN product_sectores ON products.idProductSector = product_sectores.id";
+				LEFT JOIN product_categories ON products.idProductCategory = product_categories.id";
+	}
+
+	private function validate(Product $product, bool $validateId)
+	{
+		// PRIMARY KEY
+		if ($validateId) {
+			if ($product->getID() === 0)
+				throw ProductException::newNotIdentified();
+		} else {
+			if ($product->getID() !== 0)
+				ProductException::newIdentified();
+		}
+
+		// NOT NULL
+		if (StringUtil::isEmpty($product->getName())) throw ProductException::newNameEmpty();
+		if (StringUtil::isEmpty($product->getDescription())) throw ProductException::newDescriptionEmpty();
+
+		// FOREIGN KEY
+		if ($product->getProductUnitId() === 0) throw ProductException::newUnitNone();
+		if (!$this->existProductUnit($product->getProductUnitId())) throw ProductException::newUnitInvalid();
+		if ($product->getProductCategoryId() !== 0)
+			if (!$this->existProductCategory($product->getProductCategoryId())) throw ProductException::newCategoryInvalid();
+
+		// UNIQUE KEY
+		if ($this->existName($product->getName(), $product->getId())) throw ProductException::newNameUnavaiable();
 	}
 
 	public function insert(Product $product): bool
 	{
-		$sql = "INSERT INTO products (name, description, utility, inactive, idProductUnit, idProductFamily, idProductGroup, idProductSubGroup, idProductSector)
-				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		$this->validate($product, false);
 
-		$query = $this->mysql->createQuery($sql);
+		$sql = "INSERT INTO products (name, description, utility, inactive, idProductUnit, idProductCategory)
+				VALUES (?, ?, ?, ?, ?, ?)";
+
+		$query = $this->createQuery($sql);
+		$query->setAllowNullValue(true);
 		$query->setString(1, $product->getName());
 		$query->setString(2, $product->getDescription());
 		$query->setString(3, $product->getUtility());
 		$query->setBoolean(4, $product->isInactive());
-		$query->setInteger(5, $product->getUnit()->getID());
-		$query->setInteger(6, $this->parseNullID($product->getCategory()->getFamily()->getID()));
-		$query->setInteger(7, $this->parseNullID($product->getCategory()->getGroup()->getID()));
-		$query->setInteger(8, $this->parseNullID($product->getCategory()->getSubgroup()->getID()));
-		$query->setInteger(9, $this->parseNullID($product->getCategory()->getSector()->getID()));
-		$query->setAllowNullValue(true);
+		$query->setInteger(5, $product->getProductUnitId());
+		$query->setInteger(6, $this->parseNullID($product->getProductCategoryId()));
 
-		$result = $query->execute();
+		if (($result = $query->execute())->isSuccessful())
+			$product->setId($result->getInsertID());
 
-		if ($result->isSuccessful())
-			$product->setID($result->getInsertID());
-
-		return $result->isSuccessful();
+		return $product->getId() != 0;
 	}
 
 	public function update(Product $product): bool
 	{
+		$this->validate($product, true);
+
 		$sql = "UPDATE products
-				SET name = ?, description = ?, utility = ?, inactive = ?, idProductUnit = ?, idProductFamily = ?, idProductGroup = ?, idProductSubGroup = ?, idProductSector = ?
+				SET name = ?, description = ?, utility = ?, inactive = ?, idProductUnit = ?, idProductCategory = ?
 				WHERE id = ?";
 
-		$query = $this->mysql->createQuery($sql);
+		$query = $this->createQuery($sql);
+		$query->setAllowNullValue(true);
+		$query->setEmptyAsNull(true);
 		$query->setString(1, $product->getName());
 		$query->setString(2, $product->getDescription());
 		$query->setString(3, $product->getUtility());
 		$query->setBoolean(4, $product->isInactive());
-		$query->setInteger(5, $product->getUnit()->getID());
-		$query->setInteger(6, $this->parseNullID($product->getCategory()->getFamily()->getID()));
-		$query->setInteger(7, $this->parseNullID($product->getCategory()->getGroup()->getID()));
-		$query->setInteger(8, $this->parseNullID($product->getCategory()->getSubgroup()->getID()));
-		$query->setInteger(9, $this->parseNullID($product->getCategory()->getSector()->getID()));
-		$query->setInteger(10, $product->getID());
-		$query->setAllowNullValue(true);
-		$query->setEmptyAsNull(true);
+		$query->setInteger(5, $product->getProductUnitId());
+		$query->setInteger(6, $this->parseNullID($product->getProductCategoryId()));
+		$query->setInteger(7, $product->getID());
 
 		$result = $query->execute();
 
@@ -89,7 +102,7 @@ class ProductDAO extends GenericDAO
 		$sql = "$sqlSELECT
 				WHERE products.id = ?";
 
-		$query = $this->mysql->createQuery($sql);
+		$query = $this->createQuery($sql);
 		$query->setInteger(1, $idProduct);
 
 		$result = $query->execute();
@@ -100,20 +113,34 @@ class ProductDAO extends GenericDAO
 	public function selectAll(): Products
 	{
 		$sql = $this->newSelect();
-		$query = $this->mysql->createQuery($sql);
+		$query = $this->createQuery($sql);
 		$result = $query->execute();
 
 		return $this->parseProducts($result);
 	}
 
-	public function selectByName(string $name): Products
+	public function selectLikeName(string $name): Products
 	{
 		$sqlSELECT = $this->newSelect();
 		$sql = "$sqlSELECT
 				WHERE products.name LIKE ?";
 
-		$query = $this->mysql->createQuery($sql);
+		$query = $this->createQuery($sql);
 		$query->setString(1, "%$name%");
+
+		$result = $query->execute();
+
+		return $this->parseProducts($result);
+	}
+
+	public function selectByProductCategory(int $idProductCategory): Products
+	{
+		$sqlSELECT = $this->newSelect();
+		$sql = "$sqlSELECT
+				WHERE	products.idProductCategory = ?";
+
+		$query = $this->createQuery($sql);
+		$query->setInteger(1, $idProductCategory);
 
 		$result = $query->execute();
 
@@ -124,10 +151,27 @@ class ProductDAO extends GenericDAO
 	{
 		$sqlSELECT = $this->newSelect();
 		$sql = "$sqlSELECT
-				WHERE products.idProductFamily = ?";
+				LEFT JOIN product_category_relationships ON product_category_relationships.idCategoryParent = products.idProductCategory
+				WHERE products.idProductCategory = ? AND product_category_relationships.idCategoryType IS NULL";
 
-		$query = $this->mysql->createQuery($sql);
+		$query = $this->createQuery($sql);
 		$query->setInteger(1, $idProductFamily);
+
+		$result = $query->execute();
+
+		return $this->parseProducts($result);
+	}
+
+	private function selectByCategoryRelationship(int $idProductGroup, int $idProductRelationship): Products
+	{
+		$sqlSELECT = $this->newSelect();
+		$sql = "$sqlSELECT
+				INNER JOIN product_category_relationships ON product_category_relationships.idCategory = products.idProductCategory
+				WHERE products.idProductCategory = ? AND product_category_relationships.idCategoryType = ?";
+
+		$query = $this->createQuery($sql);
+		$query->setInteger(1, $idProductGroup);
+		$query->setInteger(2, $idProductRelationship);
 
 		$result = $query->execute();
 
@@ -136,75 +180,17 @@ class ProductDAO extends GenericDAO
 
 	public function selectByProductGroup(int $idProductGroup): Products
 	{
-		$sqlSELECT = $this->newSelect();
-		$sql = "$sqlSELECT
-				WHERE products.idProductGroup = ?";
-
-		$query = $this->mysql->createQuery($sql);
-		$query->setInteger(1, $idProductGroup);
-
-		$result = $query->execute();
-
-		return $this->parseProducts($result);
+		return $this->selectByCategoryRelationship($idProductGroup, ProductCategory::CATEGORY_GROUP);
 	}
 
 	public function selectByProductSubGroup(int $idProductSubGroup): Products
 	{
-		$sqlSELECT = $this->newSelect();
-		$sql = "$sqlSELECT
-				WHERE products.idProductSubGroup = ?";
-
-		$query = $this->mysql->createQuery($sql);
-		$query->setInteger(1, $idProductSubGroup);
-
-		$result = $query->execute();
-
-		return $this->parseProducts($result);
+		return $this->selectByCategoryRelationship($idProductSubGroup, ProductCategory::CATEGORY_SUBGROUP);
 	}
 
 	public function selectByProductSector(int $idProductSector): Products
 	{
-		$sqlSELECT = $this->newSelect();
-		$sql = "$sqlSELECT
-				WHERE products.idProductSector = ?";
-
-		$query = $this->mysql->createQuery($sql);
-		$query->setInteger(1, $idProductSector);
-
-		$result = $query->execute();
-
-		return $this->parseProducts($result);
-	}
-
-	public function existID(int $idProduct): bool
-	{
-		$sql = "SELECT COUNT(*) AS qtd
-				FROM products
-				WHERE id = ?";
-
-		$query = $this->mysql->createQuery($sql);
-		$query->setInteger(1, $idProduct);
-
-		$result = $query->execute();
-		$products = $result->next();
-
-		return intval($products['qtd']) === 1;
-	}
-
-	public function existName(string $name, int $idProduct): bool
-	{
-		$sql = "SELECT COUNT(*) AS qtd
-				FROM products
-				WHERE name = ? AND id <> ?";
-
-		$query = $this->mysql->createQuery($sql);
-		$query->setString(1, $name);
-		$query->setInteger(2, $idProduct);
-
-		$result = $query->execute();
-		$products = $result->next();
-
-		return intval($products['qtd']) === 1;
+		return $this->selectByCategoryRelationship($idProductSector, ProductCategory::CATEGORY_SECTOR);
 	}
 
 	public function selectByProvider(int $idProvider, bool $inactives): Products
@@ -215,7 +201,7 @@ class ProductDAO extends GenericDAO
 				INNER JOIN product_values ON product_values.idProduct = products.id
 				WHERE product_values.idProvider = ? AND products.inactive $sqlInactive";
 
-		$query = $this->mysql->createQuery($sql);
+		$query = $this->createQuery($sql);
 		$query->setInteger(1, $idProvider);
 
 		$result = $query->execute();
@@ -223,52 +209,79 @@ class ProductDAO extends GenericDAO
 		return $this->parseProducts($result);
 	}
 
+	public function exist(int $idProduct): bool
+	{
+		$sql = "SELECT COUNT(*) qty
+				FROM products
+				WHERE id = ?";
+
+		$query = $this->createQuery($sql);
+		$query->setInteger(1, $idProduct);
+
+		return $this->parseQueryExist($query);
+	}
+
+	public function existName(string $name, int $idProduct): bool
+	{
+		$sql = "SELECT COUNT(*) qty
+				FROM products
+				WHERE name = ? AND id <> ?";
+
+		$query = $this->createQuery($sql);
+		$query->setString(1, $name);
+		$query->setInteger(2, $idProduct);
+
+		return $this->parseQueryExist($query);
+	}
+
+	public function existProductUnit(int $idProductUnit): bool
+	{
+		$sql = "SELECT COUNT(*) qty
+				FROM product_units
+				WHERE id = ?";
+
+		$query = $this->createQuery($sql);
+		$query->setInteger(1, $idProductUnit);
+
+		return $this->parseQueryExist($query);
+	}
+
+	public function existProductCategory(int $idProductCategory): bool
+	{
+		$sql = "SELECT COUNT(*) qty
+				FROM product_categories
+				WHERE id = ?";
+
+		$query = $this->createQuery($sql);
+		$query->setInteger(1, $idProductCategory);
+
+		return $this->parseQueryExist($query);
+	}
+
 	private function parseProduct(Result $result): ?Product
 	{
-		if (!$result->hasNext())
-			return null;
-
-		$array = $result->next();
-		$product = $this->newProduct($array);
-
-		return $product;
+		return ($entry = $this->parseSingleResult($result)) === null ? null : $this->newProduct($entry);
 	}
 
 	private function parseProducts(Result $result): Products
 	{
 		$products = new Products();
 
-		while ($result->hasNext())
+		foreach ($this->parseMultiplyResults($result) as $entry)
 		{
-			$array = $result->next();
-			$product = $this->newProduct($array);
+			$product = $this->newProduct($entry);
 			$products->add($product);
 		}
 
 		return $products;
 	}
 
-	private function newProduct(array $array): Product
+	private function newProduct(array $entry): Product
 	{
-		$idProductFamily = intval($array['idProductFamily']);
-		$idProductGroup = intval($array['idProductGroup']);
-		$idProductSubGroup = intval($array['idProductSubGroup']);
-		$idProductSector = intval($array['idProductSector']);
-
-		$unitArray = Functions::parseEntrySQL($array, 'productUnit');
-		$familyArray = Functions::parseEntrySQL($array, 'productFamily');
-		$groupArray = Functions::parseEntrySQL($array, 'productGroup');
-		$subGroupArray = Functions::parseEntrySQL($array, 'productSubGroup');
-		$sectorArray = Functions::parseEntrySQL($array, 'productSector');
+		$this->parseEntry($entry, 'productUnit', 'productCategory');
 
 		$product = new Product();
-		$product->fromArray($array);
-		$product->getUnit()->fromArray($unitArray);
-
-		if ($idProductFamily !== 0) $product->getCategory()->getFamily()->fromArray($familyArray);
-		if ($idProductGroup !== 0) $product->getCategory()->getGroup()->fromArray($groupArray);
-		if ($idProductSubGroup !== 0) $product->getCategory()->getSubgroup()->fromArray($subGroupArray);
-		if ($idProductSector !== 0) $product->getCategory()->getSector()->fromArray($sectorArray);
+		$product->fromArray($entry);
 
 		return $product;
 	}

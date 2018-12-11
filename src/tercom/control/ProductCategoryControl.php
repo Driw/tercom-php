@@ -126,7 +126,7 @@ class ProductCategoryControl extends GenericControl
 	 * @throws ProductCategoryException
 	 * @return ProductCategory
 	 */
-	public function get(int $idProductCategory, int $idCategoryType = 0): ProductCategory
+	public function get(int $idProductCategory, int $idCategoryType = ProductCategory::CATEGORY_NONE): ProductCategory
 	{
 		if (($productCategory = $this->productCategoryDAO->select($idProductCategory, $idCategoryType)) === null)
 			throw ProductCategoryException::newNotSelected();

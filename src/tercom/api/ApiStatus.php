@@ -65,6 +65,18 @@ class ApiStatus
 	public const PRODUCT_CATEGORY_ON_PRODUCT = 318;
 	public const PRODUCT_CATEGORY_INVALID_TYPE = 319;
 
+	public const PRODUCT_IDENTIFIED = 351;
+	public const PRODUCT_NOT_IDENTIFIED = 352;
+	public const PRODUCT_NAME_EMPTY = 253;
+	public const PRODUCT_DESCRIPTION_EMPTY = 254;
+	public const PRODUCT_UNIT_NONE = 255;
+	public const PRODUCT_NAME_UNAVAIABLE = 256;
+	public const PRODUCT_UNIT_INVALID = 257;
+	public const PRODUCT_CATEGORY_INVALID = 258;
+	public const PRODUCT_NOT_INSERTED = 259;
+	public const PRODUCT_NOT_UPDATED = 260;
+	public const PRODUCT_NOT_SELECTED = 261;
+
 	public const SERVICE_NOT_ADD = 401;
 	public const SERVICE_NOT_SET = 402;
 	public const SERVICE_NOT_FOUND = 403;
