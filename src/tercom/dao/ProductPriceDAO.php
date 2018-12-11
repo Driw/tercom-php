@@ -11,7 +11,7 @@ class ProductPriceDAO extends GenericDAO
 {
 	private function newSelect(): string
 	{
-		$productPriceColumns = ['id', 'idProduct', 'idProvider', 'idManufacture', 'idProductPackage', 'idProductType', 'name', 'amount', 'price', 'lastUpdate'];
+		$productPriceColumns = ['id', 'idProduct', 'idProvider', 'idManufacturer', 'idProductPackage', 'idProductType', 'name', 'amount', 'price', 'lastUpdate'];
 		$productColumns = ['id', 'name', 'description', 'inactive', 'idProductUnit', 'idProductFamily', 'idProductGroup', 'idProductSubGroup', 'idProductSector'];
 		$productUnitColumns = ['id', 'name', 'shortName'];
 		$productFamilyColumns = ['id', 'name'];
@@ -45,13 +45,13 @@ class ProductPriceDAO extends GenericDAO
 				LEFT JOIN product_sectores ON products.idProductSector = product_sectores.id
 				LEFT JOIN product_packages ON product_prices.idProductPackage = product_packages.id
 				LEFT JOIN product_types ON product_prices.idProductType = product_types.id
-				LEFT JOIN manufacturers ON product_prices.idManufacture = manufacturers.id
+				LEFT JOIN manufacturers ON product_prices.idManufacturer = manufacturers.id
 				LEFT JOIN providers ON product_prices.idProvider = providers.id";
 	}
 
 	public function insert(ProductPrice $productPrice): bool
 	{
-		$sql = "INSERT INTO product_prices (idProduct, idProvider, idManufacture, idProductPackage, idProductType, name, amount, price, lastUpdate)
+		$sql = "INSERT INTO product_prices (idProduct, idProvider, idManufacturer, idProductPackage, idProductType, name, amount, price, lastUpdate)
 				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 		$query = $this->createQuery($sql);
@@ -78,7 +78,7 @@ class ProductPriceDAO extends GenericDAO
 		$productPrice->getLastUpdate()->setTimestamp(time());
 
 		$sql = "UPDATE product_prices
-				SET idProvider = ?, idManufacture = ?, idProductPackage = ?, idProductType = ?, name = ?, amount = ?, price = ?, lastUpdate = ?
+				SET idProvider = ?, idManufacturer = ?, idProductPackage = ?, idProductType = ?, name = ?, amount = ?, price = ?, lastUpdate = ?
 				WHERE id = ?";
 
 		$query = $this->createQuery($sql);
@@ -167,6 +167,18 @@ class ProductPriceDAO extends GenericDAO
 		$result = $query->execute();
 
 		return $this->parseProductPrices($result);
+	}
+
+	public function existManufacturer(int $idManufacturer): bool
+	{
+		$sql = "SELECT COUNT(*) qty
+				FROM product_prices
+				WHERE idManufacture = ?";
+
+		$query = $this->createQuery($sql);
+		$query->setInteger(1, $idManufacturer);
+
+		return $this->parseQueryExist($query);
 	}
 
 	private function parseProductPrice(Result $result): ?ProductPrice

@@ -74,6 +74,7 @@ CREATE TABLE IF NOT EXISTS product_categories
 	id INT AUTO_INCREMENT,
 	name VARCHAR(32) NOT NULL,
 
+	CONSTRAINT product_categories_name_uq UNIQUE KEY (name),
 	CONSTRAINT product_categories_pk PRIMARY KEY (id)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_general_ci;
 
@@ -95,6 +96,8 @@ CREATE TABLE IF NOT EXISTS product_units
 	name VARCHAR(32) NOT NULL,
 	shortName VARCHAR(6) NOT NULL,
 
+	CONSTRAINT product_units_name_uq UNIQUE KEY (name),
+	CONSTRAINT product_units_shortName_uq UNIQUE KEY (shortName),
 	CONSTRAINT product_units_pk PRIMARY KEY (id)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_general_ci;
 
@@ -118,8 +121,8 @@ CREATE TABLE IF NOT EXISTS products
 (
 	id INT AUTO_INCREMENT,
 	name VARCHAR(48) NOT NULL,
-	description VARCHAR(128) NOT NULL,
-	utility VARCHAR(128) NOT NULL DEFAULT '',
+	description TINYTEXT NOT NULL,
+	utility TINYTEXT NOT NULL DEFAULT '',
 	inactive TINYINT(1) NOT NULL DEFAULT '0',
 	idProductUnit INT NOT NULL,
 	idProductCategory INT NULL DEFAULT NULL,
@@ -135,7 +138,7 @@ CREATE TABLE IF NOT EXISTS product_prices
 	id INT AUTO_INCREMENT,
 	idProduct INT NOT NULL,
 	idProvider INT NOT NULL,
-	idManufacture INT NOT NULL,
+	idManufacturer INT NOT NULL,
 	idProductPackage INT NOT NULL,
 	idProductType INT NOT NULL,
 	name VARCHAR(64) DEFAULT NULL,
@@ -146,7 +149,7 @@ CREATE TABLE IF NOT EXISTS product_prices
 	CONSTRAINT product_prices_pk PRIMARY KEY (id),
 	CONSTRAINT product_prices_product_fk FOREIGN KEY (idProduct) REFERENCES products(id) ON DELETE RESTRICT,
 	CONSTRAINT product_prices_provider_fk FOREIGN KEY (idProvider) REFERENCES providers(id) ON DELETE CASCADE,
-	CONSTRAINT product_prices_manufacture_fk FOREIGN KEY (idManufacture) REFERENCES manufacturers(id) ON DELETE RESTRICT,
+	CONSTRAINT product_prices_manufacture_fk FOREIGN KEY (idManufacturer) REFERENCES manufacturers(id) ON DELETE RESTRICT,
 	CONSTRAINT product_prices_package_fk FOREIGN KEY (idProductPackage) REFERENCES product_packages(id) ON DELETE RESTRICT,
 	CONSTRAINT product_prices_type_fk FOREIGN KEY (idProductType) REFERENCES product_types(id) ON DELETE RESTRICT
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_general_ci;

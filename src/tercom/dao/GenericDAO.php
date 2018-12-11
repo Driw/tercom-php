@@ -14,7 +14,7 @@ class GenericDAO
 {
 	public const ER_ROW_IS_REFERENCED_2 = 1451;
 
-	protected $mysql;
+	private $mysql;
 
 	public function __construct(?MySQL $mysql = null)
 	{
@@ -97,9 +97,63 @@ class GenericDAO
 		return implode(", ", $sqlCampos);
 	}
 
+	protected function buildInQueryInt(array $ints)
+	{
+		foreach ($ints as $int)
+			if (!is_int($int))
+				throw new DAOException('parâmetro int esperado');
+
+		return implode(", ", $ints);
+	}
+
 	protected function parseNullID(int $id): ?int
 	{
 		return $id === 0 ? null : $id;
+	}
+
+	protected function parseEntry(array &$entry)
+	{
+		$prefixes = array_slice(func_get_args(), 1);
+
+		foreach ($prefixes as $prefix)
+			foreach ($entry as $field => $value)
+				if (StringUtil::startsWith($field, $prefix))
+				{
+					unset($entry[$field]);
+					$prefixField = substr($field, strlen($prefix) + 1);
+					$entry[$prefix][$prefixField] = $value;
+				}
+
+		$this->parseNullEntries($entry);
+	}
+
+	protected function parseNullEntries(array &$entry)
+	{
+		foreach ($entry as $field => $value)
+		{
+			if (!is_array($value))
+			{
+				if ($field === 'id' && $value === null)
+					return false;
+			}
+
+			else
+			{
+				if (!$this->parseNullEntries($value))
+					unset($entry[$field]);
+			}
+		}
+
+		return true;
+	}
+
+	protected function parseQueryExist(Query $query): bool
+	{
+		$result = $query->execute();
+		$entry = $result->next();
+		$result->free();
+
+		return intval($entry['qty']) > 0;
 	}
 
 	public function beginTransaction()
@@ -133,4 +187,3 @@ class GenericDAO
 	}
 }
 
-?>

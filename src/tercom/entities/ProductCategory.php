@@ -8,13 +8,14 @@ use dProject\Primitive\StringUtil;
 use tercom\entities\lists\ProductCategories;
 
 /**
- * <h1>Produto Folha</h1>
+ * Categoria de Produto
  *
- * <p>Classe para especificar o nome da categoria do produto e a identificação desta categoria.
- * No sistema a folha serve para representar todas as categorias: família, grupo, subgrupo e setor.
- * A finalidade das categorias é agrupar produtos de acordo com uma característica usado para filtros.</p>
+ * Uma catagoria de produto pode ser classificada como: família, grupo, subgrupo e setor.
+ * Cada categoria quando classificada pode possuir uma lista de outras categorias de uma classificação abaixo.
+ * A finalidade da categoria é agrupar produtos com características semelhantes afim de facilitar a busca.
  *
  * @see AdvancedObject
+ *
  * @author Andrew
  */
 class ProductCategory extends AdvancedObject
@@ -28,6 +29,10 @@ class ProductCategory extends AdvancedObject
 	 */
 	public const MAX_NAME_LEN = 32;
 
+	/**
+	 * @var int código da categoria sem classificação.
+	 */
+	public const CATEGORY_NONE = 0;
 	/**
 	 * @var int código da categoria do tipo familia.
 	 */
@@ -63,15 +68,14 @@ class ProductCategory extends AdvancedObject
 	private $productCategories;
 
 	/**
-	 * Cria uma nova instância de um produto folha para representação de categorias.
+	 * Cria uma nova instância de uma categoria de produto.
 	 * @param int $type tipo de categoria que está sendo criada.
 	 */
-	public function __construct(?int $type = null)
+	public function __construct(int $type = self::CATEGORY_NONE)
 	{
 		$this->id = 0;
 		$this->name = '';
 		$this->type = $type;
-		$this->productCategories = null;
 	}
 
 	/**
@@ -130,7 +134,7 @@ class ProductCategory extends AdvancedObject
 	 */
 	public function getProductCategories(): ProductCategories
 	{
-		return $this->productCategories;
+		return $this->productCategories === null ? ($this->productCategories = new ProductCategories()) : $this->productCategories;
 	}
 
 	/**
@@ -151,6 +155,7 @@ class ProductCategory extends AdvancedObject
 			'id' => ObjectUtil::TYPE_INTEGER,
 			'name' => ObjectUtil::TYPE_STRING,
 			'type' => ObjectUtil::TYPE_INTEGER,
+			'productCategories' => ProductCategories::class,
 		];
 	}
 }

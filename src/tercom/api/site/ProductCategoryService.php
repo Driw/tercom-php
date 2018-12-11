@@ -36,6 +36,12 @@ abstract class ProductCategoryService extends DefaultSiteService
 
 	/**
 	 *
+	 * @return int
+	 */
+	public abstract function getProductSubCategoryType(): int;
+
+	/**
+	 *
 	 * @return string
 	 */
 	public abstract function getIdFieldName(): string;
@@ -64,7 +70,7 @@ abstract class ProductCategoryService extends DefaultSiteService
 		$post = PostService::getInstance();
 		$productCategoryParent = null;
 
-		if ($post->isSetted($this->getParentIdFieldName()))
+		if ($this->getProductCategoryParentType() !== ProductCategory::CATEGORY_NONE && $post->isSetted($this->getParentIdFieldName()))
 		{
 			$idProductCategoryParent = $post->getInt($this->getParentIdFieldName());
 			$productCategoryParent = $this->getProductCategoryControl()->get($idProductCategoryParent, $this->getProductCategoryParentType());
@@ -76,7 +82,16 @@ abstract class ProductCategoryService extends DefaultSiteService
 
 		$productCategory->setName($name);
 		$productCategory->setType($this->getProductCategoryType());
-		$this->getProductCategoryControl()->add($productCategory, $productCategoryParent);
+
+		if ($productCategoryParent === null)
+			$this->getProductCategoryControl()->add($productCategory);
+		else
+		{
+			if ($productCategory->getId() === 0)
+				$this->getProductCategoryControl()->addRelationship($productCategoryParent, $productCategory);
+			else
+				$this->getProductCategoryControl()->setRelationship($productCategoryParent, $productCategory);
+		}
 
 		$result = new ApiResultObject();
 		$result->setObject($productCategory);
@@ -97,27 +112,24 @@ abstract class ProductCategoryService extends DefaultSiteService
 		$post = PostService::getInstance();
 		$idProductCategory = $content->getParameters()->getInt('idProductCategory');
 		$productCategory = $this->getProductCategoryControl()->get($idProductCategory, $this->getProductCategoryType());
-		$productCategory->setType($this->getProductCategoryType());
-		$productCategoryParent = null;
 
 		if ($post->isSetted('name')) $productCategory->setName($post->getString('name'));
-		if ($post->isSetted($this->getParentIdFieldName()))
+		if ($this->getProductCategoryParentType() !== ProductCategory::CATEGORY_NONE && $post->isSetted($this->getParentIdFieldName()))
 		{
 			try {
+				// Verificar se a categoria superior existe
 				$idProductCategoryParent = $post->getInt($this->getParentIdFieldName());
-				$productCategoryParent = $this->getProductCategoryControl()->get($idProductCategoryParent, $this->getProductCategoryParentType());
+				$this->getProductCategoryControl()->get($idProductCategoryParent, $this->getProductCategoryParentType());
 			} catch (ControlException $e) {
 				throw new ControlException('categoria de produto a vincular não encontrado');
 			}
 		}
 
+		$this->getProductCategoryControl()->set($productCategory);
+
 		$result = new ApiResultObject();
 		$result->setObject($productCategory);
-
-		if ($this->getProductCategoryControl()->set($productCategory, $productCategoryParent))
-			$result->setMessage('categoria de produto "%s" atualizada com êxito', $productCategory->getName());
-		else
-			$result->setMessage('não foi possível atualizar a categoria de produto "%s"', $productCategory->getName());
+		$result->setMessage('categoria de produto "%s" atualizada com êxito', $productCategory->getName());
 
 		return $result;
 	}
@@ -133,14 +145,11 @@ abstract class ProductCategoryService extends DefaultSiteService
 		$idProductCategory = $content->getParameters()->getInt('idProductCategory');
 		$productCategory = $this->getProductCategoryControl()->get($idProductCategory, $this->getProductCategoryType());
 		$productCategory->setType($this->getProductCategoryType());
+		$this->getProductCategoryControl()->remove($productCategory, $this->getProductCategoryType());
 
 		$result = new ApiResultObject();
 		$result->setObject($productCategory);
-
-		if ($this->getProductCategoryControl()->remove($productCategory, $this->getProductCategoryType()))
-			$result->setMessage('categoria de produto "%s" excluída com êxito', $productCategory->getName());
-		else
-			$result->setMessage('categoria de produto "%s" não encontrada ou já excluída', $productCategory->getName());
+		$result->setMessage('categoria de produto "%s" excluída com êxito', $productCategory->getName());
 
 		return $result;
 	}
@@ -175,8 +184,7 @@ abstract class ProductCategoryService extends DefaultSiteService
 	{
 		$idProductCategory = $content->getParameters()->getInt('idProductCategory');
 		$productCategory = $this->getProductCategoryControl()->get($idProductCategory, $this->getProductCategoryType());
-		$productCategory->setType($this->getProductCategoryType());
-		$productCategories = $this->getProductCategoryControl()->getCategories($productCategory);
+		$productCategories = $this->getProductCategoryControl()->getCategories($productCategory, $this->getProductSubCategoryType());
 		$productCategory->setProductCategories($productCategories);
 
 		$result = new ApiResultObject();

@@ -34,7 +34,7 @@ class PhoneDAO extends GenericDAO
 	{
 		$sql = "INSERT INTO phones (ddd, number, type) VALUES (?, ?, ?)";
 
-		$query = $this->mysql->createQuery($sql);
+		$query = $this->createQuery($sql);
 		$query->setInteger(1, $phone->getDDD());
 		$query->setString(2, $phone->getNumber());
 		$query->setString(3, $phone->getType());
@@ -57,7 +57,7 @@ class PhoneDAO extends GenericDAO
 	{
 		$sql = "UPDATE phones SET ddd = ?, number = ?, type = ? WHERE id = ?";
 
-		$query = $this->mysql->createQuery($sql);
+		$query = $this->createQuery($sql);
 		$query->setInteger(1, $phone->getDDD());
 		$query->setString(2, $phone->getNumber());
 		$query->setString(3, $phone->getType());
@@ -78,7 +78,7 @@ class PhoneDAO extends GenericDAO
 	{
 		$sql = "DELETE FROM phones WHERE id = ?";
 
-		$query = $this->mysql->createQuery($sql);
+		$query = $this->createQuery($sql);
 		$query->setInteger(1, $phone->getId());
 
 		$result = $query->execute();
@@ -97,11 +97,10 @@ class PhoneDAO extends GenericDAO
 		if (count($phones) == 0)
 			return 0;
 
-		$sql = "DELETE FROM phones WHERE id IN(?)";
+		$sqlIn = $this->buildInQueryInt($phones);
+		$sql = "DELETE FROM phones WHERE id IN($sqlIn)";
 
-		$query = $this->mysql->createQuery($sql);
-		$query->setString(1, implode(", ", $phones));
-
+		$query = $this->createQuery($sql);
 		$result = $query->execute();
 
 		return $result->getAffectedRows();
@@ -117,7 +116,7 @@ class PhoneDAO extends GenericDAO
 	{
 		$sql = "SELECT id, ddd, number, type FROM phones WHERE id = ?";
 
-		$query = $this->mysql->createQuery($sql);
+		$query = $this->createQuery($sql);
 		$query->setInteger(1, $phoneID);
 
 		$result = $query->execute();
@@ -137,7 +136,7 @@ class PhoneDAO extends GenericDAO
 	{
 		$sql = "SELECT id, ddd, number, type FROM phones WHERE id IN (?)";
 
-		$query = $this->mysql->createQuery($sql);
+		$query = $this->createQuery($sql);
 		$query->setString(1, implode("', '", $phoneIDs));
 
 		$result = $query->execute();

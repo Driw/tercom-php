@@ -15,9 +15,12 @@ use tercom\control\CustomerPhoneControl;
 use tercom\control\CustomerProfileControl;
 use tercom\control\LoginCustomerControl;
 use tercom\control\LoginTercomControl;
+use tercom\control\ManufacturerControl;
 use tercom\control\PermissionControl;
 use tercom\control\PhoneControl;
 use tercom\control\ProductCategoryControl;
+use tercom\control\ProductControl;
+use tercom\control\ProductUnitControl;
 use tercom\control\ProviderContactControl;
 use tercom\control\ProviderControl;
 use tercom\control\ServiceControl;
@@ -42,9 +45,25 @@ class DefaultSiteService extends ApiServiceInterface
 	 */
 	private $providerControl;
 	/**
+	 * @var ProviderContactControl
+	 */
+	private $providerContactControl;
+	/**
+	 * @var ManufacturerControl
+	 */
+	private $manufacturerControl;
+	/**
 	 * @var ProductCategoryControl
 	 */
 	private $productCategoryControl;
+	/**
+	 * @var ProductUnitControl
+	 */
+	private $productUnitControl;
+	/**
+	 * @var ProductControl
+	 */
+	private $productControl;
 	/**
 	 * @var ServiceControl
 	 */
@@ -115,6 +134,15 @@ class DefaultSiteService extends ApiServiceInterface
 	}
 
 	/**
+	 * @param bool $avaiable
+	 * @return string
+	 */
+	protected function getMessageAvaiable(bool $avaiable)
+	{
+		return $avaiable ? 'disponível' : 'indisponível';
+	}
+
+	/**
 	 * {@inheritDoc}
 	 * @see \dProject\restful\ApiServiceInterface::execute()
 	 */
@@ -144,24 +172,6 @@ class DefaultSiteService extends ApiServiceInterface
 	}
 
 	/**
-	 * @return ProviderControl
-	 */
-
-	protected function newProviderControl(): ProviderControl
-	{
-		return new ProviderControl($this->getMySQL());
-	}
-
-	/**
-	 * @return ProviderControl
-	 */
-
-	protected function newProviderContactControl(): ProviderContactControl
-	{
-		return new ProviderContactControl($this->getMySQL());
-	}
-
-	/**
 	 * @return PhoneControl
 	 */
 	protected function getPhoneControl(): PhoneControl
@@ -175,8 +185,28 @@ class DefaultSiteService extends ApiServiceInterface
 	protected function getProviderControl(): ProviderControl
 	{
 		return $this->providerControl === null ?
-			($this->providerControl = new ProviderControl($this->getMySQL())) :
+			($this->providerControl = new ProviderControl()) :
 			$this->providerControl;
+	}
+
+	/**
+	 * @return ProviderContactControl
+	 */
+	protected function get(): ProviderContactControl
+	{
+		return $this->providerContactControl === null ?
+			($this->providerContactControl = new ProviderContactControl()) :
+			$this->providerContactControl;
+	}
+
+	/**
+	 * @return ManufacturerControl
+	 */
+	protected function getManufacturerControl(): ManufacturerControl
+	{
+		return $this->manufacturerControl === null ?
+			($this->manufacturerControl = new ManufacturerControl()) :
+			$this->manufacturerControl;
 	}
 
 	/**
@@ -185,8 +215,28 @@ class DefaultSiteService extends ApiServiceInterface
 	protected function getProductCategoryControl(): ProductCategoryControl
 	{
 		return $this->productCategoryControl === null ?
-			($this->productCategoryControl = new ProductCategoryControl($this->getMySQL())) :
+			($this->productCategoryControl = new ProductCategoryControl()) :
 			$this->productCategoryControl;
+	}
+
+	/**
+	 * @return ProductUnitControl
+	 */
+	protected function getProductUnitControl(): ProductUnitControl
+	{
+		return $this->productUnitControl === null ?
+			($this->productUnitControl = new ProductUnitControl()) :
+			$this->productUnitControl;
+	}
+
+	/**
+	 * @return ProductControl
+	 */
+	protected function getProductControl(): ProductControl
+	{
+		return $this->productControl === null ?
+			($this->productControl = new ProductControl()) :
+			$this->productControl;
 	}
 
 	/**

@@ -1,0 +1,10 @@
+- renomeado 'Manufature' para 'Manufaturer'.
+- webservice 'manufacture' para 'manufacturer'.
+- renomeado 'Product.unit' para 'Product.productUnit'.
+- renomeado 'Product.category' para 'Product.productCategory'.
+	- Era um CategorySet agora é um ProductCategory.
+- renomeado 'Product.prices' para 'Product.productPrices'.
+- webservice 'product' agora deve ser informado apenas uma categoria 'idProductCategory' e qual o seu tipo 'idProductCategoryType'.
+	- Caso idProductCategoryType não seja informado será considerado família (1: família, 2: grupo, 3: subgroup, 4: setor)
+	- Isso é aplicado para a atualização de um produto também, continua sendo um campo opcional.
+- modificado 'Product.description' e 'Product.utility' de 128 caracteres para 256 caracteres.

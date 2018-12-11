@@ -2,18 +2,12 @@
 
 namespace tercom\api\site;
 
-use dProject\Primitive\ArrayDataException;
 use dProject\restful\ApiContent;
-use dProject\restful\ApiResult;
-use dProject\restful\exception\ApiException;
-use dProject\restful\exception\ApiMissParam;
-use tercom\api\site\results\ApiResultManufacture;
-use tercom\api\site\results\ApiResultManufactures;
 use tercom\api\site\results\ApiResultManufactureSettings;
-use tercom\control\ManufactureControl;
-use tercom\core\System;
-use tercom\entities\Manufacture;
+use tercom\api\site\results\ApiResultObject;
 use tercom\api\site\results\ApiResultSimpleValidation;
+use tercom\entities\Manufacturer;
+use tercom\api\exceptions\FilterException;
 
 /**
  * <h1>Serviço de Fabricantes</h1>
@@ -22,8 +16,10 @@ use tercom\api\site\results\ApiResultSimpleValidation;
  * Como serviço, oferece as possibilidades de adicionar fabricante, atualizar fabrincante,
  * excluir fabricante, obter fabricante e procurar por fabricantes.<p>
  *
- * @see ApiServiceInterface
- * @see ApiConnection
+ * @see DefaultSiteService
+ * @see ApiResultObject
+ * @see ApiResultSimpleValidation
+ *
  * @author Andrew
  */
 
@@ -34,7 +30,6 @@ class ManufactureService extends DefaultSiteService
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
 	 * @return ApiResultManufactureSettings
 	 */
-
 	public function actionSettings(ApiContent $content): ApiResultManufactureSettings
 	{
 		$settings = new ApiResultManufactureSettings();
@@ -46,27 +41,17 @@ class ManufactureService extends DefaultSiteService
 	 * Adiciona um novo fabricante sendo necessário informar apenas o nome fantasia.
 	 * @ApiAnnotation({"method":"post"})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
-	 * @return ApiResult aquisição do resultado contendo os dados do fabricante adicionado.
+	 * @return ApiResultObject aquisição do resultado contendo os dados do fabricante adicionado.
 	 */
-
-	public function actionAdd(ApiContent $content): ApiResult
+	public function actionAdd(ApiContent $content): ApiResultObject
 	{
-		$POST = $content->getPost();
-		$manufacture = new Manufacture();
+		$post = $content->getPost();
+		$manufacturer = new Manufacturer();
+		$manufacturer->setFantasyName($post->getString('fantasyName'));
+		$this->getManufacturerControl()->add($manufacturer);
 
-		try {
-
-			$manufacture->setFantasyName($POST->getString('fantasyName'));
-
-		} catch (ArrayDataException $e) {
-			return new ApiMissParam($e);
-		}
-
-		$manufactureControl = new ManufactureControl(System::getWebConnection());
-		$manufactureControl->add($manufacture);
-
-		$result = new ApiResultManufacture();
-		$result->setManufacture($manufacture);
+		$result = new ApiResultObject();
+		$result->setResult($manufacturer, 'fabricante "%s" adicionado com êxito', $manufacturer->getFantasyName());
 
 		return $result;
 	}
@@ -76,35 +61,22 @@ class ManufactureService extends DefaultSiteService
 	 * Nenhum dado é obrigatório ser atualizado, porém se informado será considerado.
 	 * @ApiAnnotation({"method":"post", "params":["idManufacture"]})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
-	 * @throws ApiException fabricante não encontrado.
-	 * @return ApiResult aquisição do resultado com os dados do fabricante atualizados.
+	 * @return ApiResultObject aquisição do resultado com os dados do fabricante atualizados.
 	 */
-
-	public function actionSet(ApiContent $content):ApiResult
+	public function actionSet(ApiContent $content): ApiResultObject
 	{
-		$POST = $content->getPost();
-
+		$post = $content->getPost();
 		$idManufacture = $content->getParameters()->getInt('idManufacture');
-		$manufactureControl = new ManufactureControl(System::getWebConnection());
+		$manufacturer = $this->getManufacturerControl()->get($idManufacture);
 
-		if (($manufacture = $manufactureControl->get($idManufacture)) === null)
-			throw new ApiException('fabricante não encontrado');
+		if ($post->isSetted('fantasyName')) $manufacturer->setFantasyName($post->getString('fantasyName'));
 
-		try {
+		$result = new ApiResultObject();
 
-			if ($POST->isSetted('fantasyName')) $manufacture->setFantasyName($POST->getString('fantasyName'));
-
-		} catch (ArrayDataException $e) {
-			return new ApiMissParam($e);
-		}
-
-		$result = new ApiResultManufacture();
-		$result->setManufacture($manufacture);
-
-		if ($manufactureControl->set($manufacture))
-			$result->setMessage('fabricante atualizado com êxtio');
+		if ($this->getManufacturerControl()->set($manufacturer))
+			$result->setResult($manufacturer, 'fabricante "%s" atualizado com êxito', $manufacturer->getFantasyName());
 		else
-			$result->setMessage('nenhuma dado de fabricante modificado');
+			$result->setResult($manufacturer, 'não foi possível atualizar o fabricante "%s"', $manufacturer->getFantasyName());
 
 		return $result;
 	}
@@ -113,25 +85,19 @@ class ManufactureService extends DefaultSiteService
 	 * Exclui os dados de um fornecedor no sistema através do seu código de identificação.
 	 * @ApiAnnotation({"params":["idManufacture"]})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
-	 * @throws ApiException fabricante não encontrado.
-	 * @return ApiResult aquisição do resultado com os dados do fabricante atualizados.
+	 * @return ApiResultObject aquisição do resultado com os dados do fabricante atualizados.
 	 */
-
-	public function actionRemove(ApiContent $content): ApiResult
+	public function actionRemove(ApiContent $content): ApiResultObject
 	{
 		$idManufacture = $content->getParameters()->getInt('idManufacture');
-		$manufactureControl = new ManufactureControl(System::getWebConnection());
+		$manufacturer = $this->getManufacturerControl()->get($idManufacture);
 
-		if (($manufacture = $manufactureControl->get($idManufacture)) === null)
-			throw new ApiException('fabricante não encontrado');
+		$result = new ApiResultObject();
 
-		$result = new ApiResultManufacture();
-		$result->setManufacture($manufacture);
-
-		if ($manufactureControl->remove($manufacture))
-			$result->setMessage('fabricante excluído com êxtio');
+		if ($this->getManufacturerControl()->remove($manufacturer))
+			$result->setObject($manufacturer, 'fabricate "%s" obtido com êxito', $manufacturer->getFantasyName());
 		else
-			$result->setMessage('fabricante já não existe mais');
+			$result->setObject($manufacturer, 'não foi possível excluir o fabricante "%s"', $manufacturer->getFantasyName());
 
 		return $result;
 	}
@@ -140,20 +106,15 @@ class ManufactureService extends DefaultSiteService
 	 * Obtém os dados de um fabricante através do seu código de identificação.
 	 * @ApiAnnotation({"params":["idManufacture"]})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
-	 * @throws ApiException fabricante não encontrado.
-	 * @return ApiResult aquisição do resultado com os dados do fabricante obtido.
+	 * @return ApiResultObject aquisição do resultado com os dados do fabricante obtido.
 	 */
-
-	public function actionGet(ApiContent $content): ApiResult
+	public function actionGet(ApiContent $content): ApiResultObject
 	{
 		$idManufacture = $content->getParameters()->getInt('idManufacture');
-		$manufactureControl = new ManufactureControl(System::getWebConnection());
+		$manufacturer = $this->getManufacturerControl()->get($idManufacture);
 
-		if (($manufacture = $manufactureControl->get($idManufacture)) === null)
-			throw new ApiException('fabricante não encontrado');
-
-		$result = new ApiResultManufacture();
-		$result->setManufacture($manufacture);
+		$result = new ApiResultObject();
+		$result->setObject($manufacturer, 'fabricate "%s" obtido com êxito', $manufacturer->getFantasyName());
 
 		return $result;
 	}
@@ -161,17 +122,14 @@ class ManufactureService extends DefaultSiteService
 	/**
 	 * Obtém uma lista contendo todos os fabricantes existentes no sistema.
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
-	 * @throws ApiException fabricante não encontrado.
-	 * @return ApiResult aquisição do resultado com os dados do fabricante obtido.
+	 * @return ApiResultObject aquisição do resultado com os dados do fabricante obtido.
 	 */
-
-	public function actionGetAll(ApiContent $content): ApiResult
+	public function actionGetAll(ApiContent $content): ApiResultObject
 	{
-		$manufactureControl = new ManufactureControl(System::getWebConnection());
-		$manufactures = $manufactureControl->getAll();
+		$manufacturers = $this->getManufacturerControl()->getAll();
 
-		$result = new ApiResultManufactures();
-		$result->setManufactures($manufactures);
+		$result = new ApiResultObject();
+		$result->setResult($manufacturers, 'há %d fabricantes no banco de dados', $manufacturers->size());
 
 		return $result;
 	}
@@ -181,39 +139,33 @@ class ManufactureService extends DefaultSiteService
 	 * Os filtros são <i>cnpj</i> (CNPJ) e <i>fantasyName</i> (nome fantasia).
 	 * @ApiAnnotation({"params":["filter","value"]})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
-	 * @throws ApiException método de pesquisa desconhecido.
-	 * @return ApiResult aquisição do resultado com a lista de fabricantes encontrados.
+	 * @return ApiResultObject aquisição do resultado com a lista de fabricantes encontrados.
 	 */
-
-	public function actionSearch(ApiContent $content):ApiResult
+	public function actionSearch(ApiContent $content): ApiResultObject
 	{
 		$filter = $content->getParameters()->getString('filter');
 
 		switch ($filter)
 		{
-			case 'fantasyName': return $this->actionSearchByFantasyName($content);
+			case 'fantasyName': return $this->searchByFantasyName($content);
 		}
 
-		throw new ApiException('método de busca desconhecido');
+		throw new FilterException($filter);
 	}
 
 	/**
 	 * Procedimento interno usado pela pesquisa de fabricantes através do nome fantasia.
 	 * A busca é feita mesmo que o nome fantasia seja informado parcialmente.
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
-	 * @return ApiResult aquisição da lista de fabricantes com o nome fantasia informado.
+	 * @return ApiResultObject aquisição da lista de fabricantes com o nome fantasia informado.
 	 */
-
-	private function actionSearchByFantasyName(ApiContent $content): ApiResult
+	private function searchByFantasyName(ApiContent $content): ApiResultObject
 	{
 		$fantasyName = $content->getParameters()->getString('value');
-		$manufactureControl = new ManufactureControl(System::getWebConnection());
+		$manufacturers = $this->getManufacturerControl()->searchByFantasyName($fantasyName);
 
-		if (($manufactures = $manufactureControl->listByFantasyName($fantasyName)) === null)
-			throw new ApiException('fabricante não encontrado');
-
-		$result = new ApiResultManufactures();
-		$result->setManufactures($manufactures);
+		$result = new ApiResultObject();
+		$result->setResult($manufacturers, 'há %d fabricantes nome fantasia "%s"', $manufacturers->size(), $fantasyName);
 
 		return $result;
 	}
@@ -221,42 +173,35 @@ class ManufactureService extends DefaultSiteService
 	/**
 	 * @ApiAnnotation({"params":["filter","value","idManufacturer"]})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
-	 * @throws ApiException método de pesquisa desconhecido.
-	 * @return ApiResult aquisição do resultado com a lista de fabricantes encontrados.
+	 * @return ApiResultSimpleValidation aquisição do resultado com a lista de fabricantes encontrados.
 	 */
-
-	public function actionAvaiable(ApiContent $content):ApiResult
+	public function actionAvaiable(ApiContent $content): ApiResultSimpleValidation
 	{
 		$filter = $content->getParameters()->getString('filter');
 
 		switch ($filter)
 		{
-			case 'fantasyName': return $this->actionAvaiableFantasyName($content);
+			case 'fantasyName': return $this->avaiableFantasyName($content);
 		}
 
-		throw new ApiException('opção inexistente');
+		throw new FilterException($filter);
 	}
 
 	/**
 	 * Procedimento interno usado pela pesquisa de fabricantes através do nome fantasia.
 	 * A busca é feita mesmo que o nome fantasia seja informado parcialmente.
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
-	 * @return ApiResult aquisição da lista de fabricantes com o nome fantasia informado.
+	 * @return ApiResultSimpleValidation aquisição da lista de fabricantes com o nome fantasia informado.
 	 */
-
-	private function actionAvaiableFantasyName(ApiContent $content): ApiResult
+	private function avaiableFantasyName(ApiContent $content): ApiResultSimpleValidation
 	{
 		$parameters = $content->getParameters();
 		$fantasyName = $parameters->getString('value');
 		$idManufacturer = $this->parseNullToInt($parameters->getInt('idManufacturer', false));
-		$manufactureControl = new ManufactureControl(System::getWebConnection());
+		$avaiable = !$this->getManufacturerControl()->hasFantasyName($fantasyName, $idManufacturer);
 
 		$result = new ApiResultSimpleValidation();
-
-		if ($manufactureControl->hasAvaiableFantasyName($fantasyName, $idManufacturer))
-			$result->setOkMessage(true, 'nome fantasia disponível');
-		else
-			$result->setOkMessage(false, 'nome fantasia indisponível');
+		$result->setOkMessage($avaiable, 'nome fantasia %s', $avaiable ? 'disponível' : 'indisponível');
 
 		return $result;
 	}

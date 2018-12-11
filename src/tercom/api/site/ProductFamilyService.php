@@ -35,7 +35,16 @@ class ProductFamilyService extends ProductCategoryService
 	 */
 	public function getProductCategoryParentType(): int
 	{
-		return ProductCategory::CATEGORY_FAMILY;
+		return ProductCategory::CATEGORY_NONE;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * @see \tercom\api\site\ProductCategoryService::getProductSubCategoryType()
+	 */
+	public function getProductSubCategoryType(): int
+	{
+		return ProductCategory::CATEGORY_GROUP;
 	}
 
 	/**
@@ -53,7 +62,7 @@ class ProductFamilyService extends ProductCategoryService
 	 */
 	public function getParentIdFieldName(): string
 	{
-		return 'idProductFamily';
+		return '';
 	}
 
 	/**

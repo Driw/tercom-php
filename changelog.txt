@@ -20,6 +20,74 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+11.12.2018 - 0.3.0.120
+- Ajustado select() para que considere o tipo 0 (zero|none) como tipo 1 (família), ProductCategoryDAO.
+- Agora Product não vai mais ter especificado todas as classificações de categoria mas sim a categoria final.
+	- Deste modo ProductCategorySet não é mais necessário no sistema.
+- Removido trycatch em ProductService, as exceptions hoje são tratadas em ApiListener.
+- Movido algumas verificações de ProductService para ProductControl.
+- Substituído alguns ApiResult por ApiResultObject em ProductService.
+- Movido scripts de teste dos webservices para a pasta 'product-service'.
+- Agora as exceções geradas ao gerenciar Product terá um status diferente para cada problema.
+
+10.12.2018 - 0.3.0.119
+- Agora as ProductCategoryService será necessário especificar a sub categoria se houver.
+	- Modificado para que a categoria parent possa ser nenhuma como é o caso de 'família'.
+	- Ajustes para melhor funcionamento ao adicionar, atualizar e excluir categorias.
+- Movido scripts de teste dos webservices para as pastas 'product-{category}-service' respectivamente.
+- Diversas mudanças para funcionamento da DAO conforme nova estrutura definida para DAOs.
+- Agora as exceções geradas ao gerenciar ProductCategory terá um status diferente para cada problema.
+
+10.12.2018 - 0.3.0.118
+- Modificado as massas de dados para REPLACE ao invés de INSERT.
+
+07.12.2018 - 0.3.0.117
+- Removido trycatch em ProductUnitService, as exceptions hoje são tratadas em ApiListener.
+- Movido algumas verificações de ProductUnitService para ProductUnitControl.
+- Ao excluir unidades de produto será verificado anteriormente a existência de dependências.
+- Substituído alguns ApiResult por ApiResultObject em ProductUnitService.
+- Movido scripts de teste dos webservices para a pasta 'product-unit-service'.
+- Agora as exceções geradas ao gerenciar ProductUnit terá um status diferente para cada problema.
+- Atualizado 'product_units' para que 'name' e 'shortName' sejam UNIQUE KEY.
+	- Atualizado para verificações de unique key au adicionar e atualizar.
+- Atualizado parseEntrySQL() para que exclua os valores analisados (movido para outros atributos).
+- Modificado parseQueryExist() para que considere mais de um registro ao invés de um registro, GenericDAO.
+
+06.12.2018 - 0.3.0.116
+- Renomeado atributos e classes referente ao fabricante (Manufacturer) que estava como Manufacture.
+- Removido trycatch em ManufacturerService, as exceptions hoje são tratadas em ApiListener.
+- Movido algumas verificações de ManufacturerService para ManufacturerControl.
+- Substituído alguns ApiResult por ApiResultObject em ManufacturerService.
+- Movido scripts de teste dos webservices para a pasta 'manufacturer-service'.
+- Agora as exceções geradas ao gerenciar Manufacturer terá um status diferente para cada problema.
+- Aprimoramento ao excluir fabricante que é verificado se há algum preço de produto que o utiliza.
+
+06.12.2018 - 0.3.0.115
+- Removido trycatch em ProviderContactService, as exceptions hoje são tratadas em ApiListener.
+- Movido algumas verificações de ProviderContactService para ProviderContactControl.
+- Agora telefone comercial e telefone secundário sempre serão nulos se não existirem.
+	- Antes o objeto era instanciado porém com valores em branco e id zero.
+- Substituído alguns ApiResult por ApiResultObject em ProviderContactService.
+- Movido scripts de teste dos webservices para a pasta 'provider-contact-service'.
+	- Renomeado 'providerContactGenerator' para 'providerContactAdd'.
+- Agora as exceções geradas ao gerenciar ProviderContact terá um status diferente para cada problema.
+- Corrigido problema ao excluir mais de um telefone em deletePhones(), PhoneDAO.
+- Pequenos ajustes em ProviderDAO e padronização na documentação.
+- Corrigido problema onde ProviderControl não conseguia achar o método inexsitete em ProviderException.
+
+06.12.2018 - 0.3.0.114
+- Removido trycatch em ProviderService, as exceptions hoje são tratadas por ApiListener.
+- Movido algumas verificações de ProviderService para ProviderControl.
+- Agora telefone comercial, secundário e lista de contados sempre serão nulas se não existirem.
+	- Antes o objeto era instanciado porém com valores em branco e id zero.
+- Substituído alguns ApiResult por ApiResultObject em ProviderService.
+- Movido scripts de teste dos webservices para a pasta 'provider-service'.
+	- Renomeado 'providerGenerator' para 'providerAdd' e 'providerUpdate' para 'providerSet'.
+- Agora as exceções geradas ao gerenciar Provider terá um status diferente para cada problema.
+- Corrigido ApiResult que não estava implementado o método setResult() esperado e utilizado.
+- Corrigido PhoneControl onde keepPhones() não retornava 'true' em nenhuma hipótese.
+- Novo método adicionado à GenericDAO para simplificar a instância de entidades, parseEntry().
+
 05.12.2018 - 0.2.7.113
 - Scripts de teste dos webservice para acesso dos funcionários da TERCOM e funcionários de clientes.
 

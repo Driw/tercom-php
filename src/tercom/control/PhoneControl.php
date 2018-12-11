@@ -227,7 +227,7 @@ class PhoneControl extends GenericControl
 		$keepPhone = false;
 
 		foreach ($phones as $phone)
-			if ($this->keepPhone($phone));
+			if ($this->keepPhone($phone))
 				$keepPhone = true;
 
 		return $keepPhone;

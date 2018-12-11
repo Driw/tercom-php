@@ -7,6 +7,7 @@ use dProject\Primitive\StringUtil;
 use tercom\Functions;
 use tercom\entities\lists\Phones;
 use tercom\entities\lists\ProviderContacts;
+use dProject\Primitive\ObjectUtil;
 
 /**
  * <h1>Provider</h1>
@@ -101,21 +102,19 @@ class Provider extends AdvancedObject
 	 * Cria uma nova instância de um fornecedor.
 	 * Inicializa as instâncias do telefone commercial e otherphone.
 	 */
-
 	public function __construct()
 	{
 		$this->id = 0;
+		$this->cnpj = '';
+		$this->companyName = '';
+		$this->fantasyName = '';
 		$this->inactive = false;
-		$this->otherphone = new Phone();
-		$this->commercial = new Phone();
-		$this->contacts = new ProviderContacts();
 	}
 
 	/**
 	 * @return number aquisição do código de identificação do fornecedor.
 	 */
-
-	public function getID():int
+	public function getId(): int
 	{
 		return $this->id;
 	}
@@ -123,20 +122,15 @@ class Provider extends AdvancedObject
 	/**
 	 * @param number $id código de identificação do fornecedor.
 	 */
-
-	public function setID(int $id)
+	public function setId(int $id): void
 	{
-		if ($id < 1)
-			throw new EntityParseException("código de identificação inválido (id: $id)");
-
 		$this->id = $id;
 	}
 
 	/**
 	 * @return string aquisição do número do cadastro nacional de pessoa jurídica.
 	 */
-
-	public function getCNPJ(): ?string
+	public function getCnpj(): string
 	{
 		return $this->cnpj;
 	}
@@ -144,8 +138,7 @@ class Provider extends AdvancedObject
 	/**
 	 * @param string $cnpj número do cadastro nacional de pessoa jurídica.
 	 */
-
-	public function setCNPJ(string $cnpj)
+	public function setCnpj(string $cnpj): void
 	{
 		if (!Functions::validateCNPJ($cnpj))
 			throw new EntityParseException("CNPJ inválido (cnpj: $cnpj)");
@@ -156,8 +149,7 @@ class Provider extends AdvancedObject
 	/**
 	 * @return string aquisição do nome de registro da empresa do fornecedor.
 	 */
-
-	public function getCompanyName(): ?string
+	public function getCompanyName(): string
 	{
 		return $this->companyName;
 	}
@@ -165,8 +157,7 @@ class Provider extends AdvancedObject
 	/**
 	 * @param string $companyName nome de registro da empresa do fornecedor.
 	 */
-
-	public function setCompanyName(string $companyName)
+	public function setCompanyName(string $companyName): void
 	{
 		if (!StringUtil::hasBetweenLength($companyName, self::MIN_COMPANY_NAME_LEN, self::MAX_COMPANY_NAME_LEN))
 			throw EntityParseException::new("razão social deve ter de %d a %d caracteres (razão social: $companyName)", self::MIN_COMPANY_NAME_LEN, self::MAX_COMPANY_NAME_LEN);
@@ -177,8 +168,7 @@ class Provider extends AdvancedObject
 	/**
 	 * @return string aquisição do nome de fachada da empresa do fornecedor.
 	 */
-
-	public function getFantasyName(): ?string
+	public function getFantasyName(): string
 	{
 		return $this->fantasyName;
 	}
@@ -186,8 +176,7 @@ class Provider extends AdvancedObject
 	/**
 	 * @param string $fantasyName nome de fachada da empresa do fornecedor.
 	 */
-
-	public function setFantasyName(string $fantasyName)
+	public function setFantasyName(string $fantasyName): void
 	{
 		if (!StringUtil::hasBetweenLength($fantasyName, self::MIN_FANTASY_NAME_LEN, self::MAX_FANTASY_NAME_LEN))
 			throw EntityParseException::new("nome fantasia deve ter de %d a %d caracteres (nome fantasia: $fantasyName)", self::MIN_FANTASY_NAME_LEN, self::MAX_FANTASY_NAME_LEN);
@@ -198,7 +187,6 @@ class Provider extends AdvancedObject
 	/**
 	 * @return string aquisição do nome de uma pessoa representante do fornecedor.
 	 */
-
 	public function getSpokesman(): ?string
 	{
 		return $this->spokesman;
@@ -207,8 +195,7 @@ class Provider extends AdvancedObject
 	/**
 	 * @param string $spokesman nome de uma pessoa representante do fornecedor.
 	 */
-
-	public function setSpokesman(?string $spokesman)
+	public function setSpokesman(?string $spokesman): void
 	{
 		if ($spokesman != null && !StringUtil::hasBetweenLength($spokesman, self::MIN_SPOKESMAN_LEN, self::MAX_SPOKESMAN_LEN))
 			throw EntityParseException::new("nome do representante deve ter de %d a %d caracteres (representante: $spokesman)", self::MIN_SPOKESMAN_LEN, self::MAX_SPOKESMAN_LEN);
@@ -219,7 +206,6 @@ class Provider extends AdvancedObject
 	/**
 	 * @return string aquisição do link para acesso à página do fornecedor.
 	 */
-
 	public function getSite(): ?string
 	{
 		return $this->site;
@@ -228,17 +214,15 @@ class Provider extends AdvancedObject
 	/**
 	 * @param string $site link para acesso à página do fornecedor.
 	 */
-
-	public function setSite(string $site)
+	public function setSite(string $site): void
 	{
 		if ($site != null)
 		{
-			// Remover protocolos
-			$site = str_replace('http://', '', $site);
-			$site = str_replace('https://', '', $site);
+			if (!StringUtil::startsWith($site, 'http://') && !StringUtil::startsWith($site, 'https://'))
+				$site = "http://$site";
 
-			if (filter_var($site, FILTER_VALIDATE_URL))
-				throw new EntityParseException("site inválido (url: $site)");
+			if (!filter_var($site, FILTER_VALIDATE_URL))
+				throw new EntityParseException("url do site inválida (url: $site)");
 
 			if (!StringUtil::hasMaxLength($site, self::MAX_SITE_LEN))
 				throw EntityParseException::new("endereço do site deve ter até %d caracteres (site: $site)", self::MAX_SITE_LEN);
@@ -250,54 +234,60 @@ class Provider extends AdvancedObject
 	/**
 	 * @return Phone aquisição do número de telefone commercial.
 	 */
-
-	public function getCommercial(): Phone
+	public function getCommercial(): ?Phone
 	{
-		return $this->commercial;
+		return $this->commercial === null ? ($this->commercial = new Phone()) : $this->commercial;
 	}
 
 	/**
 	 * @param Phone $commercial número de telefone commercial.
 	 */
-
-	public function setCommercial(Phone $commercial)
+	public function setCommercial(?Phone $commercial): void
 	{
-		if ($commercial == null)
-			throw new EntityParseException('não é permitido definir telefone comercial nulo');
-
 		$this->commercial = $commercial;
+	}
+
+	/**
+	 * @return int aquisição do código de identificação do telefone comercial.
+	 */
+	public function getCommercialId(): int
+	{
+		return $this->commercial === null ? 0 : $this->commercial->getId();
 	}
 
 	/**
 	 * @return Phone aquisição do número de telefone secundário.
 	 */
-
-	public function getOtherPhone(): Phone
+	public function getOtherPhone(): ?Phone
 	{
-		return $this->otherphone;
+		return $this->otherphone === null ? ($this->otherphone = new Phone()) : $this->otherphone;
 	}
 
 	/**
 	 * @param Phone $otherPhone número de telefone secundário
 	 */
-
-	public function setOtherPhone(Phone $otherPhone)
+	public function setOtherPhone(?Phone $otherPhone): void
 	{
-		if ($otherPhone == null)
-			throw new EntityParseException('não é permitido definir telefone secundário nulo');
-
 		$this->otherphone = $otherPhone;
+	}
+
+	/**
+	 * @return int aquisição do código de identificação do telefone secundário.
+	 */
+	public function getOtherphoneId(): int
+	{
+		return $this->otherphone === null ? 0 : $this->otherphone->getId();
 	}
 
 	/**
 	 * @return Phones aquisição de uma lista com o telefone comercial e o telefone secundário.
 	 */
-
 	public function getPhones(): Phones
 	{
 		$phones = new Phones();
-		$phones->add($this->getCommercial());
-		$phones->add($this->getOtherPhone());
+
+		if ($this->commercial !== null) $phones->add($this->commercial);
+		if ($this->otherphone !== null) $phones->add($this->otherphone);
 
 		return $phones;
 	}
@@ -305,7 +295,6 @@ class Provider extends AdvancedObject
 	/**
 	 * @return boolean fornecedor está ativo ou não no sistema.
 	 */
-
 	public function isInactive(): bool
 	{
 		return $this->inactive;
@@ -314,8 +303,7 @@ class Provider extends AdvancedObject
 	/**
 	 * @param boolean $inactive fornecedor está ativo ou não no sistema.
 	 */
-
-	public function setInactive(bool $inactive)
+	public function setInactive(bool $inactive): void
 	{
 		$this->inactive = $inactive;
 	}
@@ -323,27 +311,36 @@ class Provider extends AdvancedObject
 	/**
 	 * @return ProviderContacts aquisição da lista de contatos do fornecedor.
 	 */
-
 	public function getContacs(): ProviderContacts
 	{
-		return $this->contacts;
+		return $this->contacts === null ? ($this->contacts = new ProviderContacts()) : $this->contacts;
+	}
+
+	/**
+	 * @param ProviderContacts $providerContacts lista de contatos do fornecedor.
+	 */
+	public function setContacts(ProviderContacts $providerContacts): void
+	{
+		$this->contacts = $providerContacts;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 * @see \dProject\Primitive\AdvancedObject::getParamTypes()
 	 */
-
-	public function getParamTypes():array
+	public function getAttributeTypes(): array
 	{
 		return [
-			'id' => self::TYPE_INTEGER,
-			'cnpj' => self::TYPE_STRING,
-			'companyName' => self::TYPE_STRING,
-			'fantasyName' => self::TYPE_STRING,
-			'spokesman' => self::TYPE_STRING,
-			'site' => self::TYPE_STRING,
-			'inactive' => self::TYPE_BOOLEAN,
+			'id' => ObjectUtil::TYPE_INTEGER,
+			'cnpj' => ObjectUtil::TYPE_STRING,
+			'companyName' => ObjectUtil::TYPE_STRING,
+			'fantasyName' => ObjectUtil::TYPE_STRING,
+			'spokesman' => ObjectUtil::TYPE_STRING,
+			'site' => ObjectUtil::TYPE_STRING,
+			'inactive' => ObjectUtil::TYPE_BOOLEAN,
+			'commercial' => Phone::class,
+			'otherphone' => Phone::class,
+			'contacts' => ProviderContacts::class,
 		];
 	}
 }

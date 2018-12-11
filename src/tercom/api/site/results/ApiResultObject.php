@@ -40,6 +40,16 @@ class ApiResultObject implements ApiResult
 	}
 
 	/**
+	 * @param AdvancedObject $object
+	 * @param string $message
+	 */
+	public function setResult(AdvancedObject $object, string $message)
+	{
+		$this->setObject($object);
+		$this->message = format(array_slice(func_get_args(), 1));
+	}
+
+	/**
 	 * {@inheritDoc}
 	 * @see \dProject\restful\ApiResult::toApiArray()
 	 */

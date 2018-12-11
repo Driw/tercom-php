@@ -11,7 +11,7 @@ include '../include.php';
 			header('Content-type: text/html');
 ?>
 <form method='get'>
-	<p>Família ID: <input type='text' name='idProductFamily'></p>
+	<p>Família ID: <input type='text' name='idProductFamily' required></p>
 	<p>Família: <input type='text' name='name'></p>
 	<input type='submit' value='Continuar'>
 </form>
@@ -20,7 +20,8 @@ include '../include.php';
 		}
 
 		$idProductFamily = intval($_GET['idProductFamily']);
-		return GeradorDeDados::callWebService("productFamily/set/$idProductFamily", $_GET);
+
+		return GeradorDeDados::callWebService("productFamily/set/$idProductFamily", $_GET, true);
 	}
 }
 include '../execute.php';

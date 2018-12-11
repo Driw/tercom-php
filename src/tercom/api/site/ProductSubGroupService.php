@@ -39,6 +39,15 @@ class ProductSubGroupService extends ProductCategoryService
 
 	/**
 	 * {@inheritDoc}
+	 * @see \tercom\api\site\ProductCategoryService::getProductSubCategoryType()
+	 */
+	public function getProductSubCategoryType(): int
+	{
+		return ProductCategory::CATEGORY_SECTOR;
+	}
+
+	/**
+	 * {@inheritDoc}
 	 * @see \tercom\api\site\ProductCategoryService::getIdFieldName()
 	 */
 	public function getIdFieldName(): string
