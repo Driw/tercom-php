@@ -20,11 +20,19 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
-11.12.2018 - 0.3.1.127
+12.12.2018 - 0.3.1.128
+- Removido if de alguns métodos de ManufacturerControl que passam a ser void.
+- Documentação adicionada para ManufacturerControl e ManufacturerDAO.
+- Ajustes em ManufacturerControl para uso de novas opções em ManufacturerException.
+- Removido uso de ProductPriceDAO em ManufacturerControl.
+	- Movido e corrigido o método usado em ProductPriceDAO para ManufacturerDAO em delete().
+- Renomeado selectById() para select() conforme padrão das DAO, ProviderDAO.
+
+12.12.2018 - 0.3.1.127
 - Ajustes em ProviderControl para uso de novas opções em ProviderException.
 - Corrigido problema onde a verificação na disponibilidade de CNPJ estava incorreta.
 
-11.12.2018 - 0.3.1.126
+12.12.2018 - 0.3.1.126
 - Removido trycatch em ProductPriceService, as exceptions hoje são tratadas em ApiListener.
 - Movido algumas verificações de ProductPriceService para ProductPriceControl.
 - Ao excluir tipos de produto será verificado anteriormente a existência de dependências.
@@ -33,12 +41,12 @@
 - Movido scripts de teste para gerenciar embalagens de produto para uma subpasta 'product-price-service'.
 - Adicionado constante ALL_COLUMNS para ManufacturerDAO e ProviderDAO.
 
-11.12.2018 - 0.3.1.125
+12.12.2018 - 0.3.1.125
 - Documentação do ProductTypeDAO.
 - Ajustes de padronização nos scripts de testes já revisados.
 - Ajustes na documentação de ProductPackageDAO, ProviderControl.
 
-11.12.2018 - 0.3.1.124
+12.12.2018 - 0.3.1.124
 - Removido trycatch em ProductTypeService, as exceptions hoje são tratadas em ApiListener.
 - Movido algumas verificações de ProductTypeService para ProductTypeControl.
 - Ao excluir tipos de produto será verificado anteriormente a existência de dependências.
@@ -47,7 +55,7 @@
 - Atualizado 'product_types' para que 'name' seja UNIQUE KEY.
 	- Atualizado para verificações de unique key au adicionar e atualizar.
 
-11.12.2018 - 0.3.1.123
+12.12.2018 - 0.3.1.123
 - Removido trycatch em ProductPackageService, as exceptions hoje são tratadas em ApiListener.
 - Movido algumas verificações de ProductPackageService para ProductPackageControl.
 - Ao excluir embalagens de produto será verificado anteriormente a existência de dependências.

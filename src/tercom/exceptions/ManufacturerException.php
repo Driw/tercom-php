@@ -16,7 +16,7 @@ class ManufacturerException extends ApiStatusException
 	 */
 	public static function newIdentified(): ManufacturerException
 	{
-		return new ManufacturerException('fornecedor já identificado', ApiStatus::MANUFACTURER_IDENTIFIED);
+		return new ManufacturerException('fabricante já identificado', ApiStatus::MANUFACTURER_IDENTIFIED);
 	}
 
 	/**
@@ -24,7 +24,39 @@ class ManufacturerException extends ApiStatusException
 	 */
 	public static function newNotIdentified(): ManufacturerException
 	{
-		return new ManufacturerException('fornecedor não identificado', ApiStatus::MANUFACTURER_NOT_IDENTIFIED);
+		return new ManufacturerException('fabricante não identificado', ApiStatus::MANUFACTURER_NOT_IDENTIFIED);
+	}
+
+	/**
+	 * @return ProviderException
+	 */
+	public static function newNotInserted(): ProviderException
+	{
+		return new ProviderException('não foi possível adicionar o fabricante', ApiStatus::MANUFACTURER_NOT_INSERTED);
+	}
+
+	/**
+	 * @return ProviderException
+	 */
+	public static function newNotUpdated(): ProviderException
+	{
+		return new ProviderException('não foi possível atualizar os dados do fabricante', ApiStatus::MANUFACTURER_NOT_UPDATED);
+	}
+
+	/**
+	 * @return ProviderException
+	 */
+	public static function newNotDeleted(): ProviderException
+	{
+		return new ProviderException('não foi possível excluir o fabricante', ApiStatus::MANUFACTURER_NOT_DELETED);
+	}
+
+	/**
+	 * @return ProviderException
+	 */
+	public static function newNotSelected(): ProviderException
+	{
+		return new ProviderException('fabricante não encontrado', ApiStatus::MANUFACTURER_NOT_SELECTED);
 	}
 
 	/**

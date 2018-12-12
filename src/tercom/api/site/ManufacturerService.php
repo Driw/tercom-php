@@ -23,7 +23,7 @@ use tercom\api\exceptions\FilterException;
  * @author Andrew
  */
 
-class ManufactureService extends DefaultSiteService
+class ManufacturerService extends DefaultSiteService
 {
 	/**
 	 * Ação para se obter as configurações de limites de cada atributo referente aos fabricantes.
@@ -71,12 +71,10 @@ class ManufactureService extends DefaultSiteService
 
 		if ($post->isSetted('fantasyName')) $manufacturer->setFantasyName($post->getString('fantasyName'));
 
-		$result = new ApiResultObject();
+		$this->getManufacturerControl()->set($manufacturer);
 
-		if ($this->getManufacturerControl()->set($manufacturer))
-			$result->setResult($manufacturer, 'fabricante "%s" atualizado com êxito', $manufacturer->getFantasyName());
-		else
-			$result->setResult($manufacturer, 'não foi possível atualizar o fabricante "%s"', $manufacturer->getFantasyName());
+		$result = new ApiResultObject();
+		$result->setResult($manufacturer, 'fabricante "%s" atualizado com êxito', $manufacturer->getFantasyName());
 
 		return $result;
 	}
@@ -91,13 +89,10 @@ class ManufactureService extends DefaultSiteService
 	{
 		$idManufacture = $content->getParameters()->getInt('idManufacture');
 		$manufacturer = $this->getManufacturerControl()->get($idManufacture);
+		$this->getManufacturerControl()->remove($manufacturer);
 
 		$result = new ApiResultObject();
-
-		if ($this->getManufacturerControl()->remove($manufacturer))
-			$result->setObject($manufacturer, 'fabricate "%s" obtido com êxito', $manufacturer->getFantasyName());
-		else
-			$result->setObject($manufacturer, 'não foi possível excluir o fabricante "%s"', $manufacturer->getFantasyName());
+		$result->setObject($manufacturer, 'fabricate "%s" excluído com êxito', $manufacturer->getFantasyName());
 
 		return $result;
 	}

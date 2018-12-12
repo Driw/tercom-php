@@ -94,7 +94,7 @@ class ProviderControl extends GenericControl
 	 */
 	public function get(int $idProvider): Provider
 	{
-		if (($provider = $this->providerDAO->selectByID($idProvider)) === null)
+		if (($provider = $this->providerDAO->select($idProvider)) === null)
 			throw ProviderException::newNotSelected();
 
 		return $provider;

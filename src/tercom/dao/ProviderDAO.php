@@ -21,14 +21,14 @@ use tercom\exceptions\ProviderException;
  *
  * @see GenericDAO
  * @see Provider
- * @see Phone
+ * @see Providers
  *
  * @author Andrew
  */
 class ProviderDAO extends GenericDAO
 {
 	/**
-	 * @var array nome de todas as colunas da tabela de fornecedores.
+	 * @var array nome das colunas da tabela de fornecedores.
 	 */
 	public const ALL_COLUMNS = ['id', 'cnpj', 'companyName', 'fantasyName', 'spokesman', 'site', 'inactive', 'commercial', 'otherphone'];
 
@@ -169,7 +169,7 @@ class ProviderDAO extends GenericDAO
 	 * @param int $providerID código de identificação único do fornecedor.
 	 * @return Provider|NULL fornecedor com os dados carregados ou NULL se não encontrado.
 	 */
-	public function selectByID(int $providerID): ?Provider
+	public function select(int $providerID): ?Provider
 	{
 		$sqlSelect = $this->newSelect();
 		$sql = "$sqlSelect
@@ -312,7 +312,7 @@ class ProviderDAO extends GenericDAO
 	/**
 	 * Verifica se um determinado número de CNPJ está disponível para um fornecedor.
 	 * @param string $cnpj número do cadastro nacional de pessoa jurídica.
-	 * @param int $idProvider código de identificação do fornecedor
+	 * @param int $idProvider código de identificação do fornecedor à desconsiderar
 	 * ou zero caso seja um novo fornecedor.
 	 * @return bool true se estiver disponível ou false caso contrário.
 	 */
