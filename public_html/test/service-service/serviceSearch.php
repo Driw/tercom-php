@@ -14,7 +14,7 @@ function testExecute()
 	Filtro: <select name="filter">
 		<option value="name">Nome</option>
 	</select>
-	<input type='submit' value='Continuar'>
+	<button type='submit'>Continuar</button>
 </form>
 <?php
 		exit;
