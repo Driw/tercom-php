@@ -13,7 +13,7 @@ include '../include.php';
 <form method='get'>
 	<p>Sub Grupo ID: <input type='text' name='idProductSubGroup'></p>
 	<p>Setor: <input type='text' name='name'></p>
-	<p><input type='submit' value='Continuar'></p>
+	<p><button type='submit'>Continuar</button></p>
 </form>
 <?php
 			exit;

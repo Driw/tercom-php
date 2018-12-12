@@ -19,7 +19,7 @@ include '../include.php';
 	<p>Nome Fantasia: <input type='text' name='fantasyName' value='<?php echo $empresa['nome']; ?>' required></p>
 	<p>*Representante: <input type='text' name='spokesman' value='<?php echo $pessoa['nome']; ?>'></p>
 	<p>*Site: <input type='text' name='site' value='<?php echo $empresa['site']; ?>'></p>
-	<input type='submit' value='Continuar'>
+	<button type='submit'>Continuar</button>
 </form>
 <?php
 			exit;

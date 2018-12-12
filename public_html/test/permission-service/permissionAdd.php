@@ -14,7 +14,7 @@ include '../include.php';
 	<p>Pacote: <input type='text' name='packet'></p>
 	<p>Ação: <input type='text' name='action'></p>
 	<p>Nível de Assinatura: <input type='text' name='assignmentLevel'></p>
-	<input type='submit' value='Continuar'>
+	<button type='submit'>Continuar</button>
 </form>
 <?php
 		exit;

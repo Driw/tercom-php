@@ -12,7 +12,7 @@ include '../include.php';
 ?>
 <form method='get'>
 	<p>Setor ID: <input type='text' name='idProductSector'></p>
-	<p><input type='submit' value='Continuar'></p>
+	<p><button type='submit'>Continuar</button></p>
 </form>
 <?php
 			exit;

@@ -14,7 +14,7 @@ include '../include.php';
 	<p>Cliente Perfil ID: <input type='text' name='idCustomerProfile'></p>
 	<p>Nome do Perfil: <input type='text' name='name'></p>
 	<p>Nível de Assinatura: <input type='text' name='assignmentLevel'></p>
-	<input type='submit' value='Continuar'>
+	<button type='submit'>Continuar</button>
 </form>
 <?php
 		exit;

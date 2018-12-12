@@ -17,6 +17,7 @@ use tercom\Functions;
  *
  * @see GenericControl
  * @see ProviderDAO
+ * @see Providers
  * @see Provider
  *
  * @author Andrew

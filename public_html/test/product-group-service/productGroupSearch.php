@@ -15,7 +15,7 @@ include '../include.php';
 	<p>Filtro: <select name='filter' required>
 		<option value='name'>nome</option>
 	</select>
-	<p><input type='submit' value='Continuar'></p>
+	<p><button type='submit'>Continuar</button></p>
 </form>
 <?php
 			exit;

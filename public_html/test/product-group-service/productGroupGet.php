@@ -12,7 +12,7 @@ require_once '../include.php';
 ?>
 <form method='get'>
 	<p>Grupo ID: <input type='text' name='idProductGroup' required></p>
-	<p><input type='submit' value='Continuar'></p>
+	<p><button type='submit'>Continuar</button></p>
 </form>
 <?php
 			exit;

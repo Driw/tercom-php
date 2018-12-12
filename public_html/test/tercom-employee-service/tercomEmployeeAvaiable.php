@@ -17,7 +17,7 @@ include '../include.php';
 		<option value='email'>Endereço de E-mail</option>
 	</select></p>
 	<p>Valor: <input type='text' name='value'></p>
-	<input type='submit' value='Continuar'>
+	<button type='submit'>Continuar</button>
 </form>
 <?php
 			exit;

@@ -12,7 +12,7 @@ include '../include.php';
 ?>
 <form method='get'>
 	Família: <input type='text' name='name' required>
-	<input type='submit' value='Continuar'>
+	<button type='submit'>Continuar</button>
 </form>
 <?php
 			exit;

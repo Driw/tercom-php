@@ -15,7 +15,7 @@ include_once '../include.php';
 <form method='get'>
 	<p>Fabricante ID: <input type='text' name='idManufacturer' required></p>
 	<p>Nome Fantasia: <input type='text' name='fantasyName' value='<?php echo $empresa['nome']; ?>' required></p>
-	<input type='submit' value='Continuar'>
+	<button type='submit'>Continuar</button>
 </form>
 <?php
 			exit;

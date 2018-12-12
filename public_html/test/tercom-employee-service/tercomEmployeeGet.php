@@ -12,7 +12,7 @@ include '../include.php';
 ?>
 <form method='get'>
 	<p>Funcionário da TERCOM ID: <input type='text' name='idTercomEmployee'></p>
-	<input type='submit' value='Continuar'>
+	<button type='submit'>Continuar</button>
 </form>
 <?php
 			exit;

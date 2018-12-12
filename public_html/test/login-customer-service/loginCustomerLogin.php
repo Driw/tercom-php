@@ -13,7 +13,7 @@ include '../include.php';
 <form method='get'>
 	<p>Endereço de E-mail: <input type='text' name='email'></p>
 	<p>Senha: <input type='text' name='password'></p>
-	<input type='submit' value='Continuar'>
+	<button type='submit'>Continuar</button>
 </form>
 <?php
 			exit;

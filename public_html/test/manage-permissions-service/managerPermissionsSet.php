@@ -17,7 +17,7 @@ include '../include.php';
 		<option value="customer">Permissão para Cliente</option>
 		<option value="tercom">Permissão para Tercom</option>
 	</select></p>
-	<input type='submit' value='Continuar'>
+	<button type='submit'>Continuar</button>
 </form>
 <?php
 		exit;

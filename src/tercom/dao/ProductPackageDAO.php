@@ -15,7 +15,7 @@ use tercom\exceptions\ProductPriceException;
  * Sua responsabilidade é gerenciar os dados referentes as embalagens de produto, incluindo todas operações.
  * Estas operações consiste em: adicionar, atualizar, excluir e selecionar dados das embalagens de produto.
  *
- * Cada embalagem deve possuir um nome sendo obrigatório e único no sisstema.
+ * Cada embalagem deve possuir um nome sendo obrigatório e único no sistema.
  *
  * @see GenericDAO
  * @see ProductPackage
@@ -41,10 +41,10 @@ class ProductPackageDAO extends GenericDAO
 	{
 		// PRIMARY KEY
 		if ($validateID) {
-			if ($productPackage->getID() === 0)
+			if ($productPackage->getId() === 0)
 				throw ProductPackageException::newNotIdentified();
 		} else {
-			if ($productPackage->getID() !== 0)
+			if ($productPackage->getId() !== 0)
 				throw ProductPackageException::newIdentified();
 		}
 
@@ -94,7 +94,7 @@ class ProductPackageDAO extends GenericDAO
 	/**
 	 * Exclui uma embalagem de produto do banco de dados e considera utilizações.
 	 * Caso esteja sendo referenciada em outra tabela não será possível excluir.
-	 * @param ProductPackage $productPackage objeto do tipo contato de fornecedor.
+	 * @param ProductPackage $productPackage objeto do tipo embalagem de produto à excluir.
 	 * @return bool true se excluído ou false caso contrário.
 	 */
 	public function dalete(ProductPackage $productPackage): bool
@@ -185,7 +185,7 @@ class ProductPackageDAO extends GenericDAO
 	 * Verifica se um nome de embalagem de produto está disponível par auso.
 	 * @param string $name nome da emblagem de produto à verificar.
 	 * @param int $idProductPackage código de identificação único da emblagem de produto
-	 * ou zero caso seja um novo fornecedor.
+	 * ou zero caso seja uma nova embalagem de produto.
 	 * @return bool true se existir ou false caso contrário.
 	 */
 	public function existName(string $name, int $idProductPackage): bool
@@ -225,17 +225,11 @@ class ProductPackageDAO extends GenericDAO
 	 */
 	private function parseProductPackage(Result $result): ?ProductPackage
 	{
-		if (!$result->hasNext())
-			return null;
-
-		$array = $result->next();
-		$productPackage = $this->newProductPackage($array);
-
-		return $productPackage;
+		return ($entry = $this->parseSingleResult($result)) === null ? null : $this->newProductPackage($entry);
 	}
 
 	/**
-	 * Procedimento inerno para analisar o resultado de uma consulta e criar os objetos de embalagem de produto.
+	 * Procedimento interno para analisar o resultado de uma consulta e criar os objetos de embalagem de produto.
 	 * @param Result $result referência do resultado da consulta obtido.
 	 * @return ProductPackages aquisição da lista de embalagens de produto a partir da consulta.
 	 */
@@ -243,10 +237,9 @@ class ProductPackageDAO extends GenericDAO
 	{
 		$productPackages = new ProductPackages();
 
-		while ($result->hasNext())
+		foreach ($this->parseMultiplyResults($result) as $entry)
 		{
-			$array = $result->next();
-			$productPackage = $this->newProductPackage($array);
+			$productPackage = $this->newProductPackage($entry);
 			$productPackages->add($productPackage);
 		}
 
@@ -258,10 +251,10 @@ class ProductPackageDAO extends GenericDAO
 	 * @param array $entry vetor contendo os dados do registro obtido de uma consulta.
 	 * @return ProductPackage aquisição de um objeto do tipo embalagem de produto com dados carregados.
 	 */
-	private function newProductPackage(array $array): ProductPackage
+	private function newProductPackage(array $entry): ProductPackage
 	{
 		$productPackage = new ProductPackage();
-		$productPackage->fromArray($array);
+		$productPackage->fromArray($entry);
 
 		return $productPackage;
 	}

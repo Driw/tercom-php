@@ -20,7 +20,7 @@ include '../include.php';
 	<p>Endereço de E-mail: <input type='text' name='email' value='<?php echo $pessoa['email']; ?>'></p>
 	<p>Senha: <input type='text' name='password' value='<?php echo $password; ?>'></p>
 	<p>Habilitado: <input type='checkbox' name='enabled' value="1" checked></p>
-	<input type='submit' value='Continuar'>
+	<button type='submit'>Continuar</button>
 </form>
 <?php
 			exit;

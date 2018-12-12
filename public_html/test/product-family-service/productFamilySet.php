@@ -13,7 +13,7 @@ include '../include.php';
 <form method='get'>
 	<p>Família ID: <input type='text' name='idProductFamily' required></p>
 	<p>Família: <input type='text' name='name'></p>
-	<input type='submit' value='Continuar'>
+	<button type='submit'>Continuar</button>
 </form>
 <?php
 			exit;

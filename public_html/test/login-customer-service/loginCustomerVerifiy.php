@@ -14,7 +14,7 @@ include '../include.php';
 	<p>Login ID: <input type='text' name='idLogin'></p>
 	<p>Login Cliente ID: <input type='text' name='idCustomerEmployee'></p>
 	<p>Token: <input type='text' name='token'></p>
-	<input type='submit' value='Continuar'>
+	<button type='submit'>Continuar</button>
 </form>
 <?php
 			exit;

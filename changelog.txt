@@ -20,6 +20,11 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+11.12.2018 - 0.3.1.125
+- Documentação do ProductTypeDAO.
+- Ajustes de padronização nos scripts de testes já revisados.
+- Ajustes na documentação de ProductPackageDAO, ProviderControl.
+
 11.12.2018 - 0.3.1.124
 - Removido trycatch em ProductTypeService, as exceptions hoje são tratadas em ApiListener.
 - Movido algumas verificações de ProductTypeService para ProductTypeControl.
