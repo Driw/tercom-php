@@ -3,241 +3,233 @@
 namespace tercom\api\site;
 
 use dProject\restful\ApiContent;
-use dProject\restful\ApiResult;
-use dProject\Primitive\ArrayDataException;
-use dProject\restful\exception\ApiMissParam;
+use tercom\api\exceptions\FilterException;
+use tercom\api\site\results\ApiResultObject;
 use tercom\api\site\results\ApiResultProductPriceSettings;
 use tercom\entities\ProductPrice;
-use tercom\control\ProductControl;
-use tercom\core\System;
-use dProject\restful\exception\ApiException;
-use tercom\control\ProductPriceControl;
-use tercom\api\site\results\ApiResultProductPrice;
-use tercom\api\site\results\ApiResultProductPrices;
 
+/**
+ * Serviço de Preço de Produto
+ *
+ * Este serviço realiza a comunicação do cliente para com o sistema em relação aos dados de preço de serviço.
+ * Como serviço, oferece as possibilidades de acicionar preços de produto, atualizar preços de produto,
+ * atualizar preços de produto, remover preços de produto, obter preços de produto e procurar por nome de preço.
+ *
+ * @see DefaultSiteService
+ * @see ApiResultObject
+ * @see ApiResultProductPriceSettings
+ *
+ * @author Andrew
+ */
 class ProductPriceService extends DefaultSiteService
 {
 	/**
-	 * @param ApiContent $content
-	 * @return ApiResult
+	 * Ação para se obter as configurações de limites de cada atributo referente a preço de produto.
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @return ApiResultProductPriceSettings aquisição do resultado com as configurações.
 	 */
-
-	public function actionSettings(ApiContent $content): ApiResult
+	public function actionSettings(ApiContent $content): ApiResultProductPriceSettings
 	{
 		return new ApiResultProductPriceSettings();
 	}
 
 	/**
+	 * Adiciona um novo preço de produto a partir de dados em POST.
 	 * @ApiAnnotation({"method":"post","params":["idProduct"]})
-	 * @param ApiContent $content
-	 * @return ApiResult
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @return ApiResultObject aquisição do resultado contendo os dados do preço de produto adicionado.
 	 */
-
-	public function actionAdd(ApiContent $content): ApiResult
+	public function actionAdd(ApiContent $content): ApiResultObject
 	{
-		try {
+		$post = $content->getPost();
+		$idProduct = $content->getParameters()->getInt('idProduct');
+		$idProvider = $post->getInt('idProvider');
+		$idProductPackage = $post->getInt('idProductPackage');
+		$product = $this->getProductControl()->get($idProduct);
+		$provider = $this->getProviderControl()->get($idProvider);
+		$productPackage = $this->getProductPackageControl()->get($idProductPackage);
 
-			$post = $content->getPost();
-			$idProduct = $content->getParameters()->getInt('idProduct');
-			$productControl = new ProductControl(System::getWebConnection());
+		$productPrice = new ProductPrice();
+		$productPrice->setName($product->getName());
+		$productPrice->setAmount($post->getInt('amount'));
+		$productPrice->setPrice($post->getFloat('price'));
+		$productPrice->setProduct($product);
+		$productPrice->setProvider($provider);
+		$productPrice->setProductPackage($productPackage);
 
-			if (($product = $productControl->get($idProduct)) === null)
-				throw new ApiException('produto não encontrado');
+		if ($post->isSetted('name')) $productPrice->setName($post->getString('name'));
 
-			$productPrice = new ProductPrice();
-			$productPrice->setProduct($product);
-			$productPrice->getProvider()->setID($post->getInt('idProvider'));
-			$productPrice->getManufacture()->setID($post->getInt('idManufacture'));
-			$productPrice->getProductPackage()->setID($post->getInt('idProductPackage'));
-			$productPrice->getProductType()->setID($post->getInt('idProductType'));
-			$productPrice->setName($product->getName());
-			$productPrice->setAmount($post->getInt('amount'));
-			$productPrice->setPrice($post->getFloat('price'));
-
-			if ($post->isSetted('name') && !empty($post->getString('name'))) $productPrice->setName($post->getString('name'));
-
-		} catch (ArrayDataException $e) {
-			return new ApiMissParam($e);
+		if (($idManufacturer = $post->getInt('idManufacturer', false)) !== null)
+		{
+			$manufacturer = $this->getManufacturerControl()->get($idManufacturer);
+			$productPrice->setManufacturer($manufacturer);
 		}
 
-		$productPriceControl = new ProductPriceControl(System::getWebConnection());
+		if (($idProductType = $post->getInt('idProductType', false)) !== null)
+		{
+			$productType = $this->getProductTypeControl()->get($idProductType);
+			$productPrice->setProductType($productType);
+		}
 
-		if (!$productPriceControl->add($productPrice))
-			throw new ApiException('não foi possível adicionar o valor do produto');
+		$this->getProductPriceControl()->add($productPrice);
 
-		$result = new ApiResultProductPrice();
-		$result->setProductPrice($productPrice);
-		$result->setMessage('valor do produto adicionado com êxito');
+		$result = new ApiResultObject();
+		$result->setResult($productPrice, 'valor de produto para "%s" adicionado com êxito', $productPrice->getName());
 
 		return $result;
 	}
 
 	/**
+	 * Ação para atualizar os dados de um preço de produto a partir de dados em POST.
 	 * @ApiAnnotation({"method":"post","params":["idProductPrice"]})
-	 * @param ApiContent $content
-	 * @return ApiResult
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @return ApiResultObject aquisição do resultado contendo os dados do preço de produto atualizados.
 	 */
-
-	public function actionSet(ApiContent $content): ApiResult
+	public function actionSet(ApiContent $content): ApiResultObject
 	{
-		try {
+		$post = $content->getPost();
+		$idProductPrice = $content->getParameters()->getInt('idProductPrice');
+		$productPrice = $this->getProductPriceControl()->get($idProductPrice);
 
-			$post = $content->getPost();
-			$idProductPrice = $content->getParameters()->getInt('idProductPrice');
-			$productPriceControl = new ProductPriceControl(System::getWebConnection());
+		if ($post->isSetted('name')) $productPrice->setName($post->getString('name'));
+		if ($post->isSetted('amount')) $productPrice->setAmount($post->getInt('amount'));
+		if ($post->isSetted('price')) $productPrice->setPrice($post->getFloat('price'));
 
-			if (($productPrice = $productPriceControl->get($idProductPrice)) === null)
-				throw new ApiException('valor do produto não encontrado');
-
-			if ($post->isSetted('idProduct')) $productPrice->getProduct()->setID($post->getInt('idProduct'));
-			if ($post->isSetted('idProvider')) $productPrice->getProvider()->setID($post->getInt('idProvider'));
-			if ($post->isSetted('idManufacture')) $productPrice->getManufacture()->setID($post->getInt('idManufacture'));
-			if ($post->isSetted('idProductPackage')) $productPrice->getProductPackage()->setID($post->getInt('idProductPackage'));
-			if ($post->isSetted('idProductType')) $productPrice->getProductType()->setID($post->getInt('idProductType'));
-			if ($post->isSetted('amount')) $productPrice->setAmount($post->getInt('amount'));
-			if ($post->isSetted('price')) $productPrice->setPrice($post->getFloat('price'));
-			if ($post->isSetted('name')) $productPrice->setName($post->getString('name'));
-
-		} catch (ArrayDataException $e) {
-			return new ApiMissParam($e);
+		if (($Provider = $post->getInt('idProvider', false)) !== null)
+		{
+			$provider = $this->getProviderControl()->get($Provider);
+			$productPrice->setProvider($provider);
 		}
 
-		$result = new ApiResultProductPrice();
-		$result->setProductPrice($productPrice);
+		if (($idManufacturer = $post->getInt('idManufacturer', false)) !== null)
+		{
+			$manufacturer = $this->getManufacturerControl()->get($idManufacturer);
+			$productPrice->setManufacturer($manufacturer);
+		}
 
-		if ($productPriceControl->set($productPrice))
-			$result->setMessage('valor do produto atualizado com êxito');
-		else
-			$result->setMessage('nenhuma informação alterada no valor do produto');
+		if (($idProductType = $post->getInt('idProductType', false)) !== null)
+		{
+			$productType = $this->getProductTypeControl()->get($idProductType);
+			$productPrice->setProductType($productType);
+		}
+
+		if (($idProductPackage = $post->getInt('idProductPackage', false)) !== null)
+		{
+			$productPackage = $this->getProductPackageControl()->get($idProductPackage);
+			$productPrice->setProductPackage($productPackage);
+		}
+
+		$this->getProductPriceControl()->set($productPrice);
+
+		$result = new ApiResultObject();
+		$result->setResult($productPrice, 'valor de produto para "%s" atualizado com êxito', $productPrice->getName());
 
 		return $result;
 	}
 
 	/**
+	 * Ação para remover os dados de um preço de produto a partir dos parâmetros.
 	 * @ApiAnnotation({"params":["idProductPrice"]})
-	 * @param ApiContent $content
-	 * @return ApiResult
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @return ApiResultObject aquisição do resultado contendo os dados do preço de produto removido.
 	 */
-
-	public function actionRemove(ApiContent $content): ApiResult
+	public function actionRemove(ApiContent $content): ApiResultObject
 	{
 		$idProductPrice = $content->getParameters()->getInt('idProductPrice');
-		$productPriceControl = new ProductPriceControl(System::getWebConnection());
+		$productPrice = $this->getProductPriceControl()->get($idProductPrice);
+		$this->getProductPriceControl()->remove($productPrice);
 
-		if (($productPrice = $productPriceControl->get($idProductPrice)) === null)
-			throw new ApiException('valor do produto não encontrado');
-
-		$result = new ApiResultProductPrice();
-		$result->setProductPrice($productPrice);
-
-		if ($productPriceControl->remove($productPrice))
-			$result->setMessage('valor do produto excluído com êxito');
-		else
-			$result->setMessage('valor do produto já não existe mais');
+		$result = new ApiResultObject();
+		$result->setResult($productPrice, 'valor de produto para "%s" excluído com êxito', $productPrice->getName());
 
 		return $result;
 	}
 
 	/**
+	 * Ação para obter os dados de um preço de produto a partir dos parâmetros.
 	 * @ApiAnnotation({"params":["idProductPrice"]})
-	 * @param ApiContent $content
-	 * @return ApiResult
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @return ApiResultObject aquisição do resultado contendo os dados do preço de produto obtido.
 	 */
-
-	public function actionGet(ApiContent $content): ApiResult
+	public function actionGet(ApiContent $content): ApiResultObject
 	{
 		$idProductPrice = $content->getParameters()->getInt('idProductPrice');
-		$productPriceControl = new ProductPriceControl(System::getWebConnection());
+		$productPrice = $this->getProductPriceControl()->get($idProductPrice);
 
-		if (($productPrice = $productPriceControl->get($idProductPrice)) === null)
-			throw new ApiException('valor do produto não encontrado');
-
-		$result = new ApiResultProductPrice();
-		$result->setProductPrice($productPrice);
-		$result->setMessage('valor do produto carregado com êxito');
+		$result = new ApiResultObject();
+		$result->setResult($productPrice, 'valor de produto para "%s" obtido com êxito', $productPrice->getName());
 
 		return $result;
 	}
 
 	/**
+	 * Ação para obter os dados dos preços de produtos registradas no sistema por produto.
 	 * @ApiAnnotation({"params":["idProduct"]})
-	 * @param ApiContent $content
-	 * @return ApiResult
+	 * @param ApiContent $content conteúdo fornecedido na solicitação do serviço.
+	 * @return ApiResultObject aquisição do resultado contendo os dados de todos os tipos de produto.
 	 */
-
-	public function actionGetAll(ApiContent $content): ApiResult
+	public function actionGetAll(ApiContent $content): ApiResultObject
 	{
 		$idProduct = $content->getParameters()->getInt('idProduct');
-		$productPriceControl = new ProductPriceControl(System::getWebConnection());
-		$productPrices = $productPriceControl->getByProduct($idProduct);
+		$product = $this->getProductControl()->get($idProduct);
+		$productPrice = $this->getProductPriceControl()->getByProduct($idProduct);
 
-		$result = new ApiResultProductPrices();
-		$result->setProductPrices($productPrices);
+		$result = new ApiResultObject();
+		$result->setResult($productPrice, 'há %d preços de produto para o produto "%s"', $product->getName());
 
 		return $result;
 	}
 
 	/**
+	 * Ação para obter os dados dos preços de produto filtradas conforme parâmetros.
 	 * @ApiAnnotation({"params":["filter","value"]})
-	 * @param ApiContent $content
-	 * @return ApiResult
+	 * @param ApiContent $content conteúdo fornecedido na solicitação do serviço.
+	 * @throws FilterException somente se o filtro informado não existir na ação.
+	 * @return ApiResultObject aquisição do resultado contendo os dados dos preços de produto filtradas.
 	 */
-
-	public function actionSearch(ApiContent $content): ApiResult
+	public function actionSearch(ApiContent $content): ApiResultObject
 	{
 		$filter = $content->getParameters()->getString('filter');
 
 		switch ($filter)
 		{
-			case 'product':
-			case 'provider':
-				return $this->onSearchByProvider($content);
-
-			case 'name':
-				return $this->onSearchByName($content);
+			case 'provider': return $this->searchByProvider($content);
+			case 'name': return $this->searchByName($content);
 		}
 
-		throw new ApiException('opção inexistente');
+		throw new FilterException($filter);
 	}
 
 	/**
-	 * @param ApiContent $content
-	 * @return ApiResult
+	 * Procedimento interno para ação de pesquisa por preços através do fornecedor.
+	 * @param ApiContent $content conteúdo fornecedido na solicitação do serviço.
+	 * @return ApiResultObject aquisição do resultado contendo os dados dos preços de produto.
 	 */
-
-	public function onSearchByProvider(ApiContent $content): ApiResult
+	private function searchByProvider(ApiContent $content): ApiResultObject
 	{
-		try {
+		$idProduct = $content->getParameters()->getInt('value');
+		$idProvider = $content->getPost()->getInt('idProvider');
+		$provider = $this->getProviderControl()->get($idProvider);
+		$productPrices = $this->getProductPriceControl()->searchByProvider($idProduct, $idProvider);
 
-			$idProduct = $content->getParameters()->getInt('value');
-			$idProvider = $this->parseNullToInt($content->getPost()->getInt('idProvider', false));
-
-		} catch (ArrayDataException $e) {
-			return new ApiMissParam($e);
-		}
-
-		$productPriceControl = new ProductPriceControl(System::getWebConnection());
-		$productPrices = $productPriceControl->searchByProvider($idProduct, $idProvider);
-
-		$result = new ApiResultProductPrices();
-		$result->setProductPrices($productPrices);
+		$result = new ApiResultObject();
+		$result->setResult($productPrices, 'há %d preços de produto no fornecedor "%s"', $productPrices->size(), $provider->getFantasyName());
 
 		return $result;
 	}
 
 	/**
-	 * @param ApiContent $content
-	 * @return ApiResult
+	 * Procedimento interno para ação de pesquisa por preços através do nome do preço.
+	 * @param ApiContent $content conteúdo fornecedido na solicitação do serviço.
+	 * @return ApiResultObject aquisição do resultado contendo os dados dos preços de produto.
 	 */
-
-	public function onSearchByName(ApiContent $content): ApiResult
+	private function searchByName(ApiContent $content): ApiResultObject
 	{
 		$name = $content->getParameters()->getString('value');
-		$productPriceControl = new ProductPriceControl(System::getWebConnection());
-		$productPrices = $productPriceControl->searchByName($name);
+		$productPrices = $this->getProductPriceControl()->searchByName($name);
 
-		$result = new ApiResultProductPrices();
-		$result->setProductPrices($productPrices);
+		$result = new ApiResultObject();
+		$result->setResult($productPrices, 'há %d preços de produto nomeado com "%s"', $name);
 
 		return $result;
 	}

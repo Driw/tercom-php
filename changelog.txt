@@ -20,6 +20,15 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+11.12.2018 - 0.3.1.126
+- Removido trycatch em ProductPriceService, as exceptions hoje são tratadas em ApiListener.
+- Movido algumas verificações de ProductPriceService para ProductPriceControl.
+- Ao excluir tipos de produto será verificado anteriormente a existência de dependências.
+- Substituído alguns ApiResult por ApiResultObject em ProductPriceService.
+- Agora as exceções geradas ao gerenciar ProductPrice terá um status diferente para cada problema.
+- Movido scripts de teste para gerenciar embalagens de produto para uma subpasta 'product-price-service'.
+- Adicionado constante ALL_COLUMNS para ManufacturerDAO e ProviderDAO.
+
 11.12.2018 - 0.3.1.125
 - Documentação do ProductTypeDAO.
 - Ajustes de padronização nos scripts de testes já revisados.

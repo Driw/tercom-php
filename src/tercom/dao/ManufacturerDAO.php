@@ -10,6 +10,11 @@ use dProject\Primitive\StringUtil;
 
 class ManufacturerDAO extends GenericDAO
 {
+	/**
+	 * @var array nome das colunas da tabela de fabricantes.
+	 */
+	public const ALL_COLUMNS = ['id', 'fantasyName'];
+
 	private function validate(Manufacturer $manufacturer, bool $validateId): void
 	{
 		// PRIMARY KEY

@@ -34,7 +34,7 @@ class ProductTypeDAO extends GenericDAO
 	 * Tipos de produto devem possuir um nome e este deve ser único no sistema.
 	 * @param ProductType $productType objeto do tipo tipo de produto à ser validado.
 	 * @param bool $validateId true para validar o código de identificação único ou false caso contrário.
-	 * @throws ProductTypeException caso algum dos dados da embalagem de produto não estejam de acordo.
+	 * @throws ProductTypeException caso algum dos dados do tipo de produto não estejam de acordo.
 	 */
 	private function validate(ProductType $productType, bool $validateID)
 	{
@@ -219,9 +219,9 @@ class ProductTypeDAO extends GenericDAO
 	}
 
 	/**
-	 * Procedimento interno para analisar o resultado de uma consulta e criar um objeto do tipo de produto.
+	 * Procedimento interno para analisar o resultado de uma consulta e criar um objeto do tipo tipo de produto.
 	 * @param Result $result referência do resultado da consulta obtido.
-	 * @return ProductType|NULL objeto do tipo tipo de produto com dados carregados ou NULL se não houver resultado.
+	 * @return ProductType|NULL objeto instânciado com dados carregados ou NULL se não houver resultado.
 	 */
 	private function parseProductType(Result $result): ?ProductType
 	{
@@ -229,7 +229,7 @@ class ProductTypeDAO extends GenericDAO
 	}
 
 	/**
-	 * Procedimento interno para analisar o resultado de uma consulta e criar os objetos do tipo de produto.
+	 * Procedimento interno para analisar o resultado de uma consulta e criar os objetos do tipo tipo de produto.
 	 * @param Result $result referência do resultado da consulta obtido.
 	 * @return ProductTypes aquisição da lista de tipos de produto a partir da consulta.
 	 */

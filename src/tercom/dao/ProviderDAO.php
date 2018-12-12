@@ -28,6 +28,11 @@ use tercom\exceptions\ProviderException;
 class ProviderDAO extends GenericDAO
 {
 	/**
+	 * @var array nome de todas as colunas da tabela de fornecedores.
+	 */
+	public const ALL_COLUMNS = ['id', 'cnpj', 'companyName', 'fantasyName', 'spokesman', 'site', 'inactive', 'commercial', 'otherphone'];
+
+	/**
 	 * @var int quantidade de fornecedores por paginação
 	 */
 	private const PAGE_LENGTH = 10;

@@ -10,6 +10,12 @@ use dProject\Primitive\ObjectUtil;
 use dProject\Primitive\StringUtil;
 
 /**
+ * Preço de Produto
+ *
+ * Um produto pode possuir diversos presços e cada preço irá possuir algumas informações como:
+ * fornecedor do qual oferece o produto no preço e quantidade informada, marca/fabricante (um produto tem várias marcas),
+ * o tipo e embalagem deve ser do preço do produto já que um mesmo produto pode possuir vários.
+ *
  * @see AdvancedObject
  * @author Andrew
  */
@@ -17,210 +23,229 @@ use dProject\Primitive\StringUtil;
 class ProductPrice extends AdvancedObject
 {
 	/**
-	 * @var int
+	 * @var int quantidade mínima de caracteres no nome do preço.
 	 */
 	public const MIN_NAME_LEN = 2;
 	/**
-	 * @var int
+	 * @var int quantidade máxima de caracteres no nome do preço.
 	 */
 	public const MAX_NAME_LEN = 64;
 	/**
-	 * @var int
+	 * @var int quantidade mínima do produto por preço.
 	 */
 	public const MIN_AMOUNT = 1;
 	/**
-	 * @var int
+	 * @var int quantidade máxima do produto por preço.
 	 */
 	public const MAX_AMOUNT = 9999;
 	/**
-	 * @var int
+	 * @var int valor mínimo permitido por preço de produto.
 	 */
 	public const MIN_PRICE = 0.01;
 	/**
-	 * @var int
+	 * @var int valor máximo permitido por preço de produto.
 	 */
 	public const MAX_PRICE = 99999.99;
 
 	/**
-	 * @var int
+	 * @var int código de identificação único do preço de produto.
 	 */
 	private $id;
 	/**
-	 * @var Product
+	 * @var Product objeto do tipo produto do qual o preço pertence.
 	 */
 	private $product;
 	/**
-	 * @var Provider
+	 * @var Provider objeto do tipo fornecedor que oferece o preço.
 	 */
 	private $provider;
 	/**
-	 * @var Manufacture
+	 * @var Manufacturer objeto do tipo fabricante que oferece o preço.
 	 */
-	private $manufacture;
+	private $manufacturer;
 	/**
-	 * @var ProductPackage
+	 * @var ProductPackage objeto do tipo embalagem de produto que oferece o preço.
 	 */
 	private $productPackage;
 	/**
-	 * @var ProductType
+	 * @var ProductType objeto do tipo tipo de produto que oferece o preço.
 	 */
 	private $productType;
 	/**
-	 * @var string
+	 * @var string nome de exibição no preço do produto.
 	 */
 	private $name;
 	/**
-	 * @var int
+	 * @var int quantidade do produto oferecido pelo preço.
 	 */
 	private $amount;
 	/**
-	 * @var float
+	 * @var float preço total para aquisição do produto.
 	 */
 	private $price;
 	/**
-	 * @var DateTime
+	 * @var DateTime horário da última atualização do preço de produto.
 	 */
 	private $lastUpdate;
 
 	/**
 	 *
 	 */
-
 	public function __construct()
 	{
 		$this->id = 0;
-		$this->product = new Product();
-		$this->provider = new Provider();
-		$this->productType = new ProductType();
-		$this->productPackage = new ProductPackage();
-		$this->manufacture = new Manufacture();
-		$this->lastUpdate = new DateTime();
 		$this->amount = 0;
 		$this->price = 0.0;
 	}
 
 	/**
-	 * @return int
+	 * @return int aquisição do código de identificação único do preço de produto.
 	 */
-
-	public function getID(): int
+	public function getId(): int
 	{
 		return $this->id;
 	}
 
 	/**
-	 * @param int $id
+	 * @param int $id código de identificação único do preço de produto.
 	 */
-
-	public function setID(int $id)
+	public function setId(int $id): void
 	{
 		$this->id = $id;
 	}
 
 	/**
-	 * @return Product
+	 * @return Product aquisição do objeto do tipo produto do qual o preço pertence.
 	 */
-
 	public function getProduct(): Product
 	{
 		return $this->product;
 	}
 
 	/**
-	 * @param Product $product
+	 * @return int aquisição do código de identificação do produto do preço ou zero se inválido.
 	 */
+	public function getProductId(): int
+	{
+		return $this->product === null ? 0 : $this->product->getId();
+	}
 
-	public function setProduct(Product $product)
+	/**
+	 * @param Product $product objeto do tipo produto do qual o preço pertence.
+	 */
+	public function setProduct(Product $product): void
 	{
 		$this->product = $product;
 	}
 
 	/**
-	 * @return Provider
+	 * @return Provider aquisição do objeto do tipo fornecedor que oferece o preço.
 	 */
-
 	public function getProvider(): Provider
 	{
 		return $this->provider;
 	}
 
 	/**
-	 * @param Provider $providerProvider
+	 * @return int aquisição do código de identificação do fornecedor ou zero se inválido.
 	 */
+	public function getProviderId(): int
+	{
+		return $this->provider === null ? 0 : $this->provider->getId();
+	}
 
-	public function setProvider(Provider $provider)
+	/**
+	 * @param Provider $providerProvider objeto do tipo fornecedor que oferece o preço.
+	 */
+	public function setProvider(Provider $provider): void
 	{
 		$this->provider = $provider;
 	}
 
 	/**
-	 * @return Manufacture
+	 * @return Manufacturer aquisição do objeto do tipo fabricante que oferece o preço.
 	 */
-
-	public function getManufacture(): Manufacture
+	public function getManufacturer(): Manufacturer
 	{
-		return $this->manufacture;
+		return $this->manufacturer;
 	}
 
 	/**
-	 * @param int $manufacture
+	 * @return int aquisição do código de identificação do fabricante ou zero se não especificado.
 	 */
-
-	public function setManufacture(Manufacture $manufacture)
+	public function getManufacturerId(): int
 	{
-		$this->manufacture = $manufacture;
+		return $this->manufacturer === null ? 0 : $this->manufacturer->getId();
 	}
 
 	/**
-	 * @return ProductPackage
+	 * @param int $manufacturer objeto do tipo fabricante que oferece o preço.
 	 */
+	public function setManufacturer(Manufacturer $manufacturer): void
+	{
+		$this->manufacturer = $manufacturer;
+	}
 
+	/**
+	 * @return ProductPackage aquisição do objeto do tipo embalagem de produto que oferece o preço.
+	 */
 	public function getProductPackage(): ProductPackage
 	{
 		return $this->productPackage;
 	}
 
 	/**
-	 * @param ProductPackage $productPackage
+	 * @return int aquisição do código de identificação da embalagem de produto ou zero se inválido.
 	 */
+	public function getProductPackageId(): int
+	{
+		return $this->productPackage === null ? 0 : $this->productPackage->getID();
+	}
 
-	public function setProductPackage(ProductPackage $productPackage)
+	/**
+	 * @param ProductPackage $productPackage objeto do tipo embalagem de produto que oferece o preço.
+	 */
+	public function setProductPackage(ProductPackage $productPackage): void
 	{
 		$this->productPackage = $productPackage;
 	}
 
 	/**
-	 * @return ProductType
+	 * @return ProductType aquisição do objeto do tipo tipo de produto que oferece o preço.
 	 */
-
 	public function getProductType(): ProductType
 	{
 		return $this->productType;
 	}
 
 	/**
-	 * @param ProductType $productType
+	 * @return int aquisição do código de identificação do tipo de produto ou zero se não informado.
 	 */
+	public function getProductTypeId(): int
+	{
+		return $this->productType === null ? 0 : $this->productType->getID();
+	}
 
-	public function setProductType(ProductType $productType)
+	/**
+	 * @param ProductType $productType objeto do tipo tipo de produto que oferece o preço.
+	 */
+	public function setProductType(ProductType $productType): void
 	{
 		$this->productType = $productType;
 	}
 
 	/**
-	 * @return string|NULL
+	 * @return string|NULL aquisição do nome de exibição no preço do produto.
 	 */
-
 	public function getName(): ?string
 	{
 		return $this->name;
 	}
 
 	/**
-	 * @param string $name
+	 * @param string $name nome de exibição no preço do produto.
 	 */
-
-	public function setName(?string $name)
+	public function setName(?string $name): void
 	{
 		if (!empty($name) && !StringUtil::hasBetweenLength($name, self::MIN_NAME_LEN, self::MAX_NAME_LEN))
 			throw EntityParseException::new("nome deve possuir de %d a %d caracteres (nome: $name)", self::MIN_NAME_LEN, self::MAX_NAME_LEN);
@@ -229,19 +254,17 @@ class ProductPrice extends AdvancedObject
 	}
 
 	/**
-	 * @return int
+	 * @return int aquisição da quantidade do produto oferecido pelo preço.
 	 */
-
 	public function getAmount(): int
 	{
 		return $this->amount;
 	}
 
 	/**
-	 * @param int $amount
+	 * @param int $amount quantidade do produto oferecido pelo preço.
 	 */
-
-	public function setAmount(int $amount)
+	public function setAmount(int $amount): void
 	{
 		if (!IntegerUtil::inInterval($amount, self::MIN_AMOUNT, self::MAX_AMOUNT))
 			throw new EntityParseException("quantidade deve ser de %d a %d (quantidade: $amount)", self::MIN_AMOUNT, self::MAX_AMOUNT);
@@ -250,19 +273,17 @@ class ProductPrice extends AdvancedObject
 	}
 
 	/**
-	 * @return int
+	 * @return int aquisição do preço total para aquisição do produto.
 	 */
-
 	public function getPrice(): float
 	{
 		return $this->price;
 	}
 
 	/**
-	 * @param int $price
+	 * @param int $price preço total para aquisição do produto.
 	 */
-
-	public function setPrice(float $price)
+	public function setPrice(float $price): void
 	{
 		if (!FloatUtil::inInterval($price, self::MIN_PRICE, self::MAX_PRICE))
 			throw EntityParseException::new("preço deve ser de %.2f a %.2f (preço: $price)", self::MIN_PRICE, self::MAX_PRICE);
@@ -271,57 +292,50 @@ class ProductPrice extends AdvancedObject
 	}
 
 	/**
-	 * @return float
+	 * @return float aquisição do preço unitário do produto.
 	 */
-
 	public function getUnitPrice(): float
 	{
 		return $this->price / $this->amount;
 	}
 
 	/**
-	 * @return DateTime
+	 * @return DateTime aquisição do horário da última atualização do preço de produto.
 	 */
-
 	public function getLastUpdate(): DateTime
 	{
 		return $this->lastUpdate;
 	}
 
 	/**
-	 * @param DateTime $datetime
+	 * @param DateTime $datetime horário da última atualização do preço de produto.
 	 */
-
-	public function setLastUpdate(DateTime $lastUpdate)
+	public function setLastUpdate(DateTime $lastUpdate): void
 	{
 		$this->lastUpdate = $lastUpdate;
 	}
 
 	/**
-	 * @return bool
+	 * O sistema por padrão considera o preço do produto desatualizado após 7 dias.
+	 * @return bool true se for necessário atualizar o preço do produto ou false caso contrário.
 	 */
-
 	public function isNeedUpdate(): bool
 	{
 		$nextUpdateTimestamp = strtotime('+7 days', $this->lastUpdate->getTimestamp());
 
-		$nextUpdate = new DateTime();
-		$nextUpdate->setTimestamp($nextUpdateTimestamp);
-
-		return $nextUpdate->getTimestamp() < time();
+		return $nextUpdateTimestamp < time();
 	}
 
 	/**
 	 * {@inheritDoc}
 	 * @see \dProject\Primitive\AdvancedObject::getAttributeTypes()
 	 */
-
 	public function getAttributeTypes(): array
 	{
 		return [
 			'product' => Product::class,
 			'provider' => Provider::class,
-			'manufacture' => Manufacture::class,
+			'manufacturer' => Manufacturer::class,
 			'productPackage' => ProductPackage::class,
 			'productType' => ProductType::class,
 			'name' => ObjectUtil::TYPE_STRING,
