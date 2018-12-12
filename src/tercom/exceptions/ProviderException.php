@@ -31,6 +31,30 @@ class ProviderException extends ApiStatusException
 	/**
 	 * @return ProviderException
 	 */
+	public static function newNotInserted(): ProviderException
+	{
+		return new ProviderException('não foi possível adicionar o fornecedor', ApiStatus::PROVIDER_NOT_INSERTED);
+	}
+
+	/**
+	 * @return ProviderException
+	 */
+	public static function newNotUpdated(): ProviderException
+	{
+		return new ProviderException('não foi possível atualizar os dados do fornecedor', ApiStatus::PROVIDER_NOT_UPDATED);
+	}
+
+	/**
+	 * @return ProviderException
+	 */
+	public static function newNotSelected(): ProviderException
+	{
+		return new ProviderException('fornecedor não encontrado', ApiStatus::PROVIDER_NOT_SELECTED);
+	}
+
+	/**
+	 * @return ProviderException
+	 */
 	public static function newCnpjEmpty(): ProviderException
 	{
 		return new ProviderException('CNPJ não informado', ApiStatus::PROVIDER_CNPJ_EMPTY);
@@ -58,14 +82,6 @@ class ProviderException extends ApiStatusException
 	public static function newCnpjUnavaiable(): ProviderException
 	{
 		return new ProviderException('CNPJ indisponível', ApiStatus::PROVIDER_CNPJ_UNAVAIABLE);
-	}
-
-	/**
-	 * @return ProviderException
-	 */
-	public static function newNotFound(): ProviderException
-	{
-		return new ProviderException('fornecedor não encontrado', ApiStatus::PROVIDER_NOT_FOUND);
 	}
 }
 

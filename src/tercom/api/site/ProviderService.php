@@ -21,6 +21,7 @@ use tercom\entities\Provider;
  * @see DefaultSiteService
  * @see ApiResultProviderSettings
  * @see ApiResultObject
+ *
  * @author Andrew
  */
 class ProviderService extends DefaultSiteService
@@ -323,7 +324,7 @@ class ProviderService extends DefaultSiteService
 	{
 		$cnpj = $content->getParameters()->getString('value');
 		$idProvider = $content->getParameters()->isSetted('idProvider') ? $content->getParameters()->getInt('idProvider') : 0;
-		$avaiable = $this->getProviderControl()->hasAvaiableCNPJ($cnpj, $idProvider);
+		$avaiable = !$this->getProviderControl()->hasCnpj($cnpj, $idProvider);
 
 		$result = new ApiResultSimpleValidation();
 		$result->setOkMessage($avaiable, $avaiable ? 'CNPJ disponível' : 'CNPJ indisponível');

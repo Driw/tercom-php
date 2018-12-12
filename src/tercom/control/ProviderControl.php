@@ -45,45 +45,45 @@ class ProviderControl extends GenericControl
 	/**
 	 * Adiciona um novo fornecedor no sistema.
 	 * @param Provider $provider objeto de fornecedor à adicionar.
-	 * @return bool true se adicionado ou false caso contrário.
 	 */
-	public function add(Provider $provider): bool
+	public function add(Provider $provider): void
 	{
-		return $this->providerDAO->insert($provider);
+		if (!$this->providerDAO->insert($provider))
+			throw ProviderException::newNotInserted();
 	}
 
 	/**
 	 * Atualiza os dados de um fornecedor já existente no sistema.
 	 * @param Provider $provider objeto de fornecedor à atualizar.
-	 * @return bool true se atualizado ou false caso contrário.
 	 */
-	public function set(Provider $provider): bool
+	public function set(Provider $provider): void
 	{
-		return $this->providerDAO->update($provider);
+		if (!$this->providerDAO->update($provider))
+			throw ProviderException::newNotUpdated();
 	}
 
 	/**
 	 * Habilita um fornecedor no sistema, ao habilitar estará disponível para clientes.
 	 * @param Provider $provider objeto de fornecedor à habilitar.
-	 * @return bool true se atualizado ou false caso contrário.
 	 */
-	public function setEnable(Provider $provider): bool
+	public function setEnable(Provider $provider): void
 	{
 		$provider->setInactive(false);
 
-		return $this->providerDAO->updateInactive($provider);
+		if (!$this->providerDAO->updateInactive($provider))
+			throw ProviderException::newNotUpdated();
 	}
 
 	/**
 	 * Desabilita um fornecedor no sistema, ao desabilitar estará indisponível para clientes.
 	 * @param Provider $provider objeto de fornecedor à desabilitar.
-	 * @return bool true se atualizado ou false caso contrário.
 	 */
-	public function setDisable(Provider $provider): bool
+	public function setDisable(Provider $provider): void
 	{
 		$provider->setInactive(true);
 
-		return $this->providerDAO->updateInactive($provider);
+		if (!$this->providerDAO->updateInactive($provider))
+			throw ProviderException::newNotUpdated();
 	}
 
 	/**
@@ -95,7 +95,7 @@ class ProviderControl extends GenericControl
 	public function get(int $idProvider): Provider
 	{
 		if (($provider = $this->providerDAO->selectByID($idProvider)) === null)
-			throw ProviderException::newNotFound();
+			throw ProviderException::newNotSelected();
 
 		return $provider;
 	}
@@ -108,7 +108,7 @@ class ProviderControl extends GenericControl
 	public function getByCnpj(string $cnpj): Provider
 	{
 		if (($provider = $this->providerDAO->selectByCNPJ($cnpj)) === null)
-			throw ProviderException::newNotFound();
+			throw ProviderException::newNotSelected();
 
 		return $provider;
 	}
@@ -183,7 +183,7 @@ class ProviderControl extends GenericControl
 		if (!Functions::validateCNPJ($cnpj))
 			throw ProviderException::newCnpjUnavaiable();
 
-		return !$this->providerDAO->existCnpj($cnpj, $idProvider);
+		return $this->providerDAO->existCnpj($cnpj, $idProvider);
 	}
 
 	/**

@@ -20,6 +20,10 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+11.12.2018 - 0.3.1.127
+- Ajustes em ProviderControl para uso de novas opções em ProviderException.
+- Corrigido problema onde a verificação na disponibilidade de CNPJ estava incorreta.
+
 11.12.2018 - 0.3.1.126
 - Removido trycatch em ProductPriceService, as exceptions hoje são tratadas em ApiListener.
 - Movido algumas verificações de ProductPriceService para ProductPriceControl.
