@@ -10,10 +10,16 @@ use tercom\api\site\results\ApiResultSimpleValidation;
 use tercom\entities\ProductPackage;
 
 /**
+ * Serviço de Embalagem de Produto
+ *
+ * Este serviço realiza a comunicação do cliente para com o sistema em relação aos dados de embalagens de produto.
+ * Como serviço, oferece as possibilidades de acicionar embalagens de produto, atualizar embalagens de produto,
+ * remover embalagens de produto, obter dados das embalagens de produto, e buscar por nome de embalagens de produto.
+ *
  * @see DefaultSiteService
- * @see ApiResultProductPackage
- * @see ApiResultProductPackages
+ * @see ApiResultObject
  * @see ApiResultProductPackageSettings
+ *
  * @author Andrew
  */
 
@@ -24,7 +30,6 @@ class ProductPackageService extends DefaultSiteService
 	 * @param ApiContent $content conteúdo fornecedido na solicitação do serviço.
 	 * @return ApiResultProductPackageSettings aquisição do resultado das configurações.
 	 */
-
 	public function actionSettings(ApiContent $content): ApiResultProductPackageSettings
 	{
 		return new ApiResultProductPackageSettings();
@@ -140,7 +145,7 @@ class ProductPackageService extends DefaultSiteService
 	}
 
 	/**
-	 * Procedimento interno para açaõ de pesquisa por embalagens através do nome da embalagem.
+	 * Procedimento interno para ação de pesquisa por embalagens através do nome da embalagem.
 	 * @param ApiContent $content conteúdo fornecedido na solicitação do serviço.
 	 * @return ApiResultObject aquisição do resultado contendo os dados das embalagens de produto.
 	 */
@@ -177,7 +182,7 @@ class ProductPackageService extends DefaultSiteService
 	/**
 	 * Procedimento usado para consultar a disponibilidade de um nome para embalagem de produto.
 	 * @param ApiContent $content conteúdo fornecedido na solicitação do serviço.
-	 * @return ApiResultSimpleValidation aquisição do resultado informado a disponibilidade do nome fantasia.
+	 * @return ApiResultSimpleValidation aquisição do resultado informado a disponibilidade.
 	 */
 	private function avaiableName(ApiContent $content): ApiResultSimpleValidation
 	{

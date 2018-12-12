@@ -20,6 +20,15 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+11.12.2018 - 0.3.1.124
+- Removido trycatch em ProductTypeService, as exceptions hoje são tratadas em ApiListener.
+- Movido algumas verificações de ProductTypeService para ProductTypeControl.
+- Ao excluir tipos de produto será verificado anteriormente a existência de dependências.
+- Substituído alguns ApiResult por ApiResultObject em ProductTypeService.
+- Agora as exceções geradas ao gerenciar ProductType terá um status diferente para cada problema.
+- Atualizado 'product_types' para que 'name' seja UNIQUE KEY.
+	- Atualizado para verificações de unique key au adicionar e atualizar.
+
 11.12.2018 - 0.3.1.123
 - Removido trycatch em ProductPackageService, as exceptions hoje são tratadas em ApiListener.
 - Movido algumas verificações de ProductPackageService para ProductPackageControl.
@@ -27,7 +36,7 @@
 - Substituído alguns ApiResult por ApiResultObject em ProductPackageService.
 - Movido scripts de teste dos webservices para a pasta 'product-package-service'.
 - Agora as exceções geradas ao gerenciar ProductPackage terá um status diferente para cada problema.
-- Atualizado 'product_pckages' para que 'name' seja UNIQUE KEY.
+- Atualizado 'product_packages' para que 'name' seja UNIQUE KEY.
 	- Atualizado para verificações de unique key au adicionar e atualizar.
 - Corrigido nome das variáveis em ManufacturerControl de 'idManufacture' para 'idManufacturer'.
 

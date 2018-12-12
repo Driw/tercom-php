@@ -106,7 +106,8 @@ CREATE TABLE IF NOT EXISTS product_types
 	id INT AUTO_INCREMENT,
 	name VARCHAR(32) NOT NULL,
 
-	CONSTRAINT product_types_pk PRIMARY KEY (id)
+	CONSTRAINT product_types_pk PRIMARY KEY (id),
+	CONSTRAINT product_types_name_uk UNIQUE KEY (name)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_general_ci;
 
 CREATE TABLE IF NOT EXISTS product_packages

@@ -8,6 +8,11 @@ use dProject\MySQL\Result;
 
 class ProductTypeDAO extends GenericDAO
 {
+	/**
+	 * @var array nome das colunas da tabela de tipos de produto.
+	 */
+	public const ALL_COLUMNS = ['id', 'name'];
+
 	public function insert(ProductType $productType): bool
 	{
 		$sql = "INSERT INTO product_types (name)
@@ -91,7 +96,7 @@ class ProductTypeDAO extends GenericDAO
 		return $this->parseProductTypes($result);
 	}
 
-	public function existID(int $idProductType): bool
+	public function exist(int $idProductType): bool
 	{
 		$sql = "SELECT COUNT(*) AS qtd
 				FROM product_types
