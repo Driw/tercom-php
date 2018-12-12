@@ -114,7 +114,8 @@ CREATE TABLE IF NOT EXISTS product_packages
 	id INT AUTO_INCREMENT,
 	name VARCHAR(32) NOT NULL,
 
-	CONSTRAINT product_packages_pk PRIMARY KEY (id)
+	CONSTRAINT product_packages_pk PRIMARY KEY (id),
+	CONSTRAINT product_packages_name_uk UNIQUE KEY (name)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_general_ci;
 
 CREATE TABLE IF NOT EXISTS products
@@ -138,10 +139,10 @@ CREATE TABLE IF NOT EXISTS product_prices
 	id INT AUTO_INCREMENT,
 	idProduct INT NOT NULL,
 	idProvider INT NOT NULL,
-	idManufacturer INT NOT NULL,
+	idManufacturer INT NULL DEFAULT NULL,
 	idProductPackage INT NOT NULL,
-	idProductType INT NOT NULL,
-	name VARCHAR(64) DEFAULT NULL,
+	idProductType INT NULL DEFAULT NULL,
+	name VARCHAR(64) NULL DEFAULT NULL,
 	amount SMALLINT NOT NULL,
 	price DECIMAL(10,2) NOT NULL,
 	lastUpdate DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,

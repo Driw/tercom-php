@@ -7,9 +7,9 @@ use dProject\Primitive\ObjectUtil;
 use dProject\Primitive\StringUtil;
 
 /**
- * <h1>Pacote de Produto</h1>
+ * Emablagem de Produto
  *
- * <p></p>
+ * A embalade é usada para especificar uma informação pre-definida do produto referente a sua embalagem.
  *
  * @see AdvancedObject
  * @author Andrew
@@ -18,64 +18,60 @@ use dProject\Primitive\StringUtil;
 class ProductPackage extends AdvancedObject
 {
 	/**
-	 * @var int
+	 * @var int quantidade máxima de caracteres para o nome da emblagem de produto.
 	 */
 	public const MIN_NAME_LEN = 3;
 	/**
-	 * @var int
+	 * @var int quantidade máxima de caracteres para o nome da emblagem de produto.
 	 */
 	public const MAX_NAME_LEN = 32;
 
 	/**
-	 * @var int
+	 * @var int código de identificação único da embalagem de produto.
 	 */
 	private $id;
 	/**
-	 * @var string
+	 * @var string nome da embalagem de produto.
 	 */
 	private $name;
 
 	/**
 	 *
 	 */
-
 	public function __construct()
 	{
 		$this->id = 0;
+		$this->name = '';
 	}
 
 	/**
-	 * @return number
+	 * @return int aquisição do código de identificação único da embalagem de produto.
 	 */
-
-	public function getID()
+	public function getId(): int
 	{
 		return $this->id;
 	}
 
 	/**
-	 * @param number $id
+	 * @param int $id código de identificação único da embalagem de produto.
 	 */
-
-	public function setID($id)
+	public function setId(int $id): void
 	{
 		$this->id = $id;
 	}
 
 	/**
-	 * @return string
+	 * @return string aquisição do nome da embalagem de produto.
 	 */
-
-	public function getName()
+	public function getName(): string
 	{
 		return $this->name;
 	}
 
 	/**
-	 * @param string $name
+	 * @param string $name nome da embalagem de produto.
 	 */
-
-	public function setName($name)
+	public function setName(string $name): void
 	{
 		if (!StringUtil::hasBetweenLength($name, self::MIN_NAME_LEN, self::MAX_NAME_LEN))
 			throw EntityParseException::new("nome deve possuir de %d a %d caracteres (nome: $name)", self::MIN_NAME_LEN, self::MAX_NAME_LEN);
@@ -87,8 +83,7 @@ class ProductPackage extends AdvancedObject
 	 * {@inheritDoc}
 	 * @see \dProject\Primitive\AdvancedObject::getAttributeTypes()
 	 */
-
-	public function getAttributeTypes():array
+	public function getAttributeTypes(): array
 	{
 		return [
 			'id' => ObjectUtil::TYPE_INTEGER,
@@ -96,3 +91,4 @@ class ProductPackage extends AdvancedObject
 		];
 	}
 }
+

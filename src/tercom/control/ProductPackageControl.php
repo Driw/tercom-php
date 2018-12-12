@@ -2,88 +2,126 @@
 
 namespace tercom\control;
 
-use dProject\MySQL\MySQL;
 use tercom\dao\ProductPackageDAO;
 use tercom\entities\ProductPackage;
 use tercom\entities\lists\ProductPackages;
+use tercom\exceptions\ProductPackageException;
 
+/**
+ * Controle de Embalagem de Produto
+ *
+ * Através do controle é definida as especificações de ações permitidas para se gerenciar embalagem de produto.
+ * Para tal existe uma comunicação direta com a DAO de embalagem de produto afim de persistir no banco de dados.
+ * O uso do controle pode ser feito por qualquer outra classe necessária evitando o acesso direto a DAO.
+ *
+ * @see GenericControl
+ * @see ProductPackageDAO
+ * @see ProductPackages
+ * @see ProductPackage
+ *
+ * @author Andrew
+ */
 class ProductPackageControl extends GenericControl
 {
 	/**
-	 * @var ProductPackageDAO
+	 * @var ProductPackageDAO DAO para embalagem de produto.
 	 */
 	private $productPackageDAO;
 
 	/**
-	 * @param MySQL $mysql
+	 * Construtor para inicializar a instância da DAO de embalagem de produto.
 	 */
-
-	public function __construct(MySQL $mysql)
+	public function __construct()
 	{
-		$this->productPackageDAO = new ProductPackageDAO($mysql);
+		$this->productPackageDAO = new ProductPackageDAO();
 	}
 
-	private function validate(ProductPackage $productPackage, bool $validateID)
+	/**
+	 * Adiciona os dados de uma nova embalagem de produto no sistema.
+	 * @param ProductPackage $productPackage objeto do tipo embalagem de produto à adicionar.
+	 * @throws ProductPackageException quando não for possível adicionar.
+	 */
+	public function add(ProductPackage $productPackage): void
 	{
-		if ($validateID) {
-			if ($productPackage->getID() === 0)
-				throw new ControlException('embalagem de produto não identificado');
-		} else {
-			if ($productPackage->getID() !== 0)
-				throw new ControlException('embalagem de produto já identificado');
-		}
+		if (!$this->productPackageDAO->insert($productPackage))
+			throw ProductPackageException::newNotInserted();
 	}
 
-	public function add(ProductPackage $productPackage): bool
+	/**
+	 * Atualiza os dados de uma embalagem de produto já existente no sistema.
+	 * @param ProductPackage $productPackage objeto do tipo embalagem de produto à atualizar.
+	 * @throws ProductPackageException quando não for possível atualizar.
+	 */
+	public function set(ProductPackage $productPackage): void
 	{
-		if (!$this->hasAvaiableName($productPackage->getName(), $productPackage->getID()))
-			throw new ControlException('embalagem de produto já definido');
-
-		$this->validate($productPackage, false);
-
-		return $this->productPackageDAO->insert($productPackage);
+		if (!$this->productPackageDAO->update($productPackage))
+			throw ProductPackageException::newNotUpdated();
 	}
 
-	public function set(ProductPackage $productPackage): bool
+	/**
+	 * Remove os dados de uma embalagem de produto do sistema.
+	 * @param ProductPackage $productPackage objeto do tipo embalagem de produto à excluir.
+	 * @throws ProductPackageException quando não for possível excluir.
+	 */
+	public function remove(ProductPackage $productPackage): void
 	{
-		if (!$this->hasAvaiableName($productPackage))
-			throw new ControlException('embalagem de produto já definido');
-
-		$this->validate($productPackage, true);
-
-		return $this->productPackageDAO->update($productPackage);
+		if (!$this->productPackageDAO->dalete($productPackage))
+			throw ProductPackageException::newNotDeleted();
 	}
 
-	public function remove(ProductPackage $productPackage): bool
+	/**
+	 * Obtém uma embalagem de produto no sistema través do seu código de identificação único.
+	 * @param int $idProductPackage código de identificação único da embalagem de produto.
+	 * @throws ProductPackageException quando não for possível obter os dados.
+	 * @return ProductPackage aquisição do objeto de embalagem de produto.
+	 */
+	public function get(int $idProductPackage): ProductPackage
 	{
-		$this->validate($productPackage, true);
+		if (($productPackage = $this->productPackageDAO->select($idProductPackage)) === null)
+			throw ProductPackageException::newNotSelected();
 
-		return $this->productPackageDAO->dalete($productPackage);
+		return $productPackage;
 	}
 
-	public function get(int $idProductPackage): ?ProductPackage
-	{
-		return $this->productPackageDAO->select($idProductPackage);
-	}
-
+	/**
+	 * Obtém uma lista com todas as embalagens de produto registradas no sistema.
+	 * @return ProductPackages aquisição da lista de embalagens de produto encontradas.
+	 */
 	public function getAll(): ProductPackages
 	{
 		return $this->productPackageDAO->selectAll();
 	}
 
-	public function filterByName(string $name): ProductPackages
+	/**
+	 * Procura por embalagens de produto através do seu nome.
+	 * @param string $name nome da embalagem parcial ou completo para filtro.
+	 * @return ProductPackages aquisição da lista de embalagens de produto filtradas.
+	 */
+	public function searchByName(string $name): ProductPackages
 	{
-		return $this->productPackageDAO->searchByName($name);
+		return $this->productPackageDAO->selectLikeName($name);
 	}
 
+	/**
+	 * Vericia se o sistema possui ou não uma determinada embalagem de produto.
+	 * @param int $idProductPackage código de identificação único da embalagem de produto à verificar.
+	 * @return bool true se existir ou false caso contrário.
+	 */
 	public function has(int $idProductPackage): bool
 	{
-		return $this->productPackageDAO->existID($idProductPackage);
+		return $this->productPackageDAO->exist($idProductPackage);
 	}
 
-	public function hasAvaiableName(string $name, int $idProductPackage = 0): bool
+	/**
+	 * Verifica se o sistema possui ou não um determinado nome de embalagem de produto.
+	 * @param string $name nome da embalagem de produto à verificar.
+	 * @param int $idProductPackage código de identificação único da embalagem de produto à desconsiderar
+	 * ou zero caso deseja considerar todas as embalagens.
+	 * @return bool true se existir ou false caso contrário.
+	 */
+	public function hasName(string $name, int $idProductPackage = 0): bool
 	{
-		return !$this->productPackageDAO->existName($name, $idProductPackage);
+		return $this->productPackageDAO->existName($name, $idProductPackage);
 	}
 }
 

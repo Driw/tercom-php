@@ -67,26 +67,24 @@ class ApiStatus
 
 	public const PRODUCT_IDENTIFIED = 351;
 	public const PRODUCT_NOT_IDENTIFIED = 352;
-	public const PRODUCT_NAME_EMPTY = 253;
-	public const PRODUCT_DESCRIPTION_EMPTY = 254;
-	public const PRODUCT_UNIT_NONE = 255;
-	public const PRODUCT_NAME_UNAVAIABLE = 256;
-	public const PRODUCT_UNIT_INVALID = 257;
-	public const PRODUCT_CATEGORY_INVALID = 258;
-	public const PRODUCT_NOT_INSERTED = 259;
-	public const PRODUCT_NOT_UPDATED = 260;
-	public const PRODUCT_NOT_SELECTED = 261;
+	public const PRODUCT_NAME_EMPTY = 353;
+	public const PRODUCT_DESCRIPTION_EMPTY = 354;
+	public const PRODUCT_UNIT_NONE = 355;
+	public const PRODUCT_NAME_UNAVAIABLE = 356;
+	public const PRODUCT_UNIT_INVALID = 357;
+	public const PRODUCT_CATEGORY_INVALID = 358;
+	public const PRODUCT_NOT_INSERTED = 359;
+	public const PRODUCT_NOT_UPDATED = 360;
+	public const PRODUCT_NOT_SELECTED = 361;
 
-	public const SERVICE_NOT_ADD = 401;
-	public const SERVICE_NOT_SET = 402;
-	public const SERVICE_NOT_FOUND = 403;
-	public const SERVICE_FILTER = 404;
-	public const SERVICE_FIELD = 405;
-
-	public const SERVICE_PRICE_SERVICE = 451;
-	public const SERVICE_PRICE_PROVIDER = 452;
-	public const SERVICE_PRICE_NOT_ADD = 453;
-	public const SERVICE_PRICE_NOT_SET = 454;
-	public const SERVICE_PRICE_NOT_FOUND = 455;
+	public const PRODUCT_PACKAGE_IDENTIFIED = 451;
+	public const PRODUCT_PACKAGE_NOT_IDENTIFIED = 452;
+	public const PRODUCT_PACKAGE_NAME_EMPTY = 453;
+	public const PRODUCT_PACKAGE_NAME_UNAVAIABLE = 454;
+	public const PRODUCT_PACKAGE_HAS_USES = 455;
+	public const PRODUCT_PACKAGE_INSERTED = 456;
+	public const PRODUCT_PACKAGE_UPDATED = 457;
+	public const PRODUCT_PACKAGE_DELETED = 458;
+	public const PRODUCT_PACKAGE_SELECTED = 459;
 }
 

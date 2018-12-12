@@ -2,18 +2,12 @@
 
 namespace tercom\api\site;
 
-use dProject\Primitive\ArrayDataException;
 use dProject\restful\ApiContent;
-use dProject\restful\ApiResult;
-use dProject\restful\exception\ApiMissParam;
-use dProject\restful\exception\ApiException;
-use tercom\api\site\results\ApiResultProductPackage;
-use tercom\api\site\results\ApiResultProductPackages;
+use tercom\api\exceptions\FilterException;
+use tercom\api\site\results\ApiResultObject;
 use tercom\api\site\results\ApiResultProductPackageSettings;
-use tercom\entities\ProductPackage;
-use tercom\control\ProductPackageControl;
-use tercom\core\System;
 use tercom\api\site\results\ApiResultSimpleValidation;
+use tercom\entities\ProductPackage;
 
 /**
  * @see DefaultSiteService
@@ -26,8 +20,9 @@ use tercom\api\site\results\ApiResultSimpleValidation;
 class ProductPackageService extends DefaultSiteService
 {
 	/**
-	 * @param ApiContent $content
-	 * @return ApiResultProductPackageSettings
+	 * Ação para obter as configurações de formulários para embalagens de produto.
+	 * @param ApiContent $content conteúdo fornecedido na solicitação do serviço.
+	 * @return ApiResultProductPackageSettings aquisição do resultado das configurações.
 	 */
 
 	public function actionSettings(ApiContent $content): ApiResultProductPackageSettings
@@ -36,170 +31,138 @@ class ProductPackageService extends DefaultSiteService
 	}
 
 	/**
-	 * @param ApiContent $content
-	 * @return ApiResult
+	 * Ação para adicionar uma nova embalagem de produto a partir de dados em POST.
+	 * @ApiAnnotation({"method":"post"})
+	 * @param ApiContent $content conteúdo fornecedido na solicitação do serviço.
+	 * @return ApiResultObject aquisição do resultado contendo os dados da embalagem de produto adicionada.
 	 */
-
-	public function actionAdd(ApiContent $content): ApiResult
+	public function actionAdd(ApiContent $content): ApiResultObject
 	{
 		$post = $content->getPost();
 
-		try {
+		$productPackage = new ProductPackage();
+		$productPackage->setName($post->getString('name'));
+		$this->getProductPackageControl()->add($productPackage);
 
-			$productPackage = new ProductPackage();
-			$productPackage->setName($post->getString('name'));
-
-		} catch (ArrayDataException $e) {
-			return new ApiMissParam($e);
-		}
-
-		$productPackageControl = new ProductPackageControl(System::getWebConnection());
-		$productPackageControl->add($productPackage);
-
-		$result = new ApiResultProductPackage();
-		$result->setProductPackage($productPackage);
+		$result = new ApiResultObject();
+		$result->setResult($productPackage, 'embalagem de produto "%s" adicionada com êxito', $productPackage->getName());
 
 		return $result;
 	}
 
 	/**
-	 * @ApiAnnotation({"params":["idProductPackage"]})
-	 * @param ApiContent $content
-	 * @return ApiResult
+	 * Ação para atualizar os dados de uma embalagem de produto a partir de dados em POST.
+	 * @ApiAnnotation({"method":"post","params":["idProductPackage"]})
+	 * @param ApiContent $content conteúdo fornecedido na solicitação do serviço.
+	 * @return ApiResultObject aquisição do resultado contendo os dados da emblagem de produto atualizados.
 	 */
-
-	public function actionSet(ApiContent $content): ApiResult
+	public function actionSet(ApiContent $content): ApiResultObject
 	{
 		$post = $content->getPost();
 		$idProductPackage = $content->getParameters()->getInt('idProductPackage');
-		$productPackageControl = new ProductPackageControl(System::getWebConnection());
+		$productPackage = $this->getProductPackageControl()->get($idProductPackage);
 
-		if (($productPackage = $productPackageControl->get($idProductPackage)) === null)
-			throw new ApiException('embalagem de produto não encontrado');
+		if ($post->isSetted('name')) $productPackage->setName($post->getString('name'));
 
-		try {
-
-			if ($post->isSetted('name')) $productPackage->setName($post->getString('name'));
-
-		} catch (ArrayDataException $e) {
-			return new ApiMissParam($e);
-		}
-
-		$result = new ApiResultProductPackage();
-		$result->setProductPackage($productPackage);
-
-		if ($productPackageControl->set($productPackage))
-			$result->setMessage('embalagem de produto atualizado');
-		else
-			$result->setMessage('nenhuma informação alterada');
+		$result = new ApiResultObject();
+		$result->setResult($productPackage, 'embalagem de produto "%s" atualizada com êxito', $productPackage->getName());
 
 		return $result;
 	}
 
 	/**
+	 * Ação para remover os dados de uma embalagem de produto a partir dos parâmetros.
 	 * @ApiAnnotation({"params":["idProductPackage"]})
-	 * @param ApiContent $content
-	 * @return ApiResult
+	 * @param ApiContent $content conteúdo fornecedido na solicitação do serviço.
+	 * @return ApiResultObject aquisição do resultado contendo os dados da embalagem de produto removida.
 	 */
-
-	public function actionRemove(ApiContent $content): ApiResult
+	public function actionRemove(ApiContent $content): ApiResultObject
 	{
 		$idProductPackage = $content->getParameters()->getInt('idProductPackage');
-		$productPackageControl = new ProductPackageControl(System::getWebConnection());
+		$productPackage = $this->getProductPackageControl()->get($idProductPackage);
+		$this->getProductPackageControl()->remove($productPackage);
 
-		if (($productPackage = $productPackageControl->get($idProductPackage)) === null)
-			throw new ApiException('embalagem de produto não encontrado');
-
-		$result = new ApiResultProductPackage();
-		$result->setProductPackage($productPackage);
-
-		if ($productPackageControl->remove($productPackage))
-			$result->setMessage('embalagem de produto excluído');
-		else
-			$result->setMessage('embalagem de produto não definido');
+		$result = new ApiResultObject();
+		$result->setResult($productPackage, 'embalagem de produto "%s" excluída com êxito', $productPackage->getName());
 
 		return $result;
 	}
 
 	/**
+	 * Ação para obter os dados de uma embalagem de produto a partir dos parâmetros.
 	 * @ApiAnnotation({"params":["idProductPackage"]})
-	 * @param ApiContent $content
-	 * @return ApiResult
+	 * @param ApiContent $content conteúdo fornecedido na solicitação do serviço.
+	 * @return ApiResultObject aquisição do resultado contendo os dados da embalagem de produto obtida.
 	 */
-
-	public function actionGet(ApiContent $content): ApiResult
+	public function actionGet(ApiContent $content): ApiResultObject
 	{
 		$idProductPackage = $content->getParameters()->getInt('idProductPackage');
-		$productPackageControl = new ProductPackageControl(System::getWebConnection());
+		$productPackage = $this->getProductPackageControl()->get($idProductPackage);
 
-		if (($productPackage = $productPackageControl->get($idProductPackage)) === null)
-			throw new ApiException('embalagem de produto não encontrado');
-
-		$result = new ApiResultProductPackage();
-		$result->setProductPackage($productPackage);
+		$result = new ApiResultObject();
+		$result->setResult($productPackage, 'embalagem de produto "%s" obtida com êxito', $productPackage->getName());
 
 		return $result;
 	}
 
 	/**
-	 * @param ApiContent $content
-	 * @return ApiResult
+	 * Ação para obter os dados das embalagens de produtos registradas no sistema.
+	 * @param ApiContent $content conteúdo fornecedido na solicitação do serviço.
+	 * @return ApiResultObject aquisição do resultado contendo os dados de todas as embalagens de produto.
 	 */
-
-	public function actionGetAll(ApiContent $content): ApiResult
+	public function actionGetAll(ApiContent $content): ApiResultObject
 	{
-		$productPackageControl = new ProductPackageControl(System::getWebConnection());
-		$productPackages = $productPackageControl->getAll();
+		$productPackages = $this->getProductPackageControl()->getAll();
 
-		$result = new ApiResultProductPackages();
-		$result->setProductPackages($productPackages);
+		$result = new ApiResultObject();
+		$result->setResult($productPackages, 'há "%d" embalagens de produto registradas no sistema', $productPackages->size());
 
 		return $result;
 	}
 
 	/**
+	 * Ação para obter os dados das embalagens de produto filtradas conforme parâmetros.
 	 * @ApiAnnotation({"params":["filter","value"]})
-	 * @param ApiContent $content
-	 * @return ApiResult
+	 * @param ApiContent $content conteúdo fornecedido na solicitação do serviço.
+	 * @throws FilterException somente se o filtro informado não existir na ação.
+	 * @return ApiResultObject aquisição do resultado contendo os dados das embalagens de produto filtradas.
 	 */
-
-	public function actionSearch(ApiContent $content): ApiResultProductPackages
+	public function actionSearch(ApiContent $content): ApiResultObject
 	{
 		$filter = $content->getParameters()->getString('filter');
 
 		switch ($filter)
 		{
-			case 'name': return $this->onSearchByName($content);
+			case 'name': return $this->searchByName($content);
 		}
 
-		throw new ApiException('opção inexistente');
+		throw new FilterException($filter);
 	}
 
 	/**
-	 * @param ApiContent $content
-	 * @return ApiResultProductPackages
+	 * Procedimento interno para açaõ de pesquisa por embalagens através do nome da embalagem.
+	 * @param ApiContent $content conteúdo fornecedido na solicitação do serviço.
+	 * @return ApiResultObject aquisição do resultado contendo os dados das embalagens de produto.
 	 */
-
-	private function onSearchByname(ApiContent $content): ApiResultProductPackages
+	private function searchByName(ApiContent $content): ApiResultObject
 	{
-		$value = $content->getParameters()->getString('value');
-		$productPackageControl = new ProductPackageControl(System::getWebConnection());
-		$productPackages = $productPackageControl->filterByName($value);
+		$name = $content->getParameters()->getString('value');
+		$productPackages = $this->getProductPackageControl()->searchByName($name);
 
-		$result = new ApiResultProductPackages();
-		$result->setProductPackages($productPackages);
+		$result = new ApiResultObject();
+		$result->setResult($productPackages, 'encontrado %d embalagens de produto pelo nome "%s"', $productPackages->size(), $name);
 
 		return $result;
 	}
 
 	/**
+	 * Ação para verificar a disponibilidade de algum tipo de dado para embalagens de produto.
 	 * @ApiAnnotation({"params":["filter","value","idProductPackage"]})
-	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
-	 * @throws ApiException método de pesquisa desconhecido.
-	 * @return ApiResult aquisição do resultado com a lista dos tipos de produtos encontrados.
+	 * @param ApiContent $content conteúdo fornecedido na solicitação do serviço.
+	 * @throws FilterException somente se o filtro informado não existir na ação.
+	 * @return ApiResultSimpleValidation aquisição do resultado informado a disponibilidade do dado.
 	 */
-
-	public function actionAvaiable(ApiContent $content):ApiResult
+	public function actionAvaiable(ApiContent $content): ApiResultSimpleValidation
 	{
 		$filter = $content->getParameters()->getString('filter');
 
@@ -208,29 +171,23 @@ class ProductPackageService extends DefaultSiteService
 			case 'name': return $this->avaiableName($content);
 		}
 
-		throw new ApiException('opção inexistente');
+		throw new FilterException($filter);
 	}
 
 	/**
-	 * Procedimento interno usado pela pesquisa de fabricantes através do nome fantasia.
-	 * A busca é feita mesmo que o nome fantasia seja informado parcialmente.
-	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
-	 * @return ApiResult aquisição da lista de fabricantes com o nome fantasia informado.
+	 * Procedimento usado para consultar a disponibilidade de um nome para embalagem de produto.
+	 * @param ApiContent $content conteúdo fornecedido na solicitação do serviço.
+	 * @return ApiResultSimpleValidation aquisição do resultado informado a disponibilidade do nome fantasia.
 	 */
-
-	private function avaiableName(ApiContent $content): ApiResult
+	private function avaiableName(ApiContent $content): ApiResultSimpleValidation
 	{
 		$parameters = $content->getParameters();
 		$name = $parameters->getString('value');
 		$idProductPackage = $this->parseNullToInt($parameters->getInt('idProductPackage', false));
-		$productPackageControl = new ProductPackageControl(System::getWebConnection());
+		$avaiable = !$this->getProductPackageControl()->hasName($name, $idProductPackage);
 
 		$result = new ApiResultSimpleValidation();
-
-		if ($productPackageControl->hasAvaiableName($name, $idProductPackage))
-			$result->setOkMessage(true, 'nome disponível');
-		else
-			$result->setOkMessage(false, 'nome indisponível');
+		$result->setOk($avaiable, 'nome "%s" %s', $name, $this->getMessageAvaiable($avaiable));
 
 		return $result;
 	}

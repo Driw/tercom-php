@@ -20,6 +20,9 @@ use tercom\control\PermissionControl;
 use tercom\control\PhoneControl;
 use tercom\control\ProductCategoryControl;
 use tercom\control\ProductControl;
+use tercom\control\ProductPackageControl;
+use tercom\control\ProductPriceControl;
+use tercom\control\ProductTypeControl;
 use tercom\control\ProductUnitControl;
 use tercom\control\ProviderContactControl;
 use tercom\control\ProviderControl;
@@ -64,6 +67,18 @@ class DefaultSiteService extends ApiServiceInterface
 	 * @var ProductControl
 	 */
 	private $productControl;
+	/**
+	 * @var ProductTypeControl
+	 */
+	private $productTypeControl;
+	/**
+	 * @var ProductPriceControl
+	 */
+	private $productPriceControl;
+	/**
+	 * @var ProductPackageControl
+	 */
+	private $productPackageControl;
 	/**
 	 * @var ServiceControl
 	 */
@@ -237,6 +252,36 @@ class DefaultSiteService extends ApiServiceInterface
 		return $this->productControl === null ?
 			($this->productControl = new ProductControl()) :
 			$this->productControl;
+	}
+
+	/**
+	 * @return ProductPackageControl
+	 */
+	protected function getProductPackageControl(): ProductPackageControl
+	{
+		return $this->productPackageControl === null ?
+			($this->productPackageControl = new ProductPackageControl()) :
+			$this->productPackageControl;
+	}
+
+	/**
+	 * @return ProductTypeControl
+	 */
+	protected function getProductTypeControl(): ProductTypeControl
+	{
+		return $this->productTypeControl === null ?
+			($this->productTypeControl = new ProductTypeControl()) :
+			$this->productTypeControl;
+	}
+
+	/**
+	 * @return ProductPriceControl
+	 */
+	protected function getProductPriceControl(): ProductPriceControl
+	{
+		return $this->productPriceControl === null ?
+			($this->productPriceControl = new ProductPriceControl()) :
+			$this->productPriceControl;
 	}
 
 	/**

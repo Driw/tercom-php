@@ -43,9 +43,9 @@ class ManufacturerControl extends GenericControl
 		return $this->manufactureDAO->dalete($manufacturer);
 	}
 
-	public function get(int $idManufacture): Manufacturer
+	public function get(int $idManufacturer): Manufacturer
 	{
-		if (($manufacturer = $this->manufactureDAO->select($idManufacture)) === null)
+		if (($manufacturer = $this->manufactureDAO->select($idManufacturer)) === null)
 			throw ManufacturerException::newNotFound();
 
 		return $manufacturer;
@@ -61,9 +61,9 @@ class ManufacturerControl extends GenericControl
 		return $this->manufactureDAO->selectLikeFantasyName($fantasyName, $amount);
 	}
 
-	public function has(int $idManufacture): bool
+	public function has(int $idManufacturer): bool
 	{
-		return $this->manufactureDAO->exist($idManufacture);
+		return $this->manufactureDAO->exist($idManufacturer);
 	}
 
 	public function hasFantasyName(string $fantasyName, int $idManufacturer = 0): bool
