@@ -20,6 +20,12 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+17.12.2018 - 0.3.2.133
+- Documentação de CustomerDAO.
+- Adicionado uso de ApiStatus para CustomerDAO através de CustomerDAOException.
+- Adicionado validação de CNPJ e razão social para validate() em CustomerDAO.
+	- Renomeado métodos de select...() de acordo com o padrão estabelecida.
+
 17.12.2018 - 0.3.2.132
 - Documentação de CustomerAddressDAO.
 - Adicionado uso de ApiStatus para CustomerAddressDAO através de CustomerAddressDAOException.

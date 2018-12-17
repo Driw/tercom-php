@@ -9,10 +9,16 @@ use tercom\entities\Customer;
 use tercom\entities\lists\Customers;
 
 /**
+ * DAO para Clientes
+ *
+ * Classe responsável pela comunicação completa do sistema para com o banco de dados.
+ * Sua responsabilidade é gerenciar os dados referentes aos clientes, incluindo todas operações.
+ * Estas operações consiste em: adicionar, atualizar, selecionar e desativar (<b>não pode excluir</b>).
+ *
  * @see GenericDAO
  * @see Customer
- * @see CustomerProfile
- * @see CustomerProfiles
+ * @see Customers
+ *
  * @author Andrew
  *
  */
@@ -26,6 +32,7 @@ class CustomerDAO extends GenericDAO
 	 */
 	private function validate(Customer $customer, bool $validateID)
 	{
+		// PRIMARY KEY
 		if ($validateID) {
 			if ($customer->getId() === 0)
 				throw CustomerDAOException::newNoId();
@@ -34,17 +41,22 @@ class CustomerDAO extends GenericDAO
 				throw CustomerDAOException::newHasId();
 		}
 
+		// NOT NULL
 		if (StringUtil::isEmpty($customer->getStateRegistry())) throw CustomerDAOException::newStateRegistryEmpty();
 		if (StringUtil::isEmpty($customer->getCnpj())) throw CustomerDAOException::newCnpjEmpty();
 		if (StringUtil::isEmpty($customer->getCompanyName())) throw CustomerDAOException::newCompanyNameEmpty();
 		if (StringUtil::isEmpty($customer->getFantasyName())) throw CustomerDAOException::newFantasyNameEmpty();
 		if (StringUtil::isEmpty($customer->getEmail())) throw CustomerDAOException::newEmailEmpty();
+
+		// UNIQUE KEY
+		if ($this->existCnpj($customer->getCnpj())) throw CustomerDAOException::newUnavaiableCnpj();
+		if ($this->existCompanyName($customer->getCompanyName())) throw CustomerDAOException::newUnavaiableCompanyName();
 	}
 
 	/**
-	 *
-	 * @param Customer $customer
-	 * @return bool
+	 * Insere um novo cliente no banco de dados e atualiza o mesmo com o identificador gerado.
+	 * @param Customer $customer objeto do tipo cliente à adicionar.
+	 * @return bool true se conseguir adicionar ou false caso contrário.
 	 */
 	public function insert(Customer $customer): bool
 	{
@@ -70,9 +82,9 @@ class CustomerDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param Customer $customer
-	 * @return bool
+	 * Atualiza os dados de um clinete já existente no banco de dados.
+	 * @param Customer $customer objeto do tipo clinete à atualizar.
+	 * @return bool true se for atualizado ou false caso contrário.
 	 */
 	public function update(Customer $customer): bool
 	{
@@ -96,24 +108,28 @@ class CustomerDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param Customer $customer
-	 * @return bool
+	 * Atualiza o estado de inatividade de um clinete já existente no banco de dados.
+	 * @param Customer $customer objeto do tipo clinete à atualizar.
+	 * @return bool true se for atualizado ou false caso contrário.
 	 */
-	public function delete(Customer $customer): bool
+	public function updateInactive(Customer $customer): bool
 	{
-		$sql = "DELETE FROM customers
+		$this->validate($customer, true);
+
+		$sql = "UPDATE customers
+				SET inactive = ?
 				WHERE id = ?";
 
 		$query = $this->createQuery($sql);
-		$query->setString(1, $customer->getId());
+		$query->setBoolean(1, $customer->isInactive());
+		$query->setInteger(2, $customer->getId());
 
-		return ($query->execute())->getAffectedRows() >= 1;
+		return ($query->execute())->isSuccessful();
 	}
 
 	/**
-	 *
-	 * @return string
+	 * Procedimento interno para centralizar e agilizar a manutenção de queries.
+	 * @return string aquisição da string de consulta simples para SELECT.
 	 */
 	private function newSqlCustomer(): string
 	{
@@ -122,9 +138,9 @@ class CustomerDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param int $idCustomer
-	 * @return Customer|NULL
+	 * Selecione os dados de um cliente através do seu código de identificação único.
+	 * @param int $idCustomer código de identificação único do cliente.
+	 * @return Customer|NULL cliente com os dados carregados ou NULL se não encontrado.
 	 */
 	public function select(int $idCustomer): ?Customer
 	{
@@ -141,9 +157,9 @@ class CustomerDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param string $cnpj
-	 * @return Customer|NULL
+	 * Seleciona os dados de um cliente através do seu Cadastro Nacional de Pessoa Jurídica (CNPJ).
+	 * @param string $cnpj número do Cadastro Nacional de Pessoa Jurídica do cliente.
+	 * @return Customer|NULL cliente com os dados carregados ou NULL se não encontrado.
 	 */
 	public function selectByCnpj(string $cnpj): ?Customer
 	{
@@ -160,8 +176,8 @@ class CustomerDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @return Customers
+	 * Seleciona os dados de todos os clientes registrados no banco de dados sem ordenação.
+	 * @return Customers aquisição da lista de clientes atualmente registrados.
 	 */
 	public function selectAll(): Customers
 	{
@@ -174,11 +190,11 @@ class CustomerDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param string $stateRegistry
-	 * @return Customers
+	 * Seleciona os dados dos clientes no banco de dados filtrados pela inscrição estadual.
+	 * @param string $stateRegistry inscrição estadual parcial ou completa para filtro.
+	 * @return Customers aquisição da lista de clientes conforme filtro.
 	 */
-	public function selectByStateRegistryLike(string $stateRegistry): Customers
+	public function selectLikeStateRegistry(string $stateRegistry): Customers
 	{
 		$sqlCustomer = $this->newSqlCustomer();
 		$sql = "$sqlCustomer
@@ -193,11 +209,11 @@ class CustomerDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param string $cnpj
-	 * @return Customers
+	 * Seleciona os dados dos clientes no banco de dados filtrados pelo CNPJ.
+	 * @param string $cnpj número parcial ou completo do CNPJ para filtro.
+	 * @return Customers aquisição da lista de clientes conforme filtro.
 	 */
-	public function selectByCnpjLike(string $cnpj): Customers
+	public function selectLikeCnpj(string $cnpj): Customers
 	{
 		$sqlCustomer = $this->newSqlCustomer();
 		$sql = "$sqlCustomer
@@ -212,11 +228,11 @@ class CustomerDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param string $fantasyName
-	 * @return Customers
+	 * Seleciona os dados dos clientes no banco de dados filtrados pelo nome fantasia.
+	 * @param string $fantasyName nome fantasia parcial ou completa para filtro.
+	 * @return Customers aquisição da lista de clientes conforme filtro.
 	 */
-	public function selectByFantasyNameLike(string $fantasyName): Customers
+	public function selectLikeFantasyName(string $fantasyName): Customers
 	{
 		$sqlCustomer = $this->newSqlCustomer();
 		$sql = "$sqlCustomer
@@ -231,12 +247,13 @@ class CustomerDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param string $fantasyName
-	 * @param int $idCustomer
-	 * @return int
+	 * Verifica se um determinado número de CNPJ está disponível para um cliente.
+	 * @param string $cnpj número do cadastro nacional de pessoa jurídica.
+	 * @param int $idCustomer código de identificação do cliente à desconsiderar
+	 * ou zero caso seja um novo cliente.
+	 * @return bool true se estiver disponível ou false caso contrário.
 	 */
-	public function selectCountCnpj(string $cnpj, int $idCustomer = 0): int
+	public function existCnpj(string $cnpj, int $idCustomer = 0): int
 	{
 		$sql = "SELECT COUNT(*) qty
 				FROM customers
@@ -246,20 +263,17 @@ class CustomerDAO extends GenericDAO
 		$query->setString(1, $cnpj);
 		$query->setInteger(2, $idCustomer);
 
-		$result = $query->execute();
-		$entry = $result->next();
-		$result->free();
-
-		return intval($entry['qty']);
+		return $this->parseQueryExist($query);
 	}
 
 	/**
-	 *
-	 * @param string $companyName
-	 * @param int $idCustomer
-	 * @return int
+	 * Verifica se um determinada razão social está disponível para um cliente.
+	 * @param string $companyName razão social.
+	 * @param int $idCustomer código de identificação do cliente à desconsiderar
+	 * ou zero caso seja um novo cliente.
+	 * @return bool true se estiver disponível ou false caso contrário.
 	 */
-	public function selectCountCompanyName(string $companyName, int $idCustomer = 0): int
+	public function existCompanyName(string $companyName, int $idCustomer = 0): int
 	{
 		$sql = "SELECT COUNT(*) qty
 				FROM customers
@@ -269,17 +283,13 @@ class CustomerDAO extends GenericDAO
 		$query->setString(1, $companyName);
 		$query->setInteger(2, $idCustomer);
 
-		$result = $query->execute();
-		$entry = $result->next();
-		$result->free();
-
-		return intval($entry['qty']);
+		return $this->parseQueryExist($query);
 	}
 
 	/**
-	 *
-	 * @param Result $result
-	 * @return Customer|NULL
+	 * Procedimento interno para analisar o resultado de uma consulta e criar um objeto de cliente.
+	 * @param Result $result referência do resultado da consulta obtido.
+	 * @return Customer|NULL objeto do tipo cliente com dados carregados ou NULL se não houver resultado.
 	 */
 	private function parseCustomer(Result $result, int $idCustomer = 0): ?Customer
 	{
@@ -293,9 +303,9 @@ class CustomerDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param Result $result
-	 * @return Customers
+	 * Procedimento inerno para analisar o resultado de uma consulta e criar os objetos de cliente.
+	 * @param Result $result referência do resultado da consulta obtido.
+	 * @return Customers aquisição da lista de clientes a partir da consulta.
 	 */
 	private function parseCustomers(Result $result): Customers
 	{
@@ -312,9 +322,9 @@ class CustomerDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param array $entry
-	 * @return Customer
+	 * Procedimento interno para criar um objeto do tipo cliente e carregar os dados de um registro.
+	 * @param array $entry vetor contendo os dados do registro obtido de uma consulta.
+	 * @return Customer aquisição de um objeto do tipo cliente com dados carregados.
 	 */
 	private function newCustomer(array $entry): Customer
 	{

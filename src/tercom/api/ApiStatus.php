@@ -150,5 +150,19 @@ class ApiStatus
 
 	public const CUS_ADD_CUSTOMER_NOT_INDEFIED = 651;
 	public const CUS_ADD_ADDRESS_NOT_INDEFIED = 652;
+
+	public const CUSTOMER_IDENTIFIED = 701;
+	public const CUSTOMER_NOT_IDENTIFIED = 702;
+	public const CUSTOMER_INSERTED = 703;
+	public const CUSTOMER_UPDATED = 704;
+	public const CUSTOMER_DELETED = 705;
+	public const CUSTOMER_SELECTED = 706;
+	public const CUSTOMER_STATE_REGISTRY_EMPTY = 707;
+	public const CUSTOMER_CNPJ_EMPTY = 708;
+	public const CUSTOMER_COMPANY_NAME_EMPTY = 709;
+	public const CUSTOMER_FANTASY_NAME_EMPTY = 710;
+	public const CUSTOMER_EMAIL_EMPTY = 711;
+	public const CUSTOMER_UNAVAIABLE_CNPJ = 712;
+	public const CUSTOMER_UNAVAIABLE_COMPANY_NAME = 713;
 }
 
