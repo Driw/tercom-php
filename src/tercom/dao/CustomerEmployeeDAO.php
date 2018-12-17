@@ -9,6 +9,7 @@ use dProject\MySQL\Result;
 use tercom\Functions;
 use dProject\Primitive\StringUtil;
 use tercom\entities\Customer;
+use tercom\dao\exceptions\DAOException;
 
 /**
  * @see GenericDAO

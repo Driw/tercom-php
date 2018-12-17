@@ -2,6 +2,7 @@
 
 namespace tercom\dao;
 
+use tercom\dao\exceptions\DAOException;
 use tercom\entities\Login;
 use dProject\Primitive\StringUtil;
 
