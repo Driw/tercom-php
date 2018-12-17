@@ -20,6 +20,11 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+17.12.2018 - 0.3.2.132
+- Documentação de CustomerAddressDAO.
+- Adicionado uso de ApiStatus para CustomerAddressDAO através de CustomerAddressDAOException.
+- Adicionado validação do código de identificação com validateCustomerAddress em CustomerAddressDAO.
+
 17.12.2018 - 0.3.2.131
 - Documentação de AddressDAO e AddressDAOException.
 - Corrigido DAOAddress que não estava considerando 'state' como obrigatório (not null).

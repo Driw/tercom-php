@@ -147,5 +147,8 @@ class ApiStatus
 	public const ADDRESS_STREET_EMPTY = 610;
 	public const ADDRESS_NUMBER_EMPTY = 611;
 	public const ADDRESS_CEO_EMPTY = 612;
+
+	public const CUS_ADD_CUSTOMER_NOT_INDEFIED = 651;
+	public const CUS_ADD_ADDRESS_NOT_INDEFIED = 652;
 }
 
