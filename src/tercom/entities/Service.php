@@ -7,42 +7,50 @@ use dProject\Primitive\ObjectUtil;
 use tercom\entities\lists\Tags;
 
 /**
+ * Serviço
+ *
+ * Serviço é algo do mundo real do qual inclui uma ou mais atividades para serem cumpridas.
+ * Oferecido por fornecedores no sistema de forma que estes possam ser escolhidos por clientes afim das cotações.
+ * Os serviços precisam ter um nome único, descrição que inclua todos os detalhes e tags para busca.
+ *
  * @see AdvancedObject
+ * @see Tags
+ *
  * @author Andrew
  */
 class Service extends AdvancedObject
 {
 	/**
-	 * @var int
+	 * @var int quantidade mínima de caracteres no nome do serviço.
 	 */
 	public const MIN_NAME_LEN = 2;
 	/**
-	 * @var int
+	 * @var int quantidade máxima de caracteres no nome do serviço.
 	 */
 	public const MAX_NAME_LEN = 48;
 	/**
-	 * @var int
+	 * @var int quantidade máxima de caracteres na descrição do servio.
 	 */
 	public const MAX_DESCRIPTION_LEN = 256;
 
 	/**
-	 * @var int
+	 * @var int código de identificação único do serviço.
 	 */
 	private $id;
 	/**
-	 * @var string
+	 * @var string nome do serviço.
 	 */
 	private $name;
 	/**
-	 * @var string
+	 * @var string descrição que deve incluir <b>TODOS</b> os detalhes do serviço.
 	 */
 	private $description;
 	/**
-	 * @var Tags
+	 * @var Tags objeto com a lista de tag do serivço.
 	 */
 	private $tags;
 	/**
-	 * @var bool
+	 * @var bool estado de inatividade do serviço.
 	 */
 	private $inactive;
 
@@ -54,12 +62,11 @@ class Service extends AdvancedObject
 		$this->id = 0;
 		$this->name = '';
 		$this->description = '';
-		$this->tags = new Tags();
 		$this->inactive = false;
 	}
 
 	/**
-	 * @return int
+	 * @return int aquisição do código de identificação único do serviço.
 	 */
 	public function getId(): int
 	{
@@ -67,8 +74,8 @@ class Service extends AdvancedObject
 	}
 
 	/**
-	 * @param number $id
-	 * @return Service
+	 * @param int $id código de identificação único do serviço.
+	 * @return Service aquisição do objeto de serviço usado.
 	 */
 	public function setId(int $id): Service
 	{
@@ -77,7 +84,7 @@ class Service extends AdvancedObject
 	}
 
 	/**
-	 * @return string
+	 * @return string aquisição do nome do serviço.
 	 */
 	public function getName(): string
 	{
@@ -85,8 +92,8 @@ class Service extends AdvancedObject
 	}
 
 	/**
-	 * @param string $name
-	 * @return Service
+	 * @param string $name nome do serviço.
+	 * @return Service aquisição do objeto de serviço usado.
 	 */
 	public function setName(string $name): Service
 	{
@@ -95,7 +102,7 @@ class Service extends AdvancedObject
 	}
 
 	/**
-	 * @return string
+	 * @return string aquisição da descrição que deve incluir <b>TODOS</b> os detalhes do serviço.
 	 */
 	public function getDescription(): string
 	{
@@ -103,8 +110,8 @@ class Service extends AdvancedObject
 	}
 
 	/**
-	 * @param string $description
-	 * @return Service
+	 * @param string $description descrição que deve incluir <b>TODOS</b> os detalhes do serviço.
+	 * @return Service aquisição do objeto de serviço usado.
 	 */
 	public function setDescription(string $description): Service
 	{
@@ -113,7 +120,7 @@ class Service extends AdvancedObject
 	}
 
 	/**
-	 * @return Tags
+	 * @return Tags aquisição do objeto com a lista de tag do serivço.
 	 */
 	public function getTags(): Tags
 	{
@@ -121,8 +128,8 @@ class Service extends AdvancedObject
 	}
 
 	/**
-	 * @param Tags $tags
-	 * @return Service
+	 * @param Tags $tags objeto com a lista de tag do serivço.
+	 * @return Service aquisição do objeto de serviço usado.
 	 */
 	public function setTags(Tags $tags): Service
 	{
@@ -131,7 +138,7 @@ class Service extends AdvancedObject
 	}
 
 	/**
-	 * @return bool
+	 * @return bool ativar ou desativar serviço para cotações.
 	 */
 	public function isInactive(): bool
 	{
@@ -139,8 +146,8 @@ class Service extends AdvancedObject
 	}
 
 	/**
-	 * @param bool $inactive
-	 * @return Service
+	 * @param bool $inactive ativar ou desativar serviço para cotações.
+	 * @return Service aquisição do objeto de serviço usado.
 	 */
 	public function setInactive(bool $inactive): Service
 	{

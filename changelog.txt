@@ -20,6 +20,20 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+17.12.2018 - 0.3.2.130
+- Documentação de todas as entidades.
+- Excluído DAOException que não estava sendo utilizada em 'tercom/dao'.
+- Address não estava fazendo as validações nos setters.
+- Corrigido problema onde ServicePrice não possuia valor decimal no JSON.
+- Ajustes para redução na quantidade de informações desnecessárias nos JSON em:
+	- Customer com 'phones' e 'addresses'.
+	- CustomerEmployee com 'phone' e 'cellphone'.
+	- CustomerProfile com 'customer'.
+	- LoginCustomer com 'customerEmployee'.
+	- LoginTercom com 'tercomEmployee'.
+	- ServicePrice com 'service' e 'provider'.
+	- TercomEmployee com 'phone' e 'cellphone'.
+
 12.12.2018 - 0.3.1.129
 - Atualizado último script de teste referente a rev125.
 

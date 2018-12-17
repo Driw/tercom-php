@@ -7,59 +7,70 @@ use dProject\Primitive\ObjectUtil;
 use dProject\Primitive\StringUtil;
 
 /**
+ * Funcionário de Cliente
+ *
+ * Um cliente pode ter diversos funcionários e o acesso no sistema é feito por um funcionário.
+ * Funcionários estão vinculados a um perfil de cliente e este perfil possui as permissões.
+ * As permissões vão definir o que um funcionário pode ou não fazer no sistema.
+ *
+ * Cada funcionário possui um endereço de e-mail e senha usadas para acesso, nome do funcionário,
+ * dois números de telefone (um telefone qualquer e um número de celular), habilitado ou não
+ * (quando desabilitado não permite o acesso no sistema).
+ *
  * @see AdvancedObject
+ *
  * @author Andrew
  */
 class CustomerEmployee extends AdvancedObject
 {
 	/**
-	 * @var int
+	 * @var int quantidade mínima de caracteres no nome do funcionário.
 	 */
 	public const MIN_NAME_LEN = MIN_NAME_LEN;
 	/**
-	 * @var int
+	 * @var int quantidade máxima de caracteres no nome do funcionário.
 	 */
 	public const MAX_NAME_LEN = MAX_NAME_LEN;
 	/**
-	 * @var int
+	 * @var int quantiadade máxima de caracteres no endereço de e-mail.
 	 */
 	public const MAX_EMAIL_LEN = MAX_EMAIL_LEN;
 	/**
-	 * @var int
+	 * @var int quantidade mínima de caracteres na senha de acesso.
 	 */
 	public const MIN_PASSWORD_LEN = MIN_PASSWORD_LEN;
 	/**
-	 * @var int
+	 * @var int quantidade máxima de caracteres na senha de acesso.
 	 */
 	public const MAX_PASSWORD_LEN = MAX_PASSWORD_LEN;
 
 
 	/**
-	 * @var int
+	 * @var int código de identificação único do funcionário de cliente.
 	 */
 	private $id;
 	/**
-	 * @var CustomerProfile
+	 * @var CustomerProfile perfil do clinte para uso de permissões no sistema.
 	 */
 	private $customerProfile;
 	/**
-	 * @var string
+	 * @var string nome completo do funcionáiro.
 	 */
 	private $name;
 	/**
-	 * @var string
+	 * @var string endereço de e-mail para acesso e notificações.
 	 */
 	private $email;
 	/**
-	 * @var string
+	 * @var string senha de acesso no sistema criptografada.
 	 */
 	private $password;
 	/**
-	 * @var Phone
+	 * @var Phone dados do telefone principal para contato.
 	 */
 	private $phone;
 	/**
-	 * @var Phone
+	 * @var Phone dados do telefone celular para contato.
 	 */
 	private $cellphone;
 	/**
@@ -77,18 +88,15 @@ class CustomerEmployee extends AdvancedObject
 	public function __construct()
 	{
 		$this->id = 0;
-		$this->customerProfile = new CustomerProfile();
 		$this->name = '';
 		$this->email = '';
 		$this->password = '';
-		$this->register = new \DateTime();
-		$this->phone = new Phone();
-		$this->cellphone = new Phone();
 		$this->enable = false;
+		$this->register = new \DateTime();
 	}
 
 	/**
-	 * @return int
+	 * @return int aquisição do código de identificação único do funcionário de cliente.
 	 */
 	public function getId(): int
 	{
@@ -96,7 +104,7 @@ class CustomerEmployee extends AdvancedObject
 	}
 
 	/**
-	 * @param int $id
+	 * @param int $id código de identificação único do funcionário de cliente.
 	 */
 	public function setId(int $id)
 	{
@@ -104,15 +112,15 @@ class CustomerEmployee extends AdvancedObject
 	}
 
 	/**
-	 * @return CustomerProfile
+	 * @return CustomerProfile aquisição do perfil do clinte para uso de permissões no sistema.
 	 */
 	public function getCustomerProfile(): CustomerProfile
 	{
-		return $this->customerProfile;
+		return $this->customerProfile === null ? ($this->customerProfile = new CustomerProfile()) : $this->customerProfile;
 	}
 
 	/**
-	 * @param CustomerProfile $customerProfile
+	 * @param CustomerProfile $customerProfile perfil do clinte para uso de permissões no sistema.
 	 */
 	public function setCustomerProfile(CustomerProfile $customerProfile)
 	{
@@ -121,7 +129,7 @@ class CustomerEmployee extends AdvancedObject
 
 	/**
 	 *
-	 * @return int
+	 * @return int aquisição do código de identificação do perfil de cliente ou zero se não definido.
 	 */
 	public function getCustomerProfileId(): int
 	{
@@ -129,7 +137,7 @@ class CustomerEmployee extends AdvancedObject
 	}
 
 	/**
-	 * @return string
+	 * @return string aquisição do nome completo do funcionáiro.
 	 */
 	public function getName(): string
 	{
@@ -137,7 +145,7 @@ class CustomerEmployee extends AdvancedObject
 	}
 
 	/**
-	 * @param string $name
+	 * @param string $name nome completo do funcionáiro.
 	 */
 	public function setName(string $name)
 	{
@@ -148,7 +156,7 @@ class CustomerEmployee extends AdvancedObject
 	}
 
 	/**
-	 * @return string
+	 * @return string aquisição do endereço de e-mail para acesso e notificações.
 	 */
 	public function getEmail(): string
 	{
@@ -156,7 +164,7 @@ class CustomerEmployee extends AdvancedObject
 	}
 
 	/**
-	 * @param string $email
+	 * @param string $email endereço de e-mail para acesso e notificações.
 	 */
 	public function setEmail(string $email)
 	{
@@ -170,7 +178,7 @@ class CustomerEmployee extends AdvancedObject
 	}
 
 	/**
-	 * @return string
+	 * @return string aquisição da senha de acesso no sistema criptografada.
 	 */
 	public function getPassword(): string
 	{
@@ -178,8 +186,8 @@ class CustomerEmployee extends AdvancedObject
 	}
 
 	/**
-	 * @param string $password
-	 * @param bool $hash
+	 * @param string $password senha de acesso no sistema.
+	 * @param bool $hash true se já exiver criptografada ou false caso contrário.
 	 */
 	public function setPassword(string $password, bool $hash = true)
 	{
@@ -198,7 +206,7 @@ class CustomerEmployee extends AdvancedObject
 	}
 
 	/**
-	 * @return Phone
+	 * @return Phone aquisição dos dados do telefone principal para contato.
 	 */
 	public function getPhone(): Phone
 	{
@@ -206,7 +214,7 @@ class CustomerEmployee extends AdvancedObject
 	}
 
 	/**
-	 * @param Phone $phone
+	 * @param Phone $phone dados do telefone principal para contato.
 	 */
 	public function setPhone(Phone $phone)
 	{
@@ -214,7 +222,15 @@ class CustomerEmployee extends AdvancedObject
 	}
 
 	/**
-	 * @return Phone
+	 * @return int aquisição do código de identificação do telefone principal ou zero se não definido.
+	 */
+	public function getPhoneId(): int
+	{
+		return $this->phone === null ? 0 : $this->phone->getId();
+	}
+
+	/**
+	 * @return Phone aquisição dos dados do telefone celular para contato.
 	 */
 	public function getCellphone(): Phone
 	{
@@ -222,7 +238,7 @@ class CustomerEmployee extends AdvancedObject
 	}
 
 	/**
-	 * @param Phone $cellphone
+	 * @param Phone $cellphone dados do telefone celular para contato.
 	 */
 	public function setCellphone(Phone $cellphone)
 	{
@@ -230,7 +246,15 @@ class CustomerEmployee extends AdvancedObject
 	}
 
 	/**
-	 * @return bool
+	 * @return int aquisição do código de identificação do telefone celular ou zero se não definido.
+	 */
+	public function getCellphoneId(): int
+	{
+		return $this->cellphone === null ? 0 : $this->cellphone->getId();
+	}
+
+	/**
+	 * @return bool funcionário habilitado para uso do sistema.
 	 */
 	public function isEnable(): bool
 	{
@@ -238,7 +262,7 @@ class CustomerEmployee extends AdvancedObject
 	}
 
 	/**
-	 * @param bool $enable
+	 * @param bool $enable funcionário habilitado para uso do sistema.
 	 */
 	public function setEnable(bool $enable)
 	{
@@ -246,7 +270,7 @@ class CustomerEmployee extends AdvancedObject
 	}
 
 	/**
-	 * @return \DateTime
+	 * @return \DateTime aquisição do horário de registro do funcionário no sistema.
 	 */
 	public function getRegister(): \DateTime
 	{
@@ -254,7 +278,7 @@ class CustomerEmployee extends AdvancedObject
 	}
 
 	/**
-	 * @param \DateTime $register
+	 * @param \DateTime $register horário de registro do funcionário no sistema.
 	 */
 	public function setRegister(\DateTime $register)
 	{
