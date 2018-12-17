@@ -20,6 +20,11 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+17.12.2018 - 0.3.2.131
+- Documentação de AddressDAO e AddressDAOException.
+- Corrigido DAOAddress que não estava considerando 'state' como obrigatório (not null).
+- Atualizado AddressDAOException conforme os códigos de erro criados em ApiStatus.
+
 17.12.2018 - 0.3.2.130
 - Documentação de todas as entidades.
 - Excluído DAOException que não estava sendo utilizada em 'tercom/dao'.

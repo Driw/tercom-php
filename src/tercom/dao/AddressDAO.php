@@ -5,30 +5,42 @@ namespace tercom\dao;
 use dProject\MySQL\Result;
 use dProject\Primitive\StringUtil;
 use tercom\dao\exceptions\AddressDAOException;
-use tercom\dao\exceptions\DAOException;
 use tercom\entities\Address;
 use tercom\entities\lists\Addresses;
 
 /**
+ * DAO para Endereços
+ *
+ * Classe responsável pela comunicação completa do sistema para com o banco de dados.
+ * Sua responsabilidade é gerenciar os dados referentes aos endereços, incluindo todas operações.
+ * Estas operações consiste em: adicionar, atualizar, selecionar e excluir (se possível).
+ *
+ * Endereços obrigatoriamente devem possuir um UF, cidade, CEP, bairro, rua e número.
+ * Somete o complemento é opcional já que nem todos endereços possuem um complemento.
+ *
  * @see GenericDAO
  * @see Address
+ * @see Addresses
+ *
  * @author Andrew
  */
 class AddressDAO extends GenericDAO
 {
 	/**
-	 * @var array
+	 * @var array nome das colunas da tabela de endereços.
 	 */
 	public const ALL_COLUMNS = ['id', 'state', 'city', 'cep', 'neighborhood', 'street', 'number', 'complement'];
 
 	/**
-	 *
-	 * @param Address $address
-	 * @param bool $validateID
-	 * @throws DAOException
+	 * Procedimento interno para validação dos dados de um fornecedor ao inserir e/ou atualizar.
+	 * Fornecedores não podem possuir CNPJ, Razão Social e Nome Fantasia não definidos (em branco).
+	 * @param Address $address objeto do tipo fornecedor à ser validado.
+	 * @param bool $validateId true para validar o código de identificação único ou false caso contrário.
+	 * @throws AddressDAOException caso algum dos dados do fornecedor não estejam de acordo.
 	 */
 	private function validateAddress(Address $address, bool $validateID)
 	{
+		// PRIMARY KEY
 		if ($validateID) {
 			if ($address->getId() === 0)
 				throw AddressDAOException::newNoId();
@@ -37,6 +49,8 @@ class AddressDAO extends GenericDAO
 				throw AddressDAOException::newHasId();
 		}
 
+		// NOT NULL
+		if (StringUtil::isEmpty($address->getState())) throw AddressDAOException::newStateEmpty();
 		if (StringUtil::isEmpty($address->getCity())) throw AddressDAOException::newCityEmpty();
 		if (StringUtil::isEmpty($address->getCep())) throw AddressDAOException::newCepEmpty();
 		if (StringUtil::isEmpty($address->getNeighborhood())) throw AddressDAOException::newNeighborhoodEmpty();
@@ -45,9 +59,9 @@ class AddressDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param Address $address
-	 * @return bool
+	 * Insere um novo endereço no banco de dados e atualiza o mesmo com o identificador gerado.
+	 * @param Address $address objeto do tipo endereço à adicionar.
+	 * @return bool true se conseguir adicionar ou false caso contrário.
 	 */
 	public function insert(Address $address): bool
 	{
@@ -71,9 +85,9 @@ class AddressDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param Address $address
-	 * @return bool
+	 * Atualiza os dados de um endereço já existente no banco de dados.
+	 * @param Address $address objeto do tipo endereço à atualizar.
+	 * @return bool true se for atualizado ou false caso contrário.
 	 */
 	public function update(Address $address): bool
 	{
@@ -96,9 +110,10 @@ class AddressDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param Address $address
-	 * @return bool
+	 * Exclui os dados de um endereço já existente no banco de dados.
+	 * Ao excluir um endereço suas referências serão apagadas.
+	 * @param Address $address objeto do tipo endereço à excluir.
+	 * @return bool true se for atualizado ou false caso contrário.
 	 */
 	public function delete(Address $address): bool
 	{
@@ -112,14 +127,24 @@ class AddressDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param int $idAddress
-	 * @return Address|NULL
+	 * Procedimento interno para centralizar e agilizar a manutenção de queries.
+	 * @return string aquisição da string de consulta simples para SELECT.
+	 */
+	private function newSelect(): string
+	{
+		return "SELECT id, state, city, cep, neighborhood, street, number, complement
+				FROM addresses";
+	}
+
+	/**
+	 * Selecione os dados de um endereço através do seu código de identificação único.
+	 * @param int $idAddress código de identificação único do endereço.
+	 * @return Address|NULL endereço com os dados carregados ou NULL se não encontrado.
 	 */
 	public function select(int $idAddress): ?Address
 	{
-		$sql = "SELECT id, state, city, cep, neighborhood, street, number, complement
-				FROM addresses
+		$sqlSelect = $this->newSelect();
+		$sql = "$sqlSelect
 				WHERE id = ?";
 
 		$query = $this->createQuery($sql);
@@ -131,9 +156,9 @@ class AddressDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param Result $result
-	 * @return Address|NULL
+	 * Procedimento interno para analisar o resultado de uma consulta e criar um objeto de endereço.
+	 * @param Result $result referência do resultado da consulta obtido.
+	 * @return Address|NULL objeto do tipo endereço com dados carregados ou NULL se não houver resultado.
 	 */
 	private function parseAddress(Result $result): ?Address
 	{
@@ -141,9 +166,9 @@ class AddressDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param Result $result
-	 * @return Addresses
+	 * Procedimento inerno para analisar o resultado de uma consulta e criar os objetos de endereço.
+	 * @param Result $result referência do resultado da consulta obtido.
+	 * @return Addresses aquisição da lista de endereços a partir da consulta.
 	 */
 	private function parseAddresses(Result $result): Addresses
 	{
@@ -159,9 +184,9 @@ class AddressDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param array $entry
-	 * @return Address
+	 * Procedimento interno para criar um objeto do tipo endereço e carregar os dados de um registro.
+	 * @param array $entry vetor contendo os dados do registro obtido de uma consulta.
+	 * @return Address aquisição de um objeto do tipo endereço com dados carregados.
 	 */
 	private function newAddress(array $entry): Address
 	{

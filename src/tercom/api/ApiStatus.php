@@ -134,5 +134,18 @@ class ApiStatus
 	public const SERVICE_PRICE_NOT_ADD = 553;
 	public const SERVICE_PRICE_NOT_SET = 554;
 	public const SERVICE_PRICE_NOT_FOUND = 555;
+
+	public const ADDRESS_IDENTIFIED = 601;
+	public const ADDRESS_NOT_IDENTIFIED = 602;
+	public const ADDRESS_INSERTED = 603;
+	public const ADDRESS_UPDATED = 604;
+	public const ADDRESS_DELETED = 605;
+	public const ADDRESS_SELECTED = 606;
+	public const ADDRESS_STATE_EMPTY = 607;
+	public const ADDRESS_CITY_EMPTY = 608;
+	public const ADDRESS_NEIGHTBORHOOD_EMPTY = 609;
+	public const ADDRESS_STREET_EMPTY = 610;
+	public const ADDRESS_NUMBER_EMPTY = 611;
+	public const ADDRESS_CEO_EMPTY = 612;
 }
 
