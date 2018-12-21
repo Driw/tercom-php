@@ -3,11 +3,11 @@
 namespace tercom\api\site;
 
 use dProject\restful\ApiContent;
+use tercom\api\exceptions\FilterException;
 use tercom\api\site\results\ApiResultManufactureSettings;
 use tercom\api\site\results\ApiResultObject;
 use tercom\api\site\results\ApiResultSimpleValidation;
 use tercom\entities\Manufacturer;
-use tercom\api\exceptions\FilterException;
 
 /**
  * <h1>Serviço de Fabricantes</h1>

@@ -55,7 +55,7 @@ Webservice.prototype.provider_add = function(form, listener)
 		'form': form,
 		'target': form,
 		'listener': listener,
-		'errorMessage': this.newBaseErrorMessage('obter configuração para fornecedor'),
+		'errorMessage': this.newBaseErrorMessage('adicionar fornecedor'),
 	});
 };
 Webservice.prototype.provider_set = function(idProvider, form, listener)

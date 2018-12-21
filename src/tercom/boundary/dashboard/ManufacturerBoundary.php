@@ -4,7 +4,7 @@ namespace tercom\boundary\dashboard;
 
 use dProject\restful\ApiContent;
 use dProject\restful\template\ApiTemplateResult;
-use tercom\control\ManufactureControl;
+use tercom\control\ManufacturerControl;
 
 /**
  * @see BoundaryManager
@@ -76,7 +76,7 @@ class ManufacturerBoundary extends DefaultDashboardBoundary
 
 	private function getFilterOptions(): array
 	{
-		$providerFilters = ManufactureControl::getFilters();
+		$providerFilters = ManufacturerControl::getFilters();
 		$filterOptions = [];
 
 		foreach ($providerFilters as $value => $option)
