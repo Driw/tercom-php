@@ -20,6 +20,10 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+28.12.2018 - 0.3.1.138
+- Atualizado scripts de testes para o webservice que gerencia as solicitações de pedidos para cotação.
+- Adicionado SessionVar que deveria ter sido adicionado na rev137.
+
 28.12.2018 - 0.3.1.137
 - Atualizado 'tabelas.sql' que não continha as tabelas referentes a logins.
 - Corrigido atualizações SQL rev116 e rev122 devido a problemas de ambiente de desenvolvimento diferentes.
