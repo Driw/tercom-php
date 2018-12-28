@@ -1,4 +1,4 @@
 
 -- Atualizações
 
-ALTER TABLE manufacturers CHANGE COLUMN idManufacture idManufacturer INT AUTO_INCREMENT;
+ALTER TABLE manufacturers CHANGE COLUMN id id INT AUTO_INCREMENT;

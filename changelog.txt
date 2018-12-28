@@ -20,7 +20,15 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
-12.12.2018 - 0.3.1.136
+28.12.2018 - 0.3.1.137
+- Atualizado 'tabelas.sql' que não continha as tabelas referentes a logins.
+- Corrigido atualizações SQL rev116 e rev122 devido a problemas de ambiente de desenvolvimento diferentes.
+- Implementação da entidade, DAO, controle e serviço para gerenciamento dos pedidos de cotação.
+- Adicionado aos scripts de testes de login para funcionário TERCOM e Cliente a opção de manter o acesso.
+	- O manter acesso força a criação de uma sessão fake para facilitar os testes dos serviços.
+- Ao fazer o login de funcionário TERCOM e Cliente será permitido salvar dados em sessão com 'useSession'.
+
+21.12.2018 - 0.3.1.136
 - Excluído ApiResultManufacture e ApiResultManufactures que foram substituído posteriormente por ApiResultObject.
 - Corrigido mensagem de erro para Webservice.prototype.provider_add().
 - Atualizado ManufacturerBoundary conforme renomeado ManufactureControl para ManufacturerControl.

@@ -4,6 +4,7 @@ namespace tercom\api\site;
 
 use dProject\restful\ApiContent;
 use tercom\api\site\results\ApiResultObject;
+use tercom\SessionVar;
 
 /**
  * @author Andrew
@@ -25,6 +26,15 @@ class LoginCustomerService extends DefaultSiteService
 
 		$loginCustomer = $this->getLoginCustomerControl()->newLoginCustomer($email, $password, $userAgent);
 		$this->getLoginCustomerControl()->add($loginCustomer);
+
+		if ($post->isSetted('useSession'))
+		{
+			$session = $content->getSession();
+			$session->start();
+			$session->setInt(SessionVar::LOGIN_ID, $loginCustomer->getCustomerEmployeeId());
+			$session->setInt(SessionVar::LOGIN_CUSTOMER_ID, $loginCustomer->getId());
+			$session->setString(SessionVar::LOGIN_TOKEN, $loginCustomer->getToken());
+		}
 
 		$result = new ApiResultObject();
 		$result->setObject($loginCustomer);
