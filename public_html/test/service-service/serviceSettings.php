@@ -2,11 +2,10 @@
 
 use tercom\GeradorDeDados;
 
-require_once 'include.php';
+require_once '../include.php';
 function testExecute()
 {
 	return GeradorDeDados::callWebService('service/settings', []);
 }
-require_once 'execute.php';
+require_once '../execute.php';
 
-?>

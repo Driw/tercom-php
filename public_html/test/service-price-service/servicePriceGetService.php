@@ -2,7 +2,7 @@
 
 use tercom\GeradorDeDados;
 
-require_once 'include.php';
+require_once '../include.php';
 function testExecute()
 {
 	if (!isset($_GET['idService']))
@@ -11,6 +11,7 @@ function testExecute()
 		?>
 <form method='get'>
 	Serviço ID: <input type='text' name='idService'>
+	<p><button type='submit'>Continuar</button></p>
 </form>
 <?php
 		exit;
@@ -18,6 +19,5 @@ function testExecute()
 	$idService = intval($_GET['idService']);
 	return GeradorDeDados::callWebService("servicePrice/getService/$idService", []);
 }
-require_once 'execute.php';
+require_once '../execute.php';
 
-?>

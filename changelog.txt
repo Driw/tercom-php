@@ -20,6 +20,9 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+03.01.2018 - 0.3.3.142
+- Movido scripts de teste de serviços e preço de serviços para subpastas 'service-service' e 'service-price-service' respectivamente.
+
 03.01.2018 - 0.3.2.139
 - Documentação de todas as DAO do sistema.
 - Ajustes e revisão de alguns procedimentos em DAO:
