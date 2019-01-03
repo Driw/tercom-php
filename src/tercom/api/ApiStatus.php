@@ -136,6 +136,36 @@ class ApiStatus
 	public const SERVICE_PRICE_NOT_SET = 554;
 	public const SERVICE_PRICE_NOT_FOUND = 555;
 
+	public const ADDRESS_IDENTIFIED = 601;
+	public const ADDRESS_NOT_IDENTIFIED = 602;
+	public const ADDRESS_INSERTED = 603;
+	public const ADDRESS_UPDATED = 604;
+	public const ADDRESS_DELETED = 605;
+	public const ADDRESS_SELECTED = 606;
+	public const ADDRESS_STATE_EMPTY = 607;
+	public const ADDRESS_CITY_EMPTY = 608;
+	public const ADDRESS_NEIGHTBORHOOD_EMPTY = 609;
+	public const ADDRESS_STREET_EMPTY = 610;
+	public const ADDRESS_NUMBER_EMPTY = 611;
+	public const ADDRESS_CEO_EMPTY = 612;
+
+	public const CUS_ADD_CUSTOMER_NOT_INDEFIED = 651;
+	public const CUS_ADD_ADDRESS_NOT_INDEFIED = 652;
+
+	public const CUSTOMER_IDENTIFIED = 701;
+	public const CUSTOMER_NOT_IDENTIFIED = 702;
+	public const CUSTOMER_INSERTED = 703;
+	public const CUSTOMER_UPDATED = 704;
+	public const CUSTOMER_DELETED = 705;
+	public const CUSTOMER_SELECTED = 706;
+	public const CUSTOMER_STATE_REGISTRY_EMPTY = 707;
+	public const CUSTOMER_CNPJ_EMPTY = 708;
+	public const CUSTOMER_COMPANY_NAME_EMPTY = 709;
+	public const CUSTOMER_FANTASY_NAME_EMPTY = 710;
+	public const CUSTOMER_EMAIL_EMPTY = 711;
+	public const CUSTOMER_UNAVAIABLE_CNPJ = 712;
+	public const CUSTOMER_UNAVAIABLE_COMPANY_NAME = 713;
+
 	public const ORDER_REQUEST_IDENTIFIED = 851;
 	public const ORDER_REQUEST_NOT_IDENTIFIED = 852;
 	public const ORDER_REQUEST_INSERTED = 853;

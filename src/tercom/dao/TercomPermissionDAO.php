@@ -9,42 +9,50 @@ use tercom\entities\TercomProfile;
 use tercom\entities\lists\Permissions;
 
 /**
- * @see Tercom
- * @see TercomProfile
+ * DAO para Permissão de Perfil TERCOM
+ *
+ * Classe responsável pela comunicação completa do sistema para com o banco de dados.
+ * Sua responsabilidade é gerenciar os dados referentes as permissões de perfil TERCOM, incluindo todas operações.
+ * Estas operações consiste em: adicionar, atualizar, selecionar e excluir permissões TERCOM.
+ *
+ * Toda permissão adicionada deve ser vinculada a um perfil TERCOM, quando um perfil é excluído as permissões são removidas.
+ * Permissões removidas de perfis não são excluídas do sistema, apenas são excluídas da lista de permissões do perfil.
+ *
  * @see GenericDAO
+ * @see TercomProfile
+ * @see Permission
+ * @see Permissions
+ *
  * @author Andrew
  */
 class TercomPermissionDAO extends GenericDAO
 {
 	/**
-	 *
-	 * @param TercomProfile $tercomProfile
-	 * @throws DAOException
-	 */
-	private function validateTercomProfile(TercomProfile $tercomProfile)
-	{
-		if ($tercomProfile->getId() === 0)
-			throw new DAOException('perfil da TERCOM não identificado');
-	}
-
-	/**
-	 *
+	 * Procedimento interno para validação dos dados de uma permissão para perfil TERCOM ao inserir e/ou atualizar.
+	 * A permissão e perfil TERCOM devem ter sido informadas e existir no sistema.
 	 * @param TercomProfile $tercomProfile
 	 * @param Permission $permission
-	 * @throws DAOException
+	 * @param bool $validateId true para validar o código de identificação único ou false caso contrário.
+	 * @throws DAOException caso algum dos dados da permissão  não estejam de acordo.
 	 */
 	private function validate(TercomProfile $tercomProfile, Permission $permission)
 	{
-		$this->validateTercomProfile($tercomProfile);
+		// FIXME trocar DAOException para TercomPermissionException
 
-		if ($permission->getId() === 0)
-			throw new DAOException('permissão não identificada');
+		// NOT NULL
+		if ($tercomProfile->getId() === 0) throw new DAOException('perfil da TERCOM não informado');
+		if ($permission->getId() === 0) throw new DAOException('permissão não informado');
+
+		// FOREIGN KEY
+		if (!$this->existTercomProfile($tercomProfile->getId())) throw new DAOException('perfil da TERCOM desconhecido');
+		if (!$this->existPermission($permission->getId())) throw new DAOException('permissão desconhecido');
 	}
 
 	/**
-	 *
-	 * @param TercomProfile $tercomProfile
-	 * @param Permission $permission
+	 * Insere uma nova permissão à lista de permissões de um perfil TERCOM.
+	 * @param TercomProfile $tercomProfile objeto do tipo perfil TERCOM.
+	 * @param Permission $permission objeto do tipo permissão à inserir.
+	 * @return bool true se conseguir inserir ou false caso contrário.
 	 */
 	public function insert(TercomProfile $tercomProfile, Permission $permission): bool
 	{
@@ -61,9 +69,10 @@ class TercomPermissionDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param TercomProfile $tercomProfile
-	 * @param Permission $permission
+	 * Exclui uma nova permissão da lista de permissões de um perfil TERCOM.
+	 * @param TercomProfile $tercomProfile objeto do tipo perfil TERCOM.
+	 * @param Permission $permission objeto do tipo permissão à excluir.
+	 * @return bool true se conseguir excluir ou false caso contrário.
 	 */
 	public function delete(TercomProfile $tercomProfile, Permission $permission): bool
 	{
@@ -80,8 +89,8 @@ class TercomPermissionDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @return string
+	 * Procedimento interno para centralizar e agilizar a manutenção de queries.
+	 * @return string aquisição da string de consulta simples para SELECT.
 	 */
 	private function newSelectPermission(): string
 	{
@@ -93,10 +102,10 @@ class TercomPermissionDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param TercomProfile $tercomProfile
-	 * @param int $idPermission
-	 * @return Permission
+	 * Selecione os dados de uma permissão da lista de permissões de um perfil TERCOM através do seu código de identificação único.
+	 * @param TercomProfile $tercomProfile objeto do tipo perfil TERCOM.
+	 * @param int $idPermission código de identificação da permissão à selecionar.
+	 * @return Permission|NULL fornecedor com os dados carregados ou NULL se não encontrado.
 	 */
 	public function select(TercomProfile $tercomProfile, int $idPermission): ?Permission
 	{
@@ -114,9 +123,9 @@ class TercomPermissionDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param TercomProfile $tercomProfile
-	 * @return Permissions
+	 * Seleciona os dados de todas as permissões da lista de permissões de um perfil TERCOM.
+	 * @param TercomProfile $tercomProfile objeto do tipo perfil TERCOM.
+	 * @return Permissions aquisição da lista de permissões selecionadas.
 	 */
 	public function selectByTercom(TercomProfile $tercomProfile): Permissions
 	{
@@ -133,10 +142,10 @@ class TercomPermissionDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param TercomProfile $tercomProfile
-	 * @param Permission $permission
-	 * @return bool
+	 * Verifica se um perfil TERCOM possui uma permissão em sua lista de permissões.
+	 * @param TercomProfile $tercomProfile objeto do tipo perfil TERCOM.
+	 * @param Permission $permission objeto do tipo permissão à verificar.
+	 * @return bool true se existir ou false caso contrário.
 	 */
 	public function exist(TercomProfile $tercomProfile, Permission $permission): bool
 	{
@@ -156,9 +165,9 @@ class TercomPermissionDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param Result $result
-	 * @return Permission|NULL
+	 * Procedimento interno para analisar o resultado de uma consulta e criar um objeto de permissão.
+	 * @param Result $result referência do resultado da consulta obtido.
+	 * @return Permission|NULL objeto do tipo permissão com dados carregados ou NULL se não houver resultado.
 	 */
 	private function parsePermission(Result $result): ?Permission
 	{
@@ -166,9 +175,9 @@ class TercomPermissionDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param Result $result
-	 * @return Permissions
+	 * Procedimento interno para analisar o resultado de uma consulta e criar os objetos de permissão.
+	 * @param Result $result referência do resultado da consulta obtido.
+	 * @return Permissions aquisição da lista de permissões a partir da consulta.
 	 */
 	private function parsePermissions(Result $result): Permissions
 	{
@@ -184,9 +193,9 @@ class TercomPermissionDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param array $entry
-	 * @return Permission
+	 * Procedimento interno para criar um objeto do tipo permissão e carregar os dados de um registro.
+	 * @param array $entry vetor contendo os dados do registro obtido de uma consulta.
+	 * @return Permission aquisição de um objeto do tipo permissão com dados carregados.
 	 */
 	private function newPermission(array $entry): Permission
 	{

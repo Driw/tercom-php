@@ -156,7 +156,7 @@ class CustomerControl extends GenericControl
 		if (!StringUtil::hasMinLength($stateRegistry, self::MIN_STATE_REGISTRY_FILTER_LEN))
 			throw ControlException::new('busca por Inscrição Estadual deve possuir ao menos %d dígitos', self::MIN_STATE_REGISTRY_FILTER_LEN);
 
-		$customers = $this->customerDAO->selectByStateRegistryLike($stateRegistry);
+		$customers = $this->customerDAO->selectLikeStateRegistry($stateRegistry);
 
 		return $customers;
 	}
@@ -171,7 +171,7 @@ class CustomerControl extends GenericControl
 		if (!StringUtil::hasMinLength($cnpj, self::MIN_CNPJ_FILTER_LEN))
 			throw ControlException::new('busca por CNPJ deve possuir ao menos %d dígitos', $cnpj);
 
-		$customers = $this->customerDAO->selectByCnpjLike($cnpj);
+		$customers = $this->customerDAO->selectLikeCnpj($cnpj);
 
 		return $customers;
 	}
@@ -186,7 +186,7 @@ class CustomerControl extends GenericControl
 		if (!StringUtil::hasMinLength($fantasyName, Customer::MIN_FANTASY_NAME_LEN))
 			throw ControlException::new('nome fantasia deve possuir ao menos %d caracteres', Customer::MIN_FANTASY_NAME_LEN);
 
-		$customers = $this->customerDAO->selectByFantasyNameLike($fantasyName);
+		$customers = $this->customerDAO->selectLikeFantasyName($fantasyName);
 
 		return $customers;
 	}
@@ -202,7 +202,7 @@ class CustomerControl extends GenericControl
 		if (!Functions::validateCNPJ($cnpj))
 			throw new ControlException('CNPJ inválido');
 
-		return $this->customerDAO->selectCountCnpj($cnpj, $idCustomer) === 0;
+		return !$this->customerDAO->existCnpj($cnpj, $idCustomer);
 	}
 
 	/**
@@ -213,7 +213,7 @@ class CustomerControl extends GenericControl
 	 */
 	public function hasAvaiableCompanyName(string $companyName, int $idCustomer = 0): bool
 	{
-		return $this->customerDAO->selectCountCompanyName($companyName, $idCustomer) === 0;
+		return !$this->customerDAO->existCompanyName($companyName, $idCustomer);
 	}
 }
 

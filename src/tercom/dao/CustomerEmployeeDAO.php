@@ -9,21 +9,44 @@ use dProject\MySQL\Result;
 use tercom\Functions;
 use dProject\Primitive\StringUtil;
 use tercom\entities\Customer;
+use tercom\dao\exceptions\DAOException;
 
 /**
+ * DAO para Funcionário de Cliente
+ *
+ * Classe responsável pela comunicação completa do sistema para com o banco de dados.
+ * Sua responsabilidade é gerenciar os dados referentes aos funcionários de clientes, incluindo todas operações.
+ * Estas operações consiste em: adicionar, atualizar e selecionar; <b>funcionários de clientes não podem ser excluídos</b>.
+ *
+ * Funcionários de cliente são vinculados a um único cliente e devem possuir obrigatoriamente um perfil de cliente.
+ * É obrigatório ainda possuir um endereço de e-mail e senha de acesso e nome, telefone e celular são opcionais.
+ * Funcionários não podem ser excluídos portanto é exibido uma opção de ativar/desativar.
+ *
  * @see GenericDAO
  * @see CustomerEmployee
+ * @see CustomerEmployees
+ *
  * @author Andrew
  */
 class CustomerEmployeeDAO extends GenericDAO
 {
 	/**
-	 * @var array
+	 * @var array nome das colunas da tabela de funcionários de clientes.
 	 */
 	public const ALL_COLUMNS = ['id', 'idCustomerProfile', 'name', 'email', 'password', 'idPhone', 'idCellPhone', 'enabled', 'register'];
 
+	/**
+	 * Procedimento interno para validação dos dados de um funcionário de cliente ao inserir e/ou atualizar.
+	 * Funcionários de cliente não podem possuir perfil de cliente, nome, endereço de e-mail e senha em branco.
+	 * @param CustomerEmployee $customerEmployee objeto do tipo funcionário de cliente à ser validado.
+	 * @param bool $validateId true para validar o código de identificação único ou false caso contrário.
+	 * @throws DAOException caso algum dos dados do funcionário de cliente não estejam de acordo.
+	 */
 	private function validate(CustomerEmployee $customerEmployee, bool $validateID)
 	{
+		// FIXME Transformar DAOException em CustomerEmployeeException
+
+		// PRIMARY KEY
 		if ($validateID) {
 			if ($customerEmployee->getId() === 0)
 				throw new DAOException('funcionário de cliente não identificado');
@@ -32,16 +55,22 @@ class CustomerEmployeeDAO extends GenericDAO
 				throw new DAOException('funcionário de cliente já identificado');
 		}
 
-		if ($customerEmployee->getCustomerProfileId() === 0) throw new DAOException('perfil não informado');
+		// NOT NULL
 		if (StringUtil::isEmpty($customerEmployee->getName())) throw new DAOException('nome não informado');
 		if (StringUtil::isEmpty($customerEmployee->getEmail())) throw new DAOException('endereço de e-mail não informado');
 		if (StringUtil::isEmpty($customerEmployee->getPassword())) throw new DAOException('senha não informada');
+
+		// UNIQUE KEY
+		if ($this->existEmail($customerEmployee->getEmail(), $customerEmployee->getId())) throw new DAOException('endereço de e-mail indisponível');
+
+		// FOREIGN KEY
+		if ($customerEmployee->getCustomerProfileId() === 0) throw new DAOException('perfil não informado');
 	}
 
 	/**
-	 *
-	 * @param CustomerEmployee $customerEmplyee
-	 * @return bool
+	 * Insere um novo funcionário de cliente no banco de dados e atualiza o mesmo com o identificador gerado.
+	 * @param CustomerEmployee $customerEmplyee objeto do tipo funcionário de cliente à adicionar.
+	 * @return bool true se conseguir adicionar ou false caso contrário.
 	 */
 	public function insert(CustomerEmployee $customerEmplyee): bool
 	{
@@ -67,9 +96,9 @@ class CustomerEmployeeDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param CustomerEmployee $customerEmplyee
-	 * @return bool
+	 * Atualiza os dados de um funcionário de cliente já existente no banco de dados.
+	 * @param CustomerEmployee $customerEmplyee objeto do tipo funcionário de cliente à atualizar.
+	 * @return bool true se for atualizado ou false caso contrário.
 	 */
 	public function update(CustomerEmployee $customerEmplyee): bool
 	{
@@ -93,9 +122,9 @@ class CustomerEmployeeDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param CustomerEmployee $customerEmplyee
-	 * @return bool
+	 * Atualiza o estado de inatividade de um funcionário de cliente no banco de dados.
+	 * @param CustomerEmployee $customerEmplyee objeto do tipo funcionário de cliente à atualizar.
+	 * @return bool true se atualizado ou false caso contrário.
 	 */
 	public function updateEnabled(CustomerEmployee $customerEmplyee): bool
 	{
@@ -111,8 +140,8 @@ class CustomerEmployeeDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @return string
+	 * Procedimento interno para centralizar e agilizar a manutenção de queries.
+	 * @return string aquisição da string de consulta simples para SELECT.
 	 */
 	private function newSelectProfile(): string
 	{
@@ -125,9 +154,9 @@ class CustomerEmployeeDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param int $email
-	 * @return CustomerEmployee
+	 * Selecione os dados de um funcionário de cliente através do seu código de identificação único.
+	 * @param int $idCustomerEmployee código de identificação único do funcionário de cliente.
+	 * @return CustomerEmployee|NULL funcionário de cliente com os dados carregados ou NULL se não encontrado.
 	 */
 	public function select(int $idCustomerEmployee): ?CustomerEmployee
 	{
@@ -143,10 +172,11 @@ class CustomerEmployeeDAO extends GenericDAO
 		return $this->parseCustomerEmployee($result);
 	}
 
+
 	/**
-	 *
-	 * @param string $email
-	 * @return CustomerEmployee
+	 * Seleciona os dados de um funcionário de cliente através do seu endereço de e-mail cadastrado.
+	 * @param string $email endereço de e-mail do funcionário de cliente à selecionar.
+	 * @return CustomerEmployee|NULL funcionário de cliente com os dados carregados ou NULL se não encontrado.
 	 */
 	public function selectByEmail(string $email): ?CustomerEmployee
 	{
@@ -163,8 +193,8 @@ class CustomerEmployeeDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @return CustomerEmployees
+	 * Seleciona os dados de todos os funcionários de clientes registrados no banco de dados sem ordenação.
+	 * @return CustomerEmployees aquisição da lista de funcionários de cliente atualmente registrados.
 	 */
 	public function selectAll(): CustomerEmployees
 	{
@@ -179,9 +209,9 @@ class CustomerEmployeeDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param int $assignmentLevel
-	 * @return CustomerEmployees
+	 * Selecione os dados de todos os funcionários de clientes registrados com nível de assinatura maior ou igual à:
+	 * @param int $assignmentLevel nível de assinatura mínimo para ser utilizado como filtro.
+	 * @return CustomerEmployees aquisição da lista de funcionários de cliente filtrados.
 	 */
 	public function selectByAssignmentLevel(int $assignmentLevel): CustomerEmployees
 	{
@@ -199,9 +229,9 @@ class CustomerEmployeeDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param CustomerProfile $customerProfile
-	 * @return CustomerEmployees
+	 * Selecione os dados de todos os funcionários de clientes registrados filtrados por perfil de cliente.
+	 * @param CustomerProfile $customerProfile objeto do tipo perfil de cliente à filtrar.
+	 * @return CustomerEmployees aquisição da lista de funcionários de cliente filtrados.
 	 */
 	public function selectByProfile(CustomerProfile $customerProfile): CustomerEmployees
 	{
@@ -219,9 +249,9 @@ class CustomerEmployeeDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param Customer $customer
-	 * @return CustomerEmployees
+	 * Selecione os dados de todos os funcionários de clientes registrados filtrados por cliente.
+	 * @param Customer $customer objeto do tipo cliente à filtrar.
+	 * @return CustomerEmployees aquisição da lista de funcionários de cliente filtrados.
 	 */
 	public function selectByCustomer(Customer $customer): CustomerEmployees
 	{
@@ -240,10 +270,11 @@ class CustomerEmployeeDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param string $email
-	 * @param int $email
-	 * @return bool
+	 * Verifica se um determinado endereço de e-mail já foi utilizado entre os funcionários de clientes.
+	 * @param string $email endereço de e-mail à verificar a existência.
+	 * @param int $idCustomerEmployee código de identificação do funcionário de cliente à desconsiderar
+	 * ou zero caso seja um novo funcionário de cliente.
+	 * @return bool true se já existir ou false caso contrário.
 	 */
 	public function existEmail(string $email, int $idCustomerEmployee = 0): bool
 	{
@@ -262,9 +293,9 @@ class CustomerEmployeeDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param Result $result
-	 * @return CustomerEmployee|NULL
+	 * Procedimento interno para analisar o resultado de uma consulta e criar um objeto de funcionário de clientes.
+	 * @param Result $result referência do resultado da consulta obtido.
+	 * @return CustomerEmployee|NULL objeto do tipo funcionário de cliente com dados carregados ou NULL se não houver resultado.
 	 */
 	private function parseCustomerEmployee(Result $result): ?CustomerEmployee
 	{
@@ -272,9 +303,9 @@ class CustomerEmployeeDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param Result $result
-	 * @return CustomerEmployees|NULL
+	 * Procedimento interno para analisar o resultado de uma consulta e criar os objetos de funcionário de cliente.
+	 * @param Result $result referência do resultado da consulta obtido.
+	 * @return CustomerEmployees aquisição da lista de funcionário de cliente a partir da consulta.
 	 */
 	private function parseCustomerEmployees(Result $result): CustomerEmployees
 	{
@@ -290,9 +321,9 @@ class CustomerEmployeeDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param array $entry
-	 * @return CustomerEmployee
+	 * Procedimento interno para criar um objeto do tipo funcionário de cliente e carregar os dados de um registro.
+	 * @param array $entry vetor contendo os dados do registro obtido de uma consulta.
+	 * @return CustomerEmployee aquisição de um objeto do tipo funcionário de cliente com dados carregados.
 	 */
 	private function newCustomerEmployee(array $entry): CustomerEmployee
 	{

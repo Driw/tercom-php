@@ -8,18 +8,26 @@ use tercom\entities\Phone;
 use tercom\entities\lists\Phones;
 
 /**
+ * DAO para Telefone de Cliente
+ *
+ * Classe responsável pela comunicação completa do sistema para com o banco de dados.
+ * Sua responsabilidade é gerenciar os dados referentes aos telefones de clientes, incluindo todas operações.
+ * Estas operações consiste em: adicionar, selecionar e excluir telefones de clientes.
+ *
  * @see GenericDAO
  * @see Customer
  * @see Phone
+ * @see Phones
+ *
  * @author andrews
  */
 class CustomerPhoneDAO extends GenericDAO
 {
 	/**
-	 *
-	 * @param Customer $customer
-	 * @param Phone $phone
-	 * @return bool
+	 * Insere um novo vinculo entre um cliente e telefone já existentes.
+	 * @param Customer $customer objeto do tipo cliente à vincular o telefone.
+	 * @param Phone $phone objeto do tipo telefone à vincular ao cliente.
+	 * @return bool true se conseguir inserir ou false caso contrário.
 	 */
 	public function insert(Customer $customer, Phone $phone): bool
 	{
@@ -34,10 +42,10 @@ class CustomerPhoneDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param Customer $customer
-	 * @param Phone $phone
-	 * @return bool
+	 * Exclui um vinculo existente entre cliente e telefone já existentes.
+	 * @param Customer $customer objeto do tipo cliente à desvincular o telefone.
+	 * @param Phone $phone objeto do tipo telefone à desvincular ao cliente.
+	 * @return bool true se conseguir desvincular ou false caso contrário.
 	 */
 	public function delete(Customer $customer, Phone $phone): bool
 	{
@@ -87,12 +95,12 @@ class CustomerPhoneDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param Customer $customer
-	 * @param Phone $phone
-	 * @return bool
+	 * Verifica se existe um vinculo entre um cliente e um telefone.
+	 * @param Customer $customer objeto do tipo cliente à verificar.
+	 * @param Phone $phone objeto do tipo telefone à verificar.
+	 * @return bool true se existir o vinculo ou false caso contrário.
 	 */
-	public function has(Customer $customer, Phone $phone): bool
+	public function exist(Customer $customer, Phone $phone): bool
 	{
 		$sql = "SELECT COUNT(*) qty
 				FROM customer_phones
@@ -102,11 +110,7 @@ class CustomerPhoneDAO extends GenericDAO
 		$query->setInteger(1, $customer->getId());
 		$query->setInteger(2, $phone->getId());
 
-		$result = $query->execute();
-		$entry = $result->next();
-		$result->free();
-
-		return intval($entry['qty']) !== 0;
+		return $this->parseQueryExist($query);
 	}
 
 	/**

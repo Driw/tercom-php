@@ -8,69 +8,77 @@ use dProject\Primitive\StringUtil;
 use tercom\Functions;
 
 /**
+ * Funcionário TERCOM
+ *
+ * Os funcionários TERCOM são vinculados a um perfil TERCOM para especificar suas permissões no sistema.
+ * Além disso possui informações para identificação do funcionário como pessoa física e de credenciais de acesso.
+ * As credenciais de acesso consiste em endereço de e-mail, palavra chave e habilitado/desabilitado.
+ *
+ * @see AdvancedObject
+ *
  * @author Andrew
  */
 class TercomEmployee extends AdvancedObject
 {
 	/**
-	 * @var int
+	 * @var int quantidade mínima de caracteres no nome do funcionário.
 	 */
 	public const MIN_NAME_LEN = MIN_NAME_LEN;
 	/**
-	 * @var int
+	 * @var int quantidade máxima de caracteres no nome do funcionário.
 	 */
 	public const MAX_NAME_LEN = MAX_NAME_LEN;
 	/**
-	 * @var int
+	 * @var int quantidade máxima de caracteres no endereço de e-mail.
 	 */
 	public const MAX_EMAIL_LEN = MAX_EMAIL_LEN;
 	/**
-	 * @var int
+	 * @var int quantidade mínima da caracteres na senha de acesso.
 	 */
 	public const MIN_PASSWORD_LEN = MIN_PASSWORD_LEN;
 	/**
-	 * @var int
+	 * @var int quantidade máxima da caracteres na senha de acesso.
 	 */
 	public const MAX_PASSWORD_LEN = MAX_PASSWORD_LEN;
 
 	/**
-	 * @var int
+	 * @var int código de identificação único do funcionário TERCOM.
 	 */
 	private $id;
 	/**
-	 * @var TercomProfile
+	 * @var TercomProfile perfil do funcionário de acesso no sistema.
 	 */
 	private $tercomProfile;
 	/**
-	 * @var string
+	 * @var string número de cadastro de pessoa física.
 	 */
 	private $cpf;
 	/**
-	 * @var string
+	 * @var string nome do funcionário.
 	 */
 	private $name;
 	/**
-	 * @var string
+	 * @var string endereço de e-mail para acesso e notificação.
 	 */
 	private $email;
 	/**
-	 * @var string
+	 * @var string senha criptografada para acesso.
 	 */
 	private $password;
 	/**
-	 * @var Phone
+	 * @var Phone telefone residêncial.
 	 */
 	private $phone;
 	/**
-	 * @var Phone
+	 * @var Phone telefone celular.
 	 */
 	private $cellphone;
 	/**
-	 * @var bool
+	 * @var bool funcionário habilitado para uso do sistema.
 	 */
 	private $enable;
 	/**
-	 * @var \DateTime
+	 * @var \DateTime horário de registro do funcionário.
 	 */
 	private $register;
 
@@ -80,19 +88,16 @@ class TercomEmployee extends AdvancedObject
 	public function __construct()
 	{
 		$this->id = 0;
-		$this->tercomProfile = new TercomProfile();
 		$this->cpf = '';
 		$this->name = '';
 		$this->email = '';
 		$this->password = '';
 		$this->register = new \DateTime();
-		$this->phone = new Phone();
-		$this->cellphone = new Phone();
 		$this->enable = false;
 	}
 
 	/**
-	 * @return int
+	 * @return int aquisição do código de identificação único do funcionário TERCOM.
 	 */
 	public function getId(): int
 	{
@@ -100,40 +105,40 @@ class TercomEmployee extends AdvancedObject
 	}
 
 	/**
-	 * @param int $id
+	 * @param int $id código de identificação único do funcionário TERCOM.
 	 */
-	public function setId(int $id)
+	public function setId(int $id): void
 	{
 		$this->id = $id;
 	}
 
 	/**
-	 * @return TercomProfile
+	 * @return TercomProfile aquisição do perfil do funcionário de acesso no sistema.
 	 */
 	public function getTercomProfile(): TercomProfile
 	{
-		return $this->tercomProfile;
+		return $this->tercomProfile === null ? ($this->tercomProfile = new TercomProfile()) : $this->tercomProfile;
 	}
 
 	/**
-	 * @param TercomProfile $tercomProfile
+	 * @param TercomProfile $tercomProfile perfil do funcionário de acesso no sistema.
 	 */
-	public function setTercomProfile(TercomProfile $tercomProfile)
+	public function setTercomProfile(TercomProfile $tercomProfile): void
 	{
 		$this->tercomProfile = $tercomProfile;
 	}
 
 	/**
 	 *
-	 * @return int
+	 * @return int aquisição do código de identificação do perfil do funcionário.
 	 */
 	public function getTercomProfileId(): int
 	{
-		return $this->tercomProfile->getId();
+		return $this->tercomProfile === null ? 0 : $this->tercomProfile->getId();
 	}
 
 	/**
-	 * @return string
+	 * @return string aquisição do número de cadastro de pessoa física.
 	 */
 	public function getCpf(): string
 	{
@@ -141,9 +146,9 @@ class TercomEmployee extends AdvancedObject
 	}
 
 	/**
-	 * @param string $cpf
+	 * @param string $cpf número de cadastro de pessoa física.
 	 */
-	public function setCpf(string $cpf)
+	public function setCpf(string $cpf): void
 	{
 		if (!Functions::validateCPF($cpf))
 			throw new EntityParseException("CPF inválido (cpf: $cpf)");
@@ -152,7 +157,7 @@ class TercomEmployee extends AdvancedObject
 	}
 
 	/**
-	 * @return string
+	 * @return string aquisição do nome do funcionário.
 	 */
 	public function getName(): string
 	{
@@ -160,9 +165,9 @@ class TercomEmployee extends AdvancedObject
 	}
 
 	/**
-	 * @param string $name
+	 * @param string $name nome do funcionário.
 	 */
-	public function setName(string $name)
+	public function setName(string $name): void
 	{
 		if (!StringUtil::hasBetweenLength($name, self::MIN_NAME_LEN, self::MAX_NAME_LEN))
 			throw EntityParseException::new("nome deve possuir de %d a %d caracteres ($name)", self::MIN_NAME_LEN, self::MAX_NAME_LEN);
@@ -171,7 +176,7 @@ class TercomEmployee extends AdvancedObject
 	}
 
 	/**
-	 * @return string
+	 * @return string endereço de e-mail para acesso e notificação.
 	 */
 	public function getEmail(): string
 	{
@@ -179,9 +184,9 @@ class TercomEmployee extends AdvancedObject
 	}
 
 	/**
-	 * @param string $email
+	 * @param string $email endereço de e-mail para acesso e notificação.
 	 */
-	public function setEmail(string $email)
+	public function setEmail(string $email): void
 	{
 		if (!filter_var($email, FILTER_VALIDATE_EMAIL))
 			throw new EntityParseException("endereço de e-mail inválido (email: $email)");
@@ -193,7 +198,7 @@ class TercomEmployee extends AdvancedObject
 	}
 
 	/**
-	 * @return string
+	 * @return string aquisição da senha criptografada para acesso.
 	 */
 	public function getPassword(): string
 	{
@@ -201,10 +206,10 @@ class TercomEmployee extends AdvancedObject
 	}
 
 	/**
-	 * @param string $password
-	 * @param bool $hash
+	 * @param string $password senha de acesso.
+	 * @param bool $hash true se já criptografado ou false caso contrário.
 	 */
-	public function setPassword(string $password, bool $hash = true)
+	public function setPassword(string $password, bool $hash = true): void
 	{
 		if ($hash)
 			$this->password = $password;
@@ -221,7 +226,7 @@ class TercomEmployee extends AdvancedObject
 	}
 
 	/**
-	 * @return Phone
+	 * @return Phone aquisição do telefone residêncial.
 	 */
 	public function getPhone(): Phone
 	{
@@ -229,15 +234,15 @@ class TercomEmployee extends AdvancedObject
 	}
 
 	/**
-	 * @param Phone $phone
+	 * @param Phone $phone telefone residêncial.
 	 */
-	public function setPhone(Phone $phone)
+	public function setPhone(Phone $phone): void
 	{
 		$this->phone = $phone;
 	}
 
 	/**
-	 * @return Phone
+	 * @return Phone aquisição do telefone celular.
 	 */
 	public function getCellphone(): Phone
 	{
@@ -245,15 +250,15 @@ class TercomEmployee extends AdvancedObject
 	}
 
 	/**
-	 * @param Phone $cellphone
+	 * @param Phone $cellphone telefone celular.
 	 */
-	public function setCellphone(Phone $cellphone)
+	public function setCellphone(Phone $cellphone): void
 	{
 		$this->cellphone = $cellphone;
 	}
 
 	/**
-	 * @return bool
+	 * @return bool funcionário habilitado para uso do sistema.
 	 */
 	public function isEnable(): bool
 	{
@@ -261,15 +266,15 @@ class TercomEmployee extends AdvancedObject
 	}
 
 	/**
-	 * @param bool $enable
+	 * @param bool $enable funcionário habilitado para uso do sistema.
 	 */
-	public function setEnable(bool $enable)
+	public function setEnable(bool $enable): void
 	{
 		$this->enable = $enable;
 	}
 
 	/**
-	 * @return \DateTime
+	 * @return \DateTime horário de registro do funcionário.
 	 */
 	public function getRegister(): \DateTime
 	{
@@ -277,9 +282,9 @@ class TercomEmployee extends AdvancedObject
 	}
 
 	/**
-	 * @param \DateTime $register
+	 * @param \DateTime $register horário de registro do funcionário.
 	 */
-	public function setRegister(\DateTime $register)
+	public function setRegister(\DateTime $register): void
 	{
 		$this->register = $register;
 	}

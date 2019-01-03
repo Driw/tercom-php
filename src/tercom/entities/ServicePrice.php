@@ -8,50 +8,57 @@ use dProject\Primitive\StringUtil;
 use dProject\Primitive\FloatUtil;
 
 /***
+ * Preço de Serviço
+ *
+ * O preço de serviço possui informações do que o cliente irá escolher como serviço final na sua cotação.
+ * Um serviço possui vários preços de serviço e cada preço de serviço é fornecido por um único fornecedor.
+ * Atualmente as especificações de funcionalidade e/ou categorização dos serviços é feito descritivamente.
+ *
  * @see AdvancedObject
+ *
  * @author Andrew
  */
 class ServicePrice extends AdvancedObject
 {
 	/**
-	 * @var int
+	 * @var int quantidade mínima de caracteres para o nome do preço de serviço.
 	 */
 	public const MIN_NAME_LEN = 2;
 	/**
-	 * @var int
+	 * @var int quantidade máxima de caracteres para o nome do preço de serviço.
 	 */
 	public const MAX_NAME_LEN = 48;
 	/**
-	 * @var int
+	 * @var int quantidade máxima de caracteres para a descrição adicional.
 	 */
 	public const MAX_ADDITIONAL_DESCRIPTION = 256;
 	/**
-	 * @var float
+	 * @var float valor mínimo permitido para definir o preço do serviço.
 	 */
 	public const MIN_PRICE = 0.0;
 
 	/**
-	 * @var int
+	 * @var int código de identificação único do preço de serviço.
 	 */
 	private $id;
 	/**
-	 * @var Service
+	 * @var Service objeto do tipo serviço do qual pertence o preço de serviço.
 	 */
 	private $service;
 	/**
-	 * @var Provider
+	 * @var Provider objeto do tipo fornecedor que fornece o preço.
 	 */
 	private $provider;
 	/**
-	 * @var string
+	 * @var string nome do preço de serviço.
 	 */
 	private $name;
 	/**
-	 * @var string
+	 * @var string dascrição adicional.
 	 */
 	private $additionalDescription;
 	/**
-	 * @var float
+	 * @var float preço do serviço.
 	 */
 	private $price;
 
@@ -61,15 +68,13 @@ class ServicePrice extends AdvancedObject
 	public function __construct()
 	{
 		$this->id = 0;
-		$this->service = new Service();
-		$this->provider = new Provider();
 		$this->name = '';
 		$this->additionalDescription = '';
 		$this->price = 0.0;
 	}
 
 	/**
-	 * @return int
+	 * @return int aquisição do código de identificação único do preço de serviço.
 	 */
 	public function getId(): int
 	{
@@ -77,69 +82,66 @@ class ServicePrice extends AdvancedObject
 	}
 
 	/**
-	 * @param int $id
-	 * @return ServicePrice
+	 * @param int $id código de identificação único do preço de serviço.
+	 * @return ServicePrice aquisição do objeto de preço ser serviço usado.
 	 */
 	public function setId(int $id): ServicePrice
 	{
 		$this->id = $id;
-		return $this;
 	}
 
 	/**
-	 * @return Service
+	 * @return Service objeto do tipo serviço do qual pertence o preço de serviço.
 	 */
 	public function getService(): Service
 	{
-		return $this->service;
+		return $this->service === null ? ($this->service = new Service()) : $this->service;
 	}
 
 	/**
-	 * @param Service $service
-	 * @return ServicePrice
+	 * @param Service $service aquisição do objeto do tipo serviço do qual pertence o preço de serviço.
+	 * @return ServicePrice aquisição do objeto de preço ser serviço usado.
 	 */
 	public function setService(Service $service): ServicePrice
 	{
 		$this->service = $service;
-		return $this;
 	}
 
 	/**
-	 * @return int
+	 * @return int aquisição do código de identificação do serviço ou zero se não definido.
 	 */
-	public function getIdService(): int
+	public function getServiceId(): int
 	{
-		return $this->service->getId();
+		return $this->service === null ? 0 : $this->service->getId();
 	}
 
 	/**
-	 * @return Provider
+	 * @return Provider aquisição do objeto do tipo fornecedor que fornece o preço.
 	 */
 	public function getProvider(): Provider
 	{
-		return $this->provider;
+		return $this->provider === null ? ($this->provider = new Provider()) : $this->provider;
 	}
 
 	/**
-	 * @param Provider $provider
-	 * @return ServicePrice
+	 * @param Provider $provider objeto do tipo fornecedor que fornece o preço.
+	 * @return ServicePrice aquisição do objeto de preço ser serviço usado.
 	 */
 	public function setProvider(Provider $provider): ServicePrice
 	{
 		$this->provider = $provider;
-		return $this;
 	}
 
 	/**
-	 * @return int
+	 * @return int aquisição do código de identificação do fornecedor ou zero se não definido.
 	 */
 	public function getIdProvider(): int
 	{
-		return $this->provider->getID();
+		return $this->provider === null ? 0 : $this->provider->getID();
 	}
 
 	/**
-	 * @return string
+	 * @return string aquisição do nome do preço de serviço.
 	 */
 	public function getName(): string
 	{
@@ -147,8 +149,8 @@ class ServicePrice extends AdvancedObject
 	}
 
 	/**
-	 * @param string $name
-	 * @return ServicePrice
+	 * @param string $name nome do preço de serviço.
+	 * @return ServicePrice aquisição do objeto de preço ser serviço usado.
 	 */
 	public function setName(string $name): ServicePrice
 	{
@@ -156,11 +158,10 @@ class ServicePrice extends AdvancedObject
 			throw EntityParseException::new("nome deve possuir de %d a %d caracteres (nome: $name)", self::MIN_NAME_LEN, self::MAX_NAME_LEN);
 
 		$this->name = $name;
-		return $this;
 	}
 
 	/**
-	 * @return string
+	 * @return string aquisição da dascrição adicional.
 	 */
 	public function getAdditionalDescription(): string
 	{
@@ -168,8 +169,8 @@ class ServicePrice extends AdvancedObject
 	}
 
 	/**
-	 * @param string $additionalDescription
-	 * @return ServicePrice
+	 * @param string $additionalDescription dascrição adicional.
+	 * @return ServicePrice aquisição do objeto de preço ser serviço usado.
 	 */
 	public function setAdditionalDescription(?string $additionalDescription): ServicePrice
 	{
@@ -177,11 +178,10 @@ class ServicePrice extends AdvancedObject
 			throw EntityParseException::new("descrição adicional deve possuir até %d caracteres", self::MAX_ADDITIONAL_DESCRIPTION);
 
 		$this->additionalDescription = $additionalDescription;
-		return $this;
 	}
 
 	/**
-	 * @return float
+	 * @return float aquisição do preço do serviço.
 	 */
 	public function getPrice(): float
 	{
@@ -189,8 +189,8 @@ class ServicePrice extends AdvancedObject
 	}
 
 	/**
-	 * @param float $price
-	 * @return ServicePrice
+	 * @param float $price preço do serviço.
+	 * @return ServicePrice aquisição do objeto de preço ser serviço usado.
 	 */
 	public function setPrice(float $price): ServicePrice
 	{
@@ -198,7 +198,6 @@ class ServicePrice extends AdvancedObject
 			throw EntityParseException::new('preço do serviço deve ser maior ou igual a %.2f', self::MIN_PRICE);
 
 		$this->price = $price;
-		return $this;
 	}
 
 	/**
@@ -213,7 +212,7 @@ class ServicePrice extends AdvancedObject
 			'provider' => Provider::class,
 			'name' => ObjectUtil::TYPE_STRING,
 			'additionalDescription' => ObjectUtil::TYPE_STRING,
-			'price' => ObjectUtil::TYPE_INTEGER,
+			'price' => ObjectUtil::TYPE_FLOAT,
 		];
 	}
 }

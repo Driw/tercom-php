@@ -8,8 +8,17 @@ use dProject\Primitive\StringUtil;
 use tercom\entities\lists\ProductPrices;
 
 /**
+ * Produto
+ *
+ * Um produto é algo do mundo real que está sendo disponibilizado no sistema para ser feito a cotação.
+ * O produto pode ser oferecido por vários fornecedores tal como pode deixar de ser fornecido pelos mesmos.
+ * Todo produto deve possuir um nome único, descrição, unidade de produto e categoria de produto.
+ *
  * @see AdvancedObject
  * @see ProductUnit
+ * @see ProductCategory
+ * @see ProductPrices
+ *
  * @author Andrew
  */
 class Product extends AdvancedObject

@@ -8,42 +8,51 @@ use dProject\Primitive\IntegerUtil;
 use dProject\Primitive\StringUtil;
 
 /**
+ * Perfil de Cliente
+ *
+ * Um perfil pode representar um cargo na empresa do cliente possuindo um nome e permissões de acesso.
+ * Cada permissão de acesso concede permissão para usufruir de uma ação dentro do sistema.
+ * Um perfil de cliente pertence apenas a um cliente, possui um alista de permissões e
+ * pode ser vinculado a qualquer funcionário de cliente que esteja registrado no cliente deste perfil.
+ *
  * @see Customer
+ * @see Entity
+ *
  * @author Andrew
  */
 class CustomerProfile extends AdvancedObject implements Entity
 {
 	/**
-	 * @var int
+	 * @var int quantidade mínima de caracteres para o nome do perfil de cliente.
 	 */
 	public const MIN_NAME_LEN = 3;
 	/**
-	 * @var int
+	 * @var int quantidade máxima de caracteres para o nome do perfil de cliente.
 	 */
 	public const MAX_NAME_LEN = 64;
 	/**
-	 * @var int
+	 * @var int nível mínimo de assinatura.
 	 */
 	public const MIN_ASSIGNMENT_LEVEL = Permission::MIN_ASSIGNMENT_LEVEL;
 	/**
-	 * @var int
+	 * @var int nível máximo de assinatura.
 	 */
 	public const MAX_ASSIGNMENT_LEVEL = Permission::MAX_ASSIGNMENT_LEVEL;
 
 	/**
-	 * @var int
+	 * @var int código de identificação único do perfil de cliente.
 	 */
 	private $id;
 	/**
-	 * @var Customer
+	 * @var Customer cliente ao qual o perfil pertence.
 	 */
 	private $customer;
 	/**
-	 * @var string
+	 * @var string nome do perfil.
 	 */
 	private $name;
 	/**
-	 * @var int
+	 * @var int nível de assinatura.
 	 */
 	private $assignmentLevel;
 
@@ -53,13 +62,12 @@ class CustomerProfile extends AdvancedObject implements Entity
 	public function __construct()
 	{
 		$this->id = 0;
-		$this->customer = new Customer();
 		$this->name = '';
 		$this->assignmentLevel = 0;
 	}
 
 	/**
-	 * @return int
+	 * @return int aquisição do código de identificação único do perfil de cliente.
 	 */
 	public function getId(): int
 	{
@@ -67,7 +75,7 @@ class CustomerProfile extends AdvancedObject implements Entity
 	}
 
 	/**
-	 * @param int $id
+	 * @param int $id código de identificação único do perfil de cliente.
 	 */
 	public function setId(int $id)
 	{
@@ -75,15 +83,15 @@ class CustomerProfile extends AdvancedObject implements Entity
 	}
 
 	/**
-	 * @return Customer
+	 * @return Customer aquisição do cliente ao qual o perfil pertence.
 	 */
 	public function getCustomer(): Customer
 	{
-		return $this->customer;
+		return $this->customer === null ?($this->customer = new Customer()) : $this->customer;
 	}
 
 	/**
-	 * @param Customer $customer
+	 * @param Customer $customer cliente ao qual o perfil pertence.
 	 */
 	public function setCustomer(Customer $customer)
 	{
@@ -91,7 +99,7 @@ class CustomerProfile extends AdvancedObject implements Entity
 	}
 
 	/**
-	 * @return int
+	 * @return int aquisição do código de identificação do perfil de cliente ou zero se não informado.
 	 */
 	public function getCustomerId(): int
 	{
@@ -99,7 +107,7 @@ class CustomerProfile extends AdvancedObject implements Entity
 	}
 
 	/**
-	 * @return string
+	 * @return string aquisição do nome do perfil.
 	 */
 	public function getName(): string
 	{
@@ -107,7 +115,7 @@ class CustomerProfile extends AdvancedObject implements Entity
 	}
 
 	/**
-	 * @param string $name
+	 * @param string $name nome do perfil.
 	 */
 	public function setName(string $name)
 	{
@@ -118,7 +126,7 @@ class CustomerProfile extends AdvancedObject implements Entity
 	}
 
 	/**
-	 * @return int
+	 * @return int aquisição do nível de assinatura.
 	 */
 	public function getAssignmentLevel(): int
 	{
@@ -126,7 +134,7 @@ class CustomerProfile extends AdvancedObject implements Entity
 	}
 
 	/**
-	 * @param int $assignmentLevel
+	 * @param int $assignmentLevel nível de assinatura.
 	 */
 	public function setAssignmentLevel(int $assignmentLevel)
 	{

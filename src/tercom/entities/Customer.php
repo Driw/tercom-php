@@ -11,76 +11,82 @@ use dProject\Primitive\StringUtil;
 use tercom\Functions;
 
 /**
+ * Cliente
+ *
+ * Um cliente possui diversos perfis de funcionário e diversos funcionários que podem acessar o sistema.
+ * As solicitações de cotação são por cliente mas feitas por funcionários conforme os dados cadastrados.
+ *
  * @see AdvancedObject
  * @see Addresses
  * @see Phones
+ *
  * @author Andrew
  */
 class Customer extends AdvancedObject
 {
 	/**
-	 * @var int
+	 * @var int quantidade máxima de caracteres na inscrição estadual.
 	 */
 	public const MAX_STATE_REGISTRY_LEN = 15;
 	/**
-	 * @var int
+	 * @var int quantidade máxima de caracteres no endereço de e-mail.
 	 */
 	public const MAX_EMAIL_LEN = MAX_EMAIL_LEN;
 	/**
-	 * @var int
+	 * @var int quantidade mínima de caracteres na razão social.
 	 */
 	public const MIN_COMPANY_NAME_LEN = 6;
 	/**
-	 * @var int
+	 * @var int quantidade máxima de caracteres na razão social.
 	 */
 	public const MAX_COMPANY_NAME_LEN = 72;
 	/**
-	 * @var int
+	 * @var int quantidade mínima de caracteres no nome fantasia.
 	 */
 	public const MIN_FANTASY_NAME_LEN = 3;
 	/**
-	 * @var int
+	 * @var int quantidade máxima de caracteres no nome fantasia.
 	 */
 	public const MAX_FANTASY_NAME_LEN = 48;
 
 	/**
-	 * @var int
+	 * @var int código de identificação único do cliente.
 	 */
 	private $id;
 	/**
-	 * @var string
+	 * @var string número da inscrição estadual.
 	 */
 	private $stateRegistry;
 	/**
-	 * @var string
+	 * @var string número de cadastro nacional de pessoa jurídica.
 	 */
 	private $cnpj;
 	/**
-	 * @var string
+	 * @var string razão social da empresa do cliente.
 	 */
 	private $companyName;
 	/**
-	 * @var string
+	 * @var string nome fantasia da empresa do cliente.
 	 */
 	private $fantasyName;
 	/**
-	 * @var string
+	 * @var string endereço de e-mail para notificações e contato.
 	 */
 	private $email;
 	/**
-	 * @var Phones
+	 * @var Phones lista de telefones disponíveis para contato.
 	 */
 	private $phones;
 	/**
-	 * @var Addresses
+	 * @var Addresses lista de endereços disponíveis para entregas.
 	 */
 	private $addresses;
 	/**
-	 * @var bool
+	 * @var bool determina se o cliente está inativo.
 	 */
 	private $inactive;
 	/**
-	 * @var DateTime
+	 * @var DateTime horário de registor do cliente.
 	 */
 	private $register;
 
@@ -95,14 +101,12 @@ class Customer extends AdvancedObject
 		$this->companyName = '';
 		$this->fantasyName = '';
 		$this->email = '';
-		$this->phones = new Phones();
-		$this->addresses = new Addresses();
 		$this->inactive = false;
 		$this->register = new \DateTime();
 	}
 
 	/**
-	 * @return int
+	 * @return int aquisição do código de identificação único do cliente.
 	 */
 	public function getId(): int
 	{
@@ -110,7 +114,7 @@ class Customer extends AdvancedObject
 	}
 
 	/**
-	 * @param int $id
+	 * @param int $id código de identificação único do cliente.
 	 */
 	public function setId(int $id)
 	{
@@ -118,7 +122,7 @@ class Customer extends AdvancedObject
 	}
 
 	/**
-	 * @return string
+	 * @return string aquisição do número da inscrição estadual.
 	 */
 	public function getStateRegistry(): string
 	{
@@ -126,7 +130,7 @@ class Customer extends AdvancedObject
 	}
 
 	/**
-	 * @param string $stateRegistry
+	 * @param string $stateRegistry número da inscrição estadual.
 	 */
 	public function setStateRegistry(string $stateRegistry)
 	{
@@ -137,7 +141,7 @@ class Customer extends AdvancedObject
 	}
 
 	/**
-	 * @return string
+	 * @return string aquisição do número de cadastro nacional de pessoa jurídica.
 	 */
 	public function getCnpj(): string
 	{
@@ -145,7 +149,7 @@ class Customer extends AdvancedObject
 	}
 
 	/**
-	 * @param string $cnpj
+	 * @param string $cnpj número de cadastro nacional de pessoa jurídica.
 	 */
 	public function setCnpj(string $cnpj)
 	{
@@ -156,7 +160,7 @@ class Customer extends AdvancedObject
 	}
 
 	/**
-	 * @return string
+	 * @return string aquisição da razão social da empresa do cliente.
 	 */
 	public function getCompanyName(): string
 	{
@@ -164,7 +168,7 @@ class Customer extends AdvancedObject
 	}
 
 	/**
-	 * @param string $companyName
+	 * @param string $companyName razão social da empresa do cliente.
 	 */
 	public function setCompanyName(string $companyName)
 	{
@@ -175,7 +179,7 @@ class Customer extends AdvancedObject
 	}
 
 	/**
-	 * @return string
+	 * @return string aquisição do nome fantasia da empresa do cliente.
 	 */
 	public function getFantasyName(): string
 	{
@@ -183,7 +187,7 @@ class Customer extends AdvancedObject
 	}
 
 	/**
-	 * @param string $fantasyName
+	 * @param string $fantasyName nome fantasia da empresa do cliente.
 	 */
 	public function setFantasyName(string $fantasyName)
 	{
@@ -194,7 +198,7 @@ class Customer extends AdvancedObject
 	}
 
 	/**
-	 * @return string
+	 * @return string aquisição do endereço de e-mail para notificações e contato.
 	 */
 	public function getEmail(): string
 	{
@@ -202,7 +206,7 @@ class Customer extends AdvancedObject
 	}
 
 	/**
-	 * @param string $email
+	 * @param string $email endereço de e-mail para notificações e contato.
 	 */
 	public function setEmail(string $email)
 	{
@@ -216,15 +220,15 @@ class Customer extends AdvancedObject
 	}
 
 	/**
-	 * @return Phones
+	 * @return Phones aquisição da lista de telefones disponíveis para contato.
 	 */
 	public function getPhones(): Phones
 	{
-		return $this->phones;
+		return $this->phones === null ? ($this->phones = new Phones) : $this->phones;
 	}
 
 	/**
-	 * @param Phones $phones
+	 * @param Phones $phones lista de telefones disponíveis para contato.
 	 */
 	public function setPhones(Phones $phones)
 	{
@@ -232,15 +236,15 @@ class Customer extends AdvancedObject
 	}
 
 	/**
-	 * @return Addresses
+	 * @return Addresses aquisição da lista de endereços disponíveis para entregas.
 	 */
 	public function getAddresses(): Addresses
 	{
-		return $this->addresses;
+		return $this->addresses === null ? ($this->addresses = new Address()) : $this->addresses;
 	}
 
 	/**
-	 * @param Addresses $addresses
+	 * @param Addresses $addresses lista de endereços disponíveis para entregas.
 	 */
 	public function setAddresses(Addresses $addresses)
 	{
@@ -248,7 +252,7 @@ class Customer extends AdvancedObject
 	}
 
 	/**
-	 * @return bool
+	 * @return bool aquisição de se o cliente está ativo ou inativo.
 	 */
 	public function isInactive(): bool
 	{
@@ -256,7 +260,7 @@ class Customer extends AdvancedObject
 	}
 
 	/**
-	 * @param bool $inactive
+	 * @param bool $inactive ativar ou inativar um cliente.
 	 */
 	public function setInactive(bool $inactive)
 	{
@@ -264,7 +268,7 @@ class Customer extends AdvancedObject
 	}
 
 	/**
-	 * @return DateTime
+	 * @return DateTime aquisição do horário de registor do cliente.
 	 */
 	public function getRegister(): DateTime
 	{
@@ -272,7 +276,7 @@ class Customer extends AdvancedObject
 	}
 
 	/**
-	 * @param DateTime $register
+	 * @param DateTime $register horário de registor do cliente.
 	 */
 	public function setRegister(DateTime $register)
 	{
@@ -290,11 +294,11 @@ class Customer extends AdvancedObject
 			'cnpj' => ObjectUtil::TYPE_STRING,
 			'companyName' => ObjectUtil::TYPE_STRING,
 			'fantasyName' => ObjectUtil::TYPE_STRING,
-			'phones' => Phones::class,
 			'email' => ObjectUtil::TYPE_STRING,
-			'register' => ObjectUtil::TYPE_DATE,
-			'inactive' => ObjectUtil::TYPE_BOOLEAN,
+			'phones' => Phones::class,
 			'addresses' => Addresses::class,
+			'inactive' => ObjectUtil::TYPE_BOOLEAN,
+			'register' => ObjectUtil::TYPE_DATE,
 		];
 	}
 }

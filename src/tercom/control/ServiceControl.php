@@ -101,7 +101,7 @@ class ServiceControl extends GenericControl
 	 */
 	public function avaiableName(string $name, int $idService = 0): bool
 	{
-		return $this->serviceDAO->countByName($name, $idService) === 0;
+		return !$this->serviceDAO->existName($name, $idService);
 	}
 }
 

@@ -20,6 +20,11 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+03.01.2018 - 0.3.2.139
+- Documentação de todas as DAO do sistema.
+- Ajustes e revisão de alguns procedimentos em DAO:
+	- 
+
 28.12.2018 - 0.3.1.138
 - Atualizado scripts de testes para o webservice que gerencia as solicitações de pedidos para cotação.
 - Adicionado SessionVar que deveria ter sido adicionado na rev137.
@@ -36,6 +41,42 @@
 - Excluído ApiResultManufacture e ApiResultManufactures que foram substituído posteriormente por ApiResultObject.
 - Corrigido mensagem de erro para Webservice.prototype.provider_add().
 - Atualizado ManufacturerBoundary conforme renomeado ManufactureControl para ManufacturerControl.
+
+17.12.2018 - 0.3.2.135
+- Corrigido uso de DAOException em CustomerEmployeeDAO e LoginDAO.
+
+17.12.2018 - 0.3.2.134
+- Atualizado CustomerControl conforme mudanças em #15f2585b6f9da9964bce734ded17f7c330592333.
+
+17.12.2018 - 0.3.2.133
+- Documentação de CustomerDAO.
+- Adicionado uso de ApiStatus para CustomerDAO através de CustomerDAOException.
+- Adicionado validação de CNPJ e razão social para validate() em CustomerDAO.
+	- Renomeado métodos de select...() de acordo com o padrão estabelecida.
+
+17.12.2018 - 0.3.2.132
+- Documentação de CustomerAddressDAO.
+- Adicionado uso de ApiStatus para CustomerAddressDAO através de CustomerAddressDAOException.
+- Adicionado validação do código de identificação com validateCustomerAddress em CustomerAddressDAO.
+
+17.12.2018 - 0.3.2.131
+- Documentação de AddressDAO e AddressDAOException.
+- Corrigido DAOAddress que não estava considerando 'state' como obrigatório (not null).
+- Atualizado AddressDAOException conforme os códigos de erro criados em ApiStatus.
+
+17.12.2018 - 0.3.2.130
+- Documentação de todas as entidades.
+- Excluído DAOException que não estava sendo utilizada em 'tercom/dao'.
+- Address não estava fazendo as validações nos setters.
+- Corrigido problema onde ServicePrice não possuia valor decimal no JSON.
+- Ajustes para redução na quantidade de informações desnecessárias nos JSON em:
+	- Customer com 'phones' e 'addresses'.
+	- CustomerEmployee com 'phone' e 'cellphone'.
+	- CustomerProfile com 'customer'.
+	- LoginCustomer com 'customerEmployee'.
+	- LoginTercom com 'tercomEmployee'.
+	- ServicePrice com 'service' e 'provider'.
+	- TercomEmployee com 'phone' e 'cellphone'.
 
 12.12.2018 - 0.3.1.129
 - Atualizado último script de teste referente a rev125.

@@ -2,29 +2,45 @@
 
 namespace tercom\dao;
 
-use tercom\entities\Login;
 use dProject\Primitive\StringUtil;
+use tercom\dao\exceptions\DAOException;
+use tercom\entities\Login;
 
 /**
+ * DAO para Acesso
+ *
+ * Classe responsável pela comunicação completa do sistema para com o banco de dados.
+ * Sua responsabilidade é gerenciar os dados referentes aos acessos, incluindo todas operações.
+ * Estas operações consiste em: adicionar, atualizar e gerar tokens únicos, <b>acessos não pode ser excluídos</b>.
+ *
+ * Um acesso deve possuir um token gerado pelo sistema, endereço de IP, navegador
+ * (no caso dos mobiles é o tipo de sistema operacional e versão) e um horário de expiração.
+ *
  * @see GenericDAO
+ * @see GenericLogin
+ *
  * @author Andrew
  */
 class LoginDAO extends GenericDAO
 {
 	/**
-	 * @var array
+	 * @var array nome das colunas da tabela de acessos.
 	 */
 	public const ALL_COLUMNS = ['id', 'token', 'logout', 'ipAddress', 'browser', 'expiration', 'register'];
 
 	/**
-	 *
-	 * @param Login $login
-	 * @param bool $validateID
-	 * @throws DAOException
+	 * Procedimento interno para validação dos dados de um acesso ao inserir e/ou atualizar.
+	 * Acessos não podem ter token, endereço de IP, navegador e horário de expiração não informados.
+	 * @param Login $login objeto do tipo acesso à ser validado.
+	 * @param bool $validateId true para validar o código de identificação único ou false caso contrário.
+	 * @throws DAOException caso algum dos dados do acesso não estejam de acordo.
 	 */
-	private function validate(Login $login, bool $validateID)
+	private function validate(Login $login, bool $validateId)
 	{
-		if ($validateID) {
+		// FIXME trocar DAOException para LoginException
+
+		// PRIMARY KEY
+		if ($validateId) {
 			if ($login->getId() === 0)
 				throw new DAOException('login não identificado');
 		} else {
@@ -32,6 +48,7 @@ class LoginDAO extends GenericDAO
 				throw new DAOException('login já identificado');
 		}
 
+		// NOT NULL
 		if (StringUtil::isEmpty($login->getToken())) throw new DAOException('token não informado');
 		if (StringUtil::isEmpty($login->getIpAddress())) throw new DAOException('endereço de IP não informado');
 		if (StringUtil::isEmpty($login->getBrowser())) throw new DAOException('navegador não informado');
@@ -39,9 +56,9 @@ class LoginDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param Login $login
-	 * @return bool
+	 * Insere um novo acesso no banco de dados e atualiza o mesmo com o identificador gerado.
+	 * @param Login $login objeto do tipo acesso à adicionar.
+	 * @return bool true se conseguir adicionar ou false caso contrário.
 	 */
 	public function insert(Login $login): bool
 	{
@@ -66,9 +83,9 @@ class LoginDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param Login $login
-	 * @return bool
+	 * Atualiza os dados de um acesso já existente no banco de dados.
+	 * @param Login $login objeto do tipo acesso à atualizar.
+	 * @return bool true se for atualizado ou false caso contrário.
 	 */
 	public function update(Login $login): bool
 	{
@@ -90,10 +107,13 @@ class LoginDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param int $idRelationship
-	 * @param string $ipAddress
-	 * @return string
+	 * Gera um novo token de acesso único com base nos parâmetros informados.
+	 * Tenta gerar repetidamente um token até que este seja único.
+	 * Tokens gerados não estão reservados, portanto deve ser usado o mais rápido possível após ser gerado.
+	 * @param int $idRelationship código de identificação único da relação com o acesso,
+	 * isso vai depender do tipo de acesso que está sendo registrado.
+	 * @param string $ipAddress endereço de IP usado para realizar o acesso.
+	 * @return string aquisição da string contendo o valor único do token.
 	 */
 	public function generateToken(int $idRelationship, string $ipAddress): string
 	{
@@ -111,9 +131,11 @@ class LoginDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param string $token
-	 * @return bool
+	 * Verifica se um determinado token de acesso está disponível para um acesso.
+	 * @param string $token token de acesso à verificar.
+	 * @param int $idLogin código de identificação do acesso à desconsiderar
+	 * ou zero caso seja um novo acesso.
+	 * @return bool true se estiver disponível ou false caso contrário.
 	 */
 	public function existToken(string $token, int $idLogin = 0): bool
 	{
@@ -125,11 +147,7 @@ class LoginDAO extends GenericDAO
 		$query->setString(1, $token);
 		$query->setInteger(2, $idLogin);
 
-		$result = $query->execute();
-		$entry = $result->next();
-		$result->free();
-
-		return intval($entry['qty']) > 0;
+		return $this->parseQueryExist($query);
 	}
 }
 

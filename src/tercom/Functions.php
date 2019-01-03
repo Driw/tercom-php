@@ -5,6 +5,7 @@ namespace tercom;
 use DateTime;
 use dProject\Primitive\AdvancedObject;
 use dProject\Primitive\StringUtil;
+use tercom\entities\Address;
 
 class Functions
 {
@@ -16,6 +17,10 @@ class Functions
 	 * @var string padronização de formato para CNPJ.
 	 */
 	public const PATTERN_CPF = '/[0-9]{3}\.?[0-9]{3}\.?[0-9]{3}\-?[0-9]{2}/';
+	/**
+	 * @var string padronização de formato para CEP.
+	 */
+	public const PATTERN_CEP = '/[0-9]{5}\-?[0-9]{3}/';
 
 	/**
 	 * Exibe um alerta em javascript visível apenas como mensagem.
@@ -269,7 +274,7 @@ class Functions
 
 	/**
 	 * Procedimento para validar um número de CPF das pessoas no sistema.
-	 * @param string $cpf cadastro de pessoa física.
+	 * @param string $cep cadastro de pessoa física.
 	 * @return bool true se for válido ou false caso contrário.
 	 * @link https://gist.github.com/guisehn/3276015
 	 */
@@ -300,6 +305,25 @@ class Functions
 		$resto = $soma % 11;
 
 		return $cpf{10} == ($resto < 2 ? 0 : 11 - $resto);
+	}
+
+	/**
+	 * Valida o formato numérico de um CEP.
+	 * @param string $cep número do CEP.
+	 * @return bool true se válido ou false caso contrário.
+	 */
+	public static function validateCEP(string &$cep):bool
+	{
+		if (!preg_match(self::PATTERN_CEP, $cep))
+			return false;
+
+		$cep = preg_replace('/[^0-9]/', '', (string) $cep);
+
+		// Valida tamanho
+		if (strlen($cep) !== Address::CEP_LEN)
+			return false;
+
+		return true;
 	}
 
 	/**

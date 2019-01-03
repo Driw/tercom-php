@@ -8,6 +8,7 @@ use tercom\Functions;
 use tercom\entities\TercomEmployee;
 use tercom\entities\TercomProfile;
 use tercom\entities\lists\TercomEmployees;
+use tercom\dao\exceptions\DAOException;
 
 /**
  * @see GenericDAO

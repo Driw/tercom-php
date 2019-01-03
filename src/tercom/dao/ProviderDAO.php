@@ -166,17 +166,17 @@ class ProviderDAO extends GenericDAO
 
 	/**
 	 * Selecione os dados de um fornecedor através do seu código de identificação único.
-	 * @param int $providerID código de identificação único do fornecedor.
+	 * @param int $idProvider código de identificação único do fornecedor.
 	 * @return Provider|NULL fornecedor com os dados carregados ou NULL se não encontrado.
 	 */
-	public function select(int $providerID): ?Provider
+	public function select(int $idProvider): ?Provider
 	{
 		$sqlSelect = $this->newSelect();
 		$sql = "$sqlSelect
 				WHERE id = ?";
 
 		$query = $this->createQuery($sql);
-		$query->setInteger(1, $providerID);
+		$query->setInteger(1, $idProvider);
 
 		$result = $query->execute();
 
@@ -314,7 +314,7 @@ class ProviderDAO extends GenericDAO
 	 * @param string $cnpj número do cadastro nacional de pessoa jurídica.
 	 * @param int $idProvider código de identificação do fornecedor à desconsiderar
 	 * ou zero caso seja um novo fornecedor.
-	 * @return bool true se estiver disponível ou false caso contrário.
+	 * @return bool true se existir ou false caso contrário.
 	 */
 	public function existCnpj(string $cnpj, int $idProvider): bool
 	{
@@ -340,7 +340,7 @@ class ProviderDAO extends GenericDAO
 	}
 
 	/**
-	 * Procedimento inerno para analisar o resultado de uma consulta e criar os objetos de fornecedor.
+	 * Procedimento interno para analisar o resultado de uma consulta e criar os objetos de fornecedor.
 	 * @param Result $result referência do resultado da consulta obtido.
 	 * @return Providers aquisição da lista de fornecedores a partir da consulta.
 	 */

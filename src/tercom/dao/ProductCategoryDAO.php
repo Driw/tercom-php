@@ -8,10 +8,35 @@ use tercom\entities\lists\ProductCategories;
 use tercom\exceptions\ProductCategoryException;
 use dProject\MySQL\Query;
 
+/**
+ * DAO para Categoria de Produto
+ *
+ * Classe responsável pela comunicação completa do sistema para com o banco de dados.
+ * Sua responsabilidade é gerenciar os dados referentes as categorias de produto, incluindo todas operações.
+ * Estas operações consiste em: adicionar, atualizar, selecionar e excluir <b>se não referenciados</b>.
+ *
+ * Categoria de produto obrigatoriamente precisa ter o nome e o tipo que determina sua hierarquia.
+ *
+ * @see GenericDAO
+ * @see ProductCategory
+ * @see ProductCategories
+ *
+ * @author Andrew
+ */
 class ProductCategoryDAO extends GenericDAO
 {
+	/**
+	 * @var array nome das colunas da tabela de categorias de produto.
+	 */
 	public const ALL_COLUMNS = ['id', 'name'];
 
+	/**
+	 * Procedimento interno para validação dos dados de uma categoria de produto ao inserir e/ou atualizar.
+	 * Categorias de produto não podem ter nome e tipo não informados.
+	 * @param ProductCategory $productCategory objeto do tipo categoria de produto à ser validado.
+	 * @param bool $validateId true para validar o código de identificação único ou false caso contrário.
+	 * @throws ProductCategoryException caso algum dos dados da categoria de produto não estejam de acordo.
+	 */
 	private function validate(ProductCategory $productCategory, bool $validateId)
 	{
 		// PRIMARY KEY
@@ -34,6 +59,11 @@ class ProductCategoryDAO extends GenericDAO
 		if (!$this->existType($productCategory->getType())) throw ProductCategoryException::newTypeInvalid();
 	}
 
+	/**
+	 * Insere uma nova categoria de produto no banco de dados e atualiza o mesmo com o identificador gerado.
+	 * @param ProductCategory $productCategory objeto do tipo categoria de produto à adicionar.
+	 * @return bool true se conseguir adicionar ou false caso contrário.
+	 */
 	public function insert(ProductCategory $productCategory): bool
 	{
 		$this->validate($productCategory, false);
@@ -50,6 +80,12 @@ class ProductCategoryDAO extends GenericDAO
 		return $productCategory->getId() !== 0;
 	}
 
+	/**
+	 * Substitui uma relação entre categorias de produto por uma nova conforme os parâmetros:
+	 * @param ProductCategory $productCategory objeto do tipo categoria de produto à ser relacionada.
+	 * @param ProductCategory $productCategoryParent objeto do tipo categoria de produto para relacionamento.
+	 * @return bool true se o conseguir substituir ou false caso contrário.
+	 */
 	public function replaceRelationship(ProductCategory $productCategory, ProductCategory $productCategoryParent): bool
 	{
 		if ($productCategoryParent->getId() === 0)
@@ -68,6 +104,11 @@ class ProductCategoryDAO extends GenericDAO
 		return ($query->execute())->isSuccessful();
 	}
 
+	/**
+	 * Aualiza uma categoria de produto já existente no banco de dados.
+	 * @param ProductCategory $productCategory objeto do tipo categoria de produto à atualizar.
+	 * @return bool true se conseguir atualizar ou false caso contrário.
+	 */
 	public function update(ProductCategory $productCategory): bool
 	{
 		$sql = "UPDATE product_categories
@@ -83,6 +124,11 @@ class ProductCategoryDAO extends GenericDAO
 		return ($query->execute())->isSuccessful();
 	}
 
+	/**
+	 * Exclui uma categoria de produto já existente no banco de dados.
+	 * @param ProductCategory $productCategory objeto do tipo categoria de produto à excluir.
+	 * @return bool true se conseguir excluir ou false caso contrário.
+	 */
 	public function delete(ProductCategory $productCategory): bool
 	{
 		if ($this->existOnRelationship($productCategory->getId()))
@@ -100,6 +146,12 @@ class ProductCategoryDAO extends GenericDAO
 		return ($query->execute())->getAffectedRows() === 1;
 	}
 
+	/**
+	 * Exclui uma relação entre categorias de produto já existentes no banco de dados.
+	 * @param ProductCategory $productCategory objeto do tipo categoria de produto à excluir.
+	 * @param int $idProductCategoryType código do tipo de categoria de produto à ser excluido.
+	 * @return bool true se conseguir excluir ou false caso contrário.
+	 */
 	public function deleteRelationship(ProductCategory $productCategory, int $idProductCategoryType): bool
 	{
 		$sql = "DELETE FROM product_category_relationships
@@ -112,6 +164,10 @@ class ProductCategoryDAO extends GenericDAO
 		return ($query->execute())->getAffectedRows() > 0;
 	}
 
+	/**
+	 * Procedimento interno para centralizar e agilizar a manutenção de queries.
+	 * @return string aquisição da string de consulta simples para SELECT.
+	 */
 	private function newSelect(): string
 	{
 		$productCategoriesColumns = $this->buildQuery(self::ALL_COLUMNS, 'product_categories');
@@ -122,6 +178,12 @@ class ProductCategoryDAO extends GenericDAO
 				LEFT JOIN product_category_types ON product_category_types.id = product_category_relationships.idCategoryType";
 	}
 
+	/**
+	 * Selecione os dados de uma categoria de produto através do seu código de identificação único e tipo de categoria.
+	 * @param int $idProductCategory código de identificação único da categoria de produto à selecionar.
+	 * @param int $idProductCategoryType código de identificação único do tipo de categoria a considerar.
+	 * @return ProductCategory|NULL categoria de produto com os dados carregados ou NULL se não encontrado.
+	 */
 	public function select(int $idProductCategory, int $idProductCategoryType = ProductCategory::CATEGORY_NONE): ?ProductCategory
 	{
 		// Quando é família não vai possuir nenhuma relação de categoria parent, logo o tipo será nulo
@@ -143,6 +205,11 @@ class ProductCategoryDAO extends GenericDAO
 		return $this->parseProductCategory($result);
 	}
 
+	/**
+	 * Seleciona os dados de uma categoria de produto através do seu nome.
+	 * @param string $name nome da categoria de produto à ser selecionada.
+	 * @return ProductCategory|NULL categoria de produto com os dados carregados ou NULL se não encontrado.
+	 */
 	public function selectByName(string $name): ?ProductCategory
 	{
 		$sql = "SELECT id, name
@@ -157,6 +224,10 @@ class ProductCategoryDAO extends GenericDAO
 		return $this->parseProductCategory($result);
 	}
 
+	/**
+	 * Seleciona os dados de todas as categorias de produto registradas no banco de dados sem ordenação.
+	 * @return ProductCategories aquisição da lista de categorias de produto atualmente registrados.
+	 */
 	public function selectAll(): ProductCategories
 	{
 		$sql = "SELECT id, name
@@ -168,7 +239,13 @@ class ProductCategoryDAO extends GenericDAO
 		return $this->parseProductCategories($result);
 	}
 
-	public function selectByCategory(ProductCategory $productCategory, int $idProductCategory): ProductCategories
+	/**
+	 * Seleciona os dados de todas as categorias de produto relacionadas a uma outra categoria de produto.
+	 * @param ProductCategory $productCategory objeto do tipo categoria de produto à ser filtrada.
+	 * @param int $idProductCategory código de identificação do tipo de categoria à ser filtrada.
+	 * @return ProductCategories aquisição da lista de categorias de produto conforme filtros.
+	 */
+	public function selectByCategory(ProductCategory $productCategory, int $idProductCategoryType): ProductCategories
 	{
 		$sqlSelect = $this->newSelect();
 
@@ -188,13 +265,19 @@ class ProductCategoryDAO extends GenericDAO
 
 		$query = $this->createQuery($sql);
 		$query->setInteger(1, $productCategory->getId());
-		$query->setInteger(2, $idProductCategory);
+		$query->setInteger(2, $idProductCategoryType);
 
 		$result = $query->execute();
 
 		return $this->parseProductCategories($result);
 	}
 
+	/**
+	 * Seleciona os dados de todas as categorias de produto por nome parcial e/ou completo.
+	 * @param string $name nome parcial e/ou completo da categoria de produto.
+	 * @param int $idProductCategory código de identificação do tipo de categoria à ser filtrada.
+	 * @return ProductCategories aquisição da lista de categorias de produto conforme filtros.
+	 */
 	public function selectLikeName(string $name, int $idProductCategoryType = 0): ProductCategories
 	{
 		$sqlSelect = $this->newSelect();
@@ -222,6 +305,11 @@ class ProductCategoryDAO extends GenericDAO
 		return $this->selectQuery($query);
 	}
 
+	/**
+	 * Procedimento interno usado para concluir a execução de queries que retornem uma lista de categorias de produto.
+	 * @param Query $query objeto do tipo consulta à ser executada e analisada os resultados.
+	 * @return ProductCategories aquisição da lista de categorias de produto consultadas.
+	 */
 	private function selectQuery(Query $query): ProductCategories
 	{
 		$result = $query->execute();
@@ -229,6 +317,11 @@ class ProductCategoryDAO extends GenericDAO
 		return $this->parseProductCategories($result);
 	}
 
+	/**
+	 * Verifica se um determinado código de identificação de fornecedor existe.
+	 * @param int $idProductCategory código de identificação único do fornecedor.
+	 * @return bool true se existir ou false caso contrário.
+	 */
 	public function exist(int $idProductCategory): bool
 	{
 		$sql = "SELECT COUNT(*) AS qtd
@@ -241,6 +334,13 @@ class ProductCategoryDAO extends GenericDAO
 		return $this->parseQueryExist($query);
 	}
 
+	/**
+	 * Verifica se um determinado nome para uma categoria de produto existe.
+	 * @param string $name nome da categoria de produto à verificar.
+	 * @param int $idProductCategory código de identificação da categoria de produto à desconsiderar
+	 * ou zero caso seja uma nova categoria de produto.
+	 * @return bool true se existir ou false caso contrário.
+	 */
 	public function existName(string $name, int $idProductCategory = 0): bool
 	{
 		$sql = "SELECT COUNT(*) qty
@@ -254,6 +354,12 @@ class ProductCategoryDAO extends GenericDAO
 		return $this->parseQueryExist($query);
 	}
 
+	/**
+	 * Verifica se uma categoria de produto existe em um determinado tipo de relacionamento entre categorias.
+	 * @param int $idProductCategory código de identificação da categoria de produto à verificar.
+	 * @param int $idProductCategoryType código de identificação do tipo de categoria de produto à verificar.
+	 * @return bool true se existir ou false caso contrário.
+	 */
 	public function existRelationship(int $idProductCategory, int $idProductCategoryType): bool
 	{
 		$sql = "SELECT COUNT(*) qty
@@ -267,6 +373,11 @@ class ProductCategoryDAO extends GenericDAO
 		return $this->parseQueryExist($query);
 	}
 
+	/**
+	 * Verifica se um determinado código de identificação de tipo de categoria de produto existe.
+	 * @param int $idProductCategoryType código de identificação de tipo de categoria de produto à veirficar.
+	 * @return bool true se existir ou false caso contrário.
+	 */
 	public function existType(int $idProductCategoryType): bool
 	{
 		$sql = "SELECT COUNT(*) qty
@@ -279,6 +390,11 @@ class ProductCategoryDAO extends GenericDAO
 		return $this->parseQueryExist($query);
 	}
 
+	/**
+	 * Verifica se uma categoria de produto possui algum relacionamento entre categorias de produto.
+	 * @param int $idProductCategory código de identificação único da categoria de produto à verificar.
+	 * @return bool true se existir ou false caso contrário.
+	 */
 	public function existOnRelationship(int $idProductCategory): bool
 	{
 		$sql = "SELECT COUNT(*) qty
@@ -292,6 +408,11 @@ class ProductCategoryDAO extends GenericDAO
 		return $this->parseQueryExist($query);
 	}
 
+	/**
+	 * Verifica se uma categoria de produto existe como referência em algum produto.
+	 * @param int $idProductCategory código de identificação único da categoria de produto à verificar.
+	 * @return bool true se existir ou false caso contrário.
+	 */
 	public function existOnProduct(int $idProductCategory): bool
 	{
 		$sql = "SELECT COUNT(*) qty
@@ -304,11 +425,21 @@ class ProductCategoryDAO extends GenericDAO
 		return $this->parseQueryExist($query);
 	}
 
+	/**
+	 * Procedimento interno para analisar o resultado de uma consulta e criar um objeto de categoria de produto.
+	 * @param Result $result referência do resultado da consulta obtido.
+	 * @return ProductCategory|NULL objeto do tipo categoria de produto com dados carregados ou NULL se não houver resultado.
+	 */
 	private function parseProductCategory(Result $result): ?ProductCategory
 	{
 		return ($entry = $this->parseSingleResult($result)) === null ? null : $this->newProductCategory($entry);
 	}
 
+	/**
+	 * Procedimento interno para analisar o resultado de uma consulta e criar os objetos de categoria de produto.
+	 * @param Result $result referência do resultado da consulta obtido.
+	 * @return ProductCategories aquisição da lista de categorias de produto a partir da consulta.
+	 */
 	private function parseProductCategories(Result $result): ProductCategories
 	{
 		$productCategories = new ProductCategories();
@@ -322,6 +453,11 @@ class ProductCategoryDAO extends GenericDAO
 		return $productCategories;
 	}
 
+	/**
+	 * Procedimento interno para criar um objeto do tipo categoria de produto e carregar os dados de um registro.
+	 * @param array $entry vetor contendo os dados do registro obtido de uma consulta.
+	 * @return ProductCategory aquisição de um objeto do tipo categoria de produto com dados carregados.
+	 */
 	private function newProductCategory(array $entry): ProductCategory
 	{
 		if (!isset($entry['type']) || $entry['type'] === null)

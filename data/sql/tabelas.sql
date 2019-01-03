@@ -260,7 +260,7 @@ CREATE TABLE IF NOT EXISTS customer_profile_permissions
 	idPermission INT NOT NULL,
 
 	CONSTRAINT customer_profile_per_pk PRIMARY KEY (idCustomerProfile, idPermission),
-	CONSTRAINT customer_profile_per_customer_fk FOREIGN KEY (idCustomerProfile) REFERENCES customer_profiles(id),
+	CONSTRAINT customer_profile_per_customer_fk FOREIGN KEY (idCustomerProfile) REFERENCES customer_profiles(id) ON DELETE CASCADE,
 	CONSTRAINT customer_profile_per_permission_fk FOREIGN KEY (idPermission) REFERENCES permissions(id)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_general_ci;
 
@@ -320,7 +320,7 @@ CREATE TABLE IF NOT EXISTS tercom_profile_permissions
 	idPermission INT NOT NULL,
 
 	CONSTRAINT tercom_profile_per_pk PRIMARY KEY (idTercomProfile, idPermission),
-	CONSTRAINT tercom_profile_per_tercom_fk FOREIGN KEY (idTercomProfile) REFERENCES tercom_profiles(id),
+	CONSTRAINT tercom_profile_per_tercom_fk FOREIGN KEY (idTercomProfile) REFERENCES tercom_profiles(id) ON DELETE CASCADE,
 	CONSTRAINT tercom_profile_per_permission_fk FOREIGN KEY (idPermission) REFERENCES permissions(id)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_general_ci;
 
