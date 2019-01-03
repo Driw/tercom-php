@@ -323,3 +323,53 @@ CREATE TABLE IF NOT EXISTS tercom_profile_permissions
 	CONSTRAINT tercom_profile_per_tercom_fk FOREIGN KEY (idTercomProfile) REFERENCES tercom_profiles(id) ON DELETE CASCADE,
 	CONSTRAINT tercom_profile_per_permission_fk FOREIGN KEY (idPermission) REFERENCES permissions(id)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_general_ci;
+
+CREATE TABLE IF NOT EXISTS logins
+(
+	id INT AUTO_INCREMENT,
+	token VARCHAR(32) NOT NULL,
+	logout TINYINT(1) NOT NULL DEFAULT 0,
+	ipAddress VARCHAR(15) NOT NULL,
+	browser VARCHAR(128) NOT NULL,
+	expiration DATETIME NOT NULL,
+	register DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+	CONSTRAINT login_token_uq UNIQUE KEY (token),
+	CONSTRAINT login_pk PRIMARY KEY (id)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_general_ci;
+
+CREATE TABLE IF NOT EXISTS logins_customer
+(
+	idLogin INT AUTO_INCREMENT,
+	idCustomerEmployee INT NOT NULL,
+
+	CONSTRAINT login_customer_pk PRIMARY KEY (idLogin),
+	CONSTRAINT login_customer_login_pk FOREIGN KEY (idLogin) REFERENCES logins(id),
+	CONSTRAINT login_customer_employee_fk FOREIGN KEY (idCustomerEmployee) REFERENCES customer_employees(id)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_general_ci;
+
+CREATE TABLE IF NOT EXISTS logins_tercom
+(
+	idLogin INT AUTO_INCREMENT,
+	idTercomEmployee INT NOT NULL,
+
+	CONSTRAINT login_tercom_pk PRIMARY KEY (idLogin),
+	CONSTRAINT login_tercom_login_pk FOREIGN KEY (idLogin) REFERENCES logins(id),
+	CONSTRAINT login_tercom_employee_fk FOREIGN KEY (idTercomEmployee) REFERENCES tercom_employees(id)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_general_ci;
+
+CREATE TABLE IF NOT EXISTS order_requests
+(
+	id INT NOT NULL AUTO_INCREMENT,
+	idCustomerEmployee INT NOT NULL,
+	idTercomEmployee INT NULL DEFAULT NULL,
+	status TINYINT(1) NOT NULL DEFAULT 0,
+    statusMessage VARCHAR(64) NULL DEFAULT NULL,
+	budget DECIMAL(10,2),
+	expiration DATETIME NULL DEFAULT NULL,
+	register DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+	CONSTRAINT order_request_pk PRIMARY KEY (id),
+	CONSTRAINT order_request_cutomer_employee_fk FOREIGN KEY (idCustomerEmployee) REFERENCES customer_employees(id),
+	CONSTRAINT order_request_tercom_employee_fk FOREIGN KEY (idTercomEmployee) REFERENCES tercom_employees(id)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_general_ci;

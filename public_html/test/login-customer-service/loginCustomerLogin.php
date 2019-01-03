@@ -11,8 +11,9 @@ include '../include.php';
 			header('Content-type: text/html');
 ?>
 <form method='get'>
-	<p>Endereço de E-mail: <input type='text' name='email'></p>
-	<p>Senha: <input type='text' name='password'></p>
+	<p>Endereço de E-mail: <input type='text' name='email' required></p>
+	<p>Senha: <input type='text' name='password' required></p>
+	<p>usar Sessão (Navegador): <input type='checkbox' name='useSession' value='1' checked></p>
 	<button type='submit'>Continuar</button>
 </form>
 <?php

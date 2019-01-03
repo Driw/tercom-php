@@ -4,6 +4,7 @@ namespace tercom\api\site;
 
 use dProject\MySQL\MySQL;
 use dProject\restful\ApiConnection;
+use dProject\restful\ApiContent;
 use dProject\restful\ApiResult;
 use dProject\restful\ApiServiceInterface;
 use tercom\core\System;
@@ -31,6 +32,10 @@ use tercom\control\ServicePriceControl;
 use tercom\control\TercomEmployeeControl;
 use tercom\control\TercomPermissionControl;
 use tercom\control\TercomProfileControl;
+use tercom\control\OrderRequestControl;
+use tercom\api\exceptions\LoginException;
+use tercom\entities\LoginCustomer;
+use tercom\entities\LoginTercom;
 
 /**
  * @see ApiServiceInterface
@@ -135,6 +140,10 @@ class DefaultSiteService extends ApiServiceInterface
 	 * @var LoginCustomerControl
 	 */
 	private $loginCustomerControl;
+	/**
+	 * @var OrderRequestControl
+	 */
+	private $orderRequestControl;
 
 	/**
 	 * Cria uma nova instância de um serviço para gerenciamento de stores dos produtos no sistema.
@@ -146,6 +155,17 @@ class DefaultSiteService extends ApiServiceInterface
 	public function __construct(ApiConnection $apiConnection, string $apiname, ApiServiceInterface $parent)
 	{
 		parent::__construct($apiConnection, $apiname, $parent);
+	}
+
+	/**
+	 *
+	 * @param mixed $int
+	 * @param int $default
+	 * @return int
+	 */
+	protected function parseInt($int, int $default): int
+	{
+		return is_int($int) ? $int : $default;
 	}
 
 	/**
@@ -418,6 +438,82 @@ class DefaultSiteService extends ApiServiceInterface
 		return $this->loginCustomerControl === null ?
 			($this->loginCustomerControl = new LoginCustomerControl()) :
 			$this->loginCustomerControl;
+	}
+
+	/**
+	 * @return OrderRequestControl
+	 */
+	protected function getOrderRequestControl(): OrderRequestControl
+	{
+		return $this->orderRequestControl === null ?
+			($this->orderRequestControl = new OrderRequestControl()) :
+			$this->orderRequestControl;
+	}
+
+	/**
+	 * @param ApiContent $content
+	 * @return LoginCustomer
+	 */
+	protected function getCustomerEmployeeLogin(ApiContent $content): LoginCustomer
+	{
+		$post = $content->getPost();
+
+		if ($post->isSetted('idLogin') && $post->isSetted('token'))
+		{
+			$idCustomerEmployee = $post->getInt('idCustomerEmployee');
+			$idLogin = $post->getInt('idLogin');
+			$token = $post->getString('token');
+		}
+
+		else
+		{
+			$session = $content->getSession();
+			$session->start();
+
+			if (!$post->isSetted('idLogin') || !$post->isSetted('token'))
+				throw LoginException::newNotLogged();
+
+			$idCustomerEmployee = $session->getInt('idCustomerEmployee');
+			$idLogin = $session->getInt('idLogin');
+			$token = $session->getString('token');
+		}
+
+		$loginCustomerEmployee = $this->getLoginCustomerControl()->get($idLogin, $idCustomerEmployee, $token);
+
+		return $loginCustomerEmployee;
+	}
+
+	/**
+	 * @param ApiContent $content
+	 * @return LoginTercom
+	 */
+	protected function getTercomEmployeeLogin(ApiContent $content): LoginTercom
+	{
+		$post = $content->getPost();
+
+		if ($post->isSetted('idLogin') && $post->isSetted('token'))
+		{
+			$idTercomEmployee = $post->getInt('idTercomEmployee');
+			$idLogin = $post->getInt('idLogin');
+			$token = $post->getString('token');
+		}
+
+		else
+		{
+			$session = $content->getSession();
+			$session->start();
+
+			if (!$post->isSetted('idLogin') || !$post->isSetted('token'))
+				throw LoginException::newNotLogged();
+
+			$idTercomEmployee = $session->getInt('idTercomEmployee');
+			$idLogin = $session->getInt('idLogin');
+			$token = $session->getString('token');
+		}
+
+		$loginTercomEmployee = $this->getLoginTercomControl()->get($idLogin, $idTercomEmployee, $token);
+
+		return $loginTercomEmployee;
 	}
 }
 

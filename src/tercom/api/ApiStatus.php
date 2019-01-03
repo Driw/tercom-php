@@ -10,6 +10,7 @@ class ApiStatus
 	public const PARSE_PARAMETER = 3;
 	public const FILTER = 4;
 	public const RELATIONSHIP = 5;
+	public const NOT_LOGGED = 6;
 
 	public const PROVIDER_IDENTIFIED = 101;
 	public const PROVIDER_NOT_IDENTIFIED = 102;
@@ -164,5 +165,15 @@ class ApiStatus
 	public const CUSTOMER_EMAIL_EMPTY = 711;
 	public const CUSTOMER_UNAVAIABLE_CNPJ = 712;
 	public const CUSTOMER_UNAVAIABLE_COMPANY_NAME = 713;
+
+	public const ORDER_REQUEST_IDENTIFIED = 851;
+	public const ORDER_REQUEST_NOT_IDENTIFIED = 852;
+	public const ORDER_REQUEST_INSERTED = 853;
+	public const ORDER_REQUEST_UPDATED = 854;
+	public const ORDER_REQUEST_SELECTED = 855;
+	public const ORDER_REQUEST_CUSTOMER_EMPLOYEE_EMPTY = 856;
+	public const ORDER_REQUEST_CUSTOMER_EMPLOYEE = 857;
+	public const ORDER_REQUEST_TERCOM_EMPLOYEE = 858;
+	public const ORDER_REQUEST_CUSTOMER_INVALID = 859;
 }
 

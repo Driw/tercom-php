@@ -2,6 +2,7 @@
 
 namespace tercom;
 
+use dProject\Primitive\Session;
 use tercom\entities\Phone;
 
 IncludeThirdParty('simple_html_dom');
@@ -17,6 +18,16 @@ class GeradorDeDados
 					unset($parameters[$key]);
 		}
 
+		// Simular sessão logada
+		if (isset($parameters['idLogin']) && isset($parameters['idLogin']) && isset($parameters['idCustomerEmployee']))
+		{
+			$session = Session::getInstance();
+			$session->start();
+			$session->setString(SessionVar::LOGIN_TOKEN, $parameters['token']);
+			$session->setInt(SessionVar::LOGIN_ID, $parameters['idLogin']);
+			$session->setInt(SessionVar::LOGIN_CUSTOMER_ID, $parameters['idCustomerEmployee']);
+		}
+
 		$post = http_build_query($parameters);
 		$endpoint = sprintf('http://%s/api/site', $_SERVER['SERVER_NAME']);
 		$url = "$endpoint/$webservice";
@@ -28,7 +39,7 @@ class GeradorDeDados
 		curl_setopt($curl, CURLOPT_POSTFIELDS, $post);
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($curl, CURLOPT_FRESH_CONNECT, true);
-		curl_setopt($curl, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);
+		curl_setopt($curl, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);;
 
 		$response = curl_exec($curl);
 		$error = curl_error($curl);
@@ -36,7 +47,13 @@ class GeradorDeDados
 		curl_close($curl);
 
 		if (!empty($error))
-			return "curl_error: $error";
+			return [
+				'endpoint' => $endpoint,
+				'websercice' => $webservice,
+				'fullUrl' => $url,
+				'post' => $parameters,
+				'curl_error' => $error,
+			];
 
 		$jsonResponse = json_decode($response, true);
 

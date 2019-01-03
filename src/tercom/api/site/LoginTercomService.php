@@ -3,6 +3,7 @@
 namespace tercom\api\site;
 
 use dProject\restful\ApiContent;
+use tercom\SessionVar;
 use tercom\api\site\results\ApiResultObject;
 
 /**
@@ -25,6 +26,15 @@ class LoginTercomService extends DefaultSiteService
 
 		$loginTercom = $this->getLoginTercomControl()->newLoginTercom($email, $password, $userAgent);
 		$this->getLoginTercomControl()->add($loginTercom);
+
+		if ($post->isSetted('useSession'))
+		{
+			$session = $content->getSession();
+			$session->start();
+			$session->setInt(SessionVar::LOGIN_ID, $loginTercom->getTercomEmployeeId());
+			$session->setInt(SessionVar::LOGIN_CUSTOMER_ID, $loginTercom->getId());
+			$session->setString(SessionVar::LOGIN_TOKEN, $loginTercom->getToken());
+		}
 
 		$result = new ApiResultObject();
 		$result->setObject($loginTercom);
