@@ -11,25 +11,41 @@ use tercom\entities\CustomerProfile;
 use tercom\entities\lists\CustomerProfiles;
 
 /**
+ * DAO para Perfil de Cliente
+ *
+ * Classe responsável pela comunicação completa do sistema para com o banco de dados.
+ * Sua responsabilidade é gerenciar os dados referentes aos perfis de cliente, incluindo todas operações.
+ * Estas operações consiste em: adicionar, atualizar e selecionar e excluir (se não houver referências).
+ *
+ * Perfil do cliente deve estar vinculado a um cliente, possuir um nome e um nível de assinatura.
+ * Nível de assinatura delimita o valor máximo de permissões que podem ser atribuídas ao perfil.
+ *
+ * @see GenericDAO
  * @see CustomerProfile
+ * @see CustomerProfiles
+ *
  * @author Andrew
  */
 class CustomerProfileDAO extends GenericDAO
 {
 	/**
-	 * @var array
+	 * @var array nome das colunas da tabela de perfil de cliente.
 	 */
 	public const ALL_COLUMNS = ['id', 'idCustomer', 'name', 'assignmentLevel'];
 
 	/**
-	 *
-	 * @param CustomerProfile $customerProfile
-	 * @param bool $validateID
-	 * @throws DAOException
+	 * Procedimento interno para validação dos dados de um perfil de cliente ao inserir e/ou atualizar.
+	 * Perfil de cliente deve possuir obrigatoriamnete um cliente vinculado, nome e nível de assinatura.
+	 * @param CustomerProfile $customerProfile objeto do tipo perfil de cliente à ser validado.
+	 * @param bool $validateId true para validar o código de identificação único ou false caso contrário.
+	 * @throws DAOException caso algum dos dados do perfil de cliente não estejam de acordo.
 	 */
-	private function validate(CustomerProfile $customerProfile, bool $validateID)
+	private function validate(CustomerProfile $customerProfile, bool $validateId)
 	{
-		if ($validateID) {
+		// FIXME trocar DAOException para CustomerProfileException
+
+		// PRIMARY KEY
+		if ($validateId) {
 			if ($customerProfile->getId() === 0)
 				throw new DAOException('perfil não identificado');
 		} else {
@@ -37,15 +53,19 @@ class CustomerProfileDAO extends GenericDAO
 				throw new DAOException('perfil já identificado');
 		}
 
-		if ($customerProfile->getCustomerId() === 0) throw new DAOException('cliente não identificado');
+		// NOT NULL
 		if (StringUtil::isEmpty($customerProfile->getName())) throw new DAOException('nome não definido');
 		if ($customerProfile->getAssignmentLevel() === 0) throw new DAOException('nível de assinatura não definido');
+		if ($customerProfile->getCustomerId() === 0) throw new DAOException('cliente não identificado');
+
+		// FOREIGN KEY
+		if (!$this->existCustomer($customerProfile->getCustomerId())) throw new DAOException('cliente não encontrado');
 	}
 
 	/**
-	 *
-	 * @param CustomerProfile $customerProfile
-	 * @return bool
+	 * Insere um novo perfil de cliente no banco de dados e atualiza o mesmo com o identificador gerado.
+	 * @param CustomerProfile $customerProfile objeto do tipo perfil de cliente à adicionar.
+	 * @return bool true se conseguir adicionar ou false caso contrário.
 	 */
 	public function insert(CustomerProfile $customerProfile): bool
 	{
@@ -66,9 +86,9 @@ class CustomerProfileDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param CustomerProfile $customerProfile
-	 * @return bool
+	 * Atualiza os dados de um perfil de cliente já existente no banco de dados.
+	 * @param CustomerProfile $customerProfile objeto do tipo perfil de cliente à atualizar.
+	 * @return bool true se for atualizado ou false caso contrário.
 	 */
 	public function update(CustomerProfile $customerProfile): bool
 	{
@@ -88,13 +108,17 @@ class CustomerProfileDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param CustomerProfile $customerProfile
-	 * @return bool
+	 * Exclui os dados de um perfil de cliente já existente no banco de dados.
+	 * @param CustomerProfile $customerProfile objeto do tipo perfil de cliente à excluir.
+	 * @return bool true se for atualizado ou false caso contrário.
+	 * @throws DAOException se definido em um ou mais funcionários de cliente.
 	 */
 	public function delete(CustomerProfile $customerProfile): bool
 	{
 		$this->validate($customerProfile, true);
+
+		if ($this->existOnCustomerEmployees($customerProfile))
+			throw new DAOException('perfil definido em um ou mais funcionários');
 
 		$sql = "DELETE FROM customer_profiles
 				WHERE id = ?";
@@ -106,8 +130,8 @@ class CustomerProfileDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @return string
+	 * Procedimento interno para centralizar e agilizar a manutenção de queries.
+	 * @return string aquisição da string de consulta simples para SELECT.
 	 */
 	private function newBaseSelect(): string
 	{
@@ -116,9 +140,9 @@ class CustomerProfileDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param int $idCustomerProfile
-	 * @return CustomerProfile|NULL
+	 * Selecione os dados de um perfil de cliente através do seu código de identificação único.
+	 * @param int $idCustomerProfile código de identificação único do perfil de cliente.
+	 * @return CustomerProfile|NULL perfil de cliente com os dados carregados ou NULL se não encontrado.
 	 */
 	public function select(int $idCustomerProfile): ?CustomerProfile
 	{
@@ -135,9 +159,9 @@ class CustomerProfileDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param Customer $customer
-	 * @return CustomerProfiles|NULL
+	 * Seleciona os dados dos perfis de cliente através de um cliente já existente.
+	 * @param Customer $customer objeto do tipo cliente à ser filtrado.
+	 * @return CustomerProfiles lista com os dados dos perfis filtrados.
 	 */
 	public function selectByCustomer(Customer $customer): CustomerProfiles
 	{
@@ -154,10 +178,10 @@ class CustomerProfileDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param Customer $customer
-	 * @param int $assignmentLevel
-	 * @return CustomerProfiles|NULL
+	 * Seleciona os dados dos perfis de cliente através de um cliente já existente e nível de assinatura.
+	 * @param Customer $customer objeto do tipo cliente à ser filtrado.
+	 * @param int $assignmentLevel nível de assinatura máximo à ser filtrado.
+	 * @return CustomerProfiles lista com os dados dos perfis filtrados.
 	 */
 	public function selectByCustomerLevel(Customer $customer, int $assignmentLevel): CustomerProfiles
 	{
@@ -175,8 +199,8 @@ class CustomerProfileDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @return CustomerProfiles|NULL
+	 * Seleciona os dados de todos os perfis de cliente registrados no banco de dados sem ordenação.
+	 * @return CustomerProfiles aquisição da lista de perfis de cliente atualmente registrados.
 	 */
 	public function selectAll(): CustomerProfiles
 	{
@@ -189,9 +213,9 @@ class CustomerProfileDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param int $idCustomerProfile
-	 * @return bool
+	 * Verifica se um determinado código de identificação de perfil de cliente existe.
+	 * @param int $idCustomerProfile código de identificação único do perfil de cliente.
+	 * @return bool true se existir ou false caso contrário.
 	 */
 	public function exist(int $idCustomerProfile): bool
 	{
@@ -202,19 +226,16 @@ class CustomerProfileDAO extends GenericDAO
 		$query = $this->createQuery($sql);
 		$query->setInteger(1, $idCustomerProfile);
 
-		$result = $query->execute();
-		$entry = $result->next();
-		$result->free();
-
-		return intval($entry['qty']) === 1;
+		return $this->parseQueryExist($query);
 	}
 
 	/**
-	 *
-	 * @param Customer $customer
-	 * @param string $name
-	 * @param int $idCustomerProfile
-	 * @return bool
+	 * Verifica se um determinado nome de perfil já foi utilizado por um cliente.
+	 * @param Customer $customer objeto do tipo cliente a ser considerado na consulta.
+	 * @param string $name nome de perfil do qual deseja verificar a existência.
+	 * @param int $idCustomerProfile código de identificação do perfil de cliente à desconsiderar
+	 * ou zero caso seja um novo perfil de cliente.
+	 * @return bool true se estiver disponível ou false caso contrário.
 	 */
 	public function existName(Customer $customer, string $name, int $idCustomerProfile): bool
 	{
@@ -227,17 +248,47 @@ class CustomerProfileDAO extends GenericDAO
 		$query->setString(2, $name);
 		$query->setInteger(3, $idCustomerProfile);
 
-		$result = $query->execute();
-		$entry = $result->next();
-		$result->free();
-
-		return intval($entry['qty']) === 1;
+		return $this->parseQueryExist($query);
 	}
 
 	/**
-	 *
-	 * @param Result $result
-	 * @return CustomerProfile|NULL
+	 * Verifica se um determinado código de identificação de cliente existe.
+	 * @param int $idCustomer código de identificação único do cliente.
+	 * @return bool true se existir ou false caso contrário.
+	 */
+	public function existCustomer(int $idCustomer): bool
+	{
+		$sql = "SELECT COUNT(*) qty
+				FROM customers
+				WHERE idCustomer = ?";
+
+		$query = $this->createQuery($sql);
+		$query->setInteger(1, $idCustomer);
+
+		return $this->parseQueryExist($query);
+	}
+
+	/**
+	 * Verifica se um determinado perfil de cliente está em uso por um funcionário de cliente.
+	 * @param CustomerProfile $customerProfile objeto do tipo perfil de cliente à verificar.
+	 * @return bool true se estiver vinculado ou false caso contrário.
+	 */
+	public function existOnCustomerEmployees(CustomerProfile $customerProfile): bool
+	{
+		$sql = "SELECT COUNT(*) qty
+				FROM customer_employees
+				WHERE idCustomerProfile = ?";
+
+		$query = $this->createQuery($sql);
+		$query->setInteger(1, $customerProfile->getId());
+
+		return $this->parseQueryExist($query);
+	}
+
+	/**
+	 * Procedimento interno para analisar o resultado de uma consulta e criar um objeto de perfil de cliente.
+	 * @param Result $result referência do resultado da consulta obtido.
+	 * @return CustomerProfile|NULL objeto do tipo perfil de cliente com dados carregados ou NULL se não houver resultado.
 	 */
 	private function parseCustomerProfile(Result $result): ?CustomerProfile
 	{
@@ -245,9 +296,9 @@ class CustomerProfileDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param Result $result
-	 * @return CustomerProfiles
+	 * Procedimento interno para analisar o resultado de uma consulta e criar os objetos de perfil de cliente.
+	 * @param Result $result referência do resultado da consulta obtido.
+	 * @return CustomerProfiles aquisição da lista de perfis de cliente a partir da consulta.
 	 */
 	private function parseCustomerProfiles(Result $result): CustomerProfiles
 	{
@@ -263,9 +314,9 @@ class CustomerProfileDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param array $entry
-	 * @return CustomerProfile
+	 * Procedimento interno para criar um objeto do tipo perfil de cliente e carregar os dados de um registro.
+	 * @param array $entry vetor contendo os dados do registro obtido de uma consulta.
+	 * @return CustomerProfile aquisição de um objeto do tipo perfil de cliente com dados carregados.
 	 */
 	private function newCustomerProfile(array $entry): CustomerProfile
 	{

@@ -3,22 +3,53 @@
 namespace tercom\dao;
 
 use dProject\MySQL\Result;
-use tercom\entities\CustomerEmployee;
+use tercom\dao\exceptions\DAOException;
 use tercom\entities\LoginCustomer;
 
 /**
+ * DAO para Acesso Tercom
+ *
+ * Classe responsável pela comunicação completa do sistema para com o banco de dados.
+ * Sua responsabilidade é gerenciar os dados referentes aos acessos de cliente, incluindo todas operações.
+ * Estas operações consiste em: adicionar, atualizar e selecionar, <b>acessos não pode ser excluídos</b>.
+ *
+ * Um acesso de cliente possui os mesmos dados e regras de um acesso entretanto é necessário informar o funcionário de cliente.
+ *
  * @see GenericDAO
+ * @see LoginTercom
+ *
  * @author Andrew
  */
 class LoginCustomerDAO extends GenericDAO
 {
 	/**
-	 *
-	 * @param LoginCustomer $loginCustomer
-	 * @return bool
+	 * Procedimento interno para validação dos dados de um acesso de cliente ao inserir e/ou atualizar.
+	 * Acesso TERCOM devem ter seu acesso e funcionário de cliente identificados.
+	 * @param LoginCustomer $loginCustomer objeto do tipo acesso de cliente à ser validado.
+	 * @throws DAOException caso algum dos dados do acesso de cliente não estejam de acordo.
+	 */
+	private function validate(LoginCustomer $loginCustomer): void
+	{
+		// TODO trocar DAOException para LoginCustomerException
+
+		// NOT NULL
+		if ($loginCustomer->getId() === 0) throw new DAOException('acesso não identificado');
+		if ($loginCustomer->getTercomEmployeeId() === 0) throw new DAOException('funcionário não identificado');
+
+		// PRIMARY KEY
+		if (!$this->existLogin($loginCustomer->getId())) throw new DAOException('acesso desconhecido');
+		if (!$this->existCustomerEmployee($loginCustomer->getCustomerEmployeeId())) throw new DAOException('funcionário desconhecido');
+	}
+
+	/**
+	 * Insere um novo acesso de cliente no banco de dados com base num acesso já registrado.
+	 * @param LoginCustomer $loginCustomer objeto do tipo acesso de cliente à adicionar.
+	 * @return bool true se conseguir adicionar ou false caso contrário.
 	 */
 	public function insert(LoginCustomer $loginCustomer): bool
 	{
+		$this->validate($loginCustomer);
+
 		$sql = "INSERT INTO logins_customer (idLogin, idCustomerEmployee)
 				VALUES (?, ?)";
 
@@ -30,12 +61,14 @@ class LoginCustomerDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param LoginCustomer $loginCustomer
-	 * @return int
+	 * Atualiza os dados de um acesso com base num acesso de cliente existente no banco de dados.
+	 * @param LoginCustomer $loginCustomer objeto do tipo acesso de cliente à atualizar.
+	 * @return bool true se for atualizado ou false caso contrário.
 	 */
 	public function updateLogouts(LoginCustomer $loginCustomer): int
 	{
+		$this->validate($loginCustomer);
+
 		$sql = "UPDATE logins
 				INNER JOIN logins_customer ON logins_customer.idLogin = logins.id
 				SET logins.logout = ?
@@ -50,8 +83,8 @@ class LoginCustomerDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @return string
+	 * Procedimento interno para centralizar e agilizar a manutenção de queries.
+	 * @return string aquisição da string de consulta simples para SELECT.
 	 */
 	private function newSelect(): string
 	{
@@ -65,10 +98,10 @@ class LoginCustomerDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param int $idLogin
-	 * @param int $idCustomerEmployee
-	 * @return LoginCustomer|NULL
+	 * Selecione os dados de um acesso de cliente através do código de identificação único do acesso e funcionário de cliente.
+	 * @param int $idLogin código de identificação único do acesso.
+	 * @param int $idCustomerEmployee código de identificação único do funcionário de cliente.
+	 * @return LoginCustomer|NULL acesso de cliente com os dados carregados ou NULL se não encontrado.
 	 */
 	public function select(int $idLogin, int $idCustomerEmployee): ?LoginCustomer
 	{
@@ -86,9 +119,43 @@ class LoginCustomerDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param Result $result
-	 * @return LoginCustomer|NULL
+	 * Verifica se um determinado código de identificação de acesso existe.
+	 * @param int $idLogin código de identificação único do acesso.
+	 * @return bool true se existir ou false caso contrário.
+	 */
+	public function existLogin(int $idLogin): bool
+	{
+		$sql = "SELECT COUNT(*) qty
+				FROM logins
+				WHERE id = ?";
+
+		$query = $this->buildQuery($sql);
+		$query->setInteger(1, $idLogin);
+
+		return $this->parseQueryExist($query);
+	}
+
+	/**
+	 * Verifica se um determinado código de identificação de funcionário de cliente existe.
+	 * @param int $idCustomerEmployee código de identificação único do funcionário de cliente.
+	 * @return bool true se existir ou false caso contrário.
+	 */
+	public function existCustomerEmployee(int $idCustomerEmployee): bool
+	{
+		$sql = "SELECT COUNT(*) qty
+				FROM customer_employees
+				WHERE id = ?";
+
+		$query = $this->buildQuery($sql);
+		$query->setInteger(1, $idCustomerEmployee);
+
+		return $this->parseQueryExist($query);
+	}
+
+	/**
+	 * Procedimento interno para analisar o resultado de uma consulta e criar um objeto de acesso de cliente.
+	 * @param Result $result referência do resultado da consulta obtido.
+	 * @return LoginCustomer|NULL objeto do tipo acesso de cliente com dados carregados ou NULL se não houver resultado.
 	 */
 	private function parseLoginCustomer(Result $result): ?LoginCustomer
 	{
@@ -96,20 +163,16 @@ class LoginCustomerDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param array $entry
-	 * @return LoginCustomer
+	 * Procedimento interno para criar um objeto do tipo acesso de cliente e carregar os dados de um registro.
+	 * @param array $entry vetor contendo os dados do registro obtido de uma consulta.
+	 * @return LoginCustomer aquisição de um objeto do tipo acesso de cliente com dados carregados.
 	 */
 	private function newLoginCustomer(array $entry): LoginCustomer
 	{
-		$customerEmployeeEntry = $this->parseArrayJoin($entry, 'customerEmployee');
-
-		$customerEmployee = new CustomerEmployee();
-		$customerEmployee->fromArray($customerEmployeeEntry);
+		$this->parseEntry($entry, 'customerEmployee');
 
 		$loginCustomer = new LoginCustomer();
 		$loginCustomer->fromArray($entry);
-		$loginCustomer->setCustomerEmployee($customerEmployee);
 
 		return $loginCustomer;
 	}
