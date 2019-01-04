@@ -49,9 +49,9 @@ class ProviderContactControl extends GenericControl
 	 * à lista de contatos de um fornecedor, caso não seja possível é executado um RollBack:
 	 * @param Provider $provider objeto do tipo fornecedor do qual deseja vincular o contato.
 	 * @param ProviderContact $providerContact objeto do tipo contato de fornecedor à adicionar.
-	 * @return bool true se for adicionado ou false caso contrário.
+	 * @throws ProviderContactException não foi possível adicionar o contato de fornecedor.
 	 */
-	public function add(Provider $provider, ProviderContact $providerContact): bool
+	public function add(Provider $provider, ProviderContact $providerContact): void
 	{
 		$this->providerContactDAO->beginTransaction();
 		{
@@ -59,48 +59,45 @@ class ProviderContactControl extends GenericControl
 				!$this->providerContactDAO->linkContact($provider, $providerContact))
 			{
 				$this->providerContactDAO->rollback();
-				return false;
+				throw ProviderContactException::newNotInserted();
 			}
 
 			$provider->getContacs()->add($providerContact);
 		}
 		$this->providerContactDAO->commit();
-
-		return true;
 	}
 
 	/**
 	 * Atualiza os dados de um contato de fornecedor, neste caso os dados de telefone não são considerados.
 	 * @param ProviderContact $providerContact objeto do tipo contato de fornecedor à atualizar.
-	 * @return bool true se for atualizado ou false caso contrário.
+	 * @throws ProviderContactException não foi possível atualizar o contato de fornecedor.
 	 */
-	public function set(ProviderContact $providerContact): bool
+	public function set(ProviderContact $providerContact): void
 	{
-		return $this->providerContactDAO->update($providerContact);
+		if (!$this->providerContactDAO->update($providerContact))
+			throw ProviderContactException::newNotUpdated();
 	}
 
 	/**
 	 * Define os telefones de um contato de fornecedor verificando se é necessário atualizar ou adicionar.
 	 * @param ProviderContact $providerContact objeto do tipo contato de fornecedor à considerar.
-	 * @return bool true se um ou mais telefones tiverem sido adicionados e/ou atualizados.
+	 * @throws ProviderContactException não foi possível atualizar um ou mais dos telefones.
 	 */
-	public function setPhones(ProviderContact $providerContact): bool
+	public function setPhones(ProviderContact $providerContact): void
 	{
 		$phones = $providerContact->getPhones();
 
-		if ($this->phoneControl->keepPhones($phones))
-			return $this->providerContactDAO->updatePhones($providerContact);
-
-		return false;
+		if (!$this->phoneControl->keepPhones($phones) || !$this->providerContactDAO->updatePhones($providerContact))
+			throw ProviderContactException::newPhoneNotUpdated();
 	}
 
 	/**
 	 * Inicia uma nova transação para excluir os dados de um contato de fornecedor e seus telefones.
 	 * Caso alguma das operações não possa ser concluída conforme esperado é executado um RollBack.
 	 * @param ProviderContact $providerContact objeto do tipo contato de fornecedor à excluir.
-	 * @return bool true se excluído ou false caso contrário.
+	 * @throws ProviderContactException não foi possível excluir o contato de telefone.
 	 */
-	public function remove(ProviderContact $providerContact): bool
+	public function remove(ProviderContact $providerContact): void
 	{
 		$this->providerContactDAO->beginTransaction();
 		{
@@ -109,21 +106,19 @@ class ProviderContactControl extends GenericControl
 			if ($this->phoneControl->removePhones($phones) != $phones->size() || !$this->providerContactDAO->delete($providerContact))
 			{
 				$this->providerContactDAO->rollback();
-				return false;
+				throw ProviderContactException::newNotDeleted();
 			}
 		}
 		$this->providerContactDAO->commit();
-
-		return true;
 	}
 
 	/**
 	 * Inicia uma nova transação para realizar a exclusão do telefone comercial de um contato de fornecedor.
 	 * Ao excluir o telefone o contato do fornecedor será automaticamente atualizado no banco de dados.
 	 * @param ProviderContact $providerContact objeto do tipo contato de fornecedor à considerar.
-	 * @return bool true se o telefone for excluído ou false caso contrário.
+	 * @throws ProviderContactException não foi possível excluir o telefone comercial do contato de fornecedor.
 	 */
-	public function removeCommercial(ProviderContact $providerContact): bool
+	public function removeCommercial(ProviderContact $providerContact): void
 	{
 		$this->providerContactDAO->beginTransaction();
 		{
@@ -131,32 +126,34 @@ class ProviderContactControl extends GenericControl
 				!$this->phoneControl->removePhone($providerContact->getCommercial()))
 			{
 				$this->providerContactDAO->rollback();
-				return false;
+				throw ProviderContactException::newCommercialNotDeleted();
 			}
 
 			$providerContact->setCommercial(null);
 		}
 		$this->providerContactDAO->commit();
-
-		return true;
 	}
 
 	/**
 	 * Inicia uma nova transação para realizar a exclusão do telefone secundário de um contato de fornecedor.
 	 * Ao excluir o telefone o contato do fornecedor será automaticamente atualizado no banco de dados.
 	 * @param ProviderContact $providerContact objeto do tipo contato de fornecedor à considerar.
-	 * @return bool true se o telefone for excluído ou false caso contrário.
+	 * @throws ProviderContactException não foi possível excluir o telefone secundário do contato de fornecedor.
 	 */
-	public function removeOtherphone(ProviderContact $providerContact): bool
+	public function removeOtherphone(ProviderContact $providerContact): void
 	{
-		if ($providerContact->getOtherPhone()->getId() !== 0 &&
-			$this->phoneControl->removePhone($providerContact->getOtherPhone()))
+		$this->providerContactDAO->beginTransaction();
 		{
-			$providerContact->setOtherPhone(null);
-			return true;
-		}
+			if ($providerContact->getOtherPhone()->getId() !== 0 &&
+					!$this->phoneControl->removePhone($providerContact->getOtherPhone()))
+			{
+				$this->providerContactDAO->rollback();
+				throw ProviderContactException::newOtherphoneNotDeleted();
+			}
 
-		return false;
+			$providerContact->setOtherPhone(null);
+		}
+		$this->providerContactDAO->commit();
 	}
 
 	/**
@@ -169,7 +166,7 @@ class ProviderContactControl extends GenericControl
 	public function get(int $idProvider, int $idProviderContact): ProviderContact
 	{
 		if (($providerContact = $this->providerContactDAO->select($idProvider, $idProviderContact)) === null)
-			throw ProviderContactException::newNotFound();
+			throw ProviderContactException::newNotSelected();
 
 		return $providerContact;
 	}

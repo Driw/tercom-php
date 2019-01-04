@@ -227,7 +227,7 @@ class DefaultSiteService extends ApiServiceInterface
 	/**
 	 * @return ProviderContactControl
 	 */
-	protected function get(): ProviderContactControl
+	protected function getProviderContactControl(): ProviderContactControl
 	{
 		return $this->providerContactControl === null ?
 			($this->providerContactControl = new ProviderContactControl()) :

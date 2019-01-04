@@ -20,6 +20,13 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+04.01.2018 - 0.3.3.143
+- Adicionado novos status para gerenciamento de contatos de fornecedor.
+- Modificado procedimentos de CRUD em ProviderContactControl para ter return void e usar ProviderContactException.
+- Corrigido DefaultSiteService onde getProviderContactControl() estava como get().
+- Ajustado removeOtherphone() para que use BEGIN TRANSACTION conforme removeCommercial(), ProviderContactControl.
+- Renomeado newNotFound() para newNotSelected() conforme novo padrão, ProviderContactException.
+
 03.01.2018 - 0.3.3.142
 - Movido scripts de teste de serviços e preço de serviços para subpastas 'service-service' e 'service-price-service' respectivamente.
 
