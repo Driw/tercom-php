@@ -2,8 +2,11 @@
 
 namespace tercom\control;
 
+use dProject\Primitive\PostService;
+use dProject\Primitive\Session;
 use tercom\entities\LoginTercom;
 use tercom\dao\LoginTercomDAO;
+use tercom\SessionVar;
 
 /**
  * @author Andrew
@@ -132,6 +135,46 @@ class LoginTercomControl extends LoginControl
 			throw new ControlException('acesso negado');
 
 		return $loginTercom;
+	}
+
+	/**
+	 * Procedimento para obter o acesso atual do funcionário TERCOM considerando dados em post e session.
+	 * A prioridade é considerar dados em post já que existe a possibilidade de comunicação sem session estabelecida.
+	 * @throws ControlException apenas quando não for possível obter os dados de acesso.
+	 * @return LoginTercom aquisição do objeto do tipo acesso de funcionário TERCOM.
+	 */
+	public function getCurrent(): LoginTercom
+	{
+		$post = PostService::getInstance();
+
+		if ($post->isSetted('idTercomEmployee') && $post->isSetted('idLogin') && $post->isSetted('token'))
+		{
+			$idTercomEmployee = $post->getInt('idTercomEmployee');
+			$idLogin = $post->getInt('idLogin');
+			$token = $post->getString('token');
+		}
+
+		else
+		{
+			$session = Session::getInstance();
+			$session->start();
+
+			if ($session->isSetted(SessionVar::LOGIN_TERCOM_ID) &&
+				$session->isSetted(SessionVar::LOGIN_ID) &&
+				$session->isSetted(SessionVar::LOGIN_TOKEN))
+			{
+				$idTercomEmployee = $post->getInt(SessionVar::LOGIN_TERCOM_ID);
+				$idLogin = $post->getInt(SessionVar::LOGIN_ID);
+				$token = $post->getString(SessionVar::LOGIN_TOKEN);
+			}
+
+			else
+				throw new ControlException('acesso não encontrado');
+		}
+
+		$loginCustomer = $this->get($idLogin, $idTercomEmployee, $token);
+
+		return $loginCustomer;
 	}
 }
 

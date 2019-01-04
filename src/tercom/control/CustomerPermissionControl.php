@@ -2,6 +2,7 @@
 
 namespace tercom\control;
 
+use tercom\TercomException;
 use tercom\dao\CustomerPermissionDAO;
 use tercom\entities\CustomerProfile;
 use tercom\entities\Permission;
@@ -152,6 +153,18 @@ class CustomerPermissionControl extends GenericControl implements RelationshipCo
 	public function hasRelationship($customerProfile, $permission): bool
 	{
 		return $this->customerPermissionDAO->exist($customerProfile, $permission);
+	}
+
+	/**
+	 * Verifica se um determinado perfil possui uma determinada permissão e verifica o nível de acesso.
+	 * @param CustomerProfile $customerProfile objeto do tipo perfil de cliente à verificar.
+	 * @param Permission $permission objeto do tipo permissão à verificar.
+	 */
+	public function verifyCustomerPermission(CustomerProfile $customerProfile, Permission $permission): void
+	{
+		if (!$this->hasRelationship($customerProfile, $permission) ||
+			!$this->hasAssignmentLevel($customerProfile, $permission))
+			throw TercomException::newPermissionCustomerEmployee(); // FIXME trocar por CustomerPermissionException
 	}
 }
 

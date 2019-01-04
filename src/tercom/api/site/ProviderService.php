@@ -28,6 +28,7 @@ class ProviderService extends DefaultSiteService
 {
 	/**
 	 * Ação para se obter as configurações de limites de cada atributo referente ao fornecedor.
+	 * @ApiPermissionAnnotation({})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
 	 * @return ApiResultProviderSettings aquisição do resultado com as configurações.
 	 */
@@ -40,11 +41,10 @@ class ProviderService extends DefaultSiteService
 	 * Adiciona um novo fornecedor sendo necessário informar os seguintes dados:
 	 * CNPJ, razão social e nome fantasia; representante e site são opcionais.
 	 * Por padrão forencedores serão adicionados como ativos.
-	 * @ApiAnnotation({"method":"post"})
+	 * @ApiPermissionAnnotation({"method":"post","level":1})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
 	 * @return ApiResultObject aquisição do resultado contendo os dados do fornecedor adicionado.
 	 */
-
 	public function actionAdd(ApiContent $content): ApiResultObject
 	{
 		$POST = $content->getPost();
@@ -67,7 +67,7 @@ class ProviderService extends DefaultSiteService
 	/**
 	 * Atualiza os dados do fornecedor através do seu código de identificação.
 	 * Nenhum dado é obrigatório ser atualizado, porém se informado será considerado.
-	 * @ApiAnnotation({"method":"post", "params":["idProvider"]})
+	 * @ApiPermissionAnnotation({"method":"post", "params":["idProvider"]})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
 	 * @return ApiResultObject aquisição do resultado com os dados do fornecedor atualizados.
 	 */
@@ -95,7 +95,7 @@ class ProviderService extends DefaultSiteService
 
 	/**
 	 * Obtém os dados de um fornecedor através do seu código de identificação.
-	 * @ApiAnnotation({"params":["idProvider","loadContacts"]})
+	 * @ApiPermissionAnnotation({"params":["idProvider","loadContacts"]})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
 	 * @return ApiResultObject aquisição do resultado com os dados do fornecedor obtido.
 	 */
@@ -134,7 +134,7 @@ class ProviderService extends DefaultSiteService
 	/**
 	 * Lista todos os forenecedores registrados sendo selecionados por paginas.
 	 * A página irá determinar quais fornecedores são necessários no retorno.
-	 * @ApiAnnotation({"params":["page"]})
+	 * @ApiPermissionAnnotation({"params":["page"]})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
 	 * @return ApiResultObject aquisição do resultado com a lista de fornecedores encontrados.
 	 */
@@ -158,7 +158,7 @@ class ProviderService extends DefaultSiteService
 	/**
 	 * Pesquisa por fornecedores através de um filtro e um valor de busca.
 	 * Os filtros são <i>cnpj</i> (CNPJ) e <i>fantasyName</i> (nome fantasia).
-	 * @ApiAnnotation({"params":["filter","value"]})
+	 * @ApiPermissionAnnotation({"params":["filter","value"]})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
 	 * @return ApiResultObject aquisição do resultado com a lista de fornecedores encontrados.
 	 */
@@ -213,7 +213,7 @@ class ProviderService extends DefaultSiteService
 	 * Define quais os dados de telefone para contato com o fornecedor.
 	 * Opcional definir tanto o telefone comercial quanto o secundário,
 	 * porém necessário definir ao menos um dos dois telefones.
-	 * @ApiAnnotation({"method":"post","params":["idProvider"]})
+	 * @ApiPermissionAnnotation({"method":"post","params":["idProvider"]})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
 	 * @return ApiResult aquisição do resultado com os dados de fornecedor com telefone(s) atualizado(s).
 	 */
@@ -252,7 +252,7 @@ class ProviderService extends DefaultSiteService
 
 	/**
 	 * Excluí o telefone comercial de um dos fornecedores através do seu código identificação.
-	 * @ApiAnnotation({"params":["idProvider"]})
+	 * @ApiPermissionAnnotation({"params":["idProvider"]})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
 	 * @return ApiResultObject aquisição dos dados do fornecedor atualizados com o telefone excluído.
 	 */
@@ -274,7 +274,7 @@ class ProviderService extends DefaultSiteService
 
 	/**
 	 * Excluí o telefone secundário de um dos fornecedores através do seu código identificação.
-	 * @ApiAnnotation({"params":["idProvider"]})
+	 * @ApiPermissionAnnotation({"params":["idProvider"]})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
 	 * @return ApiResult aquisição dos dados do fornecedor atualizados com o telefone excluído.
 	 */
@@ -299,7 +299,7 @@ class ProviderService extends DefaultSiteService
 	 * Por obrigatoriedade será necessário informar um filtro e valor.
 	 * Opcionalmente pode ser informado o código de identificação do fornecedor,
 	 * caso seja informado irá desconsiderar a ideia de disponível se for do mesmo.
-	 * @ApiAnnotation({"params":["filter","value","idProvider"]})
+	 * @ApiPermissionAnnotation({"params":["filter","value","idProvider"]})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
 	 * @return ApiResultSimpleValidation resultado de uma validação simples (ok, não ok).
 	 */

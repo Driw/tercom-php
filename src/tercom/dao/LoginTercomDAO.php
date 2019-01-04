@@ -90,11 +90,13 @@ class LoginTercomDAO extends GenericDAO
 	{
 		$loginColumns = $this->buildQuery(LoginDAO::ALL_COLUMNS, 'logins');
 		$tercomEmployeeColumns = $this->buildQuery(TercomEmployeeDAO::ALL_COLUMNS, 'tercom_employees', 'tercomEmployee');
+		$tercomProfileColumns = $this->buildQuery(TercomProfileDAO::ALL_COLUMNS, 'tercom_profiles', 'tercomEmployee_tercomProfile');
 
-		return "SELECT $loginColumns, $tercomEmployeeColumns
+		return "SELECT $loginColumns, $tercomEmployeeColumns, $tercomProfileColumns
 				FROM logins_tercom
 				INNER JOIN logins ON logins.id = logins_tercom.idLogin
-				INNER JOIN tercom_employees ON tercom_employees.id = logins_tercom.idTercomEmployee";
+				INNER JOIN tercom_employees ON tercom_employees.id = logins_tercom.idTercomEmployee
+				INNER JOIN tercom_profiles ON tercom_employees.idTercomProfile = tercom_profiles.id";
 	}
 
 	/**
@@ -170,6 +172,7 @@ class LoginTercomDAO extends GenericDAO
 	private function newLoginTercom(array $entry): LoginTercom
 	{
 		$this->parseEntry($entry, 'tercomEmployee');
+		$this->parseEntry($entry['tercomEmployee'], 'tercomProfile');
 
 		$loginTercom = new LoginTercom();
 		$loginTercom->fromArray($entry);

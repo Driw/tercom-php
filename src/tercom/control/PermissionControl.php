@@ -80,9 +80,9 @@ class PermissionControl
 	 *
 	 * @param string $packet
 	 * @param string $action
-	 * @return bool
+	 * @return Permission
 	 */
-	public function getAction(string $packet, string $action): bool
+	public function getAction(string $packet, string $action): Permission
 	{
 		if (($permission = $this->permissionDAO->selectByPacketAction($packet, $action)) === null)
 			throw new ControlException('permissão não encontrada');

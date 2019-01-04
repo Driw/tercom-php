@@ -20,6 +20,24 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+04.01.2018 - 0.3.4.146
+- Aprimoramento de GeradorDeDados para que os scripts de testes considerem usar o acesso de funcionário TERCOM/cliente automaticamente.
+- Atualizado ApiListener para considerar TercomException como opção para se considerar 'code' como 'status' na resposta.
+- Atualizado ProviderService para que considere a validação de permissão em cada uma de suas ações.
+- Adicionado a LoginTercomControl e LoginCustomerControl getCurrent() para considerar o login atual.
+- Corrigido PermissionControl onde get() estava configurado retorno 'bool' ao invés de 'Permission'.
+- Adicionado verifyTercomPermission() que verifica se um perfil TERCOM possui uma permissão e acesso à ela, TercomPermissionControl.
+- Adicionado verifyCustomerPermission() que verifica se um perfil de cliente possui uma permissão e acesso à ela, CustomerPermissionControl.
+- Agora LoginTercomDAO irá retornar os dados de perfil TERCOM do funcionário TERCOM.
+- Agora LoginCustomerDAO irá retornar os dados de perfil de cliente do funcionário de cliente.
+- Configurado getAttributeTypes() para LoginTercom e LoginCustomer.
+- Modificado getPhone() e getCellPhone() de TercomEmployee e CustomerEmployee para que criem a instância de Phone se não definidas.
+
+04.01.2018 - 0.3.3.145
+- Implementação básica para a funcionalidade de validação de permissões por ação de serviços nos webservices.
+- Iniciado implementação de validação das permissões no serviço de fornecedores.
+- Atualizado scripts de testes para ser obrigatório informar dados de acesso ao usar o webservice de fornecedores.
+
 04.01.2018 - 0.3.3.144
 - Atualizado loginTercom.php para funcionar corretamente conforme novas especificações de login para funcionário TERCOM.
 - Adicionado à GeradorDeDados um detalhe diferente para salvar dados de acesso em sessão.

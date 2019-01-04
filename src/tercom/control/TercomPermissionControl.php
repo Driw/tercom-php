@@ -2,6 +2,7 @@
 
 namespace tercom\control;
 
+use tercom\TercomException;
 use tercom\dao\TercomPermissionDAO;
 use tercom\entities\TercomProfile;
 use tercom\entities\Permission;
@@ -51,7 +52,7 @@ class TercomPermissionControl extends GenericControl implements RelationshipCont
 	 * @param Permission $permission
 	 * @return bool
 	 */
-	private function hasAssignmentLevel(TercomProfile $tercomProfile, Permission $permission): bool
+	public function hasAssignmentLevel(TercomProfile $tercomProfile, Permission $permission): bool
 	{
 		return $permission->getAssignmentLevel() <= $tercomProfile->getAssignmentLevel();
 	}
@@ -155,6 +156,18 @@ class TercomPermissionControl extends GenericControl implements RelationshipCont
 	public function hasRelationship($tercomProfile, $permission): bool
 	{
 		return $this->tercomPermissionDAO->exist($tercomProfile, $permission);
+	}
+
+	/**
+	 * Verifica se um determinado perfil possui uma determinada permissão e verifica o nível de acesso.
+	 * @param TercomProfile $tercomProfile objeto do tipo perfil TERCOM à verificar.
+	 * @param Permission $permission objeto do tipo permissão à verificar.
+	 */
+	public function verifyTercomPermission(TercomProfile $tercomProfile, Permission $permission): void
+	{
+		if (!$this->hasRelationship($tercomProfile, $permission) ||
+			!$this->hasAssignmentLevel($tercomProfile, $permission))
+			throw TercomException::newPermissionTercomEmployee(); // FIXME trocar por TercomPermissionException
 	}
 }
 

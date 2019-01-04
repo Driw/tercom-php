@@ -11,6 +11,10 @@ class ApiStatus
 	public const FILTER = 4;
 	public const RELATIONSHIP = 5;
 	public const NOT_LOGGED = 6;
+	public const API_CONNECTION = 7;
+	public const PERMISSION_NOT_ENOUGHT = 8;
+	public const PERMISSION_TERCOM_EMPLOYEE = 9;
+	public const PERMISSION_CUSTOMER_EMPLOYEE = 10;
 
 	public const PROVIDER_IDENTIFIED = 101;
 	public const PROVIDER_NOT_IDENTIFIED = 102;

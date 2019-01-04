@@ -2,6 +2,7 @@
 
 namespace tercom\core;
 
+use dProject\annotation\AnnotationParser;
 use dProject\MySQL\MySQL;
 use dProject\Primitive\Config;
 use dProject\Primitive\Session;
@@ -10,8 +11,10 @@ use dProject\restful\ApiConnection;
 use dProject\restful\ApiSettings;
 use tercom\Functions;
 use tercom\api\ApiListener;
+use tercom\api\ApiPermissionAnnotation;
 use tercom\boundary\dashboard\BoundaryListener;
 use tercom\boundary\dashboard\DashboardTemplate;
+use tercom\TercomException;
 
 /**
  * <p><h1>Sistema</h1></p>
@@ -39,6 +42,10 @@ class System
 	 * @var bool objetos informados na API terão formato simples ou avançado.
 	 */
 	private static $apiOnlyProperties;
+	/**
+	 * @var ApiConnection conexão da API.
+	 */
+	private static $apiConnection;
 
 	/**
 	 * Tem como finalidade garantir algumas funcionalidades do sistema do site.
@@ -66,6 +73,7 @@ class System
 	public static function initApi()
 	{
 		self::init();
+		AnnotationParser::register(new ApiPermissionAnnotation);
 
 		$listener = new ApiListener();
 
@@ -78,7 +86,7 @@ class System
 		$settings->setApiNameSpace(namespaceOf($listener));
 		$settings->setResponseType(ApiSettings::RESPONSE_JSON);
 
-		$apiConnection = ApiConnection::getInstance();
+		$apiConnection = (self::$apiConnection = ApiConnection::getInstance());
 		$apiConnection->setSettings($settings);
 		$apiConnection->setListener($listener);
 		$apiConnection->start();
@@ -231,6 +239,17 @@ class System
 	{
 		self::$apiOnlyProperties = $apiOnlyProperties;
 	}
+
+	/**
+	 * @throws TercomException quando a conexão de API não tiver sido definida.
+	 * @return ApiConnection aquisição da conexão de API do sistema.
+	 */
+	public static function getApiConnection(): ApiConnection
+	{
+		if (System::$apiConnection === null)
+			throw TercomException::newApiConnection();
+
+		return System::$apiConnection;
+	}
 }
 
-?>

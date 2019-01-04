@@ -44,5 +44,17 @@ class LoginCustomer extends Login
 	{
 		return $this->customerEmployee === null ? 0 : $this->customerEmployee->getId();
 	}
+
+	/**
+	 * {@inheritDoc}
+	 * @see \tercom\entities\Login::getAttributeTypes()
+	 */
+	public function getAttributeTypes()
+	{
+		$attributeTypes = parent::getAttributeTypes();
+		$attributeTypes['customerEmployee'] = CustomerEmployee::class;
+
+		return $attributeTypes;
+	}
 }
 

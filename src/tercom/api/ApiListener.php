@@ -8,6 +8,7 @@ use dProject\restful\ApiConnectionAdapter;
 use dProject\restful\ApiResponse;
 use tercom\Encryption;
 use dProject\Primitive\ArrayDataException;
+use tercom\TercomException;
 
 class ApiListener extends ApiConnectionAdapter
 {
@@ -43,8 +44,9 @@ class ApiListener extends ApiConnectionAdapter
 		$response->setMessage($e->getMessage());
 		$response->setResult(DEV ? explode(PHP_EOL, $trace) : [ (new Encryption())->encrypt($trace) ]);
 
-		if ($e instanceof ApiStatusException)
+		if ($e instanceof ApiStatusException || $e instanceof TercomException)
 			$response->setStatus($e->getCode());
+
 		else if ($e instanceof ArrayDataException)
 		{
 			switch ($e->getCode())

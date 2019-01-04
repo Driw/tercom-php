@@ -230,7 +230,7 @@ class TercomEmployee extends AdvancedObject
 	 */
 	public function getPhone(): Phone
 	{
-		return $this->phone;
+		return $this->phone === null ? ($this->phone = new Phone()) : $this->phone;
 	}
 
 	/**
@@ -246,7 +246,7 @@ class TercomEmployee extends AdvancedObject
 	 */
 	public function getCellphone(): Phone
 	{
-		return $this->cellphone;
+		return $this->cellphone === null ? ($this->cellphone = new Phone()) : $this->cellphone;
 	}
 
 	/**
