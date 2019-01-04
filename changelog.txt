@@ -20,6 +20,13 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+04.01.2018 - 0.3.3.144
+- Atualizado loginTercom.php para funcionar corretamente conforme novas especificações de login para funcionário TERCOM.
+- Adicionado à GeradorDeDados um detalhe diferente para salvar dados de acesso em sessão.
+- Atualizado LoginTercomService conforme nova variável disponível em SessionVar.
+- Corrigido métodos de validação existLogin() e existTercomEmployee() que estava usando buildQuery() ao invés de createQuery().
+- Corrigido problema com TercomEmployee ao usar getPhone() e getCellPhone().
+
 04.01.2018 - 0.3.3.143
 - Adicionado novos status para gerenciamento de contatos de fornecedor.
 - Modificado procedimentos de CRUD em ProviderContactControl para ter return void e usar ProviderContactException.

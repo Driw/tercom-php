@@ -32,7 +32,7 @@ class LoginTercomService extends DefaultSiteService
 			$session = $content->getSession();
 			$session->start();
 			$session->setInt(SessionVar::LOGIN_ID, $loginTercom->getTercomEmployeeId());
-			$session->setInt(SessionVar::LOGIN_CUSTOMER_ID, $loginTercom->getId());
+			$session->setInt(SessionVar::LOGIN_TERCOM_ID, $loginTercom->getId());
 			$session->setString(SessionVar::LOGIN_TOKEN, $loginTercom->getToken());
 		}
 

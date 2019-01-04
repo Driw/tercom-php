@@ -129,7 +129,7 @@ class LoginTercomDAO extends GenericDAO
 				FROM logins
 				WHERE id = ?";
 
-		$query = $this->buildQuery($sql);
+		$query = $this->createQuery($sql);
 		$query->setInteger(1, $idLogin);
 
 		return $this->parseQueryExist($query);
@@ -146,7 +146,7 @@ class LoginTercomDAO extends GenericDAO
 				FROM tercom_employees
 				WHERE id = ?";
 
-		$query = $this->buildQuery($sql);
+		$query = $this->createQuery($sql);
 		$query->setInteger(1, $idTercomEmployee);
 
 		return $this->parseQueryExist($query);

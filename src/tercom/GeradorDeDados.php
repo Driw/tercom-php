@@ -28,6 +28,16 @@ class GeradorDeDados
 			$session->setInt(SessionVar::LOGIN_CUSTOMER_ID, $parameters['idCustomerEmployee']);
 		}
 
+		// Simular sessão logada
+		else if (isset($parameters['idLogin']) && isset($parameters['idLogin']) && isset($parameters['idTercomEmployee']))
+		{
+			$session = Session::getInstance();
+			$session->start();
+			$session->setString(SessionVar::LOGIN_TOKEN, $parameters['token']);
+			$session->setInt(SessionVar::LOGIN_ID, $parameters['idLogin']);
+			$session->setInt(SessionVar::LOGIN_TERCOM_ID, $parameters['idTercomEmployee']);
+		}
+
 		$post = http_build_query($parameters);
 		$endpoint = sprintf('http://%s/api/site', $_SERVER['SERVER_NAME']);
 		$url = "$endpoint/$webservice";
