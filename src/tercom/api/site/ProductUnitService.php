@@ -118,6 +118,7 @@ class ProductUnitService extends DefaultSiteService
 
 	/**
 	 * Obtém uma lista com todas as unidades de produtos registradas no sistema.
+	 * @ApiPermissionAnnotation({})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
 	 * @return ApiResultObject aquisição do resultado com os dados das unidades de produto.
 	 */

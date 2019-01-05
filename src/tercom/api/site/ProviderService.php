@@ -71,7 +71,6 @@ class ProviderService extends DefaultSiteService
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
 	 * @return ApiResultObject aquisição do resultado com os dados do fornecedor atualizados.
 	 */
-
 	public function actionSet(ApiContent $content): ApiResultObject
 	{
 		$post = $content->getPost();
@@ -99,7 +98,6 @@ class ProviderService extends DefaultSiteService
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
 	 * @return ApiResultObject aquisição do resultado com os dados do fornecedor obtido.
 	 */
-
 	public function actionGet(ApiContent $content): ApiResultObject
 	{
 		$parameters = $content->getParameters();
@@ -118,6 +116,7 @@ class ProviderService extends DefaultSiteService
 
 	/**
 	 * Obtém uma lista contendo todos os fornecedores registrados no sistema.
+	 * @ApiPermissionAnnotation({})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
 	 * @return ApiResultObject aquisição do resultado com a lista de fornecedores encontrados.
 	 */

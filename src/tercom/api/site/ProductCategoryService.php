@@ -54,6 +54,7 @@ abstract class ProductCategoryService extends DefaultSiteService
 
 	/**
 	 * Ação para se obter as configurações de limites de cada atributo referente aos subgrupos dos produtos.
+	 * @ApiPermissionAnnotation({})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
 	 * @return ApiResult aquisição do resultado com as configurações dos dados de subgrupos dos produtos.
 	 */

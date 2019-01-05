@@ -27,6 +27,7 @@ class ManufacturerService extends DefaultSiteService
 {
 	/**
 	 * Ação para se obter as configurações de limites de cada atributo referente aos fabricantes.
+	 * @ApiPermissionAnnotation({})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
 	 * @return ApiResultManufactureSettings
 	 */
@@ -116,6 +117,7 @@ class ManufacturerService extends DefaultSiteService
 
 	/**
 	 * Obtém uma lista contendo todos os fabricantes existentes no sistema.
+	 * @ApiPermissionAnnotation({})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
 	 * @return ApiResultObject aquisição do resultado com os dados do fabricante obtido.
 	 */
