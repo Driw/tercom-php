@@ -20,6 +20,9 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+04.01.2018 - 0.3.4.148
+- Atualizando permissions.sql conforme as novas permissões referentes a rev147.
+
 04.01.2018 - 0.3.4.147
 - Adicionado permissões para a utilização do serviço para gerenciamento de contatos de fornecedor, ProviderContactService.
 - Modificado GeradorDeDados para efetuar o login em sessão automaticamente para o acesso de funcionários TERCOM/cliente nos scripts de teste.

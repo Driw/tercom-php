@@ -1,4 +1,9 @@
 
+-- TERCOM Profiles
+
+INSERT INTO tercom_profiles (id, name, assignmentLevel) VALUES
+(1, 'Administrador', 99);
+
 -- Provider Service
 
 INSERT INTO permissions (packet, action, assignmentLevel) VALUES
@@ -14,10 +19,18 @@ INSERT INTO permissions (packet, action, assignmentLevel) VALUES
 ('provider', 'removeOtherphone', 20),
 ('provider', 'avaiable', 20);
 
--- TERCOM Profiles
+-- Provider Contact Service
 
-INSERT INTO tercom_profiles (id, name, assignmentLevel) VALUES
-(1, 'Administrador', 99);
+INSERT INTO permissions (packet, action, assignmentLevel) VALUES
+('providerContact', 'settings', 20),
+('providerContact', 'add', 20),
+('providerContact', 'set', 20),
+('providerContact', 'setPhones', 20),
+('providerContact', 'removeCommercial', 20),
+('providerContact', 'removeOtherphone', 20),
+('providerContact', 'removeContact', 20),
+('providerContact', 'getContact', 20),
+('providerContact', 'getContacts', 20);
 
 -- TERCOM Profiles Permissions
 
