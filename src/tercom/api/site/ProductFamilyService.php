@@ -5,6 +5,7 @@ namespace tercom\api\site;
 use dProject\restful\ApiContent;
 use dProject\restful\ApiResult;
 use tercom\api\site\results\ApiResultCategorySettings;
+use tercom\api\site\results\ApiResultObject;
 use tercom\entities\ProductCategory;
 
 /**
@@ -72,6 +73,23 @@ class ProductFamilyService extends ProductCategoryService
 	public function actionSettings(ApiContent $content): ApiResult
 	{
 		return new ApiResultCategorySettings();
+	}
+
+	/**
+	 * Obtém os dados dos setores dos produtos vinculados a um subgrupo dos produtos especificado.
+	 * @ApiPermissionAnnotation({})
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @return ApiResult aquisição do resultado com os dados dos setores dos produtos encontrados.
+	 */
+	public function actionGetAllFamilies(ApiContent $content):ApiResult
+	{
+		$productCategories = $this->getProductCategoryControl()->getAllFamilies();
+
+		$result = new ApiResultObject();
+		$result->setObject($productCategories);
+		$result->setMessage('encontrado "%d" famílias no banco de dados', $productCategories->size());
+
+		return $result;
 	}
 }
 

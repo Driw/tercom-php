@@ -179,6 +179,27 @@ class ProductCategoryDAO extends GenericDAO
 	}
 
 	/**
+	 * Procedimento interno para centralizar e agilizar a manutenção de queries.
+	 * @return string aquisição da string de consulta simples para SELECT.
+	 */
+	private function newSelectFamilies(): string
+	{
+		$productCategoriesColumns = $this->buildQuery(self::ALL_COLUMNS, 'product_categories');
+
+		return "SELECT $productCategoriesColumns, product_category_types.id type
+				FROM product_categories
+				LEFT JOIN product_category_relationships ON product_category_relationships.idCategory = product_categories.id
+				LEFT JOIN product_category_types ON product_category_types.id = product_category_relationships.idCategoryType
+				WHERE product_category_relationships.idCategoryType = 1
+				UNION
+				SELECT $productCategoriesColumns, product_category_types.id type
+				FROM product_categories
+				LEFT JOIN product_category_relationships ON idCategoryParent = idCategoryType
+				LEFT JOIN product_category_types ON product_category_types.id = product_category_relationships.idCategoryType
+				WHERE product_category_relationships.idCategoryType IS NULL";
+	}
+
+	/**
 	 * Selecione os dados de uma categoria de produto através do seu código de identificação único e tipo de categoria.
 	 * @param int $idProductCategory código de identificação único da categoria de produto à selecionar.
 	 * @param int $idProductCategoryType código de identificação único do tipo de categoria a considerar.
@@ -245,23 +266,30 @@ class ProductCategoryDAO extends GenericDAO
 	 * @param int $idProductCategory código de identificação do tipo de categoria à ser filtrada.
 	 * @return ProductCategories aquisição da lista de categorias de produto conforme filtros.
 	 */
+	public function selectAllFamilies(): ProductCategories
+	{
+		$sqlSelect = $this->newSelectFamilies();
+		$sql = "SELECT families.*
+				FROM ($sqlSelect) families
+				ORDER BY name ASC";
+
+		$query = $this->createQuery($sql);
+		$result = $query->execute();
+
+		return $this->parseProductCategories($result);
+	}
+
+	/**
+	 * Seleciona os dados de todas as categorias de produto relacionadas a uma outra categoria de produto.
+	 * @param ProductCategory $productCategory objeto do tipo categoria de produto à ser filtrada.
+	 * @param int $idProductCategory código de identificação do tipo de categoria à ser filtrada.
+	 * @return ProductCategories aquisição da lista de categorias de produto conforme filtros.
+	 */
 	public function selectByCategory(ProductCategory $productCategory, int $idProductCategoryType): ProductCategories
 	{
 		$sqlSelect = $this->newSelect();
-
-		switch ($productCategory->getType())
-		{
-			case ProductCategory::CATEGORY_FAMILY:
-				$sql = "$sqlSelect
-						WHERE product_category_relationships.idCategoryParent = ?
-							AND (product_category_relationships.idCategoryType = ? OR product_category_relationships.idCategoryType IS NULL)";
-				break;
-
-			default:
-				$sql = "$sqlSelect
+		$sql = "$sqlSelect
 						WHERE product_category_relationships.idCategoryParent = ? AND product_category_relationships.idCategoryType = ?";
-				break;
-		}
 
 		$query = $this->createQuery($sql);
 		$query->setInteger(1, $productCategory->getId());

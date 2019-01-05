@@ -56,6 +56,60 @@ INSERT INTO permissions (packet, action, assignmentLevel) VALUES
 ('productUnit', 'search', 20),
 ('productUnit', 'avaiable', 20);
 
+-- Product Family Service
+
+INSERT INTO permissions (packet, action, assignmentLevel) VALUES
+('productFamily', 'settings', 20),
+('productFamily', 'add', 20),
+('productFamily', 'set', 20),
+('productFamily', 'remove', 20),
+('productFamily', 'get', 20),
+('productFamily', 'getAll', 20),
+('productFamily', 'getCategories', 20),
+('productFamily', 'getAllFamilies', 20),
+('productFamily', 'search', 20),
+('productFamily', 'avaiable', 20),
+('productFamily', 'has', 20);
+
+-- Product Family Service
+
+INSERT INTO permissions (packet, action, assignmentLevel) VALUES
+('productGroup', 'settings', 20),
+('productGroup', 'add', 20),
+('productGroup', 'set', 20),
+('productGroup', 'remove', 20),
+('productGroup', 'get', 20),
+('productGroup', 'getCategories', 20),
+('productGroup', 'search', 20),
+('productGroup', 'avaiable', 20),
+('productGroup', 'has', 20);
+
+-- Product Family Service
+
+INSERT INTO permissions (packet, action, assignmentLevel) VALUES
+('productSubgroup', 'settings', 20),
+('productSubgroup', 'add', 20),
+('productSubgroup', 'set', 20),
+('productSubgroup', 'remove', 20),
+('productSubgroup', 'get', 20),
+('productSubgroup', 'getCategories', 20),
+('productSubgroup', 'search', 20),
+('productSubgroup', 'avaiable', 20),
+('productSubgroup', 'has', 20);
+
+-- Product Family Service
+
+INSERT INTO permissions (packet, action, assignmentLevel) VALUES
+('productSector', 'settings', 20),
+('productSector', 'add', 20),
+('productSector', 'set', 20),
+('productSector', 'remove', 20),
+('productSector', 'get', 20),
+('productSector', 'getCategories', 20),
+('productSector', 'search', 20),
+('productSector', 'avaiable', 20),
+('productSector', 'has', 20);
+
 -- TERCOM Profiles Permissions
 
 REPLACE INTO tercom_profile_permissions (idTercomProfile, idPermission)

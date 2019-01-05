@@ -20,6 +20,14 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+05.01.2018 - 0.3.4.150
+- Adicionado permissões para a utilização do serviço para gerenciamento de categorias de produto, ProductCategoryService.
+- Adicionado método que permite obter todas as categorias que seja do tipo família, ProductFamilyService.
+	- Para ser uma família tem que ter um ou mais grupos vinculados à ela ou não possuir nenhum vinculo independente do tipo de categoria.
+- Atualizando permissions.sql conforme as novas permissões referentes a ProductCategoryService e sia.
+- Atualizado scripts de testes do serviço para gerenciamento de categorias (família, grupo, subgrupo e setor).
+- Adicionado script de teste para obter todos os fabricantes registrados (productFamilySettings, productGroupSettings, productSubGroupSettings e productSectorSettings).
+
 05.01.2018 - 0.3.4.148b
 - Adicionado permissões para a utilização do serviço para gerenciamento de unidades de produto, ProductUnitService.
 - Atualizando permissions.sql conforme as novas permissões referentes a ProductUnitService.

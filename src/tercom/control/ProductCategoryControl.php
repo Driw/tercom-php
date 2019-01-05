@@ -150,15 +150,24 @@ class ProductCategoryControl extends GenericControl
 
 	/**
 	 *
-	 * @param ProductCategory $productCategory
-	 * @param int $idProductCategory
+	 * @return ProductCategories
 	 */
-	public function getCategories(ProductCategory $productCategory, int $idProductCategory): ProductCategories
+	public function getAllFamilies(): ProductCategories
 	{
-		if ($idProductCategory === 0)
+		return $this->productCategoryDAO->selectAllFamilies();
+	}
+
+	/**
+	 *
+	 * @param ProductCategory $productCategory
+	 * @param int $idProductCategoryType
+	 */
+	public function getCategories(ProductCategory $productCategory, int $idProductCategoryType): ProductCategories
+	{
+		if ($idProductCategoryType === 0)
 			throw ProductCategoryException::newInvalidType();
 
-		return $this->productCategoryDAO->selectByCategory($productCategory, $idProductCategory);
+		return $this->productCategoryDAO->selectByCategory($productCategory, $idProductCategoryType);
 	}
 
 	/**

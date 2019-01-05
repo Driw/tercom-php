@@ -20,8 +20,10 @@ include '../include.php';
 <?php
 			exit;
 		}
+
 		$filter = $_GET['filter'];
-		$value = $_GET['value'];
+		$value = urlencode($_GET['value']);
+
 		return GeradorDeDados::callWebService("productSubGroup/search/$filter/$value", []);
 	}
 }

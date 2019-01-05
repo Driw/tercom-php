@@ -84,7 +84,7 @@ CREATE TABLE IF NOT EXISTS product_category_relationships
 	idCategory INT NOT NULL,
 	idCategoryType INT NOT NULL,
 
-	CONSTRAINT product_categories_relantionship_pk PRIMARY KEY (idCategory, idCategoryType),
+	CONSTRAINT product_categories_relantionship_pk PRIMARY KEY (idCategory, idCategory),
 	CONSTRAINT product_categories_relantionship_cat_fk FOREIGN KEY (idCategoryParent) REFERENCES product_categories(id),
 	CONSTRAINT product_categories_relantionship_rel_fk FOREIGN KEY (idCategory) REFERENCES product_categories(id),
 	CONSTRAINT product_categories_relantionship_type_fk FOREIGN KEY (idCategoryType) REFERENCES product_category_types(id)

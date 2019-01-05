@@ -61,7 +61,7 @@ abstract class ProductCategoryService extends DefaultSiteService
 
 	/**
 	 * Adiciona um novo subgrupo dos produtos sendo necessário informar somente o nome.
-	 * @ApiAnnotation({"method":"post"})
+	 * @ApiPermissionAnnotation({"method":"post"})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
 	 * @return ApiResultObject aquisição do resultado contendo os dados do subgrupo dos produtos adicionado.
 	 */
@@ -103,7 +103,7 @@ abstract class ProductCategoryService extends DefaultSiteService
 	/**
 	 * Atualiza os dados de um subgrupo dos produtos através do seu código de identificação.
 	 * Nenhum dado é obrigatório ser atualizado, porém se informado será considerado.
-	 * @ApiAnnotation({"method":"post", "params":["idProductCategory"]})
+	 * @ApiPermissionAnnotation({"method":"post", "params":["idProductCategory"]})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
 	 * @return ApiResultObject aquisição do resultado com os dados do subgrupo dos produtos atualizado.
 	 */
@@ -136,7 +136,7 @@ abstract class ProductCategoryService extends DefaultSiteService
 
 	/**
 	 * Excluí os dados de um subgrupo dos produtos através do seu código de identificação.
-	 * @ApiAnnotation({"params":["idProductCategory"]})
+	 * @ApiPermissionAnnotation({"params":["idProductCategory"]})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
 	 * @return ApiResultObject aquisição dos dados do subgrupo que foi excluída.
 	 */
@@ -156,7 +156,7 @@ abstract class ProductCategoryService extends DefaultSiteService
 
 	/**
 	 * Obtém os dados de um subgrupo dos produtos através do seu código de identificação.
-	 * @ApiAnnotation({"params":["idProductCategory"]})
+	 * @ApiPermissionAnnotation({"params":["idProductCategory"]})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
 	 * @return ApiResult aquisição do resultado com os dados do subgrupo dos produtos obtido.
 	 */
@@ -175,7 +175,24 @@ abstract class ProductCategoryService extends DefaultSiteService
 
 	/**
 	 * Obtém os dados dos setores dos produtos vinculados a um subgrupo dos produtos especificado.
-	 * @ApiAnnotation({"params":["idProductCategory"]})
+	 * @ApiPermissionAnnotation({})
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @return ApiResult aquisição do resultado com os dados dos setores dos produtos encontrados.
+	 */
+	public function actionGetAll(ApiContent $content):ApiResult
+	{
+		$productCategories = $this->getProductCategoryControl()->getAll();
+
+		$result = new ApiResultObject();
+		$result->setObject($productCategories);
+		$result->setMessage('encontrado "%d" categorias de produto no banco de dados', $productCategories->size());
+
+		return $result;
+	}
+
+	/**
+	 * Obtém os dados dos setores dos produtos vinculados a um subgrupo dos produtos especificado.
+	 * @ApiPermissionAnnotation({"params":["idProductCategory"]})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
 	 * @throws ApiException subgrupo não encontrado.
 	 * @return ApiResult aquisição do resultado com os dados dos setores dos produtos encontrados.
@@ -196,7 +213,7 @@ abstract class ProductCategoryService extends DefaultSiteService
 
 	/**
 	 * Pesquisa por subgrupos dos produtos através de um filtro e um valor de busca.
-	 * @ApiAnnotation({"params":["filter","value"]})
+	 * @ApiPermissionAnnotation({"params":["filter","value"]})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
 	 * @return ApiResult aquisição do resultado com a lista dos subgrupos dos produtos encontrados.
 	 */
