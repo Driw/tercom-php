@@ -32,6 +32,18 @@ INSERT INTO permissions (packet, action, assignmentLevel) VALUES
 ('providerContact', 'getContact', 20),
 ('providerContact', 'getContacts', 20);
 
+-- Manufacturer Service
+
+INSERT INTO permissions (packet, action, assignmentLevel) VALUES
+('manufacturer', 'settings', 20),
+('manufacturer', 'add', 20),
+('manufacturer', 'set', 20),
+('manufacturer', 'remove', 20),
+('manufacturer', 'get', 20),
+('manufacturer', 'getAll', 20),
+('manufacturer', 'search', 20),
+('manufacturer', 'avaiable', 20);
+
 -- TERCOM Profiles Permissions
 
 REPLACE INTO tercom_profile_permissions (idTercomProfile, idPermission)

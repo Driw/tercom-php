@@ -39,7 +39,7 @@ class ManufacturerService extends DefaultSiteService
 
 	/**
 	 * Adiciona um novo fabricante sendo necessário informar apenas o nome fantasia.
-	 * @ApiAnnotation({"method":"post"})
+	 * @ApiPermissionAnnotation({"method":"post"})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
 	 * @return ApiResultObject aquisição do resultado contendo os dados do fabricante adicionado.
 	 */
@@ -59,7 +59,7 @@ class ManufacturerService extends DefaultSiteService
 	/**
 	 * Atualiza os dados do fabricante através do seu código de identificação.
 	 * Nenhum dado é obrigatório ser atualizado, porém se informado será considerado.
-	 * @ApiAnnotation({"method":"post", "params":["idManufacture"]})
+	 * @ApiPermissionAnnotation({"method":"post", "params":["idManufacture"]})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
 	 * @return ApiResultObject aquisição do resultado com os dados do fabricante atualizados.
 	 */
@@ -81,7 +81,7 @@ class ManufacturerService extends DefaultSiteService
 
 	/**
 	 * Exclui os dados de um fornecedor no sistema através do seu código de identificação.
-	 * @ApiAnnotation({"params":["idManufacture"]})
+	 * @ApiPermissionAnnotation({"params":["idManufacture"]})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
 	 * @return ApiResultObject aquisição do resultado com os dados do fabricante atualizados.
 	 */
@@ -99,7 +99,7 @@ class ManufacturerService extends DefaultSiteService
 
 	/**
 	 * Obtém os dados de um fabricante através do seu código de identificação.
-	 * @ApiAnnotation({"params":["idManufacture"]})
+	 * @ApiPermissionAnnotation({"params":["idManufacture"]})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
 	 * @return ApiResultObject aquisição do resultado com os dados do fabricante obtido.
 	 */
@@ -132,7 +132,7 @@ class ManufacturerService extends DefaultSiteService
 	/**
 	 * Pesquisa por fornecedores através de um filtro e um valor de busca.
 	 * Os filtros são <i>cnpj</i> (CNPJ) e <i>fantasyName</i> (nome fantasia).
-	 * @ApiAnnotation({"params":["filter","value"]})
+	 * @ApiPermissionAnnotation({"params":["filter","value"]})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
 	 * @return ApiResultObject aquisição do resultado com a lista de fabricantes encontrados.
 	 */
@@ -166,7 +166,7 @@ class ManufacturerService extends DefaultSiteService
 	}
 
 	/**
-	 * @ApiAnnotation({"params":["filter","value","idManufacturer"]})
+	 * @ApiPermissionAnnotation({"params":["filter","value","idManufacturer"]})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
 	 * @return ApiResultSimpleValidation aquisição do resultado com a lista de fabricantes encontrados.
 	 */
