@@ -1,6 +1,8 @@
 <?php
 
+use dProject\Primitive\Session;
 use tercom\GeradorDeDados;
+use tercom\SessionVar;
 
 include '../include.php';
 {
@@ -20,7 +22,20 @@ include '../include.php';
 			exit;
 		}
 
-		return GeradorDeDados::callWebService("loginTercom/login", $_GET);
+		$call = GeradorDeDados::callWebService("loginTercom/login", $_GET);
+		$response = $call['response'];
+
+		if ($response['status'] === 1)
+		{
+			$resultAttributes = $response['result']['attributes'];
+			$session = Session::getInstance();
+			$session->start();
+			$session->setString(SessionVar::LOGIN_TOKEN, $resultAttributes['token']);
+			$session->setInt(SessionVar::LOGIN_ID, $resultAttributes['id']);
+			$session->setInt(SessionVar::LOGIN_TERCOM_ID, $resultAttributes['tercomEmployee']['attributes']['id']);
+		}
+
+		return $call;
 	}
 }
 include '../execute.php';

@@ -21,29 +21,22 @@ class GeradorDeDados
 		$session = Session::getInstance();
 		$session->start();
 
-		// Simular sessão logada
-		if (isset($parameters['idLogin']) && isset($parameters['idLogin']) && isset($parameters['idCustomerEmployee']))
+		if ($session->isSetted(SessionVar::LOGIN_ID) && $session->isSetted(SessionVar::LOGIN_TOKEN))
 		{
-			$session->setString(SessionVar::LOGIN_TOKEN, $parameters['token']);
-			$session->setInt(SessionVar::LOGIN_ID, $parameters['idLogin']);
-			$session->setInt(SessionVar::LOGIN_CUSTOMER_ID, $parameters['idCustomerEmployee']);
+			if ($session->isSetted(SessionVar::LOGIN_TERCOM_ID))
+			{
+				$parameters['idTercomEmployee'] = $session->getInt(SessionVar::LOGIN_TERCOM_ID);
+				$parameters['idLogin'] = $session->getInt(SessionVar::LOGIN_ID);
+				$parameters['token'] = $session->getString(SessionVar::LOGIN_TOKEN);
+			}
+
+			else if ($session->isSetted(SessionVar::LOGIN_CUSTOMER_ID))
+			{
+				$parameters['idCustomerEmployee'] = $session->getInt(SessionVar::LOGIN_CUSTOMER_ID);
+				$parameters['idLogin'] = $session->getInt(SessionVar::LOGIN_ID);
+				$parameters['token'] = $session->getString(SessionVar::LOGIN_TOKEN);
+			}
 		}
-
-		// Simular sessão logada
-		else if (isset($parameters['idLogin']) && isset($parameters['idLogin']) && isset($parameters['idTercomEmployee']))
-		{
-			$session->setString(SessionVar::LOGIN_TOKEN, $parameters['token']);
-			$session->setInt(SessionVar::LOGIN_ID, $parameters['idLogin']);
-			$session->setInt(SessionVar::LOGIN_TERCOM_ID, $parameters['idTercomEmployee']);
-		}
-
-		if ($session->isSetted(SessionVar::LOGIN_ID)) $parameters['idLogin'] = $session->getInt(SessionVar::LOGIN_ID);
-		if ($session->isSetted(SessionVar::LOGIN_TOKEN)) $parameters['token'] = $session->getString(SessionVar::LOGIN_TOKEN);
-
-		if ($session->isSetted(SessionVar::LOGIN_TERCOM_ID))
-			$parameters['idTercomEmployee'] = $session->getInt(SessionVar::LOGIN_TERCOM_ID);
-		else if ($session->isSetted(SessionVar::LOGIN_CUSTOMER_ID))
-			$parameters['idCustomerEmployee'] = $session->getInt(SessionVar::LOGIN_CUSTOMER_ID);
 
 		$post = http_build_query($parameters);
 		$endpoint = sprintf('http://%s/api/site', $_SERVER['SERVER_NAME']);

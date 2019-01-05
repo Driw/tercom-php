@@ -20,6 +20,10 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+04.01.2018 - 0.3.4.147
+- Adicionado permissões para a utilização do serviço para gerenciamento de contatos de fornecedor, ProviderContactService.
+- Modificado GeradorDeDados para efetuar o login em sessão automaticamente para o acesso de funcionários TERCOM/cliente nos scripts de teste.
+
 04.01.2018 - 0.3.4.146
 - Aprimoramento de GeradorDeDados para que os scripts de testes considerem usar o acesso de funcionário TERCOM/cliente automaticamente.
 - Atualizado ApiListener para considerar TercomException como opção para se considerar 'code' como 'status' na resposta.

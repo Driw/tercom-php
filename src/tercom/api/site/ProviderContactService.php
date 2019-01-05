@@ -25,6 +25,7 @@ class ProviderContactService extends DefaultSiteService
 {
 	/**
 	 * Ação para se obter as configurações de limites de cada atributo referente aos fornecedores.
+	 * @ApiPermissionAnnotation({})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
 	 * @return ApiResultProviderContactSettings aquisição do resultado com as configurações dos dados de fornecedores.
 	 */
@@ -36,7 +37,7 @@ class ProviderContactService extends DefaultSiteService
 	/**
 	 * Adiciona um novo contato do fornecedor sendo necessário informar os seguintes dados:
 	 * nome; endereço de e-mail (opicional) e cargo (opcional).
-	 * @ApiAnnotation({"method":"post","params":["idProvider"]})
+	 * @ApiPermissionAnnotationa({"method":"post","params":["idProvider"]})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
 	 * @return ApiResultObject aquisição do resultado contendo os dados do contato do fornecedor adicionado.
 	 */
@@ -63,7 +64,7 @@ class ProviderContactService extends DefaultSiteService
 	/**
 	 * Atualiza os dados do contato do fornecedor através do seu código de identificação.
 	 * Nenhum dado é obrigatório ser atualizado, porém se informado será considerado.
-	 * @ApiAnnotation({"method":"post", "params":["idProvider"]})
+	 * @ApiPermissionAnnotationa({"method":"post", "params":["idProvider"]})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
 	 * @return ApiResultObject aquisição do resultado com os dados do contato do fornecedor atualizados.
 	 */
@@ -90,7 +91,7 @@ class ProviderContactService extends DefaultSiteService
 	 * Define quais os dados de telefone do contato do fornecedor.
 	 * Opcional definir tanto o telefone comercial quanto o secundário,
 	 * porém necessário definir ao menos um dos dois telefones.
-	 * @ApiAnnotation({"method":"post","params":["idProvider"]})
+	 * @ApiPermissionAnnotationa({"method":"post","params":["idProvider"]})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
 	 * @return ApiResultObject aquisição do resultado com os dados de contato do fornecedor com telefone(s) atualizado(s).
 	 */
@@ -130,7 +131,7 @@ class ProviderContactService extends DefaultSiteService
 
 	/**
 	 * Exclui os dados do telefone comercial vinculado ao contato do fornecedor se houver.
-	 * @ApiAnnotation({"params":["idProvider"]})
+	 * @ApiPermissionAnnotationa({"params":["idProvider"]})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
 	 * @return ApiResultObject aquisição dos dados do contato do fornecedor com o telefone secundário excluído.
 	 */
@@ -150,7 +151,7 @@ class ProviderContactService extends DefaultSiteService
 
 	/**
 	 * Exclui os dados do telefone secundário vinculado ao contato do fornecedor se houver.
-	 * @ApiAnnotation({"params":["idProvider"]})
+	 * @ApiPermissionAnnotationa({"params":["idProvider"]})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
 	 * @return ApiResultObject aquisição dos dados do contato do fornecedor com o telefone comercial excluído.
 	 */
@@ -170,7 +171,7 @@ class ProviderContactService extends DefaultSiteService
 
 	/**
 	 * Exclui os dados do contato de fornecedor e seus telefones se assim for encontrado.
-	 * @ApiAnnotation({"method":"post","params":["idProvider"]})
+	 * @ApiPermissionAnnotationa({"method":"post","params":["idProvider"]})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
 	 * @return ApiResultObject aquisição dos dados do contato do fornecedor que foi excluído.
 	 */
@@ -194,7 +195,7 @@ class ProviderContactService extends DefaultSiteService
 
 	/**
 	 * Obtém os dados de um contato do fornecedor através do seu código de identificação.
-	 * @ApiAnnotation({"method":"post","params":["idProvider"]})
+	 * @ApiPermissionAnnotationa({"method":"post","params":["idProvider"]})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
 	 * @return ApiResultObject aquisição do resultado com os dados do contato do fornecedor obtido.
 	 */
@@ -214,7 +215,7 @@ class ProviderContactService extends DefaultSiteService
 
 	/**
 	 * Obtém uma lista de contatos do fornecedor através do código de identificação do fornecedor.
-	 * @ApiAnnotation({"params":["idProvider"]})
+	 * @ApiPermissionAnnotationa({"params":["idProvider"]})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
 	 * @return ApiResultObject aquisição do resultado com a lista de contatos do fornecedor obtida.
 	 */
