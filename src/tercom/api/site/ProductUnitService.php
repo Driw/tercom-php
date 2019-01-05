@@ -26,6 +26,7 @@ class ProductUnitService extends DefaultSiteService
 {
 	/**
 	 * Ação para se obter as configurações de limites de cada atributo referente a unidade de produto.
+	 * @ApiPermissionAnnotation({})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
 	 * @return ApiResultProductUnitSettings aquisição do resultado com as configurações.
 	 */
@@ -37,7 +38,7 @@ class ProductUnitService extends DefaultSiteService
 	/**
 	 * Adiciona uma nova unidade de produto sendo necessário informar os seguintes dados:
 	 * nome e abreviação sendo ambas obrigatórias e individualmente únicas.
-	 * @ApiAnnotation({"method":"post"})
+	 * @ApiPermissionAnnotation({"method":"post"})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
 	 * @return ApiResultObject aquisição do resultado contendo os dados da unidade de produto adicionada.
 	 */
@@ -59,7 +60,7 @@ class ProductUnitService extends DefaultSiteService
 	/**
 	 * Atualiza os dados da unidade de produto através do seu código de identificação.
 	 * Nenhum dado é obrigatório ser atualizado, porém se informado será considerado.
-	 * @ApiAnnotation({"method":"post","params":["idProductUnit"]})
+	 * @ApiPermissionAnnotation({"method":"post","params":["idProductUnit"]})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
 	 * @return ApiResultObject aquisição do resultado com os dados da unidade de produto atualizada.
 	 */
@@ -82,7 +83,7 @@ class ProductUnitService extends DefaultSiteService
 
 	/**
 	 * Exclui os dados de uma unidade de produto através do seu código de identificação.
-	 * @ApiAnnotation({"params":["idProductUnit"]})
+	 * @ApiPermissionAnnotation({"params":["idProductUnit"]})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
 	 * @return ApiResultObject aquisição do resultado com os dados da unidade de produto excluída.
 	 */
@@ -100,7 +101,7 @@ class ProductUnitService extends DefaultSiteService
 
 	/**
 	 * Obtém os dados de uma unidade de produto através do seu código de identificação.
-	 * @ApiAnnotation({"params":["idProductUnit"]})
+	 * @ApiPermissionAnnotation({"params":["idProductUnit"]})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
 	 * @return ApiResultObject aquisição do resultado com os dados da unidade de produto obtido.
 	 */
@@ -132,7 +133,7 @@ class ProductUnitService extends DefaultSiteService
 
 	/**
 	 * Obtém os dados as unidades de produtos filtradas a partir do seu nome.
-	 * @ApiAnnotation({"params":["filter","value"]})
+	 * @ApiPermissionAnnotation({"params":["filter","value"]})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
 	 * @return ApiResultObject aquisição do resultado com os dados das unidades de produto filtradas.
 	 */
@@ -166,7 +167,7 @@ class ProductUnitService extends DefaultSiteService
 
 	/**
 	 * Verifica a disponibilidade de algum valor de atributo para unidades de produto.
-	 * @ApiAnnotation({"params":["filter","value","idProductUnit"]})
+	 * @ApiPermissionAnnotation({"params":["filter","value","idProductUnit"]})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
 	 * @return ApiResultObject aquisição do resultado com a validação da disponibilidade do dado.
 	 */

@@ -44,6 +44,18 @@ INSERT INTO permissions (packet, action, assignmentLevel) VALUES
 ('manufacturer', 'search', 20),
 ('manufacturer', 'avaiable', 20);
 
+-- Product Unit Service
+
+INSERT INTO permissions (packet, action, assignmentLevel) VALUES
+('productUnit', 'settings', 20),
+('productUnit', 'add', 20),
+('productUnit', 'set', 20),
+('productUnit', 'remove', 20),
+('productUnit', 'get', 20),
+('productUnit', 'getAll', 20),
+('productUnit', 'search', 20),
+('productUnit', 'avaiable', 20);
+
 -- TERCOM Profiles Permissions
 
 REPLACE INTO tercom_profile_permissions (idTercomProfile, idPermission)

@@ -20,7 +20,7 @@ include_once '../include.php';
 			exit;
 		}
 
-		return GeradorDeDados::callWebService('manufacture/add', $_GET);
+		return GeradorDeDados::callWebService('manufacturer/add', $_GET);
 	}
 }
 include_once '../execute.php';

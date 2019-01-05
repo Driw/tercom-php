@@ -24,7 +24,7 @@ include_once '../include.php';
 		$filter = $_GET['filter'];
 		$value = $_GET['value'];
 
-		return GeradorDeDados::callWebService("manufacture/search/$filter/$value", []);
+		return GeradorDeDados::callWebService("manufacturer/search/$filter/$value", []);
 	}
 }
 include_once '../execute.php';

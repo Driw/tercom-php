@@ -20,7 +20,7 @@ include_once '../include.php';
 
 		$idManufacture = intval($_GET['idManufacture']);
 
-		return GeradorDeDados::callWebService("manufacture/remove/$idManufacture", []);
+		return GeradorDeDados::callWebService("manufacturer/remove/$idManufacture", []);
 	}
 }
 include_once '../execute.php';

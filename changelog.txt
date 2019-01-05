@@ -20,6 +20,18 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+05.01.2018 - 0.3.4.148b
+- Adicionado permissões para a utilização do serviço para gerenciamento de unidades de produto, ProductUnitService.
+- Atualizando permissions.sql conforme as novas permissões referentes a ProductUnitService.
+- Atualizado scripts de testes do serviço para gerenciamento de fabricantes conforme o novo nome de serviço de 'manufacture' para 'manufacturer'.
+- Adicionado script de teste para obter todos os fabricantes registrados, productUnitSettings.
+
+05.01.2018 - 0.3.4.148a
+- Adicionado permissões para a utilização do serviço para gerenciamento de fabricantes, ManufacturerService.
+- Atualizando permissions.sql conforme as novas permissões referentes a ManufacturerService.
+- Corrigido anotação usada em ProviderContactService que estava incorreta.
+- Adicionado script de teste para obter todos os fabricantes registrados, manufacturerGetAll.
+
 04.01.2018 - 0.3.4.148
 - Atualizando permissions.sql conforme as novas permissões referentes a rev147.
 

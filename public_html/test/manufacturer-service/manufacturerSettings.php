@@ -6,7 +6,7 @@ include_once '../include.php';
 {
 	function testExecute()
 	{
-		return GeradorDeDados::callWebService("manufacture/settings", []);
+		return GeradorDeDados::callWebService("manufacturer/settings", []);
 	}
 }
 include_once '../execute.php';

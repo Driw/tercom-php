@@ -23,7 +23,7 @@ include_once '../include.php';
 
 		$idManufacturer = $_GET['idManufacturer'];
 
-		return GeradorDeDados::callWebService("manufacture/set/$idManufacturer", $_GET);
+		return GeradorDeDados::callWebService("manufacturer/set/$idManufacturer", $_GET);
 	}
 }
 include_once '../execute.php';
