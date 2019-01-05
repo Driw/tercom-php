@@ -20,6 +20,9 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+05.01.2018 - 0.3.4.152
+- Atualização do README conforme estado atual do projeto e ajustes nas configurações HTTP/HTTPS e módulos.
+
 05.01.2018 - 0.3.4.151
 - Atualizado alguns dos webservices anteriormente atualizados para considerar as permissões, algumas ações não tinham anotações.
 

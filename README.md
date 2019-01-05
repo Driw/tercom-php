@@ -1,70 +1,64 @@
 # Tercom-PHP
 
-## STATUS
-
-- [x] Core
-- [x] Fornecedores
-- [x] Fabricantes
-- [x] Produtos
-- [x] Serviços
-- [ ] Clientes
-- [ ] Funcionários
-- [ ] Cotação
-- [ ] Chat
-
 ## MÓDULOS
-- Manter Fornecedores
-- Manter Produto Categoria
-- Manter Fabricante
-- Manter Produto
-- Manter Produto Valor
-- Manter Serviço
-- Manter Serviço Valores
-- Manter Cliente
-- Manter Cargos de Funcionários da TERCOM
-- Manter Funcionários Cliente
-- Login do Funcionário Cliente
-- Manter Cargos de Funcionários da TERCOM
-- Manter Funcionários TERCOM
-- Login Funcionário TERCOM
-- Solicitação de cotação
-- Realizar cotação
-- Autorização de pedido
-- Aceite do Pedido
-- Consultar Histórico
-- Chat
+### Primeira Iteração
+- [x] Manter Fornecedores
+- [x] Manter Contatos de Fornecedor
+- [x] Manter Fabricante
+- [x] Manter Unidade de Produto
+- [x] Manter Categoria de Produto
+- [x] Manter Produto
+- [x] Manter Produto Valor
+- [x] Manter Serviço
+- [x] Manter Serviço Valor
+### Segunda Iteração
+- [x] Manter Cliente
+- [x] Manter Perfil de Cliente
+- [x] Manter Funcionário de Cliente
+- [x] Login do Funcionário Cliente
+- [x] Manter Perfil TERCOM
+- [x] Manter Funcionário TERCOM
+- [x] Login Funcionário TERCOM
+### Terceira Iteração
+- [ ] Solicitação de Cotação
+- [ ] Manter e Realizar Cotação
+- [ ] Autorização de Pedido
+- [ ] Aceite do Pedido
+- [ ] Consultar Histórico
+### Extra
+- [ ] Chat
 
 ## CONFIGURAÇÃO APACHE (RECOMENDADO)
 
 ```
-<VirtualHost localhost:80>
-	DocumentRoot "D:/Andrew/Workspace/PHP/Tercom/trunk/public_html"
-	<Directory "D:/Andrew/Workspace/PHP/Tercom/trunk/public_html">
+<VirtualHost *:80>
+	DocumentRoot "{DIRETORIO_PUBLIC_HTML}"
+	<Directory "{DIRETORIO_PUBLIC_HTML}">
 		Options Indexes FollowSymLinks Includes ExecCGI
 		AllowOverride All
 		Require all granted
 	</Directory>
 	ServerName tercom.localhost
 	ServerAdmin admin@tercom
-	ErrorLog "{PROJECT_DIR}logs/error.log"
-	TransferLog "{PROJECT_DIR}logs/access.log"
+	ErrorLog "{DIRETORIO_LOGS}error.log"
+	TransferLog "{DIRETORIO_LOGS}access.log"
 </VirtualHost>
 
-<VirtualHost localhost:443>
-	DocumentRoot "D:/Andrew/Workspace/PHP/Tercom/trunk/public_html"
-	<Directory "D:/Andrew/Workspace/PHP/Tercom/trunk/public_html">
+<VirtualHost *:443>
+	DocumentRoot "{DIRETORIO_PUBLIC_HTML}"
+	<Directory "{DIRETORIO_PUBLIC_HTML}">
 		Options Indexes FollowSymLinks Includes ExecCGI
 		AllowOverride All
 		Require all granted
 	</Directory>
 	ServerName tercom.localhost
 	ServerAdmin admin@tercom
-	ErrorLog "{PROJECT_DIR}logs/error.log"
-	TransferLog "{PROJECT_DIR}logs/access.log"
+	ErrorLog "{DIRETORIO_LOGS}error.log"
+	TransferLog "{DIRETORIO_LOGS}access.log"
 	SSLEngine on
-	SSLCertificateFile "conf/ssl.crt/localhost.crt"
-	SSLCertificateKeyFile "conf/ssl.key/localhost.key"
-	CustomLog "{PROJECT_DIR}logs/ssl_request.log" \
+	SSLCertificateFile "conf/ssl.crt/server.crt"
+	SSLCertificateKeyFile "conf/ssl.key/server.key"
+	CustomLog "{DIRETORIO_LOGS}ssl_request.log" \
 			  "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b"
 </VirtualHost>
 ```
