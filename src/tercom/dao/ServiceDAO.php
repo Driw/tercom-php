@@ -69,7 +69,7 @@ class ServiceDAO extends GenericDAO
 		$sql = "INSERT INTO services (name, description, tags, inactive)
 				VALUES (?, ?, ?, ?)";
 
-		$query = $this->mysql->createQuery($sql);
+		$query = $this->createQuery($sql);
 		$query->setString(1, $service->getName());
 		$query->setString(2, $service->getDescription());
 		$query->setString(3, $service->getTags()->getString());
@@ -94,7 +94,7 @@ class ServiceDAO extends GenericDAO
 				SET name = ?, description = ?, tags = ?, inactive = ?
 				WHERE id = ?";
 
-		$query = $this->mysql->createQuery($sql);
+		$query = $this->createQuery($sql);
 		$query->setString(1, $service->getName());
 		$query->setString(2, $service->getDescription());
 		$query->setString(3, $service->getTags()->getString());
@@ -119,13 +119,13 @@ class ServiceDAO extends GenericDAO
 	 * @param int $idService código de identificação único do serviço.
 	 * @return Service|NULL serviço com os dados carregados ou NULL se não encontrado.
 	 */
-	public function select(int $idService): Service
+	public function select(int $idService): ?Service
 	{
 		$sqlSELECT = $this->newSelect();
 		$sql = "$sqlSELECT
 				WHERE id = ?";
 
-		$query = $this->mysql->createQuery($sql);
+		$query = $this->createQuery($sql);
 		$query->setInteger(1, $idService);
 
 		$result = $query->execute();
@@ -143,7 +143,7 @@ class ServiceDAO extends GenericDAO
 		$sql = "$sqlSELECT
 				ORDER BY name";
 
-		$query = $this->mysql->createQuery($sql);
+		$query = $this->createQuery($sql);
 		$result = $query->execute();
 
 		return $this->parseServices($result);
@@ -160,7 +160,7 @@ class ServiceDAO extends GenericDAO
 		$sql = "$sqlSELECT
 				WHERE name LIKE ?";
 
-		$query = $this->mysql->createQuery($sql);
+		$query = $this->createQuery($sql);
 		$query->setString(1, "%$name%");
 
 		$result = $query->execute();

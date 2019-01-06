@@ -3,6 +3,7 @@
 namespace tercom\dao;
 
 use dProject\MySQL\Result;
+use dProject\Primitive\StringUtil;
 use tercom\dao\exceptions\DAOException;
 use tercom\entities\Provider;
 use tercom\entities\ServicePrice;
@@ -43,6 +44,7 @@ class ServicePriceDAO extends GenericDAO
 		// NOT NULL
 		if ($servicePrice->getPrice() === 0) throw new DAOException('preço do serviço não informado');
 		if ($servicePrice->getIdProvider() === 0) throw new DAOException('fornecedor não informado');
+		if (StringUtil::isEmpty($servicePrice->getName())) throw new DAOException('nome não informado');
 
 		// FOREIGN KEY
 		if (!$this->existProvider($servicePrice->getProvider())) throw new DAOException('fornecedor desconhecido');
@@ -60,9 +62,9 @@ class ServicePriceDAO extends GenericDAO
 		$sql = "INSERT INTO service_values (idService, idProvider, name, additionalDescription, price)
 				VALUES (?, ?, ?, ?, ?)";
 
-		$query = $this->mysql->createQuery($sql);
-		$query->setInteger(1, $servicePrice->getIdService());
-		$query->setInteger(2, $servicePrice->getIdProvider());
+		$query = $this->createQuery($sql);
+		$query->setInteger(1, $servicePrice->getServiceId());
+		$query->setInteger(2, $servicePrice->getProviderId());
 		$query->setString(3, $servicePrice->getName());
 		$query->setString(4, $servicePrice->getAdditionalDescription());
 		$query->setFloat(5, $servicePrice->getPrice());
@@ -89,12 +91,12 @@ class ServicePriceDAO extends GenericDAO
 				SET name = ?, additionalDescription = ?, price = ?
 				WHERE idService = ? AND idProvider = ?";
 
-		$query = $this->mysql->createQuery($sql);
+		$query = $this->createQuery($sql);
 		$query->setString(1, $servicePrice->getName());
 		$query->setString(2, $servicePrice->getAdditionalDescription());
 		$query->setFloat(3, $servicePrice->getPrice());
-		$query->setInteger(4, $servicePrice->getIdService());
-		$query->setInteger(5, $servicePrice->getIdProvider());
+		$query->setInteger(4, $servicePrice->getServiceId());
+		$query->setInteger(5, $servicePrice->getProviderId());
 		$query->setEmptyAsNull(true);
 
 		$result = $query->execute();
@@ -114,7 +116,7 @@ class ServicePriceDAO extends GenericDAO
 		$sql = "DELETE FROM service_values
 				WHERE id = ?";
 
-		$query = $this->mysql->createQuery($sql);
+		$query = $this->createQuery($sql);
 		$query->setInteger(1, $servicePrice->getID());
 
 		$result = $query->execute();
@@ -137,13 +139,13 @@ class ServicePriceDAO extends GenericDAO
 	 * @param int $idServicePrice código de identificação único do preço de serviço.
 	 * @return ServicePrice|NULL preço de serviço com os dados carregados ou NULL se não encontrado.
 	 */
-	public function select(int $idServicePrice): ServicePrice
+	public function select(int $idServicePrice): ?ServicePrice
 	{
 		$sqlSelect = $this->newSelect();
 		$sql = "$sqlSelect
 				WHERE id = ?";
 
-		$query = $this->mysql->createQuery($sql);
+		$query = $this->createQuery($sql);
 		$query->setInteger(1, $idServicePrice);
 
 		$result = $query->execute();
@@ -162,7 +164,7 @@ class ServicePriceDAO extends GenericDAO
 		$sql = "$sqlSelect
 				WHERE idService = ?";
 
-		$query = $this->mysql->createQuery($sql);
+		$query = $this->createQuery($sql);
 		$query->setInteger(1, $idService);
 
 		$result = $query->execute();
@@ -182,7 +184,7 @@ class ServicePriceDAO extends GenericDAO
 		$sql = "$sqlSelect
 				WHERE idService = ? AND idProvider";
 
-		$query = $this->mysql->createQuery($sql);
+		$query = $this->createQuery($sql);
 		$query->setInteger(1, $idService);
 		$query->setInteger(2, $idProvider);
 

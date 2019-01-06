@@ -17,7 +17,7 @@ function testExecute()
 		exit;
 	}
 	$idService = intval($_GET['idService']);
-	return GeradorDeDados::callWebService("servicePrice/getService/$idService", []);
+	return GeradorDeDados::callWebService("servicePrice/getAll/$idService", []);
 }
 require_once '../execute.php';
 

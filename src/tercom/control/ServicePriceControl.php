@@ -2,8 +2,6 @@
 
 namespace tercom\control;
 
-use dProject\MySQL\MySQL;
-use dProject\Primitive\StringUtil;
 use tercom\dao\ServicePriceDAO;
 use tercom\entities\ServicePrice;
 use tercom\entities\lists\ServicePrices;
@@ -13,7 +11,6 @@ use tercom\entities\lists\ServicePrices;
  * @see ServicePriceDAO
  * @see ServicePrice
  * @author Andrew
- *
  */
 class ServicePriceControl extends GenericControl
 {
@@ -25,50 +22,35 @@ class ServicePriceControl extends GenericControl
 	/**
 	 *
 	 */
-	public function __construct(MySQL $mysql)
+	public function __construct()
 	{
-		$this->servicePriceDAO = new ServicePriceDAO($mysql);
+		$this->servicePriceDAO = new ServicePriceDAO();
 	}
 
-	private function validate(ServicePrice $servicePrice, bool $validateID)
+	public function add(ServicePrice $servicePrice): void
 	{
-		if ($validateID) {
-			if ($servicePrice->getId() === 0)
-				throw new ControlException('preço de serviço não identificado');
-		} else {
-			if ($servicePrice->getId() !== 0)
-				throw new ControlException('preço de serviço já identificado');
-		}
-
-		if ($servicePrice->getIdService() === 0) throw new ControlException('serviço não informado');
-		if ($servicePrice->getIdProvider() === 0) throw new ControlException('fornecedor não informado');
-		if (StringUtil::isEmpty($servicePrice->getName())) throw new ControlException('nome não informado');
+		if (!$this->servicePriceDAO->insert($servicePrice))
+			throw new ControlException('não foi possível adicionar o preço de serviço');
 	}
 
-	public function add(ServicePrice $servicePrice): bool
+	public function set(ServicePrice $servicePrice): void
 	{
-		$this->validate($servicePrice, false);
-
-		return $this->servicePriceDAO->insert($servicePrice);
+		if (!$this->servicePriceDAO->update($servicePrice))
+			throw new ControlException('não foi possível atualizar o preço de serviço');
 	}
 
-	public function set(ServicePrice $servicePrice): bool
+	public function remove(ServicePrice $servicePrice): void
 	{
-		$this->validate($servicePrice, true);
-
-		return $this->servicePriceDAO->update($servicePrice);
-	}
-
-	public function remove(ServicePrice $servicePrice): bool
-	{
-		$this->validate($servicePrice, true);
-
-		return $this->servicePriceDAO->delete($servicePrice);
+		if (!$this->servicePriceDAO->delete($servicePrice))
+			throw new ControlException('não foi possível exlcuir o preço de serviço');
 	}
 
 	public function get(int $idServicePrice): ServicePrice
 	{
-		return $this->servicePriceDAO->select($idServicePrice);
+		if (($servicePrice = $this->servicePriceDAO->select($idServicePrice)) === null)
+			throw new ControlException('preço de serviço não encontrado');
+
+		return $servicePrice;
 	}
 
 	public function getByService(int $idService): ServicePrices

@@ -85,7 +85,7 @@ class ServicePrice extends AdvancedObject
 	 * @param int $id código de identificação único do preço de serviço.
 	 * @return ServicePrice aquisição do objeto de preço ser serviço usado.
 	 */
-	public function setId(int $id): ServicePrice
+	public function setId(int $id): void
 	{
 		$this->id = $id;
 	}
@@ -102,7 +102,7 @@ class ServicePrice extends AdvancedObject
 	 * @param Service $service aquisição do objeto do tipo serviço do qual pertence o preço de serviço.
 	 * @return ServicePrice aquisição do objeto de preço ser serviço usado.
 	 */
-	public function setService(Service $service): ServicePrice
+	public function setService(Service $service): void
 	{
 		$this->service = $service;
 	}
@@ -124,10 +124,18 @@ class ServicePrice extends AdvancedObject
 	}
 
 	/**
+	 * @return int aquisição do código de identificação único do fornecedor que fornece o preço.
+	 */
+	public function getProviderId(): int
+	{
+		return $this->provider->getId();
+	}
+
+	/**
 	 * @param Provider $provider objeto do tipo fornecedor que fornece o preço.
 	 * @return ServicePrice aquisição do objeto de preço ser serviço usado.
 	 */
-	public function setProvider(Provider $provider): ServicePrice
+	public function setProvider(Provider $provider): void
 	{
 		$this->provider = $provider;
 	}
@@ -152,7 +160,7 @@ class ServicePrice extends AdvancedObject
 	 * @param string $name nome do preço de serviço.
 	 * @return ServicePrice aquisição do objeto de preço ser serviço usado.
 	 */
-	public function setName(string $name): ServicePrice
+	public function setName(string $name): void
 	{
 		if (!StringUtil::hasBetweenLength($name, self::MIN_NAME_LEN, self::MAX_NAME_LEN))
 			throw EntityParseException::new("nome deve possuir de %d a %d caracteres (nome: $name)", self::MIN_NAME_LEN, self::MAX_NAME_LEN);
@@ -172,7 +180,7 @@ class ServicePrice extends AdvancedObject
 	 * @param string $additionalDescription dascrição adicional.
 	 * @return ServicePrice aquisição do objeto de preço ser serviço usado.
 	 */
-	public function setAdditionalDescription(?string $additionalDescription): ServicePrice
+	public function setAdditionalDescription(?string $additionalDescription): void
 	{
 		if ($additionalDescription !== null && !StringUtil::hasMaxLength($additionalDescription, self::MAX_ADDITIONAL_DESCRIPTION))
 			throw EntityParseException::new("descrição adicional deve possuir até %d caracteres", self::MAX_ADDITIONAL_DESCRIPTION);
@@ -192,7 +200,7 @@ class ServicePrice extends AdvancedObject
 	 * @param float $price preço do serviço.
 	 * @return ServicePrice aquisição do objeto de preço ser serviço usado.
 	 */
-	public function setPrice(float $price): ServicePrice
+	public function setPrice(float $price): void
 	{
 		if (!FloatUtil::inMin($price, self::MIN_PRICE))
 			throw EntityParseException::new('preço do serviço deve ser maior ou igual a %.2f', self::MIN_PRICE);

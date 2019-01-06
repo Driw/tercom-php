@@ -3,6 +3,7 @@
 namespace tercom\dao;
 
 use dProject\MySQL\Result;
+use dProject\Primitive\StringUtil;
 use tercom\entities\ProductPrice;
 use tercom\entities\lists\ProductPrices;
 use tercom\exceptions\ProductPriceException;
@@ -47,6 +48,7 @@ class ProductPriceDAO extends GenericDAO
 		}
 
 		// NOT NULL
+		if (StringUtil::isEmpty($productPrice->getName())) throw ProductPriceException::newNameEmpty();
 		if ($productPrice->getAmount() === 0) throw ProductPriceException::newAmountEmpty();
 		if ($productPrice->getPrice() === 0.0) throw ProductPriceException::newPriceEmpty();
 		if ($productPrice->getProductId() === 0) throw ProductPriceException::newProductNone();

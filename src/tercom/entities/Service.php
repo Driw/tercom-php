@@ -124,7 +124,7 @@ class Service extends AdvancedObject
 	 */
 	public function getTags(): Tags
 	{
-		return $this->tags;
+		return $this->tags === null ? ($this->tags = new Tags()) : $this->tags;
 	}
 
 	/**

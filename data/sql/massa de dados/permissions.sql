@@ -156,6 +156,30 @@ INSERT INTO permissions (packet, action, assignmentLevel) VALUES
 ('productPrice', 'getAll', 20)
 ('productPrice', 'search', 20);
 
+-- Service Service
+
+INSERT INTO permissions (packet, action, assignmentLevel) VALUES
+('service', 'settings', 20),
+('service', 'add', 20),
+('service', 'set', 20),
+('service', 'setInactive', 20),
+('service', 'get', 20),
+('service', 'getAll', 20),
+('service', 'search', 20),
+('service', 'avaiable', 20);
+
+-- Service Price Service
+
+INSERT INTO permissions (packet, action, assignmentLevel) VALUES
+('servicePrice', 'settings', 20),
+('servicePrice', 'add', 20),
+('servicePrice', 'set', 20),
+('servicePrice', 'remove', 20),
+('servicePrice', 'get', 20),
+('servicePrice', 'getProvider', 20),
+('servicePrice', 'getAll', 20),
+('servicePrice', 'search', 20);
+
 -- TERCOM Profiles Permissions
 
 REPLACE INTO tercom_profile_permissions (idTercomProfile, idPermission)

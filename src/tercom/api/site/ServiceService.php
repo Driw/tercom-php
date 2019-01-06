@@ -3,13 +3,11 @@
 namespace tercom\api\site;
 
 use dProject\restful\ApiContent;
-use dProject\restful\ApiResult;
-use tercom\api\site\results\ApiResultServiceSettings;
-use tercom\api\site\results\ApiResultService;
-use tercom\entities\Service;
-use tercom\api\exceptions\ServiceException;
-use tercom\api\site\results\ApiResultServices;
+use tercom\api\exceptions\FilterException;
 use tercom\api\site\results\ApiResultSimpleValidation;
+use tercom\api\site\results\ApiResultObject;
+use tercom\api\site\results\ApiResultServiceSettings;
+use tercom\entities\Service;
 
 /**
  * @see DefaultSiteService
@@ -20,7 +18,7 @@ use tercom\api\site\results\ApiResultSimpleValidation;
 class ServiceService extends DefaultSiteService
 {
 	/**
-	 *
+	 * @ApiPermissionAnnotation({})
 	 * @param ApiContent $content
 	 * @return ApiResultServiceSettings
 	 */
@@ -30,11 +28,11 @@ class ServiceService extends DefaultSiteService
 	}
 
 	/**
-	 *
+	 * @ApiPermissionAnnotation({"method":"post"})
 	 * @param ApiContent $content
-	 * @return ApiResult
+	 * @return ApiResultObject
 	 */
-	public function actionAdd(ApiContent $content): ApiResult
+	public function actionAdd(ApiContent $content): ApiResultObject
 	{
 		$post = $content->getPost();
 
@@ -47,109 +45,94 @@ class ServiceService extends DefaultSiteService
 		if ($post->isSetted('tags')) $service->getTags()->parseString($post->getString('tags'));
 		if ($post->isSetted('inactive')) $service->setInactive($post->getString('inactive'));
 
-		if (!$this->getServiceControl()->add($service))
-			throw ServiceException::newAdd();
+		$this->getServiceControl()->add($service);
 
-		$result = new ApiResultService();
-		$result->setMessage('serviço %s adicionado com êxito', $service->getName());
-		$result->setService($service);
+		$result = new ApiResultObject();
+		$result->setResult($service, 'serviço %s adicionado com êxito', $service->getName());
 
 		return $result;
 	}
 
 	/**
-	 * @ApiAnnotation({"params":["idService"]})
+	 * @ApiPermissionAnnotation({"params":["idService"]})
 	 * @param ApiContent $content
-	 * @return ApiResult
+	 * @return ApiResultObject
 	 */
-	public function actionSet(ApiContent $content): ApiResult
+	public function actionSet(ApiContent $content): ApiResultObject
 	{
 		$post = $content->getPost();
 		$idService = $content->getParameters()->getInt('idService');
-
-		if (($service = $this->getServiceControl()->get($idService)) === null)
-			throw ServiceException::newNotFound();
+		$service = $this->getServiceControl()->get($idService);
 
 		if ($post->isSetted('name')) $service->setName($post->getString('name'));
 		if ($post->isSetted('description')) $service->setDescription($post->getString('description'));
 		if ($post->isSetted('tags')) $service->getTags()->parseString($post->getString('tags'));
 		if ($post->isSetted('inactive')) $service->setInactive($post->getString('inactive'));
 
-		if (!$this->getServiceControl()->set($service))
-			throw ServiceException::newNotSet();
+		$this->getServiceControl()->set($service);
 
-		$result = new ApiResultService();
-		$result->setMessage('serviço %s atualizado com êxito', $service->getName());
-		$result->setService($service);
+		$result = new ApiResultObject();
+		$result->setResult($service, 'serviço %s atualizado com êxito', $service->getName());
 
 		return $result;
 	}
 
 	/**
-	 * @ApiAnnotation({"params":["idService"]})
+	 * @ApiPermissionAnnotation({"params":["idService"]})
 	 * @param ApiContent $content
-	 * @return ApiResult
+	 * @return ApiResultObject
 	 */
-	public function actionSetInactive(ApiContent $content): ApiResult
+	public function actionSetInactive(ApiContent $content): ApiResultObject
 	{
 		$post = $content->getPost();
 		$idService = $content->getParameters()->getInt('idService');
+		$service = $this->getServiceControl()->get($idService);
+		$service->setInactive(($avaiable = $post->getBoolean('inactive')));
+		$this->getServiceControl()->set($service);
 
-		if (($service = $this->getServiceControl()->get($idService)) === null)
-			throw ServiceException::newNotFound();
-
-		$service->setInactive($post->getString('inactive'));
-
-		if (!$this->getServiceControl()->set($service))
-			throw ServiceException::newNotSet();
-
-		$result = new ApiResultService();
-		$result->setMessage('serviço %s atualizado para %s', $service->getName(), $service->isInactive() ? 'ativo' : 'inativo');
-		$result->setService($service);
+		$result = new ApiResultObject();
+		$result->setResult($service, 'serviço %s atualizado para %s', $service->getName(), $this->getMessageAvaiable($avaiable));
 
 		return $result;
 	}
 
 	/**
-	 * @ApiAnnotation({"params":["idService"]})
+	 * @ApiPermissionAnnotation({"params":["idService"]})
 	 * @param ApiContent $content
-	 * @return ApiResult
+	 * @return ApiResultObject
 	 */
-	public function actionGet(ApiContent $content): ApiResult
+	public function actionGet(ApiContent $content): ApiResultObject
 	{
 		$idService = $content->getParameters()->getInt('idService');
+		$service = $this->getServiceControl()->get($idService);
 
-		if (($service = $this->getServiceControl()->get($idService)) === null)
-			throw ServiceException::newNotFound();
-
-		$result = new ApiResultService();
-		$result->setMessage('serviço "%s" obtido com êxito', $service->getName());
-		$result->setService($service);
+		$result = new ApiResultObject();
+		$result->setResult($service, 'serviço "%s" obtido com êxito', $service->getName());
 
 		return $result;
 	}
 
 	/**
 	 * @param ApiContent $content
-	 * @return ApiResult
+	 * @return ApiResultObject
 	 */
-	public function actionGetAll(ApiContent $content): ApiResult
+	public function actionGetAll(ApiContent $content): ApiResultObject
 	{
 		$services = $this->getServiceControl()->getAll();
 
-		$result = new ApiResultServices();
-		$result->setMessage('encontrado %d serviços registrados', $services->size());
-		$result->setServices($services);
+		$result = new ApiResultObject();
+		$result->setResult($services, 'encontrado %d serviços registrados', $services->size());
 
 		return $result;
 	}
 
 	/**
-	 * @ApiAnnotation({"params":["filter","value"]})
+	 * @ApiPermissionAnnotation({"params":["filter","value"]})
 	 * @param ApiContent $content
-	 * @return ApiResult
+	 * @throws FilterException
+	 * @return ApiResultObject
 	 */
-	public function actionSearch(ApiContent $content): ApiResult
+	public function actionSearch(ApiContent $content): ApiResultObject
 	{
 		$filter = $content->getParameters()->getString('filter');
 
@@ -158,31 +141,31 @@ class ServiceService extends DefaultSiteService
 			case 'name': return $this->searchByName($content);
 		}
 
-		throw ServiceException::newFilterNotFound();
+		throw new FilterException();
 	}
 
 	/**
 	 * @param ApiContent $content
-	 * @return ApiResultServices
+	 * @return ApiResultObject
 	 */
-	private function searchByName(ApiContent $content): ApiResultServices
+	private function searchByName(ApiContent $content): ApiResultObject
 	{
 		$name = $content->getParameters()->getString('value');
 		$services = $this->getServiceControl()->filterByName($name);
 
-		$result = new ApiResultServices();
-		$result->setMessage('encontrado %d serviços com "%s" no nome', $services->size(), $name);
-		$result->setServices($services);
+		$result = new ApiResultObject();
+		$result->setResult($services, 'encontrado %d serviços com "%s" no nome', $services->size(), $name);
 
 		return $result;
 	}
 
 	/**
-	 * @ApiAnnotation({"params":["field","value"]})
+	 * @ApiPermissionAnnotation({"params":["field","value"]})
 	 * @param ApiContent $content
-	 * @return ApiResult
+	 * @throws FilterException
+	 * @return ApiResultObject
 	 */
-	public function actionAvaiable(ApiContent $content): ApiResult
+	public function actionAvaiable(ApiContent $content): ApiResultObject
 	{
 		$field = $content->getParameters()->getString('field');
 
@@ -191,7 +174,7 @@ class ServiceService extends DefaultSiteService
 			case 'name': return $this->avaiableName($content);
 		}
 
-		throw ServiceException::newFieldNotFound();
+		throw new FilterException();
 	}
 
 	/**
@@ -201,12 +184,10 @@ class ServiceService extends DefaultSiteService
 	private function avaiableName(ApiContent $content): ApiResultSimpleValidation
 	{
 		$name = $content->getParameters()->getString('value');
-		$result = new ApiResultSimpleValidation();
+		$avaiable = $this->getServiceControl()->avaiableName($name);
 
-		if ($this->getServiceControl()->avaiableName($name))
-			$result->setOkMessage(true, 'nome de serviço disponível');
-		else
-			$result->setOkMessage(false, 'nome de serviço indisponível');
+		$result = new ApiResultSimpleValidation();
+		$result->setOkMessage($avaiable, $avaiable ? 'nome de serviço disponível' : 'nome de serviço indisponível');
 
 		return $result;
 	}

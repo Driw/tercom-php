@@ -20,6 +20,13 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+06.01.2018 - 0.3.4.155
+- Adicionado permissões para a utilização do serviço para gerenciamento de serviços, ServiceService.
+- Adicionado permissões para a utilização do serviço para gerenciamento de preços de serviços, ServicePriceService.
+- Renomeado ação de 'getService' para 'getAll' conforme padrão do sistema, ServicePriceService.
+- Atualizado ServiceService e ServicePriceService conforme o novo padrão de DAO, controle e serviços.
+- Corrigido problema na utilização de ServicePrice que deveria retornar void.
+
 06.01.2018 - 0.3.4.154
 - Corrigido parseEntry() que desconsiderava o separador de préfixo _ (underline) na comparação GenericDAO.
 - Adicionado permissões para a utilização do serviço para gerenciamento de preços de produto, ProductPriceService.

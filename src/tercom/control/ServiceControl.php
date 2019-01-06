@@ -6,6 +6,7 @@ use tercom\dao\ServiceDAO;
 use tercom\entities\Service;
 use tercom\entities\lists\Services;
 use dProject\MySQL\MySQL;
+use tercom\api\exceptions\ServiceException;
 
 /**
  * @see GenericControl
@@ -23,58 +24,39 @@ class ServiceControl extends GenericControl
 	/**
 	 * @param MySQL $mysql
 	 */
-	public function __construct(MySQL $mysql)
+	public function __construct()
 	{
-		$this->serviceDAO = new ServiceDAO($mysql);
+		$this->serviceDAO = new ServiceDAO();
 	}
 
 	/**
 	 * @param Service $service
-	 * @throws ControlException
-	 * @return bool
 	 */
-	private function validate(Service $service, bool $validateID)
+	public function add(Service $service): void
 	{
-		if ($validateID) {
-			if ($service->getId() === 0)
-				throw new ControlException('serviço não identificado');
-		} else {
-			if ($service->getId() !== 0)
-				throw new ControlException('serviço já identificado');
-		}
-
-		if (!$this->avaiableName($service->getName(), $service->getId())) throw new ControlException('nome de serviço indisponível');
+		if (!$this->serviceDAO->insert($service))
+			throw ServiceException::newNotAdd();
 	}
 
 	/**
 	 * @param Service $service
-	 * @return bool
 	 */
-	public function add(Service $service): bool
+	public function set(Service $service): void
 	{
-		$this->validate($service, false);
-
-		return $this->serviceDAO->insert($service);
-	}
-
-	/**
-	 * @param Service $service
-	 * @return bool
-	 */
-	public function set(Service $service): bool
-	{
-		$this->validate($service, true);
-
-		return $this->serviceDAO->update($service);
+		if (!$this->serviceDAO->update($service))
+			throw ServiceException::newNotSet();
 	}
 
 	/**
 	 * @param int $idService
-	 * @return Service|NULL
+	 * @return Service
 	 */
-	public function get(int $idService): ?Service
+	public function get(int $idService): Service
 	{
-		return $this->serviceDAO->select($idService);
+		if (($service = $this->serviceDAO->select($idService)) === null)
+			throw ServiceException::newNotFound();
+
+		return $service;
 	}
 
 	/**
