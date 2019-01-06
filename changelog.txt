@@ -20,6 +20,9 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+06.01.2018 - 0.3.4.156
+- Excluído diversas classes que não são mais utilizadas em 'api/site/results'.
+
 06.01.2018 - 0.3.4.155
 - Adicionado permissões para a utilização do serviço para gerenciamento de serviços, ServiceService.
 - Adicionado permissões para a utilização do serviço para gerenciamento de preços de serviços, ServicePriceService.
