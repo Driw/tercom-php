@@ -14,6 +14,10 @@ use tercom\SessionVar;
 class LoginTercomControl extends LoginControl
 {
 	/**
+	 * @var LoginTercom
+	 */
+	private static $loginTercom;
+	/**
 	 * @var LoginTercomDAO
 	 */
 	private $loginTercomDAO;
@@ -145,6 +149,9 @@ class LoginTercomControl extends LoginControl
 	 */
 	public function getCurrent(): LoginTercom
 	{
+		if (self::$loginTercom !== null)
+			return self::$loginTercom;
+
 		$post = PostService::getInstance();
 
 		if ($post->isSetted('idTercomEmployee') && $post->isSetted('idLogin') && $post->isSetted('token'))
@@ -172,9 +179,20 @@ class LoginTercomControl extends LoginControl
 				throw new ControlException('acesso não encontrado');
 		}
 
-		$loginCustomer = $this->get($idLogin, $idTercomEmployee, $token);
+		self::$loginTercom = $this->get($idLogin, $idTercomEmployee, $token);
+		self::setTercomManagement(true);
+		// FIXME verificar o tempo de acesso limite
 
-		return $loginCustomer;
+		return self::$loginTercom;
+	}
+
+	/**
+	 * Verifica se há um acesso de funcionário TERCOM efetuado no sistema.
+	 * @return bool true se houver ou false caso contrário.
+	 */
+	public function hasLogged(): bool
+	{
+		return self::$loginTercom !== null;
 	}
 }
 

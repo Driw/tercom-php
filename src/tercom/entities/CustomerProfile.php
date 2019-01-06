@@ -87,7 +87,7 @@ class CustomerProfile extends AdvancedObject implements Entity
 	 */
 	public function getCustomer(): Customer
 	{
-		return $this->customer === null ?($this->customer = new Customer()) : $this->customer;
+		return $this->customer === null ? ($this->customer = new Customer()) : $this->customer;
 	}
 
 	/**

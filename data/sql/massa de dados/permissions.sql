@@ -180,6 +180,8 @@ INSERT INTO permissions (packet, action, assignmentLevel) VALUES
 ('servicePrice', 'getAll', 20),
 ('servicePrice', 'search', 20);
 
+-- Customer Service
+
 INSERT INTO permissions (packet, action, assignmentLevel) VALUES
 ('customer', 'settings', 20),
 ('customer', 'add', 20),
@@ -190,6 +192,18 @@ INSERT INTO permissions (packet, action, assignmentLevel) VALUES
 ('customer', 'getAll', 20),
 ('customer', 'search', 20),
 ('customer', 'avaiable', 20);
+
+-- Customer Profile Service
+
+INSERT INTO permissions (packet, action, assignmentLevel) VALUES
+('customerProfile', 'settings', 20),
+('customerProfile', 'add', 20),
+('customerProfile', 'set', 20),
+('customerProfile', 'remove', 20),
+('customerProfile', 'get', 20),
+('customerProfile', 'customer', 20),
+('customerProfile', 'actions', 20),
+('customerProfile', 'getAll', 20);
 
 -- TERCOM Profiles Permissions
 

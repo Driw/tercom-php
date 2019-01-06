@@ -12,9 +12,14 @@ class ApiStatus
 	public const RELATIONSHIP = 5;
 	public const NOT_LOGGED = 6;
 	public const API_CONNECTION = 7;
-	public const PERMISSION_NOT_ENOUGHT = 8;
-	public const PERMISSION_TERCOM_EMPLOYEE = 9;
-	public const PERMISSION_CUSTOMER_EMPLOYEE = 10;
+	public const LOGIN_UNEXPECTED = 8;
+
+	public const PERMISSION_NOT_ENOUGHT = 51;
+	public const PERMISSION_TERCOM_EMPLOYEE = 52;
+	public const PERMISSION_CUSTOMER_EMPLOYEE = 53;
+	public const PERMISSION_LOW_LEVEL = 54;
+	public const PERMISSION_RESTRICTED = 55;
+	public const PERMISSION_CUSTOMER_INVALID = 56;
 
 	public const PROVIDER_IDENTIFIED = 101;
 	public const PROVIDER_NOT_IDENTIFIED = 102;

@@ -6,6 +6,7 @@ use tercom\dao\CustomerProfileDAO;
 use tercom\entities\Customer;
 use tercom\entities\CustomerProfile;
 use tercom\entities\lists\CustomerProfiles;
+use tercom\TercomException;
 
 /**
  * @see CustomerProfileDAO
@@ -36,61 +37,80 @@ class CustomerProfileControl extends GenericControl
 
 	/**
 	 *
-	 * @param Customer $customer
+	 * @param CustomerProfile $customerProfile
+	 * @param int $assignmentLevel
 	 * @throws ControlException
 	 */
-	private function validateCustomer(Customer $customer)
+	private function validateLoginAndAssignment(CustomerProfile $customerProfile, int $assignmentLevel)
 	{
-		if ($customer->getId() === 0)
-			throw new ControlException('cliente não identificado');
+		if ($customerProfile->getAssignmentLevel() > $assignmentLevel)
+			throw new ControlException('nível de assinatura acima do permitido');
+
+		if (!$this->isTercomManagement())
+			if ($this->getCustomerLogged()->getId() !== $customerProfile->getCustomerId())
+				throw TercomException::newCustomerInvliad();
 	}
 
 	/**
 	 *
 	 * @param CustomerProfile $customerProfile
-	 * @return bool
+	 * @param int $assignmentLevel
+	 * @throws ControlException
 	 */
-	public function add(CustomerProfile $customerProfile): bool
+	public function add(CustomerProfile $customerProfile, int $assignmentLevel): void
 	{
-		if (!$this->avaiableName($customerProfile->getCustomer(), $customerProfile->getName(), $customerProfile->getId()))
-			throw new ControlException('nome de perfil já registrado');
+		$this->validateLoginAndAssignment($customerProfile, $assignmentLevel);
 
-		return $this->customerProfileDAO->insert($customerProfile);
+		if (!$this->customerProfileDAO->insert($customerProfile))
+			throw new ControlException('não foi possível adicionar o perfil');
 	}
 
 	/**
 	 *
 	 * @param CustomerProfile $customerProfile
-	 * @return bool
+	 * @param int $assignmentLevel
+	 * @throws ControlException
 	 */
-	public function set(CustomerProfile $customerProfile): bool
+	public function set(CustomerProfile $customerProfile, int $assignmentLevel): void
 	{
-		if (!$this->avaiableName($customerProfile->getCustomer(), $customerProfile->getName(), $customerProfile->getId()))
-			throw new ControlException('nome de perfil já registrado');
+		$this->validateLoginAndAssignment($customerProfile, $assignmentLevel);
 
-		return $this->customerProfileDAO->update($customerProfile);
+		if (!$this->customerProfileDAO->update($customerProfile))
+			throw new ControlException('não foi possível atualizar o perfil');
 	}
 
 	/**
 	 *
 	 * @param CustomerProfile $customerProfile
-	 * @return bool
+	 * @param int $assignmentLevel
+	 * @throws ControlException
 	 */
-	public function remove(CustomerProfile $customerProfile): bool
+	public function remove(CustomerProfile $customerProfile, int $assignmentLevel): void
 	{
-		return $this->customerProfileDAO->delete($customerProfile);
+		$this->validateLoginAndAssignment($customerProfile, $assignmentLevel);
+
+		if (!$this->customerProfileDAO->delete($customerProfile))
+			throw new ControlException('não foi possível excluir o perfil');
 	}
 
 	/**
 	 *
 	 * @param int $idCustomerProfile
-	 * @param bool dependences
+	 * @param bool $dependences
+	 * @param int $assignmentLevel
+	 * @throws ControlException
 	 * @return CustomerProfile
 	 */
-	public function get(int $idCustomerProfile, bool $dependences = false): CustomerProfile
+	public function get(int $idCustomerProfile, bool $dependences = false, int $assignmentLevel): CustomerProfile
 	{
 		if (($customerProfile = $this->customerProfileDAO->select($idCustomerProfile)) === null)
 			throw new ControlException('perfil de cliente não encontrado');
+
+		if ($customerProfile->getAssignmentLevel() > $assignmentLevel)
+			throw TercomException::newPermissionLowLevel();
+
+		if ($this->hasCustomerLogged() && $customerProfile->getCustomerId() !== $this->getCustomerLogged()->getId())
+			throw new ControlException('perfil de cliente desconhecido');
 
 		if ($dependences)
 		{
@@ -106,9 +126,10 @@ class CustomerProfileControl extends GenericControl
 	 * @param Customer $customer
 	 * @return CustomerProfiles
 	 */
-	public function getByCustomer(Customer $customer): CustomerProfiles
+	public function getByCustomer(Customer $customer, int $assignmentLevel): CustomerProfiles
 	{
-		$this->validateCustomer($customer);
+		if (!$this->isTercomManagement())
+			throw TercomException::newPermissionRestrict();
 
 		return $this->customerProfileDAO->selectByCustomer($customer);
 	}
@@ -121,8 +142,6 @@ class CustomerProfileControl extends GenericControl
 	 */
 	public function getByCustomerLevel(Customer $customer, int $assignmentLevel): CustomerProfiles
 	{
-		$this->validateCustomer($customer);
-
 		return $this->customerProfileDAO->selectByCustomerLevel($customer, $assignmentLevel);
 	}
 
@@ -130,8 +149,11 @@ class CustomerProfileControl extends GenericControl
 	 *
 	 * @return CustomerProfiles
 	 */
-	public function getAll(): CustomerProfiles
+	public function getAll(int $assignmentLevel): CustomerProfiles
 	{
+		if ($this->hasCustomerLogged())
+			return $this->getByCustomerLevel($this->getCustomerLogged(), $assignmentLevel);
+
 		return $this->customerProfileDAO->selectAll();
 	}
 

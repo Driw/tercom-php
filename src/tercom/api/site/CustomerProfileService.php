@@ -16,6 +16,7 @@ class CustomerProfileService extends DefaultSiteService
 {
 	/**
 	 *
+	 * @ApiPermissionAnnotation({})
 	 * @return ApiResultCustomerProfileSettings
 	 */
 	public function actionSettings(): ApiResultCustomerProfileSettings
@@ -25,7 +26,7 @@ class CustomerProfileService extends DefaultSiteService
 
 	/**
 	 *
-	 * @ApiAnnotation({"method":"post"})
+	 * @ApiPermissionAnnotation({"method":"post"})
 	 * @param ApiContent $content
 	 * @return ApiResultCustomerProfile
 	 */
@@ -39,7 +40,7 @@ class CustomerProfileService extends DefaultSiteService
 		$customerProfile->setCustomer($customer);
 		$customerProfile->setName($post->getString('name'));
 		$customerProfile->setAssignmentLevel($post->getInt('assignmentLevel'));
-		$this->getCustomerProfileControl()->add($customerProfile);
+		$this->getCustomerProfileControl()->add($customerProfile, $this->getCurrentAssignmentLevel());
 
 		$result = new ApiResultCustomerProfile();
 		$result->setCustomerProfile($customerProfile);
@@ -50,7 +51,7 @@ class CustomerProfileService extends DefaultSiteService
 
 	/**
 	 *
-	 * @ApiAnnotation({"method":"post","params":["idCustomerProfile"]})
+	 * @ApiPermissionAnnotation({"method":"post","params":["idCustomerProfile"]})
 	 * @param ApiContent $content
 	 * @return ApiResultCustomerProfile
 	 */
@@ -58,14 +59,14 @@ class CustomerProfileService extends DefaultSiteService
 	{
 		$post = $content->getPost();
 		$idCustomerProfile = $content->getParameters()->getInt('idCustomerProfile');
-		$customerProfile = $this->getCustomerProfileControl()->get($idCustomerProfile, true);
+		$customerProfile = $this->getCustomerProfileControl()->get($idCustomerProfile, true, $this->getCurrentAssignmentLevel());
 		$customer = $this->getCustomerControl()->get($customerProfile->getCustomerId());
 		$customerProfile->setCustomer($customer);
 
 		if ($post->isSetted('name')) $customerProfile->setName($post->getString('name'));
 		if ($post->isSetted('assignmentLevel')) $customerProfile->setAssignmentLevel($post->getInt('assignmentLevel'));
 
-		$this->getCustomerProfileControl()->set($customerProfile);
+		$this->getCustomerProfileControl()->set($customerProfile, $this->getCurrentAssignmentLevel());
 
 		$result = new ApiResultCustomerProfile();
 		$result->setCustomerProfile($customerProfile);
@@ -76,16 +77,15 @@ class CustomerProfileService extends DefaultSiteService
 
 	/**
 	 *
-	 * @ApiAnnotation({"params":["idCustomerProfile"]})
+	 * @ApiPermissionAnnotation({"params":["idCustomerProfile"]})
 	 * @param ApiContent $content
 	 * @return ApiResultCustomerProfile
 	 */
 	public function actionRemove(ApiContent $content): ApiResultCustomerProfile
 	{
 		$idCustomerProfile = $content->getParameters()->getInt('idCustomerProfile');
-		$customerProfile = $this->getCustomerProfileControl()->get($idCustomerProfile, true);
-
-		$this->getCustomerProfileControl()->remove($customerProfile);
+		$customerProfile = $this->getCustomerProfileControl()->get($idCustomerProfile, true, $this->getCurrentAssignmentLevel());
+		$this->getCustomerProfileControl()->remove($customerProfile, $this->getCurrentAssignmentLevel());
 
 		$result = new ApiResultCustomerProfile();
 		$result->setCustomerProfile($customerProfile);
@@ -96,14 +96,14 @@ class CustomerProfileService extends DefaultSiteService
 
 	/**
 	 *
-	 * @ApiAnnotation({"params":["idCustomerProfile"]})
+	 * @ApiPermissionAnnotation({"params":["idCustomerProfile"]})
 	 * @param ApiContent $content
 	 * @return ApiResultCustomerProfile
 	 */
 	public function actionGet(ApiContent $content): ApiResultCustomerProfile
 	{
 		$idCustomerProfile = $content->getParameters()->getInt('idCustomerProfile');
-		$customerProfile = $this->getCustomerProfileControl()->get($idCustomerProfile, true);
+		$customerProfile = $this->getCustomerProfileControl()->get($idCustomerProfile, true, $this->getCurrentAssignmentLevel());
 
 		$result = new ApiResultCustomerProfile();
 		$result->setCustomerProfile($customerProfile);
@@ -114,7 +114,7 @@ class CustomerProfileService extends DefaultSiteService
 
 	/**
 	 *
-	 * @ApiAnnotation({"params":["idCustomer"]})
+	 * @ApiPermissionAnnotation({"params":["idCustomer"]})
 	 * @param ApiContent $content
 	 * @return ApiResultCustomerProfiles
 	 */
@@ -122,28 +122,7 @@ class CustomerProfileService extends DefaultSiteService
 	{
 		$idCustomer = $content->getParameters()->getInt('idCustomer');
 		$customer = $this->getCustomerControl()->get($idCustomer);
-		$customerProfiles = $this->getCustomerProfileControl()->getByCustomer($customer);
-
-		$result = new ApiResultCustomerProfiles();
-		$result->setCustomerProfiles($customerProfiles);
-		$result->setMessage('encontrado %d perfis de cliente', $customerProfiles->size());
-
-		return $result;
-	}
-
-	/**
-	 *
-	 * @ApiAnnotation({"params":["idCustomer","assignmentLevel"]})
-	 * @param ApiContent $content
-	 * @return ApiResultCustomerProfiles
-	 */
-	public function actionActions(ApiContent $content): ApiResultCustomerProfiles
-	{
-		$parameters = $content->getParameters();
-		$assignmentLevel = $parameters->getInt('assignmentLevel');
-		$idCustomer = $parameters->getInt('idCustomer');
-		$customer = $this->getCustomerControl()->get($idCustomer);
-		$customerProfiles = $this->getCustomerProfileControl()->getByCustomerLevel($customer, $assignmentLevel);
+		$customerProfiles = $this->getCustomerProfileControl()->getByCustomer($customer, $this->getCurrentAssignmentLevel());
 
 		$result = new ApiResultCustomerProfiles();
 		$result->setCustomerProfiles($customerProfiles);

@@ -36,6 +36,7 @@ use tercom\control\OrderRequestControl;
 use tercom\api\exceptions\LoginException;
 use tercom\entities\LoginCustomer;
 use tercom\entities\LoginTercom;
+use tercom\TercomException;
 
 /**
  * @see ApiServiceInterface
@@ -195,6 +196,22 @@ class DefaultSiteService extends ApiServiceInterface
 	protected function parseNullToInt($int): int
 	{
 		return $int === null ? 0 : $int;
+	}
+
+	/**
+	 * Verifica se há o acesso de um funcionário TERCOM ou funcionário de cliente para obter seu nível de assinatura.
+	 * @throws TercomException ocorre caso não haja nenhum tipo de usuário acessado (inesperado).
+	 * @return int aquisição do nível de assinatura conforme usuário acessado.
+	 */
+	protected function getCurrentAssignmentLevel(): int
+	{
+		if ($this->getLoginTercomControl()->hasLogged())
+			return $this->getLoginTercomControl()->getCurrent()->getTercomEmployee()->getTercomProfile()->getAssignmentLevel();
+
+		if ($this->getLoginCustomerControl()->hasLogged())
+			return $this->getLoginCustomerControl()->getCurrent()->getCustomerEmployee()->getCustomerProfile()->getAssignmentLevel();
+
+		throw TercomException::newLoginUnexpected();
 	}
 
 	/**

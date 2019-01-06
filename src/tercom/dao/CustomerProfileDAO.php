@@ -260,7 +260,7 @@ class CustomerProfileDAO extends GenericDAO
 	{
 		$sql = "SELECT COUNT(*) qty
 				FROM customers
-				WHERE idCustomer = ?";
+				WHERE id = ?";
 
 		$query = $this->createQuery($sql);
 		$query->setInteger(1, $idCustomer);

@@ -14,13 +14,17 @@ use tercom\dao\LoginCustomerDAO;
 class LoginCustomerControl extends LoginControl
 {
 	/**
+	 * @var LoginCustomer
+	 */
+	private static $loginCustomer;
+	/**
 	 * @var LoginCustomerDAO
 	 */
 	private $loginCustomerDAO;
 	/**
 	 * @var CustomerEmployeeControl
 	 */
-	private $tercomEmployeeControl;
+	private $customerEmployeeControl;
 
 	/**
 	 *
@@ -30,7 +34,7 @@ class LoginCustomerControl extends LoginControl
 		parent::__construct();
 
 		$this->loginCustomerDAO = new LoginCustomerDAO();
-		$this->tercomEmployeeControl = new CustomerEmployeeControl();
+		$this->customerEmployeeControl = new CustomerEmployeeControl();
 	}
 
 	/**
@@ -44,7 +48,7 @@ class LoginCustomerControl extends LoginControl
 	{
 		try {
 
-			$tercomEmployee = $this->tercomEmployeeControl->getByEmail($email);
+			$tercomEmployee = $this->customerEmployeeControl->getByEmail($email);
 
 			if (password_verify($password, $tercomEmployee->getPassword()))
 			{
@@ -145,6 +149,9 @@ class LoginCustomerControl extends LoginControl
 	 */
 	public function getCurrent(): LoginCustomer
 	{
+		if (self::$loginCustomer !== null)
+			return self::$loginCustomer;
+
 		$post = PostService::getInstance();
 
 		if ($post->isSetted('idLogin') && $post->isSetted('idCustomerEmployee') && $post->isSetted('token'))
@@ -172,9 +179,21 @@ class LoginCustomerControl extends LoginControl
 				throw new ControlException('acesso não encontrado');
 		}
 
-		$loginCustomer = $this->get($idLogin, $idCustomerEmployee, $token);
+		self::$loginCustomer = $this->get($idLogin, $idCustomerEmployee, $token);
+		self::setTercomManagement(false);
+		self::setCustomerLogged(self::$loginCustomer->getCustomerEmployee()->getCustomerProfile()->getCustomer());
+		// FIXME verificar o tempo de acesso limite
 
-		return $loginCustomer;
+		return self::$loginCustomer;
+	}
+
+	/**
+	 * Verifica se há um acesso de funcionário de cliente efetuado no sistema.
+	 * @return bool true se houver ou false caso contrário.
+	 */
+	public function hasLogged(): bool
+	{
+		return self::$loginCustomer !== null;
 	}
 }
 
