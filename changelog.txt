@@ -20,6 +20,11 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+06.01.2018 - 0.3.4.157
+- Adicionado permissões para a utilização do serviço para gerenciamento de clientes, CustomerService.
+- Modificado scripts de teste customerAdd e customerSet para que seja preenchido um formulário previamente.
+- Corrigido problema ao atualizar dados de clientes que não desconsiderava a si mesmo ao verificar campos únicos.
+
 06.01.2018 - 0.3.4.156
 - Excluído diversas classes que não são mais utilizadas em 'api/site/results'.
 

@@ -49,8 +49,8 @@ class CustomerDAO extends GenericDAO
 		if (StringUtil::isEmpty($customer->getEmail())) throw CustomerDAOException::newEmailEmpty();
 
 		// UNIQUE KEY
-		if ($this->existCnpj($customer->getCnpj())) throw CustomerDAOException::newUnavaiableCnpj();
-		if ($this->existCompanyName($customer->getCompanyName())) throw CustomerDAOException::newUnavaiableCompanyName();
+		if ($this->existCnpj($customer->getCnpj(), $customer->getId())) throw CustomerDAOException::newUnavaiableCnpj();
+		if ($this->existCompanyName($customer->getCompanyName(), $customer->getId())) throw CustomerDAOException::newUnavaiableCompanyName();
 	}
 
 	/**

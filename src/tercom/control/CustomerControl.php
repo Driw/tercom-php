@@ -91,16 +91,6 @@ class CustomerControl extends GenericControl
 
 	/**
 	 *
-	 * @param Customer $customer
-	 * @return bool
-	 */
-	public function remove(Customer $customer): bool
-	{
-		return $this->customerDAO->delete($customer);
-	}
-
-	/**
-	 *
 	 * @param int $idCustomer
 	 * @param bool $full
 	 * @throws ControlException
@@ -169,7 +159,7 @@ class CustomerControl extends GenericControl
 	public function searchByCnpj(string $cnpj): Customers
 	{
 		if (!StringUtil::hasMinLength($cnpj, self::MIN_CNPJ_FILTER_LEN))
-			throw ControlException::new('busca por CNPJ deve possuir ao menos %d dígitos', $cnpj);
+			throw ControlException::new('busca por CNPJ deve possuir ao menos %d dígitos', self::MIN_CNPJ_FILTER_LEN);
 
 		$customers = $this->customerDAO->selectLikeCnpj($cnpj);
 

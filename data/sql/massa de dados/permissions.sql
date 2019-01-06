@@ -180,6 +180,17 @@ INSERT INTO permissions (packet, action, assignmentLevel) VALUES
 ('servicePrice', 'getAll', 20),
 ('servicePrice', 'search', 20);
 
+INSERT INTO permissions (packet, action, assignmentLevel) VALUES
+('customer', 'settings', 20),
+('customer', 'add', 20),
+('customer', 'set', 20),
+('customer', 'setInactive', 20),
+('customer', 'get', 20),
+('customer', 'getByCnpj', 20),
+('customer', 'getAll', 20),
+('customer', 'search', 20),
+('customer', 'avaiable', 20);
+
 -- TERCOM Profiles Permissions
 
 REPLACE INTO tercom_profile_permissions (idTercomProfile, idPermission)

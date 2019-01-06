@@ -16,7 +16,7 @@ use tercom\api\site\results\ApiResultSimpleValidation;
 class CustomerService extends DefaultSiteService
 {
 	/**
-	 *
+	 * @ApiPermissionAnnotation({})
 	 * @param ApiContent $content
 	 * @return ApiResultCustomerSettings
 	 */
@@ -27,7 +27,7 @@ class CustomerService extends DefaultSiteService
 
 	/**
 	 *
-	 * @ApiAnnotation({"method":"post"})
+	 * @ApiPermissionAnnotation({"method":"post"})
 	 * @param ApiContent $content
 	 * @return ApiResultCustomer
 	 */
@@ -55,7 +55,7 @@ class CustomerService extends DefaultSiteService
 
 	/**
 	 *
-	 * @ApiAnnotation({"method":"post","params":["idCustomer"]})
+	 * @ApiPermissionAnnotation({"method":"post","params":["idCustomer"]})
 	 * @param ApiContent $content
 	 * @return ApiResultCustomer
 	 */
@@ -83,7 +83,7 @@ class CustomerService extends DefaultSiteService
 
 	/**
 	 *
-	 * @ApiAnnotation({"method":"post","params":["idCustomer"]})
+	 * @ApiPermissionAnnotation({"method":"post","params":["idCustomer"]})
 	 * @param ApiContent $content
 	 * @return ApiResultCustomer
 	 */
@@ -106,26 +106,7 @@ class CustomerService extends DefaultSiteService
 
 	/**
 	 *
-	 * @ApiAnnotation({"params":["idCustomer"]})
-	 * @param ApiContent $content
-	 * @return ApiResultCustomer
-	 */
-	public function actionRemove(ApiContent $content): ApiResultCustomer
-	{
-		$idCustomer = $content->getParameters()->getInt('idCustomer');
-		$customer = $this->getCustomerControl()->get($idCustomer);
-		$this->getCustomerControl()->remove($customer);
-
-		$result = new ApiResultCustomer();
-		$result->setCustomer($customer);
-		$result->setMessage('cliente "%s" de CNPJ "%s" excluído com êxito', $customer->getFantasyName(), $customer->getCnpj());
-
-		return $result;
-	}
-
-	/**
-	 *
-	 * @ApiAnnotation({"params":["idCustomer"]})
+	 * @ApiPermissionAnnotation({"params":["idCustomer"]})
 	 * @param ApiContent $content
 	 * @return ApiResultCustomer
 	 */
@@ -143,7 +124,7 @@ class CustomerService extends DefaultSiteService
 
 	/**
 	 *
-	 * @ApiAnnotation({"params":["cnpj"]})
+	 * @ApiPermissionAnnotation({"params":["cnpj"]})
 	 * @param ApiContent $content
 	 * @return ApiResultCustomer
 	 */
@@ -161,6 +142,7 @@ class CustomerService extends DefaultSiteService
 
 	/**
 	 *
+	 * @ApiPermissionAnnotation({})
 	 * @param ApiContent $content
 	 * @return ApiResultCustomer
 	 */
@@ -177,7 +159,7 @@ class CustomerService extends DefaultSiteService
 
 	/**
 	 *
-	 * @ApiAnnotation({"params":["filter","value","idCustomer"]})
+	 * @ApiPermissionAnnotation({"params":["filter","value","idCustomer"]})
 	 * @param ApiContent $content
 	 * @return ApiResultCustomers
 	 */
@@ -200,7 +182,7 @@ class CustomerService extends DefaultSiteService
 	 * @param ApiContent $content
 	 * @return ApiResultCustomers
 	 */
-	public function searchByStateRegistry(ApiContent $content): ApiResultCustomers
+	private function searchByStateRegistry(ApiContent $content): ApiResultCustomers
 	{
 		$stateRegistry = $content->getParameters()->getString('value');
 		$customers = $this->getCustomerControl()->searchByStateRegistry($stateRegistry);
@@ -217,7 +199,7 @@ class CustomerService extends DefaultSiteService
 	 * @param ApiContent $content
 	 * @return ApiResultCustomers
 	 */
-	public function searchByCnpj(ApiContent $content): ApiResultCustomers
+	private function searchByCnpj(ApiContent $content): ApiResultCustomers
 	{
 		$cnpj = $content->getParameters()->getString('value');
 		$customers = $this->getCustomerControl()->searchByCnpj($cnpj);
@@ -234,7 +216,7 @@ class CustomerService extends DefaultSiteService
 	 * @param ApiContent $content
 	 * @return ApiResultCustomers
 	 */
-	public function searchByFantasyName(ApiContent $content): ApiResultCustomers
+	private function searchByFantasyName(ApiContent $content): ApiResultCustomers
 	{
 		$fantasyName = $content->getParameters()->getString('value');
 		$customers = $this->getCustomerControl()->searchByStateRegistry($fantasyName);
@@ -248,7 +230,7 @@ class CustomerService extends DefaultSiteService
 
 	/**
 	 *
-	 * @ApiAnnotation({"params":["filter","value"]})
+	 * @ApiPermissionAnnotation({"params":["filter","value"]})
 	 * @param ApiContent $content
 	 * @throws FilterException
 	 * @return ApiResultSimpleValidation
@@ -271,7 +253,7 @@ class CustomerService extends DefaultSiteService
 	 * @param ApiContent $content
 	 * @return ApiResultSimpleValidation
 	 */
-	public function avaiableCnpj(ApiContent $content): ApiResultSimpleValidation
+	private function avaiableCnpj(ApiContent $content): ApiResultSimpleValidation
 	{
 		$cnpj = $content->getParameters()->getString('value');
 		$idCustomer = $this->parseNullToInt($content->getParameters()->getInt('idCustomer', false));
@@ -290,7 +272,7 @@ class CustomerService extends DefaultSiteService
 	 * @param ApiContent $content
 	 * @return ApiResultSimpleValidation
 	 */
-	public function avaiableCompanyName(ApiContent $content): ApiResultSimpleValidation
+	private function avaiableCompanyName(ApiContent $content): ApiResultSimpleValidation
 	{
 		$companyName = $content->getParameters()->getString('value');
 		$idCustomer = $this->parseNullToInt($content->getParameters()->getInt('idCustomer', false));
