@@ -2,11 +2,10 @@
 
 namespace tercom\dao;
 
+use dProject\MySQL\Result;
 use tercom\entities\ProductPackage;
 use tercom\entities\lists\ProductPackages;
-use dProject\MySQL\Result;
 use tercom\exceptions\ProductPackageException;
-use tercom\exceptions\ProductPriceException;
 
 /**
  * DAO para Embalagem de Produto
@@ -80,6 +79,8 @@ class ProductPackageDAO extends GenericDAO
 	 */
 	public function update(ProductPackage $productPackage): bool
 	{
+		$this->validate($productPackage, true);
+
 		$sql = "UPDATE product_packages
 				SET name = ?
 				WHERE id = ?";
@@ -99,8 +100,10 @@ class ProductPackageDAO extends GenericDAO
 	 */
 	public function dalete(ProductPackage $productPackage): bool
 	{
+		$this->validate($productPackage, false);
+
 		if ($this->existOnProductPrice($productPackage->getId()))
-			throw ProductPriceException::newHasUses();
+			throw ProductPackageException::newHasUses();
 
 		$sql = "DELETE FROM product_packages
 				WHERE id = ?";

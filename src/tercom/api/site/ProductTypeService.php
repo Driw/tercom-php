@@ -3,7 +3,6 @@
 namespace tercom\api\site;
 
 use dProject\restful\ApiContent;
-use dProject\restful\ApiResult;
 use tercom\api\site\results\ApiResultObject;
 use tercom\api\site\results\ApiResultProductTypeSettings;
 use tercom\api\site\results\ApiResultSimpleValidation;
@@ -29,10 +28,10 @@ class ProductTypeService extends DefaultSiteService
 {
 	/**
 	 * Ação para obter as configurações de formulários para tipos de produto.
+	 * @ApiPermissionAnnotation({})
 	 * @param ApiContent $content conteúdo fornecedido na solicitação do serviço.
 	 * @return ApiResultProductTypeSettings aquisição do resultado das configurações.
 	 */
-
 	public function actionSettings(ApiContent $content): ApiResultProductTypeSettings
 	{
 		return new ApiResultProductTypeSettings();
@@ -40,7 +39,7 @@ class ProductTypeService extends DefaultSiteService
 
 	/**
 	 * Ação para adicionar um novo tipo de produto a partir de dados em POST.
-	 * @ApiAnnotation({"method":"post"})
+	 * @ApiPermissionAnnotation({"method":"post"})
 	 * @param ApiContent $content conteúdo fornecedido na solicitação do serviço.
 	 * @return ApiResultObject aquisição do resultado contendo os dados do tipo de produto adicionado.
 	 */
@@ -59,7 +58,7 @@ class ProductTypeService extends DefaultSiteService
 
 	/**
 	 * Ação para atualizar os dados de um tipo de produto a partir de dados em POST.
-	 * @ApiAnnotation({"method":"post","params":["idProductType"]})
+	 * @ApiPermissionAnnotation({"method":"post","params":["idProductType"]})
 	 * @param ApiContent $content conteúdo fornecedido na solicitação do serviço.
 	 * @return ApiResultObject aquisição do resultado contendo os dados do tipo de produto atualizados.
 	 */
@@ -71,7 +70,7 @@ class ProductTypeService extends DefaultSiteService
 
 		if ($post->isSetted('name')) $productType->setName($post->getString('name'));
 
-		$productType = $this->getProductTypeControl()->set($productType);
+		$this->getProductTypeControl()->set($productType);
 
 		$result = new ApiResultObject();
 		$result->setResult($productType, 'tipo de produto "%s" atualizado com êxito', $productType->getName());
@@ -81,7 +80,7 @@ class ProductTypeService extends DefaultSiteService
 
 	/**
 	 * Ação para remover os dados de um tipo de produto a partir dos parâmetros.
-	 * @ApiAnnotation({"params":["idProductType"]})
+	 * @ApiPermissionAnnotation({"params":["idProductType"]})
 	 * @param ApiContent $content conteúdo fornecedido na solicitação do serviço.
 	 * @return ApiResultObject aquisição do resultado contendo os dados da embalagem de produto removida.
 	 */
@@ -99,12 +98,11 @@ class ProductTypeService extends DefaultSiteService
 
 	/**
 	 * Ação para obter os dados de um tipo de produto a partir dos parâmetros.
-	 * @ApiAnnotation({"params":["idProductType"]})
+	 * @ApiPermissionAnnotation({"params":["idProductType"]})
 	 * @param ApiContent $content conteúdo fornecedido na solicitação do serviço.
 	 * @return ApiResultObject aquisição do resultado contendo os dados do tipo de produto obtida.
 	 */
-
-	public function actionGet(ApiContent $content): ApiResult
+	public function actionGet(ApiContent $content): ApiResultObject
 	{
 		$idProductType = $content->getParameters()->getInt('idProductType');
 		$productType = $this->getProductTypeControl()->get($idProductType);
@@ -120,7 +118,7 @@ class ProductTypeService extends DefaultSiteService
 	 * @param ApiContent $content conteúdo fornecedido na solicitação do serviço.
 	 * @return ApiResultObject aquisição do resultado contendo os dados de todos os tipos de produto.
 	 */
-	public function actionGetAll(ApiContent $content): ApiResult
+	public function actionGetAll(ApiContent $content): ApiResultObject
 	{
 		$productTypes = $this->getProductPackageControl()->getAll();
 
@@ -132,7 +130,7 @@ class ProductTypeService extends DefaultSiteService
 
 	/**
 	 * Ação para obter os dados dos tipos de produto filtradas conforme parâmetros.
-	 * @ApiAnnotation({"params":["filter","value"]})
+	 * @ApiPermissionAnnotation({"params":["filter","value"]})
 	 * @param ApiContent $content conteúdo fornecedido na solicitação do serviço.
 	 * @throws FilterException somente se o filtro informado não existir na ação.
 	 * @return ApiResultObject aquisição do resultado contendo os dados dos tipos de produto filtradas.
@@ -156,23 +154,23 @@ class ProductTypeService extends DefaultSiteService
 	 */
 	private function serachByName(ApiContent $content): ApiResultObject
 	{
-		$value = $content->getParameters()->getString('value');
-		$productTypes = $this->getProductTypeControl()->searchByName($value);
+		$name = $content->getParameters()->getString('value');
+		$productTypes = $this->getProductTypeControl()->searchByName($name);
 
 		$result = new ApiResultObject();
-		$result->setResult($productTypes);
+		$result->setResult($productTypes, 'encontrado %d tipos por "%s"', $productTypes->size(), $name);
 
 		return $result;
 	}
 
 	/**
 	 * Ação para verificar a disponibilidade de algum tipo de dado para tipo de produto.
-	 * @ApiAnnotation({"params":["filter","value","idProductType"]})
+	 * @ApiPermissionAnnotation({"params":["filter","value","idProductType"]})
 	 * @param ApiContent $content conteúdo fornecedido na solicitação do serviço.
 	 * @throws FilterException somente se o filtro informado não existir na ação.
 	 * @return ApiResultSimpleValidation aquisição do resultado informado a disponibilidade do dado.
 	 */
-	public function actionAvaiable(ApiContent $content):ApiResult
+	public function actionAvaiable(ApiContent $content):ApiResultObject
 	{
 		$filter = $content->getParameters()->getString('filter');
 
@@ -189,7 +187,7 @@ class ProductTypeService extends DefaultSiteService
 	 * @param ApiContent $content conteúdo fornecedido na solicitação do serviço.
 	 * @return ApiResultSimpleValidation aquisição do resultado informado a disponibilidade.
 	 */
-	private function avaiableName(ApiContent $content): ApiResult
+	private function avaiableName(ApiContent $content): ApiResultObject
 	{
 		$parameters = $content->getParameters();
 		$name = $parameters->getString('value');

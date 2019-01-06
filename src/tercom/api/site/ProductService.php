@@ -11,16 +11,26 @@ use tercom\api\exceptions\FilterException;
 use tercom\entities\ProductCategory;
 
 /**
+ * Serviço de Produto
+ *
+ * Este serviço realiza a comunicação do clietne para com o sistema relação aos dados de produtos.
+ * Como serviço, oferece as possibilidades de adicionar, atualizar, ober e procurar produtos,
+ * além de ser possível verificar a disponibilidade de um nome para o produto.
+ *
  * @see DefaultSiteService
- * @see ApiResultProductSettings
  * @see ApiResultObject
+ * @see ApiResultProductSettings
+ * @see ApiResultSimpleValidation
+ *
  * @author Andrew
  */
 
 class ProductService extends DefaultSiteService
 {
 	/**
-	 * @param ApiContent $content
+	 * Ação para se obter as configurações de limites de cada atributo referente ao produto.
+	 * @ApiPermissionAnnotation({})
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
 	 * @return ApiResultProductSettings
 	 */
 	public function actionSettings(ApiContent $content): ApiResultProductSettings
@@ -29,8 +39,11 @@ class ProductService extends DefaultSiteService
 	}
 
 	/**
-	 * @param ApiContent $content
-	 * @return ApiResultObject
+	 * Adiciona um novo produto sendo necessário informar os seguintes dados:
+	 * nome, descrição e unidade de produto; opcionalmente utilidade e categoria de produto.
+	 * @ApiPermissionAnnotation({"method":"post"})
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @return ApiResultObject aquisição do resultado contendo os dados do produto adicionado.
 	 */
 	public function actionAdd(ApiContent $content): ApiResultObject
 	{
@@ -62,9 +75,11 @@ class ProductService extends DefaultSiteService
 	}
 
 	/**
-	 * @ApiAnnotation({"params":["idProduct"]})
-	 * @param ApiContent $content
-	 * @return ApiResultObject
+	 * Atualiza os dados de produto através do seu código de identificação.
+	 * Nenhum dado é obrigatório ser atualizado, porém se informado será considerado.
+	 * @ApiPermissionAnnotation({"params":["idProduct"]})
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @return ApiResultObject aquisição do resultado com os dados do produto atualizado.
 	 */
 	public function actionSet(ApiContent $content): ApiResultObject
 	{
@@ -100,9 +115,10 @@ class ProductService extends DefaultSiteService
 	}
 
 	/**
-	 * @ApiAnnotation({"params":["idProduct","inactive"]})
-	 * @param ApiContent $content
-	 * @return ApiResultObject
+	 * Atualiza o estado de inatividade de produto entre inativo e ativo.
+	 * @ApiPermissionAnnotation({"params":["idProduct","inactive"]})
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @return ApiResultObject aquisição do resultado com os dados do produto atualizado.
 	 */
 	public function actionSetInactive(ApiContent $content): ApiResultObject
 	{
@@ -119,9 +135,10 @@ class ProductService extends DefaultSiteService
 	}
 
 	/**
-	 * @ApiAnnotation({"params":["idProduct"]})
-	 * @param ApiContent $content
-	 * @return ApiResultObject
+	 * Obtém os dados de um determinado produto através do seu código de identificação.
+	 * @ApiPermissionAnnotation({"params":["idProduct"]})
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @return ApiResultObject aquisição do resultado com os dados do produto obitdo.
 	 */
 	public function actionGet(ApiContent $content): ApiResultObject
 	{
@@ -135,8 +152,10 @@ class ProductService extends DefaultSiteService
 	}
 
 	/**
-	 * @param ApiContent $content
-	 * @return ApiResultObject
+	 * Obtém uma lista com os dados de todos os produtos registrados no sistema.
+	 * @ApiPermissionAnnotation({})
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @return ApiResultObject aquisição do resultado da lista com os dados dos produtos.
 	 */
 	public function actionGetAll(ApiContent $content): ApiResultObject
 	{
@@ -149,9 +168,10 @@ class ProductService extends DefaultSiteService
 	}
 
 	/**
-	 * @ApiAnnotation({"params":["filter","value"]})
-	 * @param ApiContent $content
-	 * @return ApiResultObject
+	 * Realiza uma busca por pordutos usando um único filtro.
+	 * @ApiPermissionAnnotation({"params":["filter","value"]})
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @return ApiResultObject aquisição do resultado com os dados dos produtos filtrados.
 	 */
 	public function actionSearch(ApiContent $content): ApiResultObject
 	{
@@ -171,10 +191,11 @@ class ProductService extends DefaultSiteService
 	}
 
 	/**
-	 * @param ApiContent $content
-	 * @return ApiResultObject
+	 * Procedimento interno usado para especificar a procura por produtos através do nome do produto.
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @return ApiResultObject aquisição do resultado com os dados dos produtos filtrados.
 	 */
-	public function searchByName(ApiContent $content): ApiResultObject
+	private function searchByName(ApiContent $content): ApiResultObject
 	{
 		$name = $content->getParameters()->getString('value');
 		$products = $this->getProductControl()->searchByName($name);
@@ -186,10 +207,11 @@ class ProductService extends DefaultSiteService
 	}
 
 	/**
-	 * @param ApiContent $content
-	 * @return ApiResultObject
+	 * Procedimento interno usado para especificar a procura por produtos através da categoria do produto.
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @return ApiResultObject aquisição do resultado com os dados dos produtos filtrados.
 	 */
-	public function searchByCategory(ApiContent $content): ApiResultObject
+	private function searchByCategory(ApiContent $content): ApiResultObject
 	{
 		$idProductCategory = $content->getParameters()->getString('value');
 		$productCategory = $this->getProductCategoryControl()->get($idProductCategory);
@@ -202,10 +224,11 @@ class ProductService extends DefaultSiteService
 	}
 
 	/**
-	 * @param ApiContent $content
-	 * @return ApiResultObject
+	 * Procedimento interno usado para especificar a procura por produtos através da categoria de família do produto.
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @return ApiResultObject aquisição do resultado com os dados dos produtos filtrados.
 	 */
-	public function searchByFamily(ApiContent $content): ApiResultObject
+	private function searchByFamily(ApiContent $content): ApiResultObject
 	{
 		$idProductFamily = $content->getParameters()->getString('value');
 		$productCategory = $this->getProductCategoryControl()->get($idProductFamily, ProductCategory::CATEGORY_FAMILY);
@@ -218,10 +241,11 @@ class ProductService extends DefaultSiteService
 	}
 
 	/**
-	 * @param ApiContent $content
-	 * @return ApiResultObject
+	 * Procedimento interno usado para especificar a procura por produtos através da categoria de grupo do produto.
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @return ApiResultObject aquisição do resultado com os dados dos produtos filtrados.
 	 */
-	public function searchByGroup(ApiContent $content): ApiResultObject
+	private function searchByGroup(ApiContent $content): ApiResultObject
 	{
 		$idProductGroup = $content->getParameters()->getString('value');
 		$productCategory = $this->getProductCategoryControl()->get($idProductGroup, ProductCategory::CATEGORY_GROUP);
@@ -234,10 +258,11 @@ class ProductService extends DefaultSiteService
 	}
 
 	/**
-	 * @param ApiContent $content
-	 * @return ApiResultObject
+	 * Procedimento interno usado para especificar a procura por produtos através da categoria de subgrupo do produto.
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @return ApiResultObject aquisição do resultado com os dados dos produtos filtrados.
 	 */
-	public function searchBySubgroup(ApiContent $content): ApiResultObject
+	private function searchBySubgroup(ApiContent $content): ApiResultObject
 	{
 		$idProductSubgroup = $content->getParameters()->getString('value');
 		$productCategory = $this->getProductCategoryControl()->get($idProductSubgroup, ProductCategory::CATEGORY_SUBGROUP);
@@ -250,10 +275,11 @@ class ProductService extends DefaultSiteService
 	}
 
 	/**
-	 * @param ApiContent $content
-	 * @return ApiResultObject
+	 * Procedimento interno usado para especificar a procura por produtos através da categoria de setor do produto.
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @return ApiResultObject aquisição do resultado com os dados dos produtos filtrados.
 	 */
-	public function searchBySector(ApiContent $content): ApiResultObject
+	private function searchBySector(ApiContent $content): ApiResultObject
 	{
 		$idProductSector = $content->getParameters()->getString('value');
 		$productCategory = $this->getProductCategoryControl()->get($idProductSector, ProductCategory::CATEGORY_SECTOR);
@@ -266,9 +292,10 @@ class ProductService extends DefaultSiteService
 	}
 
 	/**
-	 * @ApiAnnotation({"params":["filter","value","idProduct"]})
-	 * @param ApiContent $content
-	 * @return ApiResultObject
+	 * Verifica a disponibilidade de um valor para um determinado campo de produto.
+	 * @ApiPermissionAnnotation({"params":["filter","value","idProduct"]})
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @return ApiResultObject aquisição do resultado com a validação da disponibilidade do dado.
 	 */
 	public function actionAvaiable(ApiContent $content): ApiResultObject
 	{
@@ -283,10 +310,11 @@ class ProductService extends DefaultSiteService
 	}
 
 	/**
-	 * @param ApiContent $content
-	 * @return ApiResultSimpleValidation
+	 * Procedimento interno usado para verificar a disponibilidade de um nome de produto.
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @return ApiResultObject aquisição do resultado com a validação da disponibilidade do dado.
 	 */
-	public function avaiableName(ApiContent $content): ApiResultSimpleValidation
+	private function avaiableName(ApiContent $content): ApiResultSimpleValidation
 	{
 		$parameters = $content->getParameters();
 		$name = $parameters->getString('value');

@@ -27,6 +27,7 @@ class ProductPackageService extends DefaultSiteService
 {
 	/**
 	 * Ação para obter as configurações de formulários para embalagens de produto.
+	 * @ApiPermissionAnnotation({})
 	 * @param ApiContent $content conteúdo fornecedido na solicitação do serviço.
 	 * @return ApiResultProductPackageSettings aquisição do resultado das configurações.
 	 */
@@ -37,7 +38,7 @@ class ProductPackageService extends DefaultSiteService
 
 	/**
 	 * Ação para adicionar uma nova embalagem de produto a partir de dados em POST.
-	 * @ApiAnnotation({"method":"post"})
+	 * @ApiPermissionAnnotation({"method":"post"})
 	 * @param ApiContent $content conteúdo fornecedido na solicitação do serviço.
 	 * @return ApiResultObject aquisição do resultado contendo os dados da embalagem de produto adicionada.
 	 */
@@ -57,7 +58,7 @@ class ProductPackageService extends DefaultSiteService
 
 	/**
 	 * Ação para atualizar os dados de uma embalagem de produto a partir de dados em POST.
-	 * @ApiAnnotation({"method":"post","params":["idProductPackage"]})
+	 * @ApiPermissionAnnotation({"method":"post","params":["idProductPackage"]})
 	 * @param ApiContent $content conteúdo fornecedido na solicitação do serviço.
 	 * @return ApiResultObject aquisição do resultado contendo os dados da emblagem de produto atualizados.
 	 */
@@ -69,6 +70,8 @@ class ProductPackageService extends DefaultSiteService
 
 		if ($post->isSetted('name')) $productPackage->setName($post->getString('name'));
 
+		$this->getProductPackageControl()->set($productPackage);
+
 		$result = new ApiResultObject();
 		$result->setResult($productPackage, 'embalagem de produto "%s" atualizada com êxito', $productPackage->getName());
 
@@ -77,7 +80,7 @@ class ProductPackageService extends DefaultSiteService
 
 	/**
 	 * Ação para remover os dados de uma embalagem de produto a partir dos parâmetros.
-	 * @ApiAnnotation({"params":["idProductPackage"]})
+	 * @ApiPermissionAnnotation({"params":["idProductPackage"]})
 	 * @param ApiContent $content conteúdo fornecedido na solicitação do serviço.
 	 * @return ApiResultObject aquisição do resultado contendo os dados da embalagem de produto removida.
 	 */
@@ -95,7 +98,7 @@ class ProductPackageService extends DefaultSiteService
 
 	/**
 	 * Ação para obter os dados de uma embalagem de produto a partir dos parâmetros.
-	 * @ApiAnnotation({"params":["idProductPackage"]})
+	 * @ApiPermissionAnnotation({"params":["idProductPackage"]})
 	 * @param ApiContent $content conteúdo fornecedido na solicitação do serviço.
 	 * @return ApiResultObject aquisição do resultado contendo os dados da embalagem de produto obtida.
 	 */
@@ -112,6 +115,7 @@ class ProductPackageService extends DefaultSiteService
 
 	/**
 	 * Ação para obter os dados das embalagens de produtos registradas no sistema.
+	 * @ApiPermissionAnnotation({})
 	 * @param ApiContent $content conteúdo fornecedido na solicitação do serviço.
 	 * @return ApiResultObject aquisição do resultado contendo os dados de todas as embalagens de produto.
 	 */
@@ -127,7 +131,7 @@ class ProductPackageService extends DefaultSiteService
 
 	/**
 	 * Ação para obter os dados das embalagens de produto filtradas conforme parâmetros.
-	 * @ApiAnnotation({"params":["filter","value"]})
+	 * @ApiPermissionAnnotation({"params":["filter","value"]})
 	 * @param ApiContent $content conteúdo fornecedido na solicitação do serviço.
 	 * @throws FilterException somente se o filtro informado não existir na ação.
 	 * @return ApiResultObject aquisição do resultado contendo os dados das embalagens de produto filtradas.
@@ -162,7 +166,7 @@ class ProductPackageService extends DefaultSiteService
 
 	/**
 	 * Ação para verificar a disponibilidade de algum tipo de dado para embalagens de produto.
-	 * @ApiAnnotation({"params":["filter","value","idProductPackage"]})
+	 * @ApiPermissionAnnotation({"params":["filter","value","idProductPackage"]})
 	 * @param ApiContent $content conteúdo fornecedido na solicitação do serviço.
 	 * @throws FilterException somente se o filtro informado não existir na ação.
 	 * @return ApiResultSimpleValidation aquisição do resultado informado a disponibilidade do dado.
@@ -198,4 +202,3 @@ class ProductPackageService extends DefaultSiteService
 	}
 }
 
-?>

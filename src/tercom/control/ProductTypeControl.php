@@ -61,7 +61,7 @@ class ProductTypeControl extends GenericControl
 	 * @param ProductType $productType objeto do tipo tipo de produto à excluir.
 	 * @throws ProductTypeException quando não for possível excluir.
 	 */
-	public function remove(ProductType $productType): bool
+	public function remove(ProductType $productType): void
 	{
 		if (!$this->productTypeDAO->dalete($productType))
 			throw ProductTypeException::newNotDeleted();
@@ -75,8 +75,10 @@ class ProductTypeControl extends GenericControl
 	 */
 	public function get(int $idProductType): ProductType
 	{
-		if (!$this->productTypeDAO->select($idProductType))
+		if (($productType = $this->productTypeDAO->select($idProductType)) === null)
 			throw ProductTypeException::newNotSelected();
+
+		return $productType;
 	}
 
 	/**
@@ -95,7 +97,7 @@ class ProductTypeControl extends GenericControl
 	 */
 	public function searchByName(string $name): ProductTypes
 	{
-		return $this->productTypeDAO->selectByName($name);
+		return $this->productTypeDAO->selectLikeName($name);
 	}
 
 	/**

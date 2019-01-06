@@ -71,7 +71,7 @@ INSERT INTO permissions (packet, action, assignmentLevel) VALUES
 ('productFamily', 'avaiable', 20),
 ('productFamily', 'has', 20);
 
--- Product Family Service
+-- Product Group Service
 
 INSERT INTO permissions (packet, action, assignmentLevel) VALUES
 ('productGroup', 'settings', 20),
@@ -84,7 +84,7 @@ INSERT INTO permissions (packet, action, assignmentLevel) VALUES
 ('productGroup', 'avaiable', 20),
 ('productGroup', 'has', 20);
 
--- Product Family Service
+-- Product Subgroup Service
 
 INSERT INTO permissions (packet, action, assignmentLevel) VALUES
 ('productSubgroup', 'settings', 20),
@@ -97,18 +97,63 @@ INSERT INTO permissions (packet, action, assignmentLevel) VALUES
 ('productSubgroup', 'avaiable', 20),
 ('productSubgroup', 'has', 20);
 
--- Product Family Service
+-- Product Sector Service
 
 INSERT INTO permissions (packet, action, assignmentLevel) VALUES
 ('productSector', 'settings', 20),
 ('productSector', 'add', 20),
 ('productSector', 'set', 20),
-('productSector', 'remove', 20),
+('productSector', 'setInactive', 20),
 ('productSector', 'get', 20),
-('productSector', 'getCategories', 20),
+('productSector', 'getAll', 20),
 ('productSector', 'search', 20),
-('productSector', 'avaiable', 20),
-('productSector', 'has', 20);
+('productSector', 'avaiable', 20);
+
+-- Product Service
+
+INSERT INTO permissions (packet, action, assignmentLevel) VALUES
+('product', 'settings', 20),
+('product', 'add', 20),
+('product', 'set', 20),
+('product', 'setInactive', 20),
+('product', 'get', 20),
+('product', 'getAll', 20),
+('product', 'search', 20),
+('product', 'avaiable', 20);
+
+-- Product Package Service
+
+INSERT INTO permissions (packet, action, assignmentLevel) VALUES
+('productPackage', 'settings', 20),
+('productPackage', 'add', 20),
+('productPackage', 'set', 20),
+('productPackage', 'remove', 20),
+('productPackage', 'get', 20),
+('productPackage', 'getAll', 20),
+('productPackage', 'search', 20),
+('productPackage', 'avaiable', 20);
+
+-- Product Type Service
+
+INSERT INTO permissions (packet, action, assignmentLevel) VALUES
+('productType', 'settings', 20),
+('productType', 'add', 20),
+('productType', 'set', 20),
+('productType', 'remove', 20),
+('productType', 'get', 20),
+('productType', 'getAll', 20),
+('productType', 'search', 20),
+('productType', 'avaiable', 20);
+
+-- Product Price Service
+
+INSERT INTO permissions (packet, action, assignmentLevel) VALUES
+('productPrice', 'settings', 20),
+('productPrice', 'add', 20),
+('productPrice', 'set', 20),
+('productPrice', 'remove', 20),
+('productPrice', 'get', 20),
+('productPrice', 'getAll', 20);
 
 -- TERCOM Profiles Permissions
 

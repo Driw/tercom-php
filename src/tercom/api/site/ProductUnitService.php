@@ -13,7 +13,7 @@ use tercom\entities\ProductUnit;
  * Serviço de Unidade de Produto
  *
  * Este serviço realiza a comunicação do clietne para com o sistema relação aos dados de unidades de produto.
- * Como serviço, oferece as possibilidades de adicionar, atualizar, excluir, selecionar e buscar por unidades de produto,
+ * Como serviço, oferece as possibilidades de adicionar, atualizar, excluir, obter e procurar por unidades de produto,
  * além de ser possível verificar a disponibilidade de nome e abreviação para unidades de produto.
  *
  * @see DefaultSiteService

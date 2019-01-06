@@ -20,6 +20,15 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+05.01.2018 - 0.3.4.153
+- Adicionado permissões para a utilização do serviço para gerenciamento de pacotes de produto, ProductPackageService.
+	- Também foi corrigido o problema com actionSet() e em ProductPackageControl com remove() e searchByName().
+- Adicionado permissões para a utilização do serviço para gerenciamento de produtos, ProductService.
+- Adicionado permissões para a utilização do serviço para gerenciamento de tipos de produto, ProductPackageService.
+- Adicionado a documentação dos métodos à ProductService.
+- Adicionado scripts de testes que estavam faltando:
+	- productSettings, productTypeSettings, productPackageSettings e produtUnitSettings, productTypeGetAll.
+
 05.01.2018 - 0.3.4.152
 - Atualização do README conforme estado atual do projeto e ajustes nas configurações HTTP/HTTPS e módulos.
 
