@@ -196,7 +196,7 @@ abstract class GenericDAO
 
 		foreach ($prefixes as $prefix)
 			foreach ($entry as $field => $value)
-				if (StringUtil::startsWith($field, $prefix))
+				if (StringUtil::startsWith($field, $prefix. '_'))
 				{
 					unset($entry[$field]);
 					$prefixField = substr($field, strlen($prefix) + 1);

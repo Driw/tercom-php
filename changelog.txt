@@ -20,6 +20,11 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+06.01.2018 - 0.3.4.154
+- Corrigido parseEntry() que desconsiderava o separador de préfixo _ (underline) na comparação GenericDAO.
+- Adicionado permissões para a utilização do serviço para gerenciamento de preços de produto, ProductPriceService.
+- Ajustes na execução de scripts de testes para exibir erros sem formato JSON.
+
 05.01.2018 - 0.3.4.153
 - Adicionado permissões para a utilização do serviço para gerenciamento de pacotes de produto, ProductPackageService.
 	- Também foi corrigido o problema com actionSet() e em ProductPackageControl com remove() e searchByName().

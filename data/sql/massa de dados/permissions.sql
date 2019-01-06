@@ -153,7 +153,8 @@ INSERT INTO permissions (packet, action, assignmentLevel) VALUES
 ('productPrice', 'set', 20),
 ('productPrice', 'remove', 20),
 ('productPrice', 'get', 20),
-('productPrice', 'getAll', 20);
+('productPrice', 'getAll', 20)
+('productPrice', 'search', 20);
 
 -- TERCOM Profiles Permissions
 

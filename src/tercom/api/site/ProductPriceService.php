@@ -25,6 +25,7 @@ class ProductPriceService extends DefaultSiteService
 {
 	/**
 	 * Ação para se obter as configurações de limites de cada atributo referente a preço de produto.
+	 * @ApiPermissionAnnotation({})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
 	 * @return ApiResultProductPriceSettings aquisição do resultado com as configurações.
 	 */
@@ -35,7 +36,7 @@ class ProductPriceService extends DefaultSiteService
 
 	/**
 	 * Adiciona um novo preço de produto a partir de dados em POST.
-	 * @ApiAnnotation({"method":"post","params":["idProduct"]})
+	 * @ApiPermissionAnnotation({"method":"post","params":["idProduct"]})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
 	 * @return ApiResultObject aquisição do resultado contendo os dados do preço de produto adicionado.
 	 */
@@ -81,7 +82,7 @@ class ProductPriceService extends DefaultSiteService
 
 	/**
 	 * Ação para atualizar os dados de um preço de produto a partir de dados em POST.
-	 * @ApiAnnotation({"method":"post","params":["idProductPrice"]})
+	 * @ApiPermissionAnnotation({"method":"post","params":["idProductPrice"]})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
 	 * @return ApiResultObject aquisição do resultado contendo os dados do preço de produto atualizados.
 	 */
@@ -95,9 +96,9 @@ class ProductPriceService extends DefaultSiteService
 		if ($post->isSetted('amount')) $productPrice->setAmount($post->getInt('amount'));
 		if ($post->isSetted('price')) $productPrice->setPrice($post->getFloat('price'));
 
-		if (($Provider = $post->getInt('idProvider', false)) !== null)
+		if (($idProvider = $post->getInt('idProvider', false)) !== null)
 		{
-			$provider = $this->getProviderControl()->get($Provider);
+			$provider = $this->getProviderControl()->get($idProvider);
 			$productPrice->setProvider($provider);
 		}
 
@@ -129,7 +130,7 @@ class ProductPriceService extends DefaultSiteService
 
 	/**
 	 * Ação para remover os dados de um preço de produto a partir dos parâmetros.
-	 * @ApiAnnotation({"params":["idProductPrice"]})
+	 * @ApiPermissionAnnotation({"params":["idProductPrice"]})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
 	 * @return ApiResultObject aquisição do resultado contendo os dados do preço de produto removido.
 	 */
@@ -147,7 +148,7 @@ class ProductPriceService extends DefaultSiteService
 
 	/**
 	 * Ação para obter os dados de um preço de produto a partir dos parâmetros.
-	 * @ApiAnnotation({"params":["idProductPrice"]})
+	 * @ApiPermissionAnnotation({"params":["idProductPrice"]})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
 	 * @return ApiResultObject aquisição do resultado contendo os dados do preço de produto obtido.
 	 */
@@ -164,7 +165,7 @@ class ProductPriceService extends DefaultSiteService
 
 	/**
 	 * Ação para obter os dados dos preços de produtos registradas no sistema por produto.
-	 * @ApiAnnotation({"params":["idProduct"]})
+	 * @ApiPermissionAnnotation({"params":["idProduct"]})
 	 * @param ApiContent $content conteúdo fornecedido na solicitação do serviço.
 	 * @return ApiResultObject aquisição do resultado contendo os dados de todos os tipos de produto.
 	 */
@@ -172,17 +173,17 @@ class ProductPriceService extends DefaultSiteService
 	{
 		$idProduct = $content->getParameters()->getInt('idProduct');
 		$product = $this->getProductControl()->get($idProduct);
-		$productPrice = $this->getProductPriceControl()->getByProduct($idProduct);
+		$productPrices = $this->getProductPriceControl()->getByProduct($idProduct);
 
 		$result = new ApiResultObject();
-		$result->setResult($productPrice, 'há %d preços de produto para o produto "%s"', $product->getName());
+		$result->setResult($productPrices, 'há %d preços de produto para o produto "%s"', $productPrices->size(), $product->getName());
 
 		return $result;
 	}
 
 	/**
 	 * Ação para obter os dados dos preços de produto filtradas conforme parâmetros.
-	 * @ApiAnnotation({"params":["filter","value"]})
+	 * @ApiPermissionAnnotation({"params":["filter","value"]})
 	 * @param ApiContent $content conteúdo fornecedido na solicitação do serviço.
 	 * @throws FilterException somente se o filtro informado não existir na ação.
 	 * @return ApiResultObject aquisição do resultado contendo os dados dos preços de produto filtradas.
@@ -229,7 +230,7 @@ class ProductPriceService extends DefaultSiteService
 		$productPrices = $this->getProductPriceControl()->searchByName($name);
 
 		$result = new ApiResultObject();
-		$result->setResult($productPrices, 'há %d preços de produto nomeado com "%s"', $name);
+		$result->setResult($productPrices, 'há %d preços de produto nomeado com "%s"', $productPrices->size(), $name);
 
 		return $result;
 	}

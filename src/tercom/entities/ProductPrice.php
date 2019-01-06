@@ -96,6 +96,7 @@ class ProductPrice extends AdvancedObject
 		$this->id = 0;
 		$this->amount = 0;
 		$this->price = 0.0;
+		$this->lastUpdate = new \DateTime();
 	}
 
 	/**

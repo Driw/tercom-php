@@ -3,22 +3,23 @@
 use tercom\GeradorDeDados;
 
 include_once '../include.php';
-function testExecute()
 {
-	if (!isset($_GET['idProduct']))
+	function testExecute()
 	{
-		header('Content-type: text/html');
-		?>
+		if (!isset($_GET['idProduct']))
+		{
+			header('Content-type: text/html');
+?>
 <form method='get'>
-	Produto ID: <input type='text' name='idProduct'>
-	<button type='submit'>Continuar</button>
+	<p>Produto ID: <input type='text' name='idProduct'></p>
+	<p><button type='submit'>Continuar</button></p>
 </form>
 <?php
-		exit;
+			exit;
+		}
+		$idProduct = intval($_GET['idProduct']);
+		return GeradorDeDados::callWebService("productPrice/getAll/$idProduct", []);
 	}
-	$idProduct = intval($_GET['idProduct']);
-	return GeradorDeDados::callWebService("productPrice/getAll/$idProduct", []);
 }
 include_once '../execute.php';
 
-?>
