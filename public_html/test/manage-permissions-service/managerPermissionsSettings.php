@@ -6,7 +6,7 @@ include '../include.php';
 {
 	function testExecute()
 	{
-		return GeradorDeDados::callWebService("customerProfile/settings", []);
+		return GeradorDeDados::callWebService("managePermissions/settings", []);
 	}
 }
 include '../execute.php';

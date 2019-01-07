@@ -44,8 +44,8 @@ class TercomPermissionDAO extends GenericDAO
 		if ($permission->getId() === 0) throw new DAOException('permissão não informado');
 
 		// FOREIGN KEY
-		if (!$this->existTercomProfile($tercomProfile->getId())) throw new DAOException('perfil da TERCOM desconhecido');
-		if (!$this->existPermission($permission->getId())) throw new DAOException('permissão desconhecido');
+		if (!$this->existTercomProfile($tercomProfile)) throw new DAOException('perfil da TERCOM desconhecido');
+		if (!$this->existPermission($permission)) throw new DAOException('permissão desconhecido');
 	}
 
 	/**
@@ -157,11 +157,41 @@ class TercomPermissionDAO extends GenericDAO
 		$query->setInteger(1, $tercomProfile->getId());
 		$query->setInteger(2, $permission->getId());
 
-		$result = $query->execute();
-		$entry = $result->next();
-		$result->free();
+		return $this->parseQueryExist($query);
+	}
 
-		return intval($entry['qty']) > 0;
+	/**
+	 * Verifica se um determinado perfil TERCOM existe no sistema.
+	 * @param TercomProfile $tercomProfile objeto do tipo perfil TERCOM à verficiar.
+	 * @return bool true se existir ou false caso contrário.
+	 */
+	public function existTercomProfile(TercomProfile $tercomProfile): bool
+	{
+		$sql = "SELECT COUNT(*) qty
+				FROM tercom_profiles
+				WHERE id = ?";
+
+		$query = $this->createQuery($sql);
+		$query->setInteger(1, $tercomProfile->getId());
+
+		return $this->parseQueryExist($query);
+	}
+
+	/**
+	 * Verifica se uma determinada permissão existe no sistema.
+	 * @param Permission $permission objeto do tipo permissão à verificar.
+	 * @return bool true se existir ou false caso contrário.
+	 */
+	public function existPermission(Permission $permission): bool
+	{
+		$sql = "SELECT COUNT(*) qty
+				FROM permissions
+				WHERE id = ?";
+
+		$query = $this->createQuery($sql);
+		$query->setInteger(1, $permission->getId());
+
+		return $this->parseQueryExist($query);
 	}
 
 	/**

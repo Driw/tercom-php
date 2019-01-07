@@ -39,6 +39,45 @@ class CustomerPermissionControl extends GenericControl implements RelationshipCo
 	 *
 	 * @param CustomerProfile $customerProfile
 	 * @param Permission $permission
+	 * @throws ControlException
+	 */
+	private function validate(CustomerProfile $customerProfile, Permission $permission)
+	{
+		if ($this->isTercomManagement())
+		{
+			$loginTercom = (new LoginTercomControl())->getCurrent();
+			$tercomProfile = $loginTercom->getTercomEmployee()->getTercomProfile();
+
+			if (!(new TercomPermissionControl())->hasRelationship($tercomProfile, $permission))
+				throw TercomException::newPermissionLowLevel();
+		}
+
+		else
+		{
+			$this->validateLogin($customerProfile);
+			$customerProfileLogged = (new LoginCustomerControl())->getCurrent()->getCustomerEmployee()->getCustomerProfile();
+
+			if (!$this->hasRelationship($customerProfile, $permission) || $this->hasAssignmentLevel($customerProfileLogged, $permission))
+				throw TercomException::newPermissionLowLevel();
+		}
+	}
+
+	/**
+	 *
+	 * @param CustomerProfile $customerProfile
+	 * @throws ControlException
+	 */
+	private function validateLogin(CustomerProfile $customerProfile): void
+	{
+		if (!$this->isTercomManagement())
+			if ($customerProfile->getCustomerId() !== $this->getCustomerLoggedId())
+				throw TercomException::newPermissionRestrict();
+	}
+
+	/**
+	 *
+	 * @param CustomerProfile $customerProfile
+	 * @param Permission $permission
 	 */
 	private function validateRelanshionship(CustomerProfile $customerProfile, Permission $permission)
 	{
@@ -63,8 +102,10 @@ class CustomerPermissionControl extends GenericControl implements RelationshipCo
 	 * @param CustomerProfile $customerProfile
 	 * @param Permission $permission
 	 */
-	public function addRelationship($customerProfile, $permission): bool
+	public function addRelationship($customerProfile, $permission): void
 	{
+		$this->validate($customerProfile, $permission);
+
 		$this->customerPermissionDAO->beginTransaction();
 		{
 			if ($permission->getId() === 0)
@@ -83,8 +124,6 @@ class CustomerPermissionControl extends GenericControl implements RelationshipCo
 			}
 		}
 		$this->customerPermissionDAO->commit();
-
-		return true;
 	}
 
 	/**
@@ -93,19 +132,16 @@ class CustomerPermissionControl extends GenericControl implements RelationshipCo
 	 * @param CustomerProfile $customerProfile
 	 * @param Permission $permission
 	 */
-	public function setRelationship($customerProfile, $permission): bool
+	public function setRelationship($customerProfile, $permission): void
 	{
+		$this->validate($customerProfile, $permission);
 		$this->validateRelanshionship($customerProfile, $permission);
 
 		if (!$this->hasAssignmentLevel($customerProfile, $permission))
 		{
 			if (!$this->customerPermissionDAO->delete($customerProfile, $permission))
 				throw new ControlException('não foi possível descvincular a permissão do perfil');
-
-			return false;
 		}
-
-		return true;
 	}
 
 	/**
@@ -114,11 +150,13 @@ class CustomerPermissionControl extends GenericControl implements RelationshipCo
 	 * @param CustomerProfile $customerProfile
 	 * @param Permission $permission
 	 */
-	public function removeRelationship($customerProfile, $permission): bool
+	public function removeRelationship($customerProfile, $permission): void
 	{
+		$this->validate($customerProfile, $permission);
 		$this->validateRelanshionship($customerProfile, $permission);
 
-		return $this->customerPermissionDAO->delete($customerProfile, $permission);
+		if (!$this->customerPermissionDAO->delete($customerProfile, $permission))
+			throw new ControlException('não foi possível desvincular a permissão do perfil');
 	}
 
 	/**
@@ -130,7 +168,14 @@ class CustomerPermissionControl extends GenericControl implements RelationshipCo
 	 */
 	public function getRelationship($customerProfile, $idPermission)
 	{
-		return $this->customerPermissionDAO->select($customerProfile, $idPermission);
+		if (!$this->isTercomManagement())
+			if ($customerProfile->getCustomerId() !== $this->getCustomerLoggedId())
+				throw TercomException::newPermissionRestrict();
+
+		if (($permission = $this->customerPermissionDAO->select($customerProfile, $idPermission)) === null)
+			throw new ControlException('permissão desconhecida');
+
+		return $permission;
 	}
 
 	/**
@@ -141,6 +186,8 @@ class CustomerPermissionControl extends GenericControl implements RelationshipCo
 	 */
 	public function getRelationships($customerProfile)
 	{
+		$this->validateLogin($customerProfile);
+
 		return $this->customerPermissionDAO->selectByCustomer($customerProfile);
 	}
 

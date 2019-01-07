@@ -101,11 +101,11 @@ class CustomerPermissionDAO extends GenericDAO
 	 * @param int $idCustomerEmployee código de identificação único da permissão.
 	 * @return Permission|NULL permissão com os dados carregados ou NULL se não encontrado.
 	 */
-	public function select(CustomerProfile $customerProfile, int $idPermission): Permission
+	public function select(CustomerProfile $customerProfile, int $idPermission): ?Permission
 	{
 		$sqlPermission = $this->newSelectPermission();
 		$sql = "$sqlPermission
-				WHERE customer_profile_permissions.idCustomerProfile = ? AND customer_profile_permissions.$idPermission = ?";
+				WHERE customer_profile_permissions.idCustomerProfile = ? AND customer_profile_permissions.idPermission = ?";
 
 		$query = $this->createQuery($sql);
 		$query->setInteger(1, $customerProfile->getId());

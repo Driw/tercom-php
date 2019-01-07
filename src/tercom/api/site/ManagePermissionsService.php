@@ -39,7 +39,7 @@ class ManagePermissionsService extends RelationshipService
 	protected function addCustomerPermission(ApiContent $content, int $idCustomerProfile): ApiResultObject
 	{
 		$idPermission = $content->getPost()->getInt('idPermission');
-		$customerProfile = $this->getCustomerProfileControl()->get($idCustomerProfile);
+		$customerProfile = $this->getCustomerProfileControl()->get($idCustomerProfile, false, $this->getCurrentAssignmentLevel());
 		$permission = $this->getPermissionControl()->get($idPermission);
 		$this->getCustomerPermissionControl()->addRelationship($customerProfile, $permission);
 
@@ -58,7 +58,7 @@ class ManagePermissionsService extends RelationshipService
 	 */
 	protected function setCustomerPermission(ApiContent $content, int $idCustomerProfile, int $idPermission): ApiResultObject
 	{
-		$customerProfile = $this->getCustomerProfileControl()->get($idCustomerProfile);
+		$customerProfile = $this->getCustomerProfileControl()->get($idCustomerProfile, false, $this->getCurrentAssignmentLevel());
 		$permission = $this->getPermissionControl()->get($idPermission);
 
 		$result = new ApiResultObject();
@@ -80,7 +80,7 @@ class ManagePermissionsService extends RelationshipService
 	 */
 	protected function removeCustomerPermission(ApiContent $content, int $idCustomerProfile, int $idPermission): ApiResultObject
 	{
-		$customerProfile = $this->getCustomerProfileControl()->get($idCustomerProfile);
+		$customerProfile = $this->getCustomerProfileControl()->get($idCustomerProfile, false, $this->getCurrentAssignmentLevel());
 		$permission = $this->getPermissionControl()->get($idPermission);
 		$this->getCustomerPermissionControl()->removeRelationship($customerProfile, $permission);
 
@@ -99,7 +99,7 @@ class ManagePermissionsService extends RelationshipService
 	 */
 	protected function getCustomerPermission(ApiContent $content, int $idCustomerProfile, int $idPermission): ApiResultObject
 	{
-		$customerProfile = $this->getCustomerProfileControl()->get($idCustomerProfile);
+		$customerProfile = $this->getCustomerProfileControl()->get($idCustomerProfile, false, $this->getCurrentAssignmentLevel());
 		$permission = $this->getCustomerPermissionControl()->getRelationship($customerProfile, $idPermission);
 
 		$result = new ApiResultObject();
@@ -117,7 +117,7 @@ class ManagePermissionsService extends RelationshipService
 	 */
 	protected function getAllCustomerPermission(ApiContent $content, int $idCustomerProfile): ApiResultObject
 	{
-		$customerProfile = $this->getCustomerProfileControl()->get($idCustomerProfile);
+		$customerProfile = $this->getCustomerProfileControl()->get($idCustomerProfile, false, $this->getCurrentAssignmentLevel());
 		$permissions = $this->getCustomerPermissionControl()->getRelationships($customerProfile);
 
 		$result = new ApiResultObject();
@@ -137,7 +137,7 @@ class ManagePermissionsService extends RelationshipService
 		$idPermission = $content->getPost()->getInt('idPermission');
 		$tercomProfile = $this->getTercomProfileControl()->get($idTercomProfile);
 		$permission = $this->getPermissionControl()->get($idPermission);
-		$this->getTercomPermissionControl()->addRelationship($tercomProfile, $permission);
+		$this->getTercomPermissionControl()->addRelationship($tercomProfile, $permission, $this->getCurrentAssignmentLevel());
 
 		$result = new ApiResultObject();
 		$result->setObject($permission);

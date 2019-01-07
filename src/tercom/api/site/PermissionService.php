@@ -6,6 +6,7 @@ use dProject\restful\ApiContent;
 use tercom\entities\Permission;
 use tercom\api\site\results\ApiResultObject;
 use tercom\api\site\results\ApiResultPermissionSettings;
+use tercom\TercomException;
 
 /**
  * @see DefaultSiteService
@@ -13,6 +14,18 @@ use tercom\api\site\results\ApiResultPermissionSettings;
  */
 class PermissionService extends DefaultSiteService
 {
+	/**
+	 * {@inheritDoc}
+	 * @see \dProject\restful\ApiServiceInterface::defaultExecute()
+	 */
+	protected function defaultExecute()
+	{
+		if (!DEV)
+			throw TercomException::newPermissionRestrict();
+
+		parent::defaultExecute();
+	}
+
 	/**
 	 *
 	 * @return ApiResultPermissionSettings

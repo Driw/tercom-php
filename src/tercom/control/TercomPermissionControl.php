@@ -65,6 +65,9 @@ class TercomPermissionControl extends GenericControl implements RelationshipCont
 	 */
 	public function addRelationship($tercomProfile, $permission): void
 	{
+		if (!$this->isTercomManagement())
+			throw TercomException::newPermissionRestrict();
+
 		$this->tercomPermissionDAO->beginTransaction();
 		{
 			if ($permission->getId() === 0)
@@ -93,6 +96,9 @@ class TercomPermissionControl extends GenericControl implements RelationshipCont
 	 */
 	public function setRelationship($tercomProfile, $permission): void
 	{
+		if (!$this->isTercomManagement())
+			throw TercomException::newPermissionRestrict();
+
 		$this->validateRelanshionship($tercomProfile, $permission);
 
 		if (!$this->hasAssignmentLevel($tercomProfile, $permission))
@@ -108,6 +114,9 @@ class TercomPermissionControl extends GenericControl implements RelationshipCont
 	 */
 	public function removeRelationship($tercomProfile, $permission): void
 	{
+		if (!$this->isTercomManagement())
+			throw TercomException::newPermissionRestrict();
+
 		$this->validateRelanshionship($tercomProfile, $permission);
 
 		if (!$this->tercomPermissionDAO->delete($tercomProfile, $permission))
@@ -123,6 +132,9 @@ class TercomPermissionControl extends GenericControl implements RelationshipCont
 	 */
 	public function getRelationship($tercomProfile, $idPermission)
 	{
+		if (!$this->isTercomManagement())
+			throw TercomException::newPermissionRestrict();
+
 		if (($permission = $this->tercomPermissionDAO->select($tercomProfile, $idPermission)) === null)
 			throw new ControlException('permissão não encontrada');
 
@@ -137,6 +149,9 @@ class TercomPermissionControl extends GenericControl implements RelationshipCont
 	 */
 	public function getRelationships($tercomProfile)
 	{
+		if (!$this->isTercomManagement())
+			throw TercomException::newPermissionRestrict();
+
 		return $this->tercomPermissionDAO->selectByTercom($tercomProfile);
 	}
 
