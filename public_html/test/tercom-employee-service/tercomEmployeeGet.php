@@ -11,13 +11,12 @@ include '../include.php';
 			header('Content-type: text/html');
 ?>
 <form method='get'>
-	<p>Funcionário da TERCOM ID: <input type='text' name='idTercomEmployee'></p>
-	<button type='submit'>Continuar</button>
+	<p>Funcionário da TERCOM ID: <input type='text' name='idTercomEmployee' required></p>
+	<p><button type='submit'>Continuar</button></p>
 </form>
 <?php
 			exit;
 		}
-
 		$idTercomEmployee = $_GET['idTercomEmployee'];
 		return GeradorDeDados::callWebService("tercomEmployee/get/$idTercomEmployee", []);
 	}

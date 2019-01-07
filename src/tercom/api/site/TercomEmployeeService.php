@@ -16,6 +16,7 @@ class TercomEmployeeService extends DefaultSiteService
 {
 	/**
 	 *
+	 * @ApiPermissionAnnotation({})
 	 * @param ApiContent $content
 	 * @return ApiResultTercomEmployeeSettings
 	 */
@@ -26,7 +27,7 @@ class TercomEmployeeService extends DefaultSiteService
 
 	/**
 	 *
-	 * @ApiAnnotation({"method":"post"})
+	 * @ApiPermissionAnnotation({"method":"post"})
 	 * @param ApiContent $content
 	 * @return ApiResultObject
 	 */
@@ -45,15 +46,14 @@ class TercomEmployeeService extends DefaultSiteService
 		$this->getTercomEmployeeControl()->add($tercomEmployee);
 
 		$result = new ApiResultObject();
-		$result->setObject($tercomEmployee);
-		$result->setMessage('funcionário da TERCOM "%s" adicionado com êxito', $tercomEmployee->getName());
+		$result->setResult($tercomEmployee, 'funcionário da TERCOM "%s" adicionado com êxito', $tercomEmployee->getName());
 
 		return $result;
 	}
 
 	/**
 	 *
-	 * @ApiAnnotation({"method":"post","params":["idTercomEmployee"]})
+	 * @ApiPermissionAnnotation({"method":"post","params":["idTercomEmployee"]})
 	 * @param ApiContent $content
 	 * @return ApiResultObject
 	 */
@@ -79,15 +79,14 @@ class TercomEmployeeService extends DefaultSiteService
 		$this->getTercomEmployeeControl()->set($tercomEmployee, $tercomProfile);
 
 		$result = new ApiResultObject();
-		$result->setObject($tercomEmployee);
-		$result->setMessage('funcionário da TERCOM "%s" atualizado com êxito', $tercomEmployee->getName());
+		$result->setResult($tercomEmployee, 'funcionário da TERCOM "%s" atualizado com êxito', $tercomEmployee->getName());
 
 		return $result;
 	}
 
 	/**
 	 *
-	 * @ApiAnnotation({"method":"post","params":["idTercomEmployee"]})
+	 * @ApiPermissionAnnotation({"method":"post","params":["idTercomEmployee"]})
 	 * @param ApiContent $content
 	 * @return ApiResultObject
 	 */
@@ -96,24 +95,19 @@ class TercomEmployeeService extends DefaultSiteService
 		$post = $content->getPost();
 		$idTercomEmployee = $content->getParameters('idTercomEmployee');
 		$tercomEmployee = $this->getTercomEmployeeControl()->get($idTercomEmployee);
-		$tercomEmployee->setEnable($post->getBoolean('enable'));
-
+		$tercomEmployee->setEnable(($enable = $post->getBoolean('enable')));
 		$this->getTercomEmployeeControl()->setEnabled($tercomEmployee);
+		$enabled = $enable ? 'habilitado' : 'desabilitado';
 
 		$result = new ApiResultObject();
-		$result->setObject($tercomEmployee);
-
-		if ($tercomEmployee->isEnable())
-			$result->setMessage('funcionário da TERCOM "%s" habilitado com êxito', $tercomEmployee->getName());
-		else
-			$result->setMessage('funcionário da TERCOM "%s" desabilitado com êxito', $tercomEmployee->getName());
+		$result->setResult($tercomEmployee, 'funcionário da TERCOM "%s" %s com êxito', $tercomEmployee->getName(), $enabled);
 
 		return $result;
 	}
 
 	/**
 	 *
-	 * @ApiAnnotation({"params":["idTercomEmployee"]})
+	 * @ApiPermissionAnnotation({"params":["idTercomEmployee"]})
 	 * @param ApiContent $content
 	 * @return ApiResultObject
 	 */
@@ -123,14 +117,14 @@ class TercomEmployeeService extends DefaultSiteService
 		$tercomEmployee = $this->getTercomEmployeeControl()->get($idTercomEmployee);
 
 		$result = new ApiResultObject();
-		$result->setObject($tercomEmployee);
-		$result->setMessage('funcionário da TERCOM "%s" obtido com êxito', $tercomEmployee->getName());
+		$result->setResult($tercomEmployee, 'funcionário da TERCOM "%s" obtido com êxito', $tercomEmployee->getName());
 
 		return $result;
 	}
 
 	/**
 	 *
+	 * @ApiPermissionAnnotation({})
 	 * @param ApiContent $content
 	 * @return ApiResultObject
 	 */
@@ -139,15 +133,14 @@ class TercomEmployeeService extends DefaultSiteService
 		$tercomEmployees = $this->getTercomEmployeeControl()->getAll();
 
 		$result = new ApiResultObject();
-		$result->setObject($tercomEmployees);
-		$result->setMessage('encontrado um total de %d funcionários da TERCOM no banco de dados', $tercomEmployees->size());
+		$result->setResult($tercomEmployees, 'encontrado um total de %d funcionários da TERCOM no banco de dados', $tercomEmployees->size());
 
 		return $result;
 	}
 
 	/**
 	 *
-	 * @ApiAnnotation({"params":["assignmentLevel"]})
+	 * @ApiPermissionAnnotation({"params":["assignmentLevel"]})
 	 * @param ApiContent $content
 	 * @return ApiResultObject
 	 */
@@ -157,15 +150,14 @@ class TercomEmployeeService extends DefaultSiteService
 		$tercomEmployees = $this->getTercomEmployeeControl()->getByAssignmentLevel($assignmentLevel);
 
 		$result = new ApiResultObject();
-		$result->setObject($tercomEmployees);
-		$result->setMessage('encontrado %d funcionários da TERCOM por nível de permissão', $tercomEmployees->size());
+		$result->setResult($tercomEmployees, 'encontrado %d funcionários da TERCOM por nível de permissão', $tercomEmployees->size());
 
 		return $result;
 	}
 
 	/**
 	 *
-	 * @ApiAnnotation({"params":["idTercomProfile"]})
+	 * @ApiPermissionAnnotation({"params":["idTercomProfile"]})
 	 * @param ApiContent $content
 	 * @return ApiResultObject
 	 */
@@ -176,15 +168,14 @@ class TercomEmployeeService extends DefaultSiteService
 		$tercomEmployees = $this->getTercomEmployeeControl()->getByTercomProfile($tercomProfile);
 
 		$result = new ApiResultObject();
-		$result->setObject($tercomEmployees);
-		$result->setMessage('encontrado %d funcionários da TERCOM no perfil "%s"', $tercomEmployees->size(), $tercomProfile->getName());
+		$result->setResult($tercomEmployees, 'encontrado %d funcionários da TERCOM no perfil "%s"', $tercomEmployees->size(), $tercomProfile->getName());
 
 		return $result;
 	}
 
 	/**
 	 *
-	 * @ApiAnnotation({"params":["filter","value","idTercomEmployee"]})
+	 * @ApiPermissionAnnotation({"params":["filter","value","idTercomEmployee"]})
 	 * @param ApiContent $content
 	 * @throws FilterException
 	 * @return ApiResultSimpleValidation
@@ -207,7 +198,7 @@ class TercomEmployeeService extends DefaultSiteService
 	 * @param ApiContent $content
 	 * @return ApiResultSimpleValidation
 	 */
-	public function avaiableCpf(ApiContent $content): ApiResultSimpleValidation
+	private function avaiableCpf(ApiContent $content): ApiResultSimpleValidation
 	{
 		$parameters = $content->getParameters();
 		$cpf = $parameters->getString('value');
@@ -215,7 +206,7 @@ class TercomEmployeeService extends DefaultSiteService
 		$avaiable = $this->getTercomEmployeeControl()->avaiableCpf($cpf, $idTercomEmployee);
 
 		$result = new ApiResultSimpleValidation();
-		$result->setOkMessage($avaiable, 'CPF "%s" %s', $cpf, $avaiable ? 'disponível' : 'indisponível');
+		$result->setOkMessage($avaiable, 'CPF "%s" %s', $cpf, $this->getMessageAvaiable($avaiable));
 
 		return $result;
 	}
@@ -225,7 +216,7 @@ class TercomEmployeeService extends DefaultSiteService
 	 * @param ApiContent $content
 	 * @return ApiResultSimpleValidation
 	 */
-	public function avaiableEmail(ApiContent $content): ApiResultSimpleValidation
+	private function avaiableEmail(ApiContent $content): ApiResultSimpleValidation
 	{
 		$parameters = $content->getParameters();
 		$email = $parameters->getString('value');
@@ -233,7 +224,7 @@ class TercomEmployeeService extends DefaultSiteService
 		$avaiable = $this->getTercomEmployeeControl()->avaiableEmail($email, $idTercomEmployee);
 
 		$result = new ApiResultSimpleValidation();
-		$result->setOkMessage($avaiable, 'endereço de e-mail "%s" %s', $email, $avaiable ? 'disponível' : 'indisponível');
+		$result->setOkMessage($avaiable, 'endereço de e-mail "%s" %s', $email, $this->getMessageAvaiable($avaiable));
 
 		return $result;
 	}

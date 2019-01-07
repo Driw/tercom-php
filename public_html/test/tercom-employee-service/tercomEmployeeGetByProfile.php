@@ -11,8 +11,8 @@ include '../include.php';
 			header('Content-type: text/html');
 			?>
 <form method='get'>
-	<p>Perfil da TERCOM ID: <input type='text' name='idTercomProfile'></p>
-	<button type='submit'>Continuar</button>
+	<p>Perfil da TERCOM ID: <input type='text' name='idTercomProfile' required></p>
+	<p><button type='submit'>Continuar</button></p>
 </form>
 <?php
 		exit;

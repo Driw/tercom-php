@@ -45,36 +45,10 @@ class TercomEmployeeControl extends GenericControl
 	 * @param TercomEmployee $tercomEmployee
 	 * @throws ControlException
 	 */
-	public function verify(TercomEmployee $tercomEmployee)
+	public function add(TercomEmployee $tercomEmployee): void
 	{
-		if (!$this->tercomProfileControl->has($tercomEmployee->getTercomProfileId()))
-			throw new ControlException('perfil não encontrado');
-
-		if (!$this->avaiableCpf($tercomEmployee->getCpf(), $tercomEmployee->getId()))
-			throw new ControlException('CPF indisponível');
-
-		if (!$this->avaiableEmail($tercomEmployee->getEmail(), $tercomEmployee->getId()))
-			throw new ControlException('CPF indisponível');
-
-		if ($tercomEmployee->getPhone()->getId() !== 0)
-			if ($this->phoneControl->has($tercomEmployee->getPhone()->getId()))
-				throw new ControlException('número de telefone não encontrado');
-
-		if ($tercomEmployee->getCellphone()->getId() !== 0)
-			if ($this->phoneControl->has($tercomEmployee->getCellphone()->getId()))
-				throw new ControlException('número de celular não encontrado');
-	}
-
-	/**
-	 *
-	 * @param TercomEmployee $tercomEmployee
-	 * @return bool
-	 */
-	public function add(TercomEmployee $tercomEmployee): bool
-	{
-		$this->verify($tercomEmployee);
-
-		return $this->tercomEmployeeDAO->insert($tercomEmployee);
+		if (!$this->tercomEmployeeDAO->insert($tercomEmployee))
+			throw new ControlException('não foi possível adicionar o funcionário');
 	}
 
 	/**
@@ -82,26 +56,25 @@ class TercomEmployeeControl extends GenericControl
 	 * @param TercomEmployee $tercomEmployee
 	 * @param TercomProfile $tercomProfile
 	 * @throws ControlException
-	 * @return bool
 	 */
-	public function set(TercomEmployee $tercomEmployee, ?TercomProfile $tercomProfile = null): bool
+	public function set(TercomEmployee $tercomEmployee, ?TercomProfile $tercomProfile = null): void
 	{
-		$this->verify($tercomEmployee);
-
 		if ($tercomProfile !== null)
 			$tercomEmployee->setTercomProfile($tercomProfile);
 
-		return $this->tercomEmployeeDAO->update($tercomEmployee);
+		if (!$this->tercomEmployeeDAO->update($tercomEmployee))
+			throw new ControlException('não foi possível atualizar o funcionário');
 	}
 
 	/**
 	 *
 	 * @param TercomEmployee $tercomEmployee
-	 * @return bool
+	 * @throws ControlException
 	 */
 	public function setEnabled(TercomEmployee $tercomEmployee): bool
 	{
-		return $this->tercomEmployeeDAO->updateEnabled($tercomEmployee);
+		if (!$this->tercomEmployeeDAO->updateEnabled($tercomEmployee))
+			throw new ControlException('não foi possível atualizar o funcionário');
 	}
 
 	/**
@@ -139,16 +112,6 @@ class TercomEmployeeControl extends GenericControl
 	public function getAll(): TercomEmployees
 	{
 		return $this->tercomEmployeeDAO->selectAll();
-	}
-
-	/**
-	 *
-	 * @param int $assignmentLevel
-	 * @return TercomEmployees
-	 */
-	public function getByAssignmentLevel(int $assignmentLevel): TercomEmployees
-	{
-		return $this->tercomEmployeeDAO->selectByAssignmentLevel($assignmentLevel);
 	}
 
 	/**

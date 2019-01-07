@@ -183,26 +183,6 @@ class TercomEmployeeDAO extends GenericDAO
 
 	/**
 	 *
-	 * @param int $assignmentLevel
-	 * @return TercomEmployees
-	 */
-	public function selectByAssignmentLevel(int $assignmentLevel): TercomEmployees
-	{
-		$sqlSelectProfile = $this->newSelectProfile();
-		$sql = "$sqlSelectProfile
-				WHERE tercom_profiles.assignmentLevel >= ?
-				ORDER BY tercom_employees.name";
-
-		$query = $this->createQuery($sql);
-		$query->setInteger(1, $assignmentLevel);
-
-		$result = $query->execute();
-
-		return $this->parseTercomEmployees($result);
-	}
-
-	/**
-	 *
 	 * @param TercomProfile $tercomProfile
 	 * @return TercomEmployees
 	 */

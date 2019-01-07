@@ -214,10 +214,8 @@ INSERT INTO permissions (packet, action, assignmentLevel) VALUES
 ('customerEmployee', 'enable', 20),
 ('customerEmployee', 'get', 20),
 ('customerEmployee', 'getAll', 20),
-('customerEmployee', 'getByAssignmnetLevel', 20),
 ('customerEmployee', 'getByCustomer', 20),
 ('customerEmployee', 'getByProfile', 20),
-('customerEmployee', 'getAvaiable', 20),
 ('customerEmployee', 'avaiable', 20);
 
 -- Address Service
@@ -242,6 +240,17 @@ INSERT INTO permissions (packet, action, assignmentLevel) VALUES
 ('tercomProfile', 'avaiable', 20);
 
 -- Tercom Employee Service
+
+INSERT INTO permissions (packet, action, assignmentLevel) VALUES
+('tercomEmployee', 'settings', 20),
+('tercomEmployee', 'add', 20),
+('tercomEmployee', 'set', 20),
+('tercomEmployee', 'enable', 20),
+('tercomEmployee', 'get', 20),
+('tercomEmployee', 'getAll', 20),
+('tercomEmployee', 'getByProfile', 20),
+('tercomEmployee', 'avaiable', 20);
+
 -- Permission Service
 -- Manage Permission Service
 -- Phone Service
