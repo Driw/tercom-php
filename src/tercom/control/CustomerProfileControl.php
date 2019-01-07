@@ -47,8 +47,13 @@ class CustomerProfileControl extends GenericControl
 			throw new ControlException('nível de assinatura acima do permitido');
 
 		if (!$this->isTercomManagement())
-			if ($this->getCustomerLogged()->getId() !== $customerProfile->getCustomerId())
+		{
+			if ($customerProfile->getId() === (new LoginCustomerControl)->getCurrent()->getCustomerEmployee()->getCustomerProfileId())
+				throw new ControlException('não é permitido alterar o próprio perfil');
+
+			if ($this->getCustomerLoggedId() !== $customerProfile->getCustomerId())
 				throw TercomException::newCustomerInvliad();
+		}
 	}
 
 	/**

@@ -11,8 +11,8 @@ include '../include.php';
 			header('Content-type: text/html');
 ?>
 <form method='get'>
-	<p>Nome do Perfil: <input type='text' name='name'></p>
-	<p>Nível de Assinatura: <input type='text' name='assignmentLevel'></p>
+	<p>Nome do Perfil: <input type='text' name='name' required></p>
+	<p>Nível de Assinatura: <input type='text' name='assignmentLevel' required></p>
 	<button type='submit'>Continuar</button>
 </form>
 <?php

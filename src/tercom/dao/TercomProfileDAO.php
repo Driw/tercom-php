@@ -52,6 +52,9 @@ class TercomProfileDAO extends GenericDAO
 		// NOT NULL
 		if (StringUtil::isEmpty($tercomProfile->getName())) throw new DAOException('nome não definido');
 		if ($tercomProfile->getAssignmentLevel() === 0) throw new DAOException('nível de assinatura não definido');
+
+		// UNIQUE KEY
+		if ($this->existName($tercomProfile->getName(), $tercomProfile->getId())) throw new DAOException('nome indisponível');
 	}
 
 	/**
@@ -146,25 +149,6 @@ class TercomProfileDAO extends GenericDAO
 		$result = $query->execute();
 
 		return $this->parseTercomProfile($result);
-	}
-
-	/**
-	 * Seleciona os dados de um perfil TERCOM através do seu nível de assinatura.
-	 * @param int $assignmentLevel nível de assinatura máximo à filtrar.
-	 * @return TercomProfiles aquisição da lista de perfil TERCOM conforme filtro.
-	 */
-	public function selectByAssignmentLevel(int $assignmentLevel): TercomProfiles
-	{
-		$sqlBase = $this->newBaseSelect();
-		$sql = "$sqlBase
-				WHERE assignmentLevel <= ?";
-
-		$query = $this->createQuery($sql);
-		$query->setInteger(1, $assignmentLevel);
-
-		$result = $query->execute();
-
-		return $this->parseTercomProfiles($result);
 	}
 
 	/**

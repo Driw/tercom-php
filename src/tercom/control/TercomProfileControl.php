@@ -30,14 +30,44 @@ class TercomProfileControl extends GenericControl
 	/**
 	 *
 	 * @param TercomProfile $tercomProfile
-	 * @return bool
+	 * @param int $assignmentLevel
+	 * @throws ControlException
 	 */
-	public function add(TercomProfile $tercomProfile): bool
+	private function validateLoginAndAssignment(TercomProfile $tercomProfile, int $assignmentLevel)
 	{
-		if (!$this->avaiableName($tercomProfile->getName(), $tercomProfile->getId()))
-			throw new ControlException('nome de perfil já registrado');
+		if ($tercomProfile->getAssignmentLevel() > $assignmentLevel)
+			throw new ControlException('nível de assinatura acima do permitido');
 
-		return $this->tercomProfileDAO->insert($tercomProfile);
+		if ($tercomProfile->getId() === (new LoginTercomControl)->getCurrent()->getTercomEmployee()->getTercomProfileId())
+			throw new ControlException('não é permitido alterar o próprio perfil');
+	}
+
+	/**
+	 *
+	 * @param TercomProfile $tercomProfile
+	 * @param int $assignmentLevel
+	 * @throws ControlException
+	 */
+	public function add(TercomProfile $tercomProfile, int $assignmentLevel): void
+	{
+		$this->validateLoginAndAssignment($tercomProfile, $assignmentLevel);
+
+		if (!$this->tercomProfileDAO->insert($tercomProfile))
+			throw new ControlException('não foi possível adicionar o perfil');
+	}
+
+	/**
+	 *
+	 * @param TercomProfile $tercomProfile
+	 * @param int $assignmentLevel
+	 * @throws ControlException
+	 */
+	public function set(TercomProfile $tercomProfile, int $assignmentLevel): void
+	{
+		$this->validateLoginAndAssignment($tercomProfile, $assignmentLevel);
+
+		if (!$this->tercomProfileDAO->update($tercomProfile))
+			throw new ControlException('não foi possível atualizar o perfil');
 	}
 
 	/**
@@ -45,22 +75,12 @@ class TercomProfileControl extends GenericControl
 	 * @param TercomProfile $tercomProfile
 	 * @return bool
 	 */
-	public function set(TercomProfile $tercomProfile): bool
+	public function remove(TercomProfile $tercomProfile, int $assignmentLevel): void
 	{
-		if (!$this->avaiableName($tercomProfile->getName(), $tercomProfile->getId()))
-			throw new ControlException('nome de perfil já registrado');
+		$this->validateLoginAndAssignment($tercomProfile, $assignmentLevel);
 
-		return $this->tercomProfileDAO->update($tercomProfile);
-	}
-
-	/**
-	 *
-	 * @param TercomProfile $tercomProfile
-	 * @return bool
-	 */
-	public function remove(TercomProfile $tercomProfile): bool
-	{
-		return $this->tercomProfileDAO->delete($tercomProfile);
+		if (!$this->tercomProfileDAO->delete($tercomProfile))
+			throw new ControlException('não foi possível exlcuir o perfil');
 	}
 
 	/**
@@ -74,16 +94,6 @@ class TercomProfileControl extends GenericControl
 			throw new ControlException('perfil da TERCOM não encontrado');
 
 		return $tercomProfile;
-	}
-
-	/**
-	 *
-	 * @param int $assignmentLevel
-	 * @return TercomProfiles
-	 */
-	public function getByAssignmentLevel(int $assignmentLevel): TercomProfiles
-	{
-		return $this->tercomProfileDAO->selectByAssignmentLevel($assignmentLevel);
 	}
 
 	/**

@@ -15,6 +15,7 @@ class TercomProfileService extends DefaultSiteService
 {
 	/**
 	 *
+	 * @ApiPermissionAnnotation({})
 	 * @return ApiResultTercomProfileSettings
 	 */
 	public function actionSettings(): ApiResultTercomProfileSettings
@@ -24,7 +25,7 @@ class TercomProfileService extends DefaultSiteService
 
 	/**
 	 *
-	 * @ApiAnnotation({"method":"post"})
+	 * @ApiPermissionAnnotation({"method":"post"})
 	 * @param ApiContent $content
 	 * @return ApiResultObject
 	 */
@@ -35,7 +36,7 @@ class TercomProfileService extends DefaultSiteService
 		$tercomProfile = new TercomProfile();
 		$tercomProfile->setName($post->getString('name'));
 		$tercomProfile->setAssignmentLevel($post->getInt('assignmentLevel'));
-		$this->getTercomProfileControl()->add($tercomProfile);
+		$this->getTercomProfileControl()->add($tercomProfile, $this->getCurrentAssignmentLevel());
 
 		$result = new ApiResultObject();
 		$result->setObject($tercomProfile);
@@ -46,7 +47,7 @@ class TercomProfileService extends DefaultSiteService
 
 	/**
 	 *
-	 * @ApiAnnotation({"method":"post","params":["idTercomProfile"]})
+	 * @ApiPermissionAnnotation({"method":"post","params":["idTercomProfile"]})
 	 * @param ApiContent $content
 	 * @return ApiResultObject
 	 */
@@ -59,7 +60,7 @@ class TercomProfileService extends DefaultSiteService
 		if ($post->isSetted('name')) $tercomProfile->setName($post->getString('name'));
 		if ($post->isSetted('assignmentLevel')) $tercomProfile->setAssignmentLevel($post->getInt('assignmentLevel'));
 
-		$this->getTercomProfileControl()->set($tercomProfile);
+		$this->getTercomProfileControl()->set($tercomProfile, $this->getCurrentAssignmentLevel());
 
 		$result = new ApiResultObject();
 		$result->setObject($tercomProfile);
@@ -70,7 +71,7 @@ class TercomProfileService extends DefaultSiteService
 
 	/**
 	 *
-	 * @ApiAnnotation({"params":["idTercomProfile"]})
+	 * @ApiPermissionAnnotation({"params":["idTercomProfile"]})
 	 * @param ApiContent $content
 	 * @return ApiResultObject
 	 */
@@ -79,7 +80,7 @@ class TercomProfileService extends DefaultSiteService
 		$idTercomProfile = $content->getParameters()->getInt('idTercomProfile');
 		$tercomProfile = $this->getTercomProfileControl()->get($idTercomProfile, true);
 
-		$this->getTercomProfileControl()->remove($tercomProfile);
+		$this->getTercomProfileControl()->remove($tercomProfile, $this->getCurrentAssignmentLevel());
 
 		$result = new ApiResultObject();
 		$result->setObject($tercomProfile);
@@ -90,14 +91,14 @@ class TercomProfileService extends DefaultSiteService
 
 	/**
 	 *
-	 * @ApiAnnotation({"params":["idTercomProfile"]})
+	 * @ApiPermissionAnnotation({"params":["idTercomProfile"]})
 	 * @param ApiContent $content
 	 * @return ApiResultObject
 	 */
 	public function actionGet(ApiContent $content): ApiResultObject
 	{
 		$idTercomProfile = $content->getParameters()->getInt('idTercomProfile');
-		$tercomProfile = $this->getTercomProfileControl()->get($idTercomProfile, true);
+		$tercomProfile = $this->getTercomProfileControl()->get($idTercomProfile);
 
 		$result = new ApiResultObject();
 		$result->setObject($tercomProfile);
@@ -108,25 +109,7 @@ class TercomProfileService extends DefaultSiteService
 
 	/**
 	 *
-	 * @ApiAnnotation({"params":["assignmentLevel"]})
-	 * @param ApiContent $content
-	 * @return ApiResultObject
-	 */
-	public function actionActions(ApiContent $content): ApiResultObject
-	{
-		$parameters = $content->getParameters();
-		$assignmentLevel = $parameters->getInt('assignmentLevel');
-		$tercomProfiles = $this->getTercomProfileControl()->getByAssignmentLevel($assignmentLevel);
-
-		$result = new ApiResultObject();
-		$result->setObject($tercomProfiles);
-		$result->setMessage('encontrado %d perfis da TERCOM', $tercomProfiles->size());
-
-		return $result;
-	}
-
-	/**
-	 *
+	 * @ApiPermissionAnnotation({})
 	 * @param ApiContent $content
 	 * @return ApiResultObject
 	 */

@@ -231,6 +231,16 @@ INSERT INTO permissions (packet, action, assignmentLevel) VALUES
 ('address', 'getAll', 20);
 
 -- Tercom Profile Service
+
+INSERT INTO permissions (packet, action, assignmentLevel) VALUES
+('tercomProfile', 'settings', 20),
+('tercomProfile', 'add', 20),
+('tercomProfile', 'set', 20),
+('tercomProfile', 'remove', 20),
+('tercomProfile', 'get', 20),
+('tercomProfile', 'getAll', 20),
+('tercomProfile', 'avaiable', 20);
+
 -- Tercom Employee Service
 -- Permission Service
 -- Manage Permission Service

@@ -20,9 +20,15 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+07.01.2018 - 0.3.4.162
+- Adicionado permissões para a utilização do serviço para gerenciamento de perfis TERCOM, TercomProfileService.
+	- Excluída ação para obter perfis por nível de assinatura, não será necessário.
+- Corrigido problema que não era validado nome único por perfil TERCOM, TercomProfileDAO.
+- Adicionada restrição do qual um funcionário de cliente não pode gerenciar seu próprio perfil, CustomerProfileControl.
+
 07.01.2018 - 0.3.4.161
-- Adicionado permissões para a utilização do serviço para gerenciamento de funcionários de cliente, CustomerEmployeeService.
 - Adicionado permissões para a utilização do serviço para gerenciamento de relações que afeta:
+- Adicionado permissões para a utilização do serviço para gerenciamento de funcionários de cliente, CustomerEmployeeService.
 	- AddressService, ManagePermissionService e PhoneService.
 		- Somente AddressService foi atualizado para considerar restrições à funcionários de cliente.
 - Excluído ação 'getByAssignmentLevel', não será mais necessário, AddressService.

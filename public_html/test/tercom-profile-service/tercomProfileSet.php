@@ -11,10 +11,10 @@ include '../include.php';
 			header('Content-type: text/html');
 ?>
 <form method='get'>
-	<p>Tercom Perfil ID: <input type='text' name='idTercomProfile'></p>
+	<p>Tercom Perfil ID: <input type='text' name='idTercomProfile' required></p>
 	<p>Nome do Perfil: <input type='text' name='name'></p>
 	<p>Nível de Assinatura: <input type='text' name='assignmentLevel'></p>
-	<button type='submit'>Continuar</button>
+	<p><button type='submit'>Continuar</button></p>
 </form>
 <?php
 			exit;
