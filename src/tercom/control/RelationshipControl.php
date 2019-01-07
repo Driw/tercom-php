@@ -16,25 +16,22 @@ interface RelationshipControl
 	 *
 	 * @param Entity $relationship
 	 * @param Entity $item
-	 * @return bool
 	 */
-	public function addRelationship($relationship, $item): bool;
+	public function addRelationship($relationship, $item): void;
 
 	/**
 	 *
 	 * @param Entity $relationship
 	 * @param Entity $item
-	 * @return bool
 	 */
-	public function setRelationship($relationship, $item): bool;
+	public function setRelationship($relationship, $item): void;
 
 	/**
 	 *
 	 * @param Entity $relationship
 	 * @param Entity $item
-	 * @return bool
 	 */
-	public function removeRelationship($relationship, $item): bool;
+	public function removeRelationship($relationship, $item): void;
 
 	/**
 	 *

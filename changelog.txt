@@ -20,6 +20,15 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+07.01.2018 - 0.3.4.161
+- Adicionado permissões para a utilização do serviço para gerenciamento de funcionários de cliente, CustomerEmployeeService.
+- Adicionado permissões para a utilização do serviço para gerenciamento de relações que afeta:
+	- AddressService, ManagePermissionService e PhoneService.
+		- Somente AddressService foi atualizado para considerar restrições à funcionários de cliente.
+- Excluído ação 'getByAssignmentLevel', não será mais necessário, AddressService.
+- Adicionado restrição para que se for cliente não possa alterar dados de endereços de outros clientes.
+- Modificado addRelationship, setRelationship e removeRelationship de 'bool' para 'void' conforme novo padrão, RelationshipControl.
+
 07.01.2018 - 0.3.4.160
 - Corrigido problema com get() que não definia valor padrão para 'assignmentLevel', CustomerProfileControl.
 - Corrigido setState() que chamava método incorreto para validaçaõ da UF, Address.

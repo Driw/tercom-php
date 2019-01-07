@@ -7,6 +7,7 @@ use tercom\entities\CustomerEmployee;
 use tercom\entities\lists\CustomerEmployees;
 use tercom\entities\CustomerProfile;
 use tercom\entities\Customer;
+use tercom\TercomException;
 
 /**
  * @see GenericControl
@@ -43,47 +44,44 @@ class CustomerEmployeeControl extends GenericControl
 	/**
 	 *
 	 * @param CustomerEmployee $customerEmployee
+	 * @param int $assignmentLevel|NULL
 	 * @throws ControlException
 	 */
-	public function verify(CustomerEmployee $customerEmployee)
+	public function verify(CustomerEmployee $customerEmployee, ?int $assignmentLevel = null)
 	{
-		if (!$this->customerProfileControl->has($customerEmployee->getCustomerProfileId()))
-			throw new ControlException('perfil não encontrado');
+		if (!$this->isTercomManagement())
+			if ($customerEmployee->getCustomerProfile()->getCustomerId() !== $this->getCustomerLoggedId())
+				throw TercomException::newPermissionRestrict();
 
-		if (!$this->avaiableEmail($customerEmployee->getEmail(), $customerEmployee->getId()))
-			throw new ControlException('CPF indisponível');
-
-		if ($customerEmployee->getPhone()->getId() !== 0)
-			if ($this->phoneControl->has($customerEmployee->getPhone()->getId()))
-				throw new ControlException('número de telefone não encontrado');
-
-		if ($customerEmployee->getCellphone()->getId() !== 0)
-			if ($this->phoneControl->has($customerEmployee->getCellphone()->getId()))
-				throw new ControlException('número de celular não encontrado');
+		if ($assignmentLevel !== null)
+			if ($customerEmployee->getCustomerProfile()->getAssignmentLevel() > $assignmentLevel)
+				throw TercomException::newPermissionLowLevel();
 	}
 
 	/**
 	 *
 	 * @param CustomerEmployee $customerEmployee
-	 * @return bool
+	 * @param int $assignmentLevel
+	 * @throws ControlException
 	 */
-	public function add(CustomerEmployee $customerEmployee): bool
+	public function add(CustomerEmployee $customerEmployee, int $assignmentLevel): void
 	{
-		$this->verify($customerEmployee);
+		$this->verify($customerEmployee, $assignmentLevel);
 
-		return $this->customerEmployeeDAO->insert($customerEmployee);
+		if (!$this->customerEmployeeDAO->insert($customerEmployee))
+			throw new ControlException('não foi possível adicionar o funcionário de cliente');
 	}
 
 	/**
 	 *
 	 * @param CustomerEmployee $customerEmployee
 	 * @param CustomerProfile $customerProfile
+	 * @param int $assignmentLevel
 	 * @throws ControlException
-	 * @return bool
 	 */
-	public function set(CustomerEmployee $customerEmployee, ?CustomerProfile $customerProfile = null): bool
+	public function set(CustomerEmployee $customerEmployee, ?CustomerProfile $customerProfile, int $assignmentLevel): void
 	{
-		$this->verify($customerEmployee);
+		$this->verify($customerEmployee, $assignmentLevel);
 
 		if ($customerProfile !== null)
 		{
@@ -93,17 +91,19 @@ class CustomerEmployeeControl extends GenericControl
 			$customerEmployee->setCustomerProfile($customerProfile);
 		}
 
-		return $this->customerEmployeeDAO->update($customerEmployee);
+		if (!$this->customerEmployeeDAO->update($customerEmployee))
+			throw new ControlException('não foi possível atualizar o funcionário de cliente');
 	}
 
 	/**
 	 *
 	 * @param CustomerEmployee $customerEmployee
-	 * @return bool
+	 * @throws ControlException
 	 */
-	public function setEnabled(CustomerEmployee $customerEmployee): bool
+	public function setEnabled(CustomerEmployee $customerEmployee): void
 	{
-		return $this->customerEmployeeDAO->updateEnabled($customerEmployee);
+		if (!$this->customerEmployeeDAO->updateEnabled($customerEmployee))
+			throw new ControlException('não foi possível atualizar o estado do funcionário de cliente');
 	}
 
 	/**
@@ -116,6 +116,8 @@ class CustomerEmployeeControl extends GenericControl
 	{
 		if (($customerEmployee = $this->customerEmployeeDAO->select($idCustomerEmployee)) === null)
 			throw new ControlException('funcionário não encontrado');
+
+		$this->verify($customerEmployee);
 
 		return $customerEmployee;
 	}
@@ -140,17 +142,10 @@ class CustomerEmployeeControl extends GenericControl
 	 */
 	public function getAll(): CustomerEmployees
 	{
-		return $this->customerEmployeeDAO->selectAll();
-	}
+		if (!$this->isTercomManagement() && $this->hasCustomerLogged())
+			return $this->getByCustomer($this->getCustomerLogged());
 
-	/**
-	 *
-	 * @param int $assignmentLevel
-	 * @return CustomerEmployees
-	 */
-	public function getByAssignmentLevel(int $assignmentLevel): CustomerEmployees
-	{
-		return $this->customerEmployeeDAO->selectByAssignmentLevel($assignmentLevel);
+		return $this->customerEmployeeDAO->selectAll();
 	}
 
 	/**
@@ -170,6 +165,10 @@ class CustomerEmployeeControl extends GenericControl
 	 */
 	public function getByCustomerProfile(CustomerProfile $customerProfile): CustomerEmployees
 	{
+		if (!$this->isTercomManagement() && $this->hasCustomerLogged())
+			if ($this->getCustomerLoggedId() !== $customerProfile->getCustomerId())
+				throw TercomException::newPermissionRestrict();
+
 		return $this->customerEmployeeDAO->selectByProfile($customerProfile);
 	}
 

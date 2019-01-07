@@ -14,12 +14,12 @@ include '../include.php';
 			header('Content-type: text/html');
 ?>
 <form method='get'>
-	<p>Perfil de Cliente ID: <input type='text' name='idCustomerProfile'></p>
-	<p>Nome: <input type='text' name='name' value='<?php echo $pessoa['nome']; ?>'></p>
-	<p>Endereço de E-mail: <input type='text' name='email' value='<?php echo $pessoa['email']; ?>'></p>
-	<p>Senha: <input type='text' name='password' value='<?php echo $password; ?>'></p>
+	<p>Perfil de Cliente ID: <input type='text' name='idCustomerProfile' required></p>
+	<p>Nome: <input type='text' name='name' value='<?php echo $pessoa['nome']; ?>' required></p>
+	<p>Endereço de E-mail: <input type='text' name='email' value='<?php echo $pessoa['email']; ?>' required></p>
+	<p>Senha: <input type='text' name='password' value='<?php echo $password; ?>' required></p>
 	<p>Habilitado: <input type='checkbox' name='enabled' value="1" checked></p>
-	<button type='submit'>Continuar</button>
+	<p><button type='submit'>Continuar</button></p>
 </form>
 <?php
 			exit;

@@ -63,7 +63,7 @@ class TercomPermissionControl extends GenericControl implements RelationshipCont
 	 * @param TercomProfile $tercomProfile
 	 * @param Permission $permission
 	 */
-	public function addRelationship($tercomProfile, $permission): bool
+	public function addRelationship($tercomProfile, $permission): void
 	{
 		$this->tercomPermissionDAO->beginTransaction();
 		{
@@ -83,8 +83,6 @@ class TercomPermissionControl extends GenericControl implements RelationshipCont
 			}
 		}
 		$this->tercomPermissionDAO->commit();
-
-		return true;
 	}
 
 	/**
@@ -93,19 +91,13 @@ class TercomPermissionControl extends GenericControl implements RelationshipCont
 	 * @param TercomProfile $tercomProfile
 	 * @param Permission $permission
 	 */
-	public function setRelationship($tercomProfile, $permission): bool
+	public function setRelationship($tercomProfile, $permission): void
 	{
 		$this->validateRelanshionship($tercomProfile, $permission);
 
 		if (!$this->hasAssignmentLevel($tercomProfile, $permission))
-		{
 			if (!$this->tercomPermissionDAO->delete($tercomProfile, $permission))
 				throw new ControlException('não foi possível descvincular a permissão do perfil');
-
-			return false;
-		}
-
-		return true;
 	}
 
 	/**
@@ -114,11 +106,12 @@ class TercomPermissionControl extends GenericControl implements RelationshipCont
 	 * @param TercomProfile $tercomProfile
 	 * @param Permission $permission
 	 */
-	public function removeRelationship($tercomProfile, $permission): bool
+	public function removeRelationship($tercomProfile, $permission): void
 	{
 		$this->validateRelanshionship($tercomProfile, $permission);
 
-		return $this->tercomPermissionDAO->delete($tercomProfile, $permission);
+		if (!$this->tercomPermissionDAO->delete($tercomProfile, $permission))
+			throw new ControlException('não foi possível descvincular a permissão do perfil');
 	}
 
 	/**

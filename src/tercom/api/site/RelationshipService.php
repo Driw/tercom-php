@@ -27,7 +27,7 @@ abstract class RelationshipService extends DefaultSiteService
 
 	/**
 	 *
-	 * @ApiAnnotation({"method":"post","params":["relationship","idRelationship"]})
+	 * @ApiPermissionAnnotation({"method":"post","params":["relationship","idRelationship"]})
 	 * @param ApiContent $content
 	 * @return ApiResult
 	 */
@@ -46,7 +46,7 @@ abstract class RelationshipService extends DefaultSiteService
 
 	/**
 	 *
-	 * @ApiAnnotation({"method":"post","params":["relationship","idRelationship","idItem"]})
+	 * @ApiPermissionAnnotation({"method":"post","params":["relationship","idRelationship","idItem"]})
 	 * @param ApiContent $content
 	 * @throws RelationshipException
 	 * @return ApiResult
@@ -67,7 +67,7 @@ abstract class RelationshipService extends DefaultSiteService
 
 	/**
 	 *
-	 * @ApiAnnotation({"params":["relationship","idRelationship","idItem"]})
+	 * @ApiPermissionAnnotation({"params":["relationship","idRelationship","idItem"]})
 	 * @param ApiContent $content
 	 * @throws RelationshipException
 	 * @return ApiResult
@@ -88,7 +88,7 @@ abstract class RelationshipService extends DefaultSiteService
 
 	/**
 	 *
-	 * @ApiAnnotation({"params":["relationship","idRelationship","idItem"]})
+	 * @ApiPermissionAnnotation({"params":["relationship","idRelationship","idItem"]})
 	 * @param ApiContent $content
 	 * @throws RelationshipException
 	 * @return ApiResult
@@ -109,7 +109,7 @@ abstract class RelationshipService extends DefaultSiteService
 
 	/**
 	 *
-	 * @ApiAnnotation({"params":["relationship","idRelationship"]})
+	 * @ApiPermissionAnnotation({"params":["relationship","idRelationship"]})
 	 * @param ApiContent $content
 	 * @throws RelationshipException
 	 * @return ApiResult

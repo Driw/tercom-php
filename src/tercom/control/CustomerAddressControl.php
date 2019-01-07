@@ -7,6 +7,7 @@ use tercom\entities\Address;
 use tercom\entities\Customer;
 use tercom\dao\CustomerAddressDAO;
 use tercom\entities\lists\Customers;
+use tercom\TercomException;
 
 /**
  * @see AddressDAO
@@ -35,29 +36,17 @@ class CustomerAddressControl extends GenericControl implements RelationshipContr
 	/**
 	 *
 	 * @param Customer $customer
-	 * @throws ControlException
+	 * @throws TercomException
 	 */
-	private function validateCustomer(Customer $customer)
+	private function validate(Customer $customer, ?Address $address = null): void
 	{
-		if ($customer->getId() === 0)
-			throw new ControlException('cliente não identificado');
-	}
+		if ($this->hasCustomerLogged())
+			if ($customer->getId() !== $this->getCustomerLoggedId())
+				throw TercomException::newPermissionRestrict();
 
-	/**
-	 *
-	 * @param Customer $customer
-	 * @param Address $address
-	 * @throws ControlException
-	 */
-	private function validateCustomerAddress(Customer $customer, Address $address)
-	{
-		$this->validateCustomer($customer);
-
-		if ($address->getId() === 0)
-			throw new ControlException('endereço não identificado');
-
-		if (!$this->hasRelationship($customer, $address))
-			throw new ControlException('endereço não vinculado ao cliente');
+		if ($address !== null)
+			if (!$this->customerAddressDAO->exist($customer, $address))
+				throw new ControlException('endereço desconhecido');
 	}
 
 	/**
@@ -66,8 +55,10 @@ class CustomerAddressControl extends GenericControl implements RelationshipContr
 	 * @param Customer $customer
 	 * @param Address $address
 	 */
-	public function addRelationship($customer, $address): bool
+	public function addRelationship($customer, $address): void
 	{
+		$this->validate($customer);
+
 		$this->addressDAO->beginTransaction();
 		{
 			if (!$this->addressDAO->insert($address) || !$this->customerAddressDAO->insert($customer, $address))
@@ -77,9 +68,7 @@ class CustomerAddressControl extends GenericControl implements RelationshipContr
 			}
 		}
 		$this->addressDAO->commit();
-
 		$customer->getAddresses()->add($address);
-		return true;
 	}
 
 	/**
@@ -88,11 +77,12 @@ class CustomerAddressControl extends GenericControl implements RelationshipContr
 	 * @param Customer $customer
 	 * @param Address $address
 	 */
-	public function setRelationship($customer, $address): bool
+	public function setRelationship($customer, $address): void
 	{
-		$this->validateCustomerAddress($customer, $address);
+		$this->validate($customer, $address);
 
-		return $this->addressDAO->update($address);
+		if (!$this->addressDAO->update($address))
+			throw new ControlException('não foi possível atualizar o endereço');
 	}
 
 	/**
@@ -101,15 +91,14 @@ class CustomerAddressControl extends GenericControl implements RelationshipContr
 	 * @param Customer $customer
 	 * @param Address $address
 	 */
-	public function removeRelationship($customer, $address): bool
+	public function removeRelationship($customer, $address): void
 	{
-		$this->validateCustomerAddress($customer, $address);
+		$this->validate($customer, $address);
 
 		if (!$this->addressDAO->delete($address))
-			return false;
+			throw new ControlException('não foi excluir o endereço');
 
 		$customer->getAddresses()->removeElement($address);
-		return true;
 	}
 
 	/**
@@ -119,12 +108,10 @@ class CustomerAddressControl extends GenericControl implements RelationshipContr
 	 */
 	public function getRelationship($customer, int $idAddress)
 	{
-		$this->validateCustomer($customer);
-
 		if (($address = $this->addressDAO->select($idAddress)) === null)
 			throw new ControlException('endereço não encontrado');
 
-		$this->validateCustomerAddress($customer, $address);
+		$this->validate($customer, $address);
 		$customer->getAddresses()->replace($address);
 
 		return $address;
@@ -138,7 +125,7 @@ class CustomerAddressControl extends GenericControl implements RelationshipContr
 	 */
 	public function getRelationships($customer)
 	{
-		$this->validateCustomer($customer);
+		$this->validate($customer);
 		$addresses = $this->customerAddressDAO->select($customer);
 		$customer->setAddresses($addresses);
 

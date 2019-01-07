@@ -10,32 +10,31 @@ include '../include.php';
 		if (!isset($_GET['relationship']))
 		{
 			header('Content-type: text/html');
-			?>
+			$empresa = GeradorDeDados::genEmpresa();
+
+?>
 <form method='get'>
-	Relação com: <select name="relationship">
-		<option value="customer">Endereço para Clientes</option>
-	</select><br>
-	Chave da Realação (ID): <input type="text" name="idRelationship"><br>
-	<button type='submit'>Continuar</button>
+	<p>Relação com: <select name='relationship'>
+		<option value='customer'>Endereço para Clientes</option>
+	</select></p>
+	<p>Chave da Realação (ID): <input type='text' name='idRelationship'></p>
+	<p>Estado: <input type='text' name='state' value='<?php echo $empresa['estado']; ?>' required></p>
+	<p>Cidade: <input type='text' name='city' value='<?php echo $empresa['cidade']; ?>' required></p>
+	<p>CEP: <input type='text' name='cep' value='<?php echo $empresa['cep']; ?>' required></p>
+	<p>Bairro: <input type='text' name='neighborhood' value='<?php echo $empresa['bairro']; ?>' required></p>
+	<p>Endereço: <input type='text' name='street' value='<?php echo $empresa['endereco']; ?>' required></p>
+	<p>Número: <input type='text' name='number' value='<?php echo $empresa['numero']; ?>' required></p>
+	<p>Complemento: <input type='text' name='complement' value='<?php echo $empresa['complemento']; ?>'></p>
+	<p><button type='submit'>Continuar</button></p>
 </form>
 <?php
 			exit;
 		}
 
-		$empresa = GeradorDeDados::genEmpresa();
-		$parameters = [
-			'state' => $empresa['estado'],
-			'city' => $empresa['cidade'],
-			'cep' => $empresa['cep'],
-			'neighborhood' => $empresa['bairro'],
-			'street' => $empresa['endereco'],
-			'number' => $empresa['numero'],
-			'complement' => $empresa['complemento'],
-		];
 		$relationship = $_GET['relationship'];
 		$idRelationship = $_GET['idRelationship'];
 
-		return GeradorDeDados::callWebService("address/add/$relationship/$idRelationship", $parameters, true);
+		return GeradorDeDados::callWebService("address/add/$relationship/$idRelationship", $_GET, true);
 	}
 }
 include '../execute.php';

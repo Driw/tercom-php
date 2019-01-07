@@ -16,6 +16,7 @@ class CustomerEmployeeService extends DefaultSiteService
 {
 	/**
 	 *
+	 * @ApiPermissionAnnotation({})
 	 * @param ApiContent $content
 	 * @return ApiResultCustomerEmployeeSettings
 	 */
@@ -26,14 +27,14 @@ class CustomerEmployeeService extends DefaultSiteService
 
 	/**
 	 *
-	 * @ApiAnnotation({"method":"post"})
+	 * @ApiPermissionAnnotation({"method":"post"})
 	 * @param ApiContent $content
 	 * @return ApiResultObject
 	 */
 	public function actionAdd(ApiContent $content): ApiResultObject
 	{
 		$post = $content->getPost();
-		$customerProfile = $this->getCustomerProfileControl()->get($post->getInt('idCustomerProfile'));
+		$customerProfile = $this->getCustomerProfileControl()->get($post->getInt('idCustomerProfile'), false, $this->getCurrentAssignmentLevel());
 
 		$customerEmployee = new CustomerEmployee();
 		$customerEmployee->setCustomerProfile($customerProfile);
@@ -41,18 +42,17 @@ class CustomerEmployeeService extends DefaultSiteService
 		$customerEmployee->setEmail($post->getString('email'));
 		$customerEmployee->setPassword($post->getString('password'), false);
 		$customerEmployee->setEnable($post->getBoolean('enable'));
-		$this->getCustomerEmployeeControl()->add($customerEmployee);
+		$this->getCustomerEmployeeControl()->add($customerEmployee, $this->getCurrentAssignmentLevel());
 
 		$result = new ApiResultObject();
-		$result->setObject($customerEmployee);
-		$result->setMessage('funcionário de cliente "%s" adicionado com êxito', $customerEmployee->getName());
+		$result->setResult($customerEmployee, 'funcionário de cliente "%s" adicionado com êxito', $customerEmployee->getName());
 
 		return $result;
 	}
 
 	/**
 	 *
-	 * @ApiAnnotation({"method":"post","params":["idCustomerEmployee"]})
+	 * @ApiPermissionAnnotation({"method":"post","params":["idCustomerEmployee"]})
 	 * @param ApiContent $content
 	 * @return ApiResultObject
 	 */
@@ -63,7 +63,7 @@ class CustomerEmployeeService extends DefaultSiteService
 		$customerEmployee = $this->getCustomerEmployeeControl()->get($idCustomerEmployee);
 
 		if ($post->isSetted('idCustomerProfile'))
-			$customerProfile = $this->getCustomerProfileControl()->get($post->getInt('idCustomerProfile'));
+			$customerProfile = $this->getCustomerProfileControl()->get($post->getInt('idCustomerProfile'), false, $this->getCurrentAssignmentLevel());
 		else
 			$customerProfile = null;
 
@@ -74,18 +74,17 @@ class CustomerEmployeeService extends DefaultSiteService
 		if ($post->isSetted('cellphone')) $customerEmployee->setCellphone($post->getInstance('cellphone'));
 		if ($post->isSetted('enable')) $customerEmployee->setEnable($post->getBoolean('enable'));
 
-		$this->getCustomerEmployeeControl()->set($customerEmployee, $customerProfile);
+		$this->getCustomerEmployeeControl()->set($customerEmployee, $customerProfile, $this->getCurrentAssignmentLevel());
 
 		$result = new ApiResultObject();
-		$result->setObject($customerEmployee);
-		$result->setMessage('funcionário de cliente "%s" atualizado com êxito', $customerEmployee->getName());
+		$result->setResult($customerEmployee, 'funcionário de cliente "%s" atualizado com êxito', $customerEmployee->getName());
 
 		return $result;
 	}
 
 	/**
 	 *
-	 * @ApiAnnotation({"method":"post","params":["idCustomerEmployee"]})
+	 * @ApiPermissionAnnotation({"method":"post","params":["idCustomerEmployee"]})
 	 * @param ApiContent $content
 	 * @return ApiResultObject
 	 */
@@ -94,24 +93,19 @@ class CustomerEmployeeService extends DefaultSiteService
 		$post = $content->getPost();
 		$idCustomerEmployee = $content->getParameters('idCustomerEmployee');
 		$customerEmployee = $this->getCustomerEmployeeControl()->get($idCustomerEmployee);
-		$customerEmployee->setEnable($post->getBoolean('enable'));
-
+		$customerEmployee->setEnable(($enable = $post->getBoolean('enable')));
 		$this->getCustomerEmployeeControl()->setEnabled($customerEmployee);
+		$enabled = $enable ? 'habilitado' : 'desabilitado';
 
 		$result = new ApiResultObject();
-		$result->setObject($customerEmployee);
-
-		if ($customerEmployee->isEnable())
-			$result->setMessage('funcionário de cliente "%s" habilitado com êxito', $customerEmployee->getName());
-		else
-			$result->setMessage('funcionário de cliente "%s" desabilitado com êxito', $customerEmployee->getName());
+		$result->setResult($customerEmployee, 'funcionário de cliente "%s" %s com êxito', $customerEmployee->getName(), $enabled);
 
 		return $result;
 	}
 
 	/**
 	 *
-	 * @ApiAnnotation({"params":["idCustomerEmployee"]})
+	 * @ApiPermissionAnnotation({"params":["idCustomerEmployee"]})
 	 * @param ApiContent $content
 	 * @return ApiResultObject
 	 */
@@ -121,14 +115,14 @@ class CustomerEmployeeService extends DefaultSiteService
 		$customerEmployee = $this->getCustomerEmployeeControl()->get($idCustomerEmployee);
 
 		$result = new ApiResultObject();
-		$result->setObject($customerEmployee);
-		$result->setMessage('funcionário de cliente "%s" obtido com êxito', $customerEmployee->getName());
+		$result->setResult($customerEmployee, 'funcionário de cliente "%s" obtido com êxito', $customerEmployee->getName());
 
 		return $result;
 	}
 
 	/**
 	 *
+	 * @ApiPermissionAnnotation({})
 	 * @param ApiContent $content
 	 * @return ApiResultObject
 	 */
@@ -137,33 +131,14 @@ class CustomerEmployeeService extends DefaultSiteService
 		$customerEmployees = $this->getCustomerEmployeeControl()->getAll();
 
 		$result = new ApiResultObject();
-		$result->setObject($customerEmployees);
-		$result->setMessage('encontrado um total de %d funcionários de clientes no banco', $customerEmployees->size());
+		$result->setResult($customerEmployees, 'encontrado um total de %d funcionários de clientes no banco', $customerEmployees->size());
 
 		return $result;
 	}
 
 	/**
 	 *
-	 * @ApiAnnotation({"params":["assignmentLevel"]})
-	 * @param ApiContent $content
-	 * @return ApiResultObject
-	 */
-	public function actionGetByAssignmentLevel(ApiContent $content): ApiResultObject
-	{
-		$assignmentLevel = $content->getParameters()->getInt('assignmentLevel');
-		$customerEmployees = $this->getCustomerEmployeeControl()->getByAssignmentLevel($assignmentLevel);
-
-		$result = new ApiResultObject();
-		$result->setObject($customerEmployees);
-		$result->setMessage('encontrado %d funcionários de clientes por nível de permissão', $customerEmployees->size());
-
-		return $result;
-	}
-
-	/**
-	 *
-	 * @ApiAnnotation({"params":["idCustomer"]})
+	 * @ApiPermissionAnnotation({"params":["idCustomer"]})
 	 * @param ApiContent $content
 	 * @return ApiResultObject
 	 */
@@ -174,34 +149,32 @@ class CustomerEmployeeService extends DefaultSiteService
 		$customerEmployees = $this->getCustomerEmployeeControl()->getByCustomer($customer);
 
 		$result = new ApiResultObject();
-		$result->setObject($customerEmployees);
-		$result->setMessage('encontrado %d funcionários no cliente "%s"', $customerEmployees->size(), $customer->getFantasyName());
+		$result->setResult($customerEmployees, 'encontrado %d funcionários no cliente "%s"', $customerEmployees->size(), $customer->getFantasyName());
 
 		return $result;
 	}
 
 	/**
 	 *
-	 * @ApiAnnotation({"params":["idCustomerProfile"]})
+	 * @ApiPermissionAnnotation({"params":["idCustomerProfile"]})
 	 * @param ApiContent $content
 	 * @return ApiResultObject
 	 */
 	public function actionGetByProfile(ApiContent $content): ApiResultObject
 	{
 		$idCustomerProfile = $content->getParameters()->getInt('idCustomerProfile');
-		$customerProfile = $this->getCustomerProfileControl()->get($idCustomerProfile);
+		$customerProfile = $this->getCustomerProfileControl()->get($idCustomerProfile, false, $this->getCurrentAssignmentLevel());
 		$customerEmployees = $this->getCustomerEmployeeControl()->getByCustomerProfile($customerProfile);
 
 		$result = new ApiResultObject();
-		$result->setObject($customerEmployees);
-		$result->setMessage('encontrado %d funcionários no perfil "%s"', $customerEmployees->size(), $customerProfile->getName());
+		$result->setResult($customerEmployees, 'encontrado %d funcionários no perfil "%s"', $customerEmployees->size(), $customerProfile->getName());
 
 		return $result;
 	}
 
 	/**
 	 *
-	 * @ApiAnnotation({"params":["filter","value","idCustomerEmployee"]})
+	 * @ApiPermissionAnnotation({"params":["filter","value","idCustomerEmployee"]})
 	 * @param ApiContent $content
 	 * @throws FilterException
 	 * @return ApiResultSimpleValidation
@@ -223,7 +196,7 @@ class CustomerEmployeeService extends DefaultSiteService
 	 * @param ApiContent $content
 	 * @return ApiResultSimpleValidation
 	 */
-	public function avaiableEmail(ApiContent $content): ApiResultSimpleValidation
+	private function avaiableEmail(ApiContent $content): ApiResultSimpleValidation
 	{
 		$parameters = $content->getParameters();
 		$email = $parameters->getString('value');
@@ -231,7 +204,7 @@ class CustomerEmployeeService extends DefaultSiteService
 		$avaiable = $this->getCustomerEmployeeControl()->avaiableEmail($email, $idCustomerEmployee);
 
 		$result = new ApiResultSimpleValidation();
-		$result->setOkMessage($avaiable, 'endereço de e-mail "%s" %s', $email, $avaiable ? 'disponível' : 'indisponível');
+		$result->setOkMessage($avaiable, 'endereço de e-mail "%s" %s', $email, $this->getMessageAvaiable($avaiable));
 
 		return $result;
 	}

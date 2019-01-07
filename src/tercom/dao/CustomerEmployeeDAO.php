@@ -209,26 +209,6 @@ class CustomerEmployeeDAO extends GenericDAO
 	}
 
 	/**
-	 * Selecione os dados de todos os funcionários de clientes registrados com nível de assinatura maior ou igual à:
-	 * @param int $assignmentLevel nível de assinatura mínimo para ser utilizado como filtro.
-	 * @return CustomerEmployees aquisição da lista de funcionários de cliente filtrados.
-	 */
-	public function selectByAssignmentLevel(int $assignmentLevel): CustomerEmployees
-	{
-		$sqlSelectProfile = $this->newSelectProfile();
-		$sql = "$sqlSelectProfile
-				WHERE customer_profiles.assignmentLevel >= ?
-				ORDER BY customer_employees.name";
-
-		$query = $this->createQuery($sql);
-		$query->setInteger(1, $assignmentLevel);
-
-		$result = $query->execute();
-
-		return $this->parseCustomerEmployees($result);
-	}
-
-	/**
 	 * Selecione os dados de todos os funcionários de clientes registrados filtrados por perfil de cliente.
 	 * @param CustomerProfile $customerProfile objeto do tipo perfil de cliente à filtrar.
 	 * @return CustomerEmployees aquisição da lista de funcionários de cliente filtrados.
@@ -286,10 +266,7 @@ class CustomerEmployeeDAO extends GenericDAO
 		$query->setString(1, $email);
 		$query->setInteger(2, $idCustomerEmployee);
 
-		$result = $query->execute();
-		$entry = $result->next();
-
-		return intval($entry['qty']) > 0;
+		return $this->parseQueryExist($query);
 	}
 
 	/**

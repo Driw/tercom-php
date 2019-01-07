@@ -153,7 +153,7 @@ INSERT INTO permissions (packet, action, assignmentLevel) VALUES
 ('productPrice', 'set', 20),
 ('productPrice', 'remove', 20),
 ('productPrice', 'get', 20),
-('productPrice', 'getAll', 20)
+('productPrice', 'getAll', 20),
 ('productPrice', 'search', 20);
 
 -- Service Service
@@ -204,6 +204,38 @@ INSERT INTO permissions (packet, action, assignmentLevel) VALUES
 ('customerProfile', 'customer', 20),
 ('customerProfile', 'actions', 20),
 ('customerProfile', 'getAll', 20);
+
+-- Customer Employee Service
+
+INSERT INTO permissions (packet, action, assignmentLevel) VALUES
+('customerEmployee', 'settings', 20),
+('customerEmployee', 'add', 20),
+('customerEmployee', 'set', 20),
+('customerEmployee', 'enable', 20),
+('customerEmployee', 'get', 20),
+('customerEmployee', 'getAll', 20),
+('customerEmployee', 'getByAssignmnetLevel', 20),
+('customerEmployee', 'getByCustomer', 20),
+('customerEmployee', 'getByProfile', 20),
+('customerEmployee', 'getAvaiable', 20),
+('customerEmployee', 'avaiable', 20);
+
+-- Address Service
+
+INSERT INTO permissions (packet, action, assignmentLevel) VALUES
+('address', 'settings', 20),
+('address', 'add', 20),
+('address', 'set', 20),
+('address', 'remove', 20),
+('address', 'get', 20),
+('address', 'getAll', 20);
+
+-- Tercom Profile Service
+-- Tercom Employee Service
+-- Permission Service
+-- Manage Permission Service
+-- Phone Service
+-- Order Request Service
 
 -- TERCOM Profiles Permissions
 

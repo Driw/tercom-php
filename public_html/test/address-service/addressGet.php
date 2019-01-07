@@ -1,7 +1,6 @@
 <?php
 
 use tercom\GeradorDeDados;
-use tercom\api\site\AddressService;
 
 include '../include.php';
 {
@@ -12,12 +11,12 @@ include '../include.php';
 			header('Content-type: text/html');
 			?>
 <form method='get'>
-	Endereço ID: <input type="text" name="idAddress"><br>
-	Relação com: <select name="relationship">
+	<p>Endereço ID: <input type="text" name="idAddress"></p>
+	<p>Relação com: <select name="relationship">
 		<option value="customer">Endereço para Clientes</option>
-	</select><br>
-	Chave da Realação (ID): <input type="text" name="relationshipID"><br>
-	<button type='submit'>Continuar</button>
+	</select></p>
+	<p>Chave da Realação (ID): <input type="text" name="relationshipID"></p>
+	<p><button type='submit'>Continuar</button></p>
 </form>
 <?php
 			exit;

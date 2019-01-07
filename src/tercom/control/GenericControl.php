@@ -67,6 +67,14 @@ class GenericControl
 	}
 
 	/**
+	 * @return int aquisição do código de identificação do cliente atualmente acessado no sistema.
+	 */
+	public static function getCustomerLoggedId(): int
+	{
+		return self::hasCustomerLogged() ? GenericControl::$customerLogged->getId() : 0;
+	}
+
+	/**
 	 * @return bool true se o usuário acessado for um cliente.
 	 */
 	public static function hasCustomerLogged(): bool
