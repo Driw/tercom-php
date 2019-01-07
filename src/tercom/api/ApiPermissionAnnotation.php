@@ -10,6 +10,7 @@ use tercom\control\LoginTercomControl;
 use tercom\control\PermissionControl;
 use tercom\control\TercomPermissionControl;
 use tercom\TercomException;
+use tercom\SessionVar;
 
 /**
  * Anotação de API para Permissão
@@ -45,10 +46,10 @@ class ApiPermissionAnnotation extends ApiAnnotation
 		$this->packet = $parameters->getString(-1);
 		$this->action = $parameters->getString(0);
 
-		if ($post->isSetted('idCustomerEmployee'))
+		if ($post->isSetted(SessionVar::LOGIN_CUSTOMER_ID))
 			$this->validateCustomerEmployee();
 
-		else if ($post->isSetted('idTercomEmployee'))
+		else if ($post->isSetted(SessionVar::LOGIN_TERCOM_ID))
 			$this->validateTercomEmployee();
 
 		else

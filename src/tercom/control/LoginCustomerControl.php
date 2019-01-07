@@ -154,11 +154,13 @@ class LoginCustomerControl extends LoginControl
 
 		$post = PostService::getInstance();
 
-		if ($post->isSetted('idLogin') && $post->isSetted('idCustomerEmployee') && $post->isSetted('token'))
+		if ($post->isSetted(SessionVar::LOGIN_CUSTOMER_ID) &&
+			$post->isSetted(SessionVar::LOGIN_ID) &&
+			$post->isSetted(SessionVar::LOGIN_TOKEN))
 		{
-			$idCustomerEmployee = $post->getInt('idCustomerEmployee');
-			$idLogin = $post->getInt('idLogin');
-			$token = $post->getString('token');
+			$idCustomerEmployee = $post->getInt(SessionVar::LOGIN_CUSTOMER_ID);
+			$idLogin = $post->getInt(SessionVar::LOGIN_ID);
+			$token = $post->getString(SessionVar::LOGIN_TOKEN);
 		}
 
 		else
@@ -167,8 +169,8 @@ class LoginCustomerControl extends LoginControl
 			$session->start();
 
 			if ($session->isSetted(SessionVar::LOGIN_CUSTOMER_ID) &&
-					$session->isSetted(SessionVar::LOGIN_ID) &&
-					$session->isSetted(SessionVar::LOGIN_TOKEN))
+				$session->isSetted(SessionVar::LOGIN_ID) &&
+				$session->isSetted(SessionVar::LOGIN_TOKEN))
 			{
 				$idCustomerEmployee = $post->getInt(SessionVar::LOGIN_CUSTOMER_ID);
 				$idLogin = $post->getInt(SessionVar::LOGIN_ID);

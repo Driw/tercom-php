@@ -154,11 +154,13 @@ class LoginTercomControl extends LoginControl
 
 		$post = PostService::getInstance();
 
-		if ($post->isSetted('idTercomEmployee') && $post->isSetted('idLogin') && $post->isSetted('token'))
+		if ($post->isSetted(SessionVar::LOGIN_TERCOM_ID) &&
+			$post->isSetted(SessionVar::LOGIN_ID) &&
+			$post->isSetted(SessionVar::LOGIN_TOKEN))
 		{
-			$idTercomEmployee = $post->getInt('idTercomEmployee');
-			$idLogin = $post->getInt('idLogin');
-			$token = $post->getString('token');
+			$idTercomEmployee = $post->getInt(SessionVar::LOGIN_TERCOM_ID);
+			$idLogin = $post->getInt(SessionVar::LOGIN_ID);
+			$token = $post->getString(SessionVar::LOGIN_TOKEN);
 		}
 
 		else

@@ -25,16 +25,16 @@ class GeradorDeDados
 		{
 			if ($session->isSetted(SessionVar::LOGIN_TERCOM_ID))
 			{
-				$parameters['idTercomEmployee'] = $session->getInt(SessionVar::LOGIN_TERCOM_ID);
-				$parameters['idLogin'] = $session->getInt(SessionVar::LOGIN_ID);
-				$parameters['token'] = $session->getString(SessionVar::LOGIN_TOKEN);
+				$parameters[SessionVar::LOGIN_TERCOM_ID] = $session->getInt(SessionVar::LOGIN_TERCOM_ID);
+				$parameters[SessionVar::LOGIN_ID] = $session->getInt(SessionVar::LOGIN_ID);
+				$parameters[SessionVar::LOGIN_TOKEN] = $session->getString(SessionVar::LOGIN_TOKEN);
 			}
 
 			else if ($session->isSetted(SessionVar::LOGIN_CUSTOMER_ID))
 			{
-				$parameters['idCustomerEmployee'] = $session->getInt(SessionVar::LOGIN_CUSTOMER_ID);
-				$parameters['idLogin'] = $session->getInt(SessionVar::LOGIN_ID);
-				$parameters['token'] = $session->getString(SessionVar::LOGIN_TOKEN);
+				$parameters[SessionVar::LOGIN_CUSTOMER_ID] = $session->getInt(SessionVar::LOGIN_CUSTOMER_ID);
+				$parameters[SessionVar::LOGIN_ID] = $session->getInt(SessionVar::LOGIN_ID);
+				$parameters[SessionVar::LOGIN_TOKEN] = $session->getString(SessionVar::LOGIN_TOKEN);
 			}
 		}
 
