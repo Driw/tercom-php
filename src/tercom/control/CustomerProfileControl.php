@@ -101,7 +101,7 @@ class CustomerProfileControl extends GenericControl
 	 * @throws ControlException
 	 * @return CustomerProfile
 	 */
-	public function get(int $idCustomerProfile, bool $dependences = false, int $assignmentLevel): CustomerProfile
+	public function get(int $idCustomerProfile, bool $dependences = false, int $assignmentLevel = 0): CustomerProfile
 	{
 		if (($customerProfile = $this->customerProfileDAO->select($idCustomerProfile)) === null)
 			throw new ControlException('perfil de cliente não encontrado');

@@ -240,7 +240,7 @@ class Customer extends AdvancedObject
 	 */
 	public function getAddresses(): Addresses
 	{
-		return $this->addresses === null ? ($this->addresses = new Address()) : $this->addresses;
+		return $this->addresses === null ? ($this->addresses = new Addresses()) : $this->addresses;
 	}
 
 	/**

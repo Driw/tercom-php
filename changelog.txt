@@ -20,6 +20,11 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+07.01.2018 - 0.3.4.160
+- Corrigido problema com get() que não definia valor padrão para 'assignmentLevel', CustomerProfileControl.
+- Corrigido setState() que chamava método incorreto para validaçaõ da UF, Address.
+- Corrigido getAddresses() que instanciava Address ao invés de Addresses quando nulo, Customer.
+
 07.01.2018 - 0.3.4.159
 - Modificado variáveis POST para autenticar o acesso devido a duplicidade de parâmetros dependendo do serviço executado.
 

@@ -138,7 +138,7 @@ class Address extends AdvancedObject implements Entity
 	 */
 	public function setState(string $state)
 	{
-		if (!self::hasState($state))
+		if (!self::hasUf($state))
 			throw new EntityParseException('UF inválida');
 
 		$this->state = $state;
