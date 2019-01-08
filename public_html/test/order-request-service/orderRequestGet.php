@@ -11,10 +11,7 @@ include '../include.php';
 			header('Content-type: text/html');
 ?>
 <form method='get'>
-<?php include '../loginCustomer.php' ?>
 	<p>Solicitação de Pedido ID: <input type='text' name='idOrderRequest' required></p>
-	<p>Orçamento: <input type='text' name='budget' placeholder='0.00'></p>
-	<p>Horário de Expiração: <input type='date' name='expiration'></p>
 	<p><button type='submit'>Continuar</button></p>
 </form>
 <?php
@@ -23,7 +20,7 @@ include '../include.php';
 
 		$idOrderRequest = $_GET['idOrderRequest'];
 
-		return GeradorDeDados::callWebService("orderRequest/set/$idOrderRequest", $_GET, true);
+		return GeradorDeDados::callWebService("orderRequest/get/$idOrderRequest", $_GET);
 	}
 }
 include '../execute.php';

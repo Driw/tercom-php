@@ -4,6 +4,7 @@ namespace tercom\api\site;
 
 use dProject\restful\ApiContent;
 use tercom\api\site\results\ApiResultObject;
+use tercom\api\site\results\ApiResultOrderRequestSettings;
 use tercom\dao\OrderRequestDAO;
 use tercom\entities\OrderRequest;
 
@@ -12,6 +13,21 @@ use tercom\entities\OrderRequest;
  */
 class OrderRequestService extends DefaultSiteService
 {
+	/**
+	 * @ApiPermissionAnnotation({})
+	 * @param ApiContent $content
+	 * @return ApiResultOrderRequestSettings
+	 */
+	public function actionSettings(ApiContent $content): ApiResultOrderRequestSettings
+	{
+		return new ApiResultOrderRequestSettings();
+	}
+
+	/**
+	 * @ApiPermissionAnnotation({"method":"post"})
+	 * @param ApiContent $content
+	 * @return ApiResultObject
+	 */
 	public function actionAdd(ApiContent $content): ApiResultObject
 	{
 		$post = $content->getPost();
@@ -32,7 +48,7 @@ class OrderRequestService extends DefaultSiteService
 	}
 
 	/**
-	 * @ApiAnnotation({"method":"post","params":["idOrderRequest"]})
+	 * @ApiPermissionAnnotation({"method":"post","params":["idOrderRequest"]})
 	 * @param ApiContent $content
 	 * @return ApiResultObject
 	 */
@@ -55,7 +71,7 @@ class OrderRequestService extends DefaultSiteService
 	}
 
 	/**
-	 * @ApiAnnotation({"params":["idOrderRequest"]})
+	 * @ApiPermissionAnnotation({"params":["idOrderRequest"]})
 	 * @param ApiContent $content
 	 * @return ApiResultObject
 	 */
@@ -87,7 +103,7 @@ class OrderRequestService extends DefaultSiteService
 	}
 
 	/**
-	 * @ApiAnnotation({"params":["idCustomerEmployee"]})
+	 * @ApiPermissionAnnotation({"params":["idCustomerEmployee"]})
 	 * @param ApiContent $content
 	 * @return ApiResultObject
 	 */
@@ -110,7 +126,7 @@ class OrderRequestService extends DefaultSiteService
 	}
 
 	/**
-	 * @ApiAnnotation({"params":["idTercomEmployee"]})
+	 * @ApiPermissionAnnotation({"params":["idTercomEmployee"]})
 	 * @param ApiContent $content
 	 * @return ApiResultObject
 	 */

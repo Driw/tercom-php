@@ -11,16 +11,16 @@ include '../include.php';
 			header('Content-type: text/html');
 ?>
 <form method='get'>
-<?php include '../loginCustomer.php' ?>
+	<p><input type='text' name='idTercomEmployee'></p>
 	<p><button type='submit'>Continuar</button></p>
 </form>
 <?php
 			exit;
 		}
-
-		$idCustomerEmployee = isset($_GET['idCustomerEmployee']) ? $_GET['idCustomerEmployee'] : '';
-
-		return GeradorDeDados::callWebService("orderRequest/getByCustomer", $_GET, true);
+		if (($idTercomEmployee = $_GET['idTercomEmployee']) === '')
+			return GeradorDeDados::callWebService("orderRequest/getByTercom", []);
+		else
+			return GeradorDeDados::callWebService("orderRequest/getByTercom/$idTercomEmployee", []);
 	}
 }
 include '../execute.php';

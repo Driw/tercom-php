@@ -131,7 +131,7 @@ class LoginCustomerDAO extends GenericDAO
 				FROM logins
 				WHERE id = ?";
 
-		$query = $this->buildQuery($sql);
+		$query = $this->createQuery($sql);
 		$query->setInteger(1, $idLogin);
 
 		return $this->parseQueryExist($query);
@@ -148,7 +148,7 @@ class LoginCustomerDAO extends GenericDAO
 				FROM customer_employees
 				WHERE id = ?";
 
-		$query = $this->buildQuery($sql);
+		$query = $this->createQuery($sql);
 		$query->setInteger(1, $idCustomerEmployee);
 
 		return $this->parseQueryExist($query);

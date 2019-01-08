@@ -262,9 +262,28 @@ INSERT INTO permissions (packet, action, assignmentLevel) VALUES
 ('managePermissions', 'getAll', 20);
 
 -- Phone Service
+
+INSERT INTO permissions (packet, action, assignmentLevel) VALUES
+('phone', 'settings', 20),
+('phone', 'add', 20),
+('phone', 'set', 20),
+('phone', 'remove', 20),
+('phone', 'get', 20),
+('phone', 'getAll', 20);
+
 -- Order Request Service
 
--- TERCOM Profiles Permissions
+INSERT INTO permissions (packet, action, assignmentLevel) VALUES
+('orderRequest', 'settings', 20),
+('orderRequest', 'add', 20),
+('orderRequest', 'set', 20),
+('orderRequest', 'remove', 20),
+('orderRequest', 'get', 20),
+('orderRequest', 'getAll', 20),
+('orderRequest', 'getByCustomer', 20),
+('orderRequest', 'getByTercom', 20);
+
+-- TERCOM Profile Permissions
 
 REPLACE INTO tercom_profile_permissions (idTercomProfile, idPermission)
 SELECT 1, id FROM permissions;

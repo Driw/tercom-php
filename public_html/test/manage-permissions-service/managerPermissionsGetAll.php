@@ -1,0 +1,32 @@
+<?php
+
+use tercom\GeradorDeDados;
+
+include '../include.php';
+{
+	function testExecute()
+	{
+		if (!isset($_GET['idRelationship']))
+		{
+			header('Content-type: text/html');
+?>
+<form method='get'>
+	<p>Relação ID: <input type='text' name='idRelationship' required></p>
+	<p>Relação: <select name='relationship'>
+		<option value="customer">Permissão para Cliente</option>
+		<option value="tercom">Permissão para Tercom</option>
+	</select></p>
+	<button type='submit'>Continuar</button>
+</form>
+<?php
+			exit;
+		}
+
+		$relationship = $_GET['relationship'];
+		$idRelationship = $_GET['idRelationship'];
+
+		return GeradorDeDados::callWebService("managePermissions/getAll/$relationship/$idRelationship", []);
+	}
+}
+include '../execute.php';
+

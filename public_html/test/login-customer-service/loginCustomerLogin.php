@@ -33,6 +33,7 @@ include '../include.php';
 			$session->setString(SessionVar::LOGIN_TOKEN, $resultAttributes['token']);
 			$session->setInt(SessionVar::LOGIN_ID, $resultAttributes['id']);
 			$session->setInt(SessionVar::LOGIN_CUSTOMER_ID, $resultAttributes['customerEmployee']['attributes']['id']);
+			$session->setValue(SessionVar::LOGIN_TERCOM_ID, null);
 		}
 
 		return $call;

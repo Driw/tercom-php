@@ -33,7 +33,6 @@ use tercom\control\TercomEmployeeControl;
 use tercom\control\TercomPermissionControl;
 use tercom\control\TercomProfileControl;
 use tercom\control\OrderRequestControl;
-use tercom\api\exceptions\LoginException;
 use tercom\entities\LoginCustomer;
 use tercom\entities\LoginTercom;
 use tercom\TercomException;
@@ -473,31 +472,7 @@ class DefaultSiteService extends ApiServiceInterface
 	 */
 	protected function getCustomerEmployeeLogin(ApiContent $content): LoginCustomer
 	{
-		$post = $content->getPost();
-
-		if ($post->isSetted('idLogin') && $post->isSetted('token'))
-		{
-			$idCustomerEmployee = $post->getInt('idCustomerEmployee');
-			$idLogin = $post->getInt('idLogin');
-			$token = $post->getString('token');
-		}
-
-		else
-		{
-			$session = $content->getSession();
-			$session->start();
-
-			if (!$post->isSetted('idLogin') || !$post->isSetted('token'))
-				throw LoginException::newNotLogged();
-
-			$idCustomerEmployee = $session->getInt('idCustomerEmployee');
-			$idLogin = $session->getInt('idLogin');
-			$token = $session->getString('token');
-		}
-
-		$loginCustomerEmployee = $this->getLoginCustomerControl()->get($idLogin, $idCustomerEmployee, $token);
-
-		return $loginCustomerEmployee;
+		return $this->getLoginCustomerControl()->getCurrent();
 	}
 
 	/**
@@ -506,31 +481,7 @@ class DefaultSiteService extends ApiServiceInterface
 	 */
 	protected function getTercomEmployeeLogin(ApiContent $content): LoginTercom
 	{
-		$post = $content->getPost();
-
-		if ($post->isSetted('idLogin') && $post->isSetted('token'))
-		{
-			$idTercomEmployee = $post->getInt('idTercomEmployee');
-			$idLogin = $post->getInt('idLogin');
-			$token = $post->getString('token');
-		}
-
-		else
-		{
-			$session = $content->getSession();
-			$session->start();
-
-			if (!$post->isSetted('idLogin') || !$post->isSetted('token'))
-				throw LoginException::newNotLogged();
-
-			$idTercomEmployee = $session->getInt('idTercomEmployee');
-			$idLogin = $session->getInt('idLogin');
-			$token = $session->getString('token');
-		}
-
-		$loginTercomEmployee = $this->getLoginTercomControl()->get($idLogin, $idTercomEmployee, $token);
-
-		return $loginTercomEmployee;
+		return $this->getLoginTercomControl()->getCurrent();
 	}
 }
 
