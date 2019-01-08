@@ -34,7 +34,7 @@ class LoginCustomerDAO extends GenericDAO
 
 		// NOT NULL
 		if ($loginCustomer->getId() === 0) throw new DAOException('acesso não identificado');
-		if ($loginCustomer->getTercomEmployeeId() === 0) throw new DAOException('funcionário não identificado');
+		if ($loginCustomer->getCustomerEmployeeId() === 0) throw new DAOException('funcionário não identificado');
 
 		// PRIMARY KEY
 		if (!$this->existLogin($loginCustomer->getId())) throw new DAOException('acesso desconhecido');

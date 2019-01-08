@@ -48,15 +48,15 @@ class LoginCustomerControl extends LoginControl
 	{
 		try {
 
-			$tercomEmployee = $this->customerEmployeeControl->getByEmail($email);
+			$customerEmployee = $this->customerEmployeeControl->getByEmail($email);
 
-			if (password_verify($password, $tercomEmployee->getPassword()))
+			if (password_verify($password, $customerEmployee->getPassword()))
 			{
 				if (empty($userAgent) || !isset($_SERVER['REMOTE_ADDR']))
 					throw new ControlException('informações insuficientes para acesso');
 
 				$loginCustomer = new LoginCustomer();
-				$loginCustomer->setCustomerEmployee($tercomEmployee);
+				$loginCustomer->setCustomerEmployee($customerEmployee);
 				$loginCustomer->setBrowser($userAgent);
 				$loginCustomer->setIpAddress($_SERVER['REMOTE_ADDR']);
 				$loginCustomer->setLogout(false);

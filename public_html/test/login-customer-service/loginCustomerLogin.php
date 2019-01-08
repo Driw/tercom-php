@@ -22,7 +22,7 @@ include '../include.php';
 			exit;
 		}
 
-		$call = GeradorDeDados::callWebService("loginTercom/login", $_GET);
+		$call = GeradorDeDados::callWebService("loginCustomer/login", $_GET);
 		$response = $call['response'];
 
 		if ($response['status'] === 1)
