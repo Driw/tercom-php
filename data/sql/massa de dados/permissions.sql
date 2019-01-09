@@ -281,7 +281,7 @@ INSERT INTO permissions (packet, action, assignmentLevel) VALUES
 ('orderRequest', 'get', 20),
 ('orderRequest', 'getAll', 20),
 ('orderRequest', 'getByCustomer', 20),
-('orderRequest', 'getByTercom', 20)
+('orderRequest', 'getByTercom', 20),
 ('orderRequest', 'setQueued', 20),
 ('orderRequest', 'setQuoting', 20);
 

@@ -20,6 +20,9 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+09.01.2018 - 0.3.4.173
+- Atualizado README e corrigido de massa de dados 'permissions.sql'.
+
 09.01.2018 - 0.3.4.172
 - Ajustes nos scripts de testes para listar os pedidos de cotação (todos, por funcionário cliente e por funcionário TERCOM).
 	- Adicionado novo método de consulta: em fila.

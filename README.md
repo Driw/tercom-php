@@ -20,7 +20,7 @@
 - [x] Manter Funcionário TERCOM
 - [x] Login Funcionário TERCOM
 ### Terceira Iteração
-- [ ] Solicitação de Cotação
+- [x] Solicitação de Cotação
 - [ ] Manter e Realizar Cotação
 - [ ] Autorização de Pedido
 - [ ] Aceite do Pedido
