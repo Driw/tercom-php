@@ -8,6 +8,7 @@ use tercom\exceptions\OrderRequestException;
 use tercom\entities\TercomEmployee;
 use tercom\entities\CustomerEmployee;
 use tercom\entities\lists\OrderRequests;
+use tercom\TercomException;
 
 /**
  * @author Andrew
@@ -33,17 +34,18 @@ class OrderRequestControl extends GenericControl
 			throw OrderRequestException::newUpdated();
 	}
 
-	public function get(int $idOrderRequest, ?CustomerEmployee $customerEmployee = null): OrderRequest
+	public function get(int $idOrderRequest, bool $onlyView = false): OrderRequest
 	{
 		if (($orderRequest = $this->orderRequestDAO->select($idOrderRequest)) === null)
 			throw OrderRequestException::newSelected();
 
-		if ($customerEmployee !== null)
+		if (!$onlyView)
 		{
-			if ($customerEmployee->getId() !== $orderRequest->getCustomerEmployeeId())
-				throw OrderRequestException::newCustomerInvalid();
-
-			$orderRequest->setCustomerEmployee($customerEmployee);
+			switch ($orderRequest->getStatus())
+			{
+				case OrderRequest::ORS_CANCEL_BY_CUSTOMER: throw OrderRequestException::newCanceledByCustomer();
+				case OrderRequest::ORS_CANCEL_BY_TERCOM: throw OrderRequestException::newCanceledByTercom();
+			}
 		}
 
 		return $orderRequest;
@@ -51,36 +53,142 @@ class OrderRequestControl extends GenericControl
 
 	public function getWithCustomerEmployee(CustomerEmployee $customerEmployee, int $idOrderRequest): OrderRequest
 	{
-		if (($orderRequest = $this->orderRequestDAO->select($idOrderRequest)) === null)
-			throw OrderRequestException::newSelected();
+		$orderRequest = $this->get($idOrderRequest);
 
-			if (!$this->isTercomManagement())
-			{
-				$customerEmployee = $this->getCustomerLogged();
+		if ($this->isTercomManagement())
+			throw TercomException::newPermissionRestrict();
 
-				if ($customerEmployee !== null && $customerEmployee->getId() !== $orderRequest->getCustomerEmployeeId())
-					throw OrderRequestException::newCustomerInvalid();
+		$customerEmployee = $this->getCustomerLogged();
 
-					if ($customerEmployee !== null)
-						$orderRequest->setCustomerEmployee($customerEmployee);
-			}
+		if ($customerEmployee->getId() !== $orderRequest->getCustomerEmployeeId())
+			throw OrderRequestException::newCustomerEmployeeError();
 
-			return $orderRequest;
+		$orderRequest->setCustomerEmployee($customerEmployee);
+
+		return $orderRequest;
+	}
+
+	public function getWithTercomEmployee(TercomEmployee $tercomEmployee, int $idOrderRequest): OrderRequest
+	{
+		$orderRequest = $this->get($idOrderRequest);
+
+		if (!$this->isTercomManagement())
+			throw TercomException::newPermissionRestrict();
+
+		return $orderRequest;
 	}
 
 	public function getAll(int $mode): OrderRequests
 	{
-		return $this->orderRequestDAO->selectAll($mode);
+		if ($this->isTercomManagement())
+			return $this->orderRequestDAO->selectAll($mode);
+
+		return $this->orderRequestDAO->selectAllByCustomer($this->getCustomerLoggedId(), $mode);
 	}
 
 	public function getByCustomerEmployee(CustomerEmployee $customerEmployee, int $mode): OrderRequests
 	{
+		if (!$this->isTercomManagement())
+			if ($customerEmployee->getCustomerProfile()->getCustomerId() !== $this->getCustomerLoggedId())
+				throw TercomException::newCustomerInvliad();
+
 		return $this->orderRequestDAO->selectByCustomerEmployee($customerEmployee, $mode);
 	}
 
 	public function getByTercomEmployee(TercomEmployee $tercomEmployee, int $mode): OrderRequests
 	{
+		if (!$this->isTercomManagement())
+			throw TercomException::newPermissionRestrict();
+
 		return $this->orderRequestDAO->selectByTercomEmployee($tercomEmployee, $mode);
+	}
+
+	public function cancelByCustomer(CustomerEmployee $customerEmployee, OrderRequest $orderRequest): void
+	{
+		if ($customerEmployee->getId() !== $orderRequest->getCustomerEmployeeId())
+			throw OrderRequestException::newCustomerEmployeeError();
+
+		$orderRequest->setStatus(OrderRequest::ORS_CANCEL_BY_CUSTOMER);
+
+		if (!$this->orderRequestDAO->update($orderRequest))
+			throw OrderRequestException::newUpdated();
+	}
+
+	public function setCustomerEmployee(CustomerEmployee $currentCustomerEmployee, CustomerEmployee $newCustomerEmployee, OrderRequest $orderRequest): void
+	{
+		if ($orderRequest->getCustomerEmployeeId() !== $currentCustomerEmployee->getId())
+			throw OrderRequestException::newCustomerEmployeeError();
+
+		$orderRequest->setCustomerEmployee($newCustomerEmployee);
+
+		if (!$this->orderRequestDAO->update($orderRequest))
+			throw OrderRequestException::newUpdated();
+	}
+
+	public function setTercomEmployee(TercomEmployee $currentTercomEmployee, TercomEmployee $newTercomEmployee, OrderRequest $orderRequest): void
+	{
+		if ($orderRequest->getTercomEmployeeId() !== $currentTercomEmployee->getId())
+			throw OrderRequestException::newTercomEmployeeError();
+
+		$orderRequest->setTercomEmployee($newTercomEmployee);
+
+		if (!$this->orderRequestDAO->update($orderRequest))
+			throw OrderRequestException::newUpdated();
+	}
+
+	public function cancelByTercom(TercomEmployee $tercomEmployee, OrderRequest $orderRequest): void
+	{
+		if ($tercomEmployee->getId() !== $orderRequest->getTercomEmployeeId())
+			throw OrderRequestException::newTercomEmployeeError();
+
+		$orderRequest->setStatus(OrderRequest::ORS_CANCEL_BY_TERCOM);
+
+		if (!$this->orderRequestDAO->update($orderRequest))
+			throw OrderRequestException::newUpdated();
+	}
+
+	public function setQueued(CustomerEmployee $customerEmployee, OrderRequest $orderRequest): void
+	{
+		if ($customerEmployee->getId() !== $orderRequest->getCustomerEmployeeId())
+			throw OrderRequestException::newCustomerEmployeeError();
+
+		$orderRequest->setStatus(OrderRequest::ORS_QUEUED);
+
+		if (!$this->orderRequestDAO->update($orderRequest))
+			throw OrderRequestException::newUpdated();
+	}
+
+	public function setQuoting(TercomEmployee $tercomEmployee, OrderRequest $orderRequest): void
+	{
+		if ($orderRequest->getTercomEmployeeId() !== 0)
+			throw OrderRequestException::newTercomEmployeeSetted();
+
+		$orderRequest->setStatus(OrderRequest::ORS_QUOTING);
+
+		if (!$this->orderRequestDAO->update($orderRequest))
+			throw OrderRequestException::newUpdated();
+	}
+
+	public function setQuoted(TercomEmployee $tercomEmployee, OrderRequest $orderRequest): void
+	{
+		if ($orderRequest->getTercomEmployeeId() !== $tercomEmployee->getId())
+			throw OrderRequestException::newTercomEmployeeError();
+
+		$orderRequest->setStatus(OrderRequest::ORS_QUOTED);
+
+		if (!$this->orderRequestDAO->update($orderRequest))
+			throw OrderRequestException::newUpdated();
+	}
+
+	public function setDone(CustomerEmployee $customerEmployee, OrderRequest $orderRequest): void
+	{
+		if ($orderRequest->getTercomEmployeeId() !== $customerEmployee->getId())
+			throw OrderRequestException::newCustomerEmployeeError();
+
+		$orderRequest->setStatus(OrderRequest::ORS_DONE);
+
+		if (!$this->orderRequestDAO->update($orderRequest))
+			throw OrderRequestException::newUpdated();
 	}
 }
 

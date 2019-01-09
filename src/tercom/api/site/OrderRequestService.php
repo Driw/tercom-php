@@ -57,7 +57,7 @@ class OrderRequestService extends DefaultSiteService
 		$post = $content->getPost();
 		$customerEmployee = $this->getCustomerEmployee();
 		$idOrderRequest = $content->getParameters()->getInt('idOrderRequest');
-		$orderRequest = $this->getOrderRequestControl()->get($idOrderRequest, $customerEmployee);
+		$orderRequest = $this->getOrderRequestControl()->getWithCustomerEmployee($customerEmployee, $idOrderRequest);
 
 		if ($post->isSetted('budget')) $orderRequest->setBudget($post->getFloat('budget'));
 		if ($post->isSetted('expiration')) $orderRequest->setExpiration(new \DateTime($post->getString('expiration')));
@@ -77,9 +77,19 @@ class OrderRequestService extends DefaultSiteService
 	 */
 	public function actionGet(ApiContent $content): ApiResultObject
 	{
-		$customerEmployee = $this->getCustomerEmployee();
 		$idOrderRequest = $content->getParameters()->getInt('idOrderRequest');
-		$orderRequest = $this->getOrderRequestControl()->get($idOrderRequest, $customerEmployee);
+
+		if ($this->getLoginCustomerControl()->hasLogged())
+		{
+			$customerEmployee = $this->getCustomerEmployee();
+			$orderRequest = $this->getOrderRequestControl()->getWithCustomerEmployee($customerEmployee, $idOrderRequest);
+		}
+
+		else
+		{
+			$tercomEmployee = $this->getTercomEmployee();
+			$orderRequest = $this->getOrderRequestControl()->getWithTercomEmployee($tercomEmployee, $idOrderRequest);
+		}
 
 		$result = new ApiResultObject();
 		$result->setResult($orderRequest, 'pedido de código %d obtido com êxito', $orderRequest->getId());
@@ -88,6 +98,7 @@ class OrderRequestService extends DefaultSiteService
 	}
 
 	/**
+	 * @ApiPermissionAnnotation({})
 	 * @param ApiContent $content
 	 * @return ApiResultObject
 	 */
@@ -110,11 +121,7 @@ class OrderRequestService extends DefaultSiteService
 	public function actionGetByCustomer(ApiContent $content): ApiResultObject
 	{
 		$idCustomerEmployee = $content->getParameters()->getInt('idCustomerEmployee', false);
-
-		if ($idCustomerEmployee === null)
-			$customerEmployee = $this->getCustomerEmployee();
-		else
-			$customerEmployee = $this->getCustomerEmployeeControl()->get($idCustomerEmployee);
+		$customerEmployee = $idCustomerEmployee === null ? $this->getCustomerEmployee() : $this->getCustomerEmployeeControl()->get($idCustomerEmployee);
 
 		$mode = $this->parseInt($content->getPost()->getInt('mode', false), OrderRequestDAO::SELECT_MODE_ALL);
 		$orderRequests = $this->getOrderRequestControl()->getByCustomerEmployee($customerEmployee, $mode);
@@ -133,17 +140,86 @@ class OrderRequestService extends DefaultSiteService
 	public function actionGetByTercom(ApiContent $content): ApiResultObject
 	{
 		$idTercomEmployee = $content->getParameters()->getInt('idTercomEmployee', false);
-
-		if ($idTercomEmployee === null)
-			$tercomEmployee = $this->getTercomEmployeeLogin($content)->getTercomEmployee();
-		else
-			$tercomEmployee = $this->getTercomEmployeeControl()->get($idTercomEmployee);
+		$tercomEmployee = $idTercomEmployee === null ? $this->getTercomEmployee() : $this->getTercomEmployeeControl()->get($idTercomEmployee);
 
 		$mode = $this->parseInt($content->getPost()->getInt('mode', false), OrderRequestDAO::SELECT_MODE_ALL);
 		$orderRequests = $this->getOrderRequestControl()->getByTercomEmployee($tercomEmployee, $mode);
 
 		$result = new ApiResultObject();
 		$result->setResult($orderRequests, 'encontrado %d solicitações de pedidos feitas por "%s"', $orderRequests->size(), $tercomEmployee->getName());
+
+		return $result;
+	}
+
+	/**
+	 * @ApiPermissionAnnotation({"params":["idOrderRequest"]})
+	 * @param ApiContent $content
+	 * @return ApiResultObject
+	 */
+	public function actionCancelByCustomer(ApiContent $content): ApiResultObject
+	{
+		$customerEmployee = $this->getCustomerEmployee();
+		$idOrderRequest = $content->getParameters()->getInt('idOrderRequest');
+		$orderRequest = $this->getOrderRequestControl()->get($idOrderRequest, $customerEmployee);
+		$this->getOrderRequestControl()->cancelByCustomer($customerEmployee, $orderRequest);
+
+		$result = new ApiResultObject();
+		$result->setResult($orderRequest, 'pedido de código %d cancelado com êxito', $orderRequest->getId());
+
+		return $result;
+	}
+
+	/**
+	 * @ApiPermissionAnnotation({"params":["idOrderRequest"]})
+	 * @param ApiContent $content
+	 * @return ApiResultObject
+	 */
+	public function actionCancelByTercom(ApiContent $content): ApiResultObject
+	{
+		$tercomEmployee = $this->getTercomEmployee();
+		$idOrderRequest = $content->getParameters()->getInt('idOrderRequest');
+		$orderRequest = $this->getOrderRequestControl()->getByTercomEmployee($idOrderRequest);
+		$this->getOrderRequestControl()->cancelByTercom($tercomEmployee, $orderRequest);
+
+		$result = new ApiResultObject();
+		$result->setResult($orderRequest, 'pedido de código %d cancelado com êxito', $orderRequest->getId());
+
+		return $result;
+	}
+
+	/**
+	 * @ApiPermissionAnnotation({"params":["idOrderRequest"]})
+	 * @param ApiContent $content
+	 * @return ApiResultObject
+	 */
+	public function actionSetQueued(ApiContent $content): ApiResultObject
+	{
+		$customerEmployee = $this->getCustomerEmployee();
+		$idOrderRequest = $content->getParameters()->getInt('idOrderRequest');
+		$orderRequest = $this->getOrderRequestControl()->get($idOrderRequest, $customerEmployee);
+		$this->getOrderRequestControl()->setQueued($customerEmployee, $orderRequest);
+
+		$result = new ApiResultObject();
+		$result->setResult($orderRequest, 'pedido de código %d movido para fila de espera', $orderRequest->getId());
+
+		return $result;
+	}
+
+	/**
+	 * @ApiPermissionAnnotation({"params":["idOrderRequest"]})
+	 * @param ApiContent $content
+	 * @return ApiResultObject
+	 */
+	public function actionSetQuoting(ApiContent $content): ApiResultObject
+	{
+		$tercomEmployee = $this->getTercomEmployee();
+		$idOrderRequest = $content->getParameters()->getInt('idOrderRequest');
+		$orderRequest = $this->getOrderRequestControl()->get($idOrderRequest);
+		$this->getOrderRequestControl()->setQuoting($tercomEmployee, $orderRequest);
+
+		$result = new ApiResultObject();
+		$result->setResult($orderRequest, 'pedido de código %d em realização de cotação', $orderRequest->getId());
+		// TODO adicionar push para informar o cliente que a cotação foi iniciada.
 
 		return $result;
 	}

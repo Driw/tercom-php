@@ -36,6 +36,7 @@ use tercom\control\OrderRequestControl;
 use tercom\entities\CustomerEmployee;
 use tercom\entities\LoginCustomer;
 use tercom\entities\LoginTercom;
+use tercom\entities\TercomEmployee;
 use tercom\TercomException;
 use tercom\control\OrderItemProductControl;
 use tercom\control\OrderItemServiceControl;
@@ -526,9 +527,17 @@ class DefaultSiteService extends ApiServiceInterface
 	 * @param ApiContent $content
 	 * @return LoginTercom
 	 */
-	protected function getTercomEmployeeLogin(ApiContent $content): LoginTercom
+	protected function getTercomEmployeeLogin(): LoginTercom
 	{
 		return $this->getLoginTercomControl()->getCurrent();
+	}
+
+	/**
+	 * @return TercomEmployee
+	 */
+	protected function getTercomEmployee(): TercomEmployee
+	{
+		return $this->getTercomEmployeeLogin()->getTercomEmployee();
 	}
 }
 

@@ -18,6 +18,7 @@ class OrderRequestDAO extends GenericDAO
 	public const SELECT_MODE_ALL = 0;
 	public const SELECT_MODE_CUSTOMER_CANCEL = 1;
 	public const SELECT_MODE_TERCOM_CANCEL = 2;
+	public const SELECT_MODE_TERCOM_CANCEL = 3;
 
 	private function validate(OrderRequest $orderRequest, bool $validateId): void
 	{
@@ -86,6 +87,7 @@ class OrderRequestDAO extends GenericDAO
 		{
 			case self::SELECT_MODE_CUSTOMER_CANCEL: return sprintf('status = %d', OrderRequest::ORS_CANCEL_BY_CUSTOMER);
 			case self::SELECT_MODE_TERCOM_CANCEL: return sprintf('status = %d', OrderRequest::ORS_CANCEL_BY_TERCOM);
+			case self::SELECT_MODE_QUEUE: return sprintf('status = %d', OrderRequest::ORS_QUEUED);
 		}
 
 		return 'status IS NOT NULL';
@@ -113,6 +115,22 @@ class OrderRequestDAO extends GenericDAO
 				WHERE $sqlAndStatus";
 
 		$query = $this->createQuery($sql);
+		$result = $query->execute();
+
+		return $this->parseOrderRequests($result);
+	}
+
+	public function selectAllByCustomer(int $idCustomer, int $mode): OrderRequests
+	{
+		$sqlSelect = $this->newSelect();
+		$sqlAndStatus = $this->newAndStatus($mode);
+		$sql = "$sqlSelect
+				INNER JOIN customer_employees ON customer_employees.id = order_requests.idCustomerEmployee
+				WHERE customer_employee.idCustomer = ? AND $sqlAndStatus";
+
+		$query = $this->createQuery($sql);
+		$query->setInteger(1, $idCustomer);
+
 		$result = $query->execute();
 
 		return $this->parseOrderRequests($result);

@@ -27,6 +27,22 @@ class OrderRequest extends AdvancedObject
 	 * @var int
 	 */
 	public const ORS_CANCEL_BY_TERCOM = 2;
+	/**
+	 * @var int
+	 */
+	public const ORS_QUEUED = 3;
+	/**
+	 * @var int
+	 */
+	public const ORS_QUOTING = 4;
+	/**
+	 * @var int
+	 */
+	public const ORS_QUOTED = 5;
+	/**
+	 * @var int
+	 */
+	public const ORS_DONE = 6;
 
 	/**
 	 * @var int

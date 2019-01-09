@@ -20,6 +20,18 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+09.01.2018 - 0.3.4.171
+- Novo método que permite obter os dados do funcionário TERCOM acessado, DefaultSiteService.
+- Implementação de novas ações para solicitações de cotação:
+	- Cancelar pedido através do funcionário de cliente e funcionário TERCOM.
+	- Ao concluir a definição dos dados da solicitação será movido para a fila.
+	- Solicitações em fila podem ser escolhidas por qualquer funcionário TERCOM (com permissão) para fazer a cotação.
+	- Quanto a solicitação for concluída repassar novamente ao funcionário de cliente para definir os valores cotados.
+		- Esta opção está disponível somente em OrderRequestControl.
+	- Fila de solicitações de pedido de cotação em aberto (cotação ainda não iniciado/sem funcionário TERCOM vinculado).
+- Ao obter os dados de uma solicitação de pedido de cotação para validar o estado de cancelado em alguns casos.
+	- Há dois métodos: um somente para visualizar os dados e outro esperando que seja usado.
+
 09.01.2018 - 0.3.4.170
 - Adicionado scripts de teste para o serviço de gerenciamento de itens de pedido de cotação.
 

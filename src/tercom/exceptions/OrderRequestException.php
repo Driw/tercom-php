@@ -90,5 +90,50 @@ class OrderRequestException extends ApiStatusException
 	{
 		return new OrderRequestException('solicitação de pedido inválida para este cliente', ApiStatus::ORDER_REQUEST_CUSTOMER_INVALID);
 	}
+
+	/**
+	 *
+	 * @return OrderRequestException
+	 */
+	public static function newCanceledByCustomer(): OrderRequestException
+	{
+		return new OrderRequestException('cancelado pelo funcionário do cliente', ApiStatus::ORDER_REQUEST_CANCELED_BY_CUSTOMER);
+	}
+
+	/**
+	 *
+	 * @return OrderRequestException
+	 */
+	public static function newCanceledByTercom(): OrderRequestException
+	{
+		return new OrderRequestException('cancelado pelo funcionário TERCOM', ApiStatus::ORDER_REQUEST_CANCELED_BY_TERCOM);
+	}
+
+	/**
+	 *
+	 * @return OrderRequestException
+	 */
+	public static function newCustomerEmployeeError(): OrderRequestException
+	{
+		return new OrderRequestException('pedido de cotação não gerenciado por você', ApiStatus::ORDER_REQUEST_CUSTOMER_EMPLOYEE_ERROR);
+	}
+
+	/**
+	 *
+	 * @return OrderRequestException
+	 */
+	public static function newTercomEmployeeError(): OrderRequestException
+	{
+		return new OrderRequestException('pedido de cotação não gerenciado por você', ApiStatus::ORDER_REQUEST_TERCOM_EMPLOYEE_ERROR);
+	}
+
+	/**
+	 *
+	 * @return OrderRequestException
+	 */
+	public static function newTercomEmployeeSetted(): OrderRequestException
+	{
+		return new OrderRequestException('pedido de cotação já está sendo cotado por outro funcionário', ApiStatus::ORDER_REQUEST_TERCOM_EMPLOYEE_SETTED);
+	}
 }
 
