@@ -20,6 +20,14 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+09.01.2018 - 0.3.4.172
+- Ajustes nos scripts de testes para listar os pedidos de cotação (todos, por funcionário cliente e por funcionário TERCOM).
+	- Adicionado novo método de consulta: em fila.
+- Corrigido problema em actionSetQueued() de parametrização devido a mudança no método get() de OrderRequestControl, OrderRequestService.
+- Agora ao cancelar um pedido de cotação será adicionado uma mensagem padrão para 'statusMessage'.
+- Funcionários TERCOM não podem iniciar uma cotação de um pedido que não esteja na fila.
+- Adicionado scripts de testes orderRequestSetQueued e orderRequestSetQuoting.
+
 09.01.2018 - 0.3.4.171
 - Novo método que permite obter os dados do funcionário TERCOM acessado, DefaultSiteService.
 - Implementação de novas ações para solicitações de cotação:

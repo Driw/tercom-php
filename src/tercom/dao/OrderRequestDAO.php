@@ -18,7 +18,8 @@ class OrderRequestDAO extends GenericDAO
 	public const SELECT_MODE_ALL = 0;
 	public const SELECT_MODE_CUSTOMER_CANCEL = 1;
 	public const SELECT_MODE_TERCOM_CANCEL = 2;
-	public const SELECT_MODE_TERCOM_CANCEL = 3;
+	public const SELECT_MODE_CANCELED = 3;
+	public const SELECT_MODE_QUEUED = 4;
 
 	private function validate(OrderRequest $orderRequest, bool $validateId): void
 	{
@@ -77,8 +78,14 @@ class OrderRequestDAO extends GenericDAO
 
 	private function newSelect(): string
 	{
-		return "SELECT id, idCustomerEmployee customerEmployee_id, idTercomEmployee tercomEmployee_id, budget, expiration, register
-				FROM order_requests";
+		$orderRequestColumns = $this->buildQuery(self::ALL_COLUMNS, 'order_requests');
+		$customerEmployeeColumns = $this->buildQuery(CustomerEmployeeDAO::ALL_COLUMNS, 'customer_employees', 'customerEmployee');
+		$tercomEmployeeColumns = $this->buildQuery(TercomEmployeeDAO::ALL_COLUMNS, 'tercom_employees', 'tercomEmployee');
+
+		return "SELECT $orderRequestColumns, $customerEmployeeColumns, $tercomEmployeeColumns
+				FROM order_requests
+				INNER JOIN customer_employees ON customer_employees.id = order_requests.idCustomerEmployee
+				LEFT JOIN tercom_employees ON tercom_employees.id = order_requests.idTercomEmployee";
 	}
 
 	private function newAndStatus(int $mode): string
@@ -87,7 +94,8 @@ class OrderRequestDAO extends GenericDAO
 		{
 			case self::SELECT_MODE_CUSTOMER_CANCEL: return sprintf('status = %d', OrderRequest::ORS_CANCEL_BY_CUSTOMER);
 			case self::SELECT_MODE_TERCOM_CANCEL: return sprintf('status = %d', OrderRequest::ORS_CANCEL_BY_TERCOM);
-			case self::SELECT_MODE_QUEUE: return sprintf('status = %d', OrderRequest::ORS_QUEUED);
+			case self::SELECT_MODE_CANCELED: return sprintf('status IN(%d, %d)', OrderRequest::ORS_CANCEL_BY_CUSTOMER, OrderRequest::ORS_CANCEL_BY_TERCOM);
+			case self::SELECT_MODE_QUEUED: return sprintf('status = %d', OrderRequest::ORS_QUEUED);
 		}
 
 		return 'status IS NOT NULL';
@@ -97,7 +105,7 @@ class OrderRequestDAO extends GenericDAO
 	{
 		$sqlSelect = $this->newSelect();
 		$sql = "$sqlSelect
-				WHERE id = ?";
+				WHERE order_requests.id = ?";
 
 		$query = $this->createQuery($sql);
 		$query->setInteger(1, $idOrderRequest);
@@ -125,13 +133,13 @@ class OrderRequestDAO extends GenericDAO
 		$sqlSelect = $this->newSelect();
 		$sqlAndStatus = $this->newAndStatus($mode);
 		$sql = "$sqlSelect
-				INNER JOIN customer_employees ON customer_employees.id = order_requests.idCustomerEmployee
-				WHERE customer_employee.idCustomer = ? AND $sqlAndStatus";
+				WHERE customer_employees.id = ? AND $sqlAndStatus";
 
 		$query = $this->createQuery($sql);
 		$query->setInteger(1, $idCustomer);
 
 		$result = $query->execute();
+		die(json_encode($query->toSqlQuery()));
 
 		return $this->parseOrderRequests($result);
 	}
@@ -141,7 +149,7 @@ class OrderRequestDAO extends GenericDAO
 		$sqlSelect = $this->newSelect();
 		$sqlAndStatus = $this->newAndStatus($mode);
 		$sql = "$sqlSelect
-				WHERE idCustomerEmployee = ? AND $sqlAndStatus";
+				WHERE order_requests.idCustomerEmployee = ? AND $sqlAndStatus";
 
 		$query = $this->createQuery($sql);
 		$query->setInteger(1, $customerEmployee->getId());
@@ -156,7 +164,7 @@ class OrderRequestDAO extends GenericDAO
 		$sqlSelect = $this->newSelect();
 		$sqlAndStatus = $this->newAndStatus($mode);
 		$sql = "$sqlSelect
-				WHERE idTercomEmployee = ? AND $sqlAndStatus";
+				WHERE order_requests.idTercomEmployee = ? AND $sqlAndStatus";
 
 		$query = $this->createQuery($sql);
 		$query->setInteger(1, $tercomEmployee->getId());

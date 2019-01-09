@@ -109,6 +109,19 @@ class OrderRequestControl extends GenericControl
 			throw OrderRequestException::newCustomerEmployeeError();
 
 		$orderRequest->setStatus(OrderRequest::ORS_CANCEL_BY_CUSTOMER);
+		$orderRequest->setStatusMessage(format('cancelado por "%s"', $customerEmployee->getName()));
+
+		if (!$this->orderRequestDAO->update($orderRequest))
+			throw OrderRequestException::newUpdated();
+	}
+
+	public function cancelByTercom(TercomEmployee $tercomEmployee, OrderRequest $orderRequest): void
+	{
+		if ($tercomEmployee->getId() !== $orderRequest->getTercomEmployeeId())
+			throw OrderRequestException::newTercomEmployeeError();
+
+		$orderRequest->setStatus(OrderRequest::ORS_CANCEL_BY_TERCOM);
+		$orderRequest->setStatusMessage(format('cancelado por "%s"', $tercomEmployee->getName()));
 
 		if (!$this->orderRequestDAO->update($orderRequest))
 			throw OrderRequestException::newUpdated();
@@ -136,17 +149,6 @@ class OrderRequestControl extends GenericControl
 			throw OrderRequestException::newUpdated();
 	}
 
-	public function cancelByTercom(TercomEmployee $tercomEmployee, OrderRequest $orderRequest): void
-	{
-		if ($tercomEmployee->getId() !== $orderRequest->getTercomEmployeeId())
-			throw OrderRequestException::newTercomEmployeeError();
-
-		$orderRequest->setStatus(OrderRequest::ORS_CANCEL_BY_TERCOM);
-
-		if (!$this->orderRequestDAO->update($orderRequest))
-			throw OrderRequestException::newUpdated();
-	}
-
 	public function setQueued(CustomerEmployee $customerEmployee, OrderRequest $orderRequest): void
 	{
 		if ($customerEmployee->getId() !== $orderRequest->getCustomerEmployeeId())
@@ -162,6 +164,9 @@ class OrderRequestControl extends GenericControl
 	{
 		if ($orderRequest->getTercomEmployeeId() !== 0)
 			throw OrderRequestException::newTercomEmployeeSetted();
+
+		if ($orderRequest->getStatus() !== OrderRequest::ORS_QUEUED)
+			throw OrderRequestException::newNotQueued();
 
 		$orderRequest->setStatus(OrderRequest::ORS_QUOTING);
 

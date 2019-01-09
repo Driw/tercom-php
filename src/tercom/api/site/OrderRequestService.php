@@ -196,7 +196,7 @@ class OrderRequestService extends DefaultSiteService
 	{
 		$customerEmployee = $this->getCustomerEmployee();
 		$idOrderRequest = $content->getParameters()->getInt('idOrderRequest');
-		$orderRequest = $this->getOrderRequestControl()->get($idOrderRequest, $customerEmployee);
+		$orderRequest = $this->getOrderRequestControl()->get($idOrderRequest);
 		$this->getOrderRequestControl()->setQueued($customerEmployee, $orderRequest);
 
 		$result = new ApiResultObject();

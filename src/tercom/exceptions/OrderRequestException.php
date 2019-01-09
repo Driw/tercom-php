@@ -135,5 +135,14 @@ class OrderRequestException extends ApiStatusException
 	{
 		return new OrderRequestException('pedido de cotação já está sendo cotado por outro funcionário', ApiStatus::ORDER_REQUEST_TERCOM_EMPLOYEE_SETTED);
 	}
+
+	/**
+	 *
+	 * @return OrderRequestException
+	 */
+	public static function newNotQueued(): OrderRequestException
+	{
+		return new OrderRequestException('pedido de cotação não está em fila de ', ApiStatus::ORDER_REQUEST_NOT_QUEUED);
+	}
 }
 
