@@ -4,8 +4,7 @@ namespace tercom\api\site;
 
 use dProject\restful\ApiContent;
 use dProject\restful\ApiResult;
-use tercom\api\site\results\ApiResultAddress;
-use tercom\api\site\results\ApiResultAddresses;
+use tercom\api\site\results\ApiResultObject;
 use tercom\api\site\results\ApiResultAddressSettings;
 use tercom\entities\Address;
 
@@ -38,9 +37,9 @@ class AddressService extends RelationshipService
 	 *
 	 * @param ApiContent $content
 	 * @param int $idCustomer
-	 * @return ApiResultAddress
+	 * @return ApiResultObject
 	 */
-	protected function addCustomerAddress(ApiContent $content, int $idCustomer): ApiResultAddress
+	protected function addCustomerAddress(ApiContent $content, int $idCustomer): ApiResultObject
 	{
 		$post = $content->getPost();
 		$customer = $this->getCustomerControl()->get($idCustomer);
@@ -55,9 +54,8 @@ class AddressService extends RelationshipService
 		$address->setComplement($post->getString('complement', false));
 		$this->getCustomerAddressControl()->addRelationship($customer, $address);
 
-		$result = new ApiResultAddress();
-		$result->setAddress($address);
-		$result->setMessage('novo endereço para o cliente "%s"', $customer->getFantasyName());
+		$result = new ApiResultObject();
+		$result->setResult($address, 'novo endereço para o cliente "%s"', $customer->getFantasyName());
 
 		return $result;
 	}
@@ -67,9 +65,9 @@ class AddressService extends RelationshipService
 	 * @param ApiContent $content
 	 * @param int $idCustomer
 	 * @param int $idAddress
-	 * @return ApiResultAddress
+	 * @return ApiResultObject
 	 */
-	protected function setCustomerAddress(ApiContent $content, int $idCustomer, int $idAddress): ApiResultAddress
+	protected function setCustomerAddress(ApiContent $content, int $idCustomer, int $idAddress): ApiResultObject
 	{
 		$post = $content->getPost();
 		$customer = $this->getCustomerControl()->get($idCustomer);
@@ -85,9 +83,8 @@ class AddressService extends RelationshipService
 
 		$this->getCustomerAddressControl()->setRelationship($customer, $address);
 
-		$result = new ApiResultAddress();
-		$result->setAddress($address);
-		$result->setMessage('endereço atualizado com êxito');
+		$result = new ApiResultObject();
+		$result->setResult($address, 'endereço atualizado com êxito');
 
 		return $result;
 	}
@@ -97,17 +94,16 @@ class AddressService extends RelationshipService
 	 * @param ApiContent $content
 	 * @param int $idCustomer
 	 * @param int $idAddress
-	 * @return ApiResultAddress
+	 * @return ApiResultObject
 	 */
-	public function removeCustomerAddress(ApiContent $content, int $idCustomer, int $idAddress): ApiResultAddress
+	public function removeCustomerAddress(ApiContent $content, int $idCustomer, int $idAddress): ApiResultObject
 	{
 		$customer = $this->getCustomerControl()->get($idCustomer);
 		$address = $this->getCustomerAddressControl()->getRelationship($customer, $idAddress);
 		$this->getCustomerAddressControl()->removeRelationship($customer, $address);
 
-		$result = new ApiResultAddress();
-		$result->setAddress($address);
-		$result->setMessage('endereço excluído com êxito');
+		$result = new ApiResultObject();
+		$result->setResult($address, 'endereço excluído com êxito');
 
 		return $result;
 	}
@@ -117,16 +113,15 @@ class AddressService extends RelationshipService
 	 * @param ApiContent $content
 	 * @param int $idCustomer
 	 * @param int $idAddress
-	 * @return ApiResultAddress
+	 * @return ApiResultObject
 	 */
-	public function getCustomerAddress(ApiContent $content, int $idCustomer, int $idAddress): ApiResultAddress
+	public function getCustomerAddress(ApiContent $content, int $idCustomer, int $idAddress): ApiResultObject
 	{
 		$customer = $this->getCustomerControl()->get($idCustomer);
 		$address = $this->getCustomerAddressControl()->getRelationship($customer, $idAddress);
 
-		$result = new ApiResultAddress();
-		$result->setAddress($address);
-		$result->setMessage('endereço carregado com êxito');
+		$result = new ApiResultObject();
+		$result->setResult($address, 'endereço carregado com êxito');
 
 		return $result;
 	}
@@ -135,16 +130,15 @@ class AddressService extends RelationshipService
 	 *
 	 * @param ApiContent $content
 	 * @param int $idCustomer
-	 * @return ApiResultAddresses
+	 * @return ApiResultObject
 	 */
-	public function getAllCustomerAddress(ApiContent $content, int $idCustomer): ApiResultAddresses
+	public function getAllCustomerAddress(ApiContent $content, int $idCustomer): ApiResultObject
 	{
 		$customer = $this->getCustomerControl()->get($idCustomer);
 		$addresses = $this->getCustomerAddressControl()->getRelationships($customer);
 
-		$result = new ApiResultAddresses();
-		$result->setAddresses($addresses);
-		$result->setMessage('encontrado %d endereços para "%s"', $customer->getAddresses()->size(), $customer->getFantasyName());
+		$result = new ApiResultObject();
+		$result->setResult($addresses, 'encontrado %d endereços para "%s"', $customer->getAddresses()->size(), $customer->getFantasyName());
 
 		return $result;
 	}

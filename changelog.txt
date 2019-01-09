@@ -20,6 +20,10 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+09.01.2018 - 0.3.4.167
+- Excluído classes de resultados que não são mais utilizadas em 'tercom/api/site/results'.
+	- Necessário atualizar AddressService, CustomerProfileService, CustomerService e PhoneService.
+
 08.01.2018 - 0.3.4.166
 - Adicionado permissões para a utilização do serviço para gerenciamento de pedidos de cotação, OrderRequestService.
 - Atualizados scripts de testes para o gerenciamento de pedidos de cotação referente a mudanças na validação de acesso.

@@ -3,8 +3,7 @@
 namespace tercom\api\site;
 
 use dProject\restful\ApiContent;
-use tercom\api\site\results\ApiResultCustomerProfile;
-use tercom\api\site\results\ApiResultCustomerProfiles;
+use tercom\api\site\results\ApiResultObject;
 use tercom\api\site\results\ApiResultCustomerProfileSettings;
 use tercom\entities\CustomerProfile;
 
@@ -28,9 +27,9 @@ class CustomerProfileService extends DefaultSiteService
 	 *
 	 * @ApiPermissionAnnotation({"method":"post"})
 	 * @param ApiContent $content
-	 * @return ApiResultCustomerProfile
+	 * @return ApiResultObject
 	 */
-	public function actionAdd(ApiContent $content): ApiResultCustomerProfile
+	public function actionAdd(ApiContent $content): ApiResultObject
 	{
 		$post = $content->getPost();
 		$idCustomer = $post->getInt('idCustomer');
@@ -42,9 +41,8 @@ class CustomerProfileService extends DefaultSiteService
 		$customerProfile->setAssignmentLevel($post->getInt('assignmentLevel'));
 		$this->getCustomerProfileControl()->add($customerProfile, $this->getCurrentAssignmentLevel());
 
-		$result = new ApiResultCustomerProfile();
-		$result->setCustomerProfile($customerProfile);
-		$result->setMessage('perfil de cliente "%s" adicionado com êxito', $customerProfile->getName());
+		$result = new ApiResultObject();
+		$result->setResult($customerProfile, 'perfil de cliente "%s" adicionado com êxito', $customerProfile->getName());
 
 		return $result;
 	}
@@ -53,9 +51,9 @@ class CustomerProfileService extends DefaultSiteService
 	 *
 	 * @ApiPermissionAnnotation({"method":"post","params":["idCustomerProfile"]})
 	 * @param ApiContent $content
-	 * @return ApiResultCustomerProfile
+	 * @return ApiResultObject
 	 */
-	public function actionSet(ApiContent $content): ApiResultCustomerProfile
+	public function actionSet(ApiContent $content): ApiResultObject
 	{
 		$post = $content->getPost();
 		$idCustomerProfile = $content->getParameters()->getInt('idCustomerProfile');
@@ -68,9 +66,8 @@ class CustomerProfileService extends DefaultSiteService
 
 		$this->getCustomerProfileControl()->set($customerProfile, $this->getCurrentAssignmentLevel());
 
-		$result = new ApiResultCustomerProfile();
-		$result->setCustomerProfile($customerProfile);
-		$result->setMessage('perfil de cliente "%s" atualizado com êxito', $customerProfile->getName());
+		$result = new ApiResultObject();
+		$result->setResult($customerProfile, 'perfil de cliente "%s" atualizado com êxito', $customerProfile->getName());
 
 		return $result;
 	}
@@ -79,17 +76,16 @@ class CustomerProfileService extends DefaultSiteService
 	 *
 	 * @ApiPermissionAnnotation({"params":["idCustomerProfile"]})
 	 * @param ApiContent $content
-	 * @return ApiResultCustomerProfile
+	 * @return ApiResultObject
 	 */
-	public function actionRemove(ApiContent $content): ApiResultCustomerProfile
+	public function actionRemove(ApiContent $content): ApiResultObject
 	{
 		$idCustomerProfile = $content->getParameters()->getInt('idCustomerProfile');
 		$customerProfile = $this->getCustomerProfileControl()->get($idCustomerProfile, true, $this->getCurrentAssignmentLevel());
 		$this->getCustomerProfileControl()->remove($customerProfile, $this->getCurrentAssignmentLevel());
 
-		$result = new ApiResultCustomerProfile();
-		$result->setCustomerProfile($customerProfile);
-		$result->setMessage('perfil de cliente "%s" excluído com êxito', $customerProfile->getName());
+		$result = new ApiResultObject();
+		$result->setResult($customerProfile, 'perfil de cliente "%s" excluído com êxito', $customerProfile->getName());
 
 		return $result;
 	}
@@ -98,16 +94,15 @@ class CustomerProfileService extends DefaultSiteService
 	 *
 	 * @ApiPermissionAnnotation({"params":["idCustomerProfile"]})
 	 * @param ApiContent $content
-	 * @return ApiResultCustomerProfile
+	 * @return ApiResultObject
 	 */
-	public function actionGet(ApiContent $content): ApiResultCustomerProfile
+	public function actionGet(ApiContent $content): ApiResultObject
 	{
 		$idCustomerProfile = $content->getParameters()->getInt('idCustomerProfile');
 		$customerProfile = $this->getCustomerProfileControl()->get($idCustomerProfile, true, $this->getCurrentAssignmentLevel());
 
-		$result = new ApiResultCustomerProfile();
-		$result->setCustomerProfile($customerProfile);
-		$result->setMessage('perfil de cliente "%s" obtido com êxito', $customerProfile->getName());
+		$result = new ApiResultObject();
+		$result->setResult($customerProfile, 'perfil de cliente "%s" obtido com êxito', $customerProfile->getName());
 
 		return $result;
 	}
@@ -116,17 +111,16 @@ class CustomerProfileService extends DefaultSiteService
 	 *
 	 * @ApiPermissionAnnotation({"params":["idCustomer"]})
 	 * @param ApiContent $content
-	 * @return ApiResultCustomerProfiles
+	 * @return ApiResultObject
 	 */
-	public function actionCustomer(ApiContent $content): ApiResultCustomerProfiles
+	public function actionCustomer(ApiContent $content): ApiResultObject
 	{
 		$idCustomer = $content->getParameters()->getInt('idCustomer');
 		$customer = $this->getCustomerControl()->get($idCustomer);
 		$customerProfiles = $this->getCustomerProfileControl()->getByCustomer($customer, $this->getCurrentAssignmentLevel());
 
-		$result = new ApiResultCustomerProfiles();
-		$result->setCustomerProfiles($customerProfiles);
-		$result->setMessage('encontrado %d perfis de cliente', $customerProfiles->size());
+		$result = new ApiResultObject();
+		$result->setResult($customerProfiles, 'encontrado %d perfis de cliente', $customerProfiles->size());
 
 		return $result;
 	}
@@ -134,15 +128,14 @@ class CustomerProfileService extends DefaultSiteService
 	/**
 	 *
 	 * @param ApiContent $content
-	 * @return ApiResultCustomerProfile
+	 * @return ApiResultObject
 	 */
-	public function actionGetAll(ApiContent $content): ApiResultCustomerProfiles
+	public function actionGetAll(ApiContent $content): ApiResultObject
 	{
 		$customerProfiles = $this->getCustomerProfileControl()->getAll();
 
-		$result = new ApiResultCustomerProfiles();
-		$result->setCustomerProfiles($customerProfiles);
-		$result->setMessage('encontrados %d perfis de cliente no banco de dados', $customerProfiles->size());
+		$result = new ApiResultObject();
+		$result->setResult($customerProfiles, 'encontrados %d perfis de cliente no banco de dados', $customerProfiles->size());
 
 		return $result;
 	}

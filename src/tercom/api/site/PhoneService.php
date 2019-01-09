@@ -4,8 +4,7 @@ namespace tercom\api\site;
 
 use dProject\restful\ApiContent;
 use dProject\restful\ApiResult;
-use tercom\api\site\results\ApiResultPhone;
-use tercom\api\site\results\ApiResultPhones;
+use tercom\api\site\results\ApiResultObject;
 use tercom\api\site\results\ApiResultPhoneSettings;
 use tercom\entities\Phone;
 
@@ -37,9 +36,9 @@ class PhoneService extends RelationshipService
 	 *
 	 * @param ApiContent $content
 	 * @param int $idCustomer
-	 * @return ApiResultPhone
+	 * @return ApiResultObject
 	 */
-	protected function addCustomerPhone(ApiContent $content, int $idCustomer): ApiResultPhone
+	protected function addCustomerPhone(ApiContent $content, int $idCustomer): ApiResultObject
 	{
 		$post = $content->getPost();
 		$customer = $this->getCustomerControl()->get($idCustomer);
@@ -50,9 +49,8 @@ class PhoneService extends RelationshipService
 		$phone->setType($post->getString('type'));
 		$this->getCustomerPhoneControl()->addRelationship($customer, $phone);
 
-		$result = new ApiResultPhone();
-		$result->setPhone($phone);
-		$result->setMessage('novo telefone para o cliente "%s"', $customer->getFantasyName());
+		$result = new ApiResultObject();
+		$result->setResult($phone, 'novo telefone para o cliente "%s"', $customer->getFantasyName());
 
 		return $result;
 	}
@@ -62,9 +60,9 @@ class PhoneService extends RelationshipService
 	 * @param ApiContent $content
 	 * @param int $idCustomer
 	 * @param int $idPhone
-	 * @return ApiResultPhone
+	 * @return ApiResultObject
 	 */
-	protected function setCustomerPhone(ApiContent $content, int $idCustomer, int $idPhone): ApiResultPhone
+	protected function setCustomerPhone(ApiContent $content, int $idCustomer, int $idPhone): ApiResultObject
 	{
 		$post = $content->getPost();
 		$customer = $this->getCustomerControl()->get($idCustomer);
@@ -76,9 +74,8 @@ class PhoneService extends RelationshipService
 
 		$this->getCustomerPhoneControl()->setRelationship($customer, $phone);
 
-		$result = new ApiResultPhone();
-		$result->setPhone($phone);
-		$result->setMessage('telefone atualizado com êxito');
+		$result = new ApiResultObject();
+		$result->setResult($phone, 'telefone atualizado com êxito');
 
 		return $result;
 	}
@@ -88,17 +85,16 @@ class PhoneService extends RelationshipService
 	 * @param ApiContent $content
 	 * @param int $idCustomer
 	 * @param int $idPhone
-	 * @return ApiResultPhone
+	 * @return ApiResultObject
 	 */
-	protected function removeCustomerPhone(ApiContent $content, int $idCustomer, int $idPhone): ApiResultPhone
+	protected function removeCustomerPhone(ApiContent $content, int $idCustomer, int $idPhone): ApiResultObject
 	{
 		$customer = $this->getCustomerControl()->get($idCustomer);
 		$phone = $this->getCustomerPhoneControl()->getRelationship($customer, $idPhone);
 		$this->getCustomerPhoneControl()->removeRelationship($customer, $phone);
 
-		$result = new ApiResultPhone();
-		$result->setPhone($phone);
-		$result->setMessage('telefone excluído com êxito');
+		$result = new ApiResultObject();
+		$result->setResult($phone, 'telefone excluído com êxito');
 
 		return $result;
 	}
@@ -108,16 +104,15 @@ class PhoneService extends RelationshipService
 	 * @param ApiContent $content
 	 * @param int $idCustomer
 	 * @param int $idPhone
-	 * @return ApiResultPhone
+	 * @return ApiResultObject
 	 */
-	protected function getCustomerPhone(ApiContent $content, int $idCustomer, int $idPhone): ApiResultPhone
+	protected function getCustomerPhone(ApiContent $content, int $idCustomer, int $idPhone): ApiResultObject
 	{
 		$customer = $this->getCustomerControl()->get($idCustomer);
 		$phone = $this->getCustomerPhoneControl()->getRelationship($customer, $idPhone);
 
-		$result = new ApiResultPhone();
-		$result->setPhone($phone);
-		$result->setMessage('telefone carregado com êxito');
+		$result = new ApiResultObject();
+		$result->setResult($phone, 'telefone carregado com êxito');
 
 		return $result;
 	}
@@ -126,16 +121,15 @@ class PhoneService extends RelationshipService
 	 *
 	 * @param ApiContent $content
 	 * @param int $idCustomer
-	 * @return ApiResultPhones
+	 * @return ApiResultObject
 	 */
-	protected function getAllCustomerPhone(ApiContent $content, int $idCustomer): ApiResultPhones
+	protected function getAllCustomerPhone(ApiContent $content, int $idCustomer): ApiResultObject
 	{
 		$customer = $this->getCustomerControl()->get($idCustomer);
 		$this->getCustomerPhoneControl()->getRelationships($customer);
 
-		$result = new ApiResultPhones();
-		$result->setPhones($customer->getPhones());
-		$result->setMessage('encontrado %d telefones para "%s"', $customer->getPhones()->size(), $customer->getFantasyName());
+		$result = new ApiResultObject();
+		$result->setResult($customer->getPhones(), 'encontrado %d telefones para "%s"', $customer->getPhones()->size(), $customer->getFantasyName());
 
 		return $result;
 	}

@@ -3,12 +3,11 @@
 namespace tercom\api\site;
 
 use dProject\restful\ApiContent;
-use tercom\api\site\results\ApiResultCustomer;
-use tercom\api\site\results\ApiResultCustomers;
 use tercom\api\site\results\ApiResultCustomerSettings;
-use tercom\entities\Customer;
-use tercom\api\exceptions\FilterException;
+use tercom\api\site\results\ApiResultObject;
 use tercom\api\site\results\ApiResultSimpleValidation;
+use tercom\api\exceptions\FilterException;
+use tercom\entities\Customer;
 
 /**
  * @author andrews
@@ -29,9 +28,9 @@ class CustomerService extends DefaultSiteService
 	 *
 	 * @ApiPermissionAnnotation({"method":"post"})
 	 * @param ApiContent $content
-	 * @return ApiResultCustomer
+	 * @return ApiResultObject
 	 */
-	public function actionAdd(ApiContent $content): ApiResultCustomer
+	public function actionAdd(ApiContent $content): ApiResultObject
 	{
 		$post = $content->getPost();
 
@@ -46,9 +45,8 @@ class CustomerService extends DefaultSiteService
 
 		$this->getCustomerControl()->add($customer);
 
-		$result = new ApiResultCustomer();
-		$result->setCustomer($customer);
-		$result->setMessage('cliente "%s" de CNPJ "%s" adicionado com êxito', $customer->getFantasyName(), $customer->getCnpj());
+		$result = new ApiResultObject();
+		$result->setResult($customer, 'cliente "%s" de CNPJ "%s" adicionado com êxito', $customer->getFantasyName(), $customer->getCnpj());
 
 		return $result;
 	}
@@ -57,9 +55,9 @@ class CustomerService extends DefaultSiteService
 	 *
 	 * @ApiPermissionAnnotation({"method":"post","params":["idCustomer"]})
 	 * @param ApiContent $content
-	 * @return ApiResultCustomer
+	 * @return ApiResultObject
 	 */
-	public function actionSet(ApiContent $content): ApiResultCustomer
+	public function actionSet(ApiContent $content): ApiResultObject
 	{
 		$post = $content->getPost();
 		$idCustomer = $content->getParameters()->getInt('idCustomer');
@@ -74,9 +72,8 @@ class CustomerService extends DefaultSiteService
 
 		$this->getCustomerControl()->set($customer);
 
-		$result = new ApiResultCustomer();
-		$result->setCustomer($customer);
-		$result->setMessage('cliente "%s" de CNPJ "%s" atualizado com êxito', $customer->getFantasyName(), $customer->getCnpj());
+		$result = new ApiResultObject();
+		$result->setResult($customer, 'cliente "%s" de CNPJ "%s" atualizado com êxito', $customer->getFantasyName(), $customer->getCnpj());
 
 		return $result;
 	}
@@ -85,9 +82,9 @@ class CustomerService extends DefaultSiteService
 	 *
 	 * @ApiPermissionAnnotation({"method":"post","params":["idCustomer"]})
 	 * @param ApiContent $content
-	 * @return ApiResultCustomer
+	 * @return ApiResultObject
 	 */
-	public function actionSetInactive(ApiContent $content): ApiResultCustomer
+	public function actionSetInactive(ApiContent $content): ApiResultObject
 	{
 		$post = $content->getPost();
 		$idCustomer = $content->getParameters()->getInt('idCustomer');
@@ -97,9 +94,8 @@ class CustomerService extends DefaultSiteService
 
 		$this->getCustomerControl()->set($customer);
 
-		$result = new ApiResultCustomer();
-		$result->setCustomer($customer);
-		$result->setMessage('cliente "%s" de CNPJ "%s" atualizado com êxito', $customer->getFantasyName(), $customer->getCnpj());
+		$result = new ApiResultObject();
+		$result->setResult($customer, 'cliente "%s" de CNPJ "%s" atualizado com êxito', $customer->getFantasyName(), $customer->getCnpj());
 
 		return $result;
 	}
@@ -108,16 +104,15 @@ class CustomerService extends DefaultSiteService
 	 *
 	 * @ApiPermissionAnnotation({"params":["idCustomer"]})
 	 * @param ApiContent $content
-	 * @return ApiResultCustomer
+	 * @return ApiResultObject
 	 */
-	public function actionGet(ApiContent $content): ApiResultCustomer
+	public function actionGet(ApiContent $content): ApiResultObject
 	{
 		$idCustomer = $content->getParameters()->getInt('idCustomer');
 		$customer = $this->getCustomerControl()->get($idCustomer);
 
-		$result = new ApiResultCustomer();
-		$result->setCustomer($customer);
-		$result->setMessage('cliente "%s" obtido com êxito', $customer->getFantasyName());
+		$result = new ApiResultObject();
+		$result->setResult($customer, 'cliente "%s" obtido com êxito', $customer->getFantasyName());
 
 		return $result;
 	}
@@ -126,16 +121,15 @@ class CustomerService extends DefaultSiteService
 	 *
 	 * @ApiPermissionAnnotation({"params":["cnpj"]})
 	 * @param ApiContent $content
-	 * @return ApiResultCustomer
+	 * @return ApiResultObject
 	 */
-	public function actionGetByCnpj(ApiContent $content): ApiResultCustomer
+	public function actionGetByCnpj(ApiContent $content): ApiResultObject
 	{
 		$cnpj = $content->getParameters()->getString('cnpj');
 		$customer = $this->getCustomerControl()->getByCnpj($cnpj);
 
-		$result = new ApiResultCustomer();
-		$result->setCustomer($customer);
-		$result->setMessage('cliente "%s" obtido com êxito', $customer->getFantasyName());
+		$result = new ApiResultObject();
+		$result->setResult($customer, 'cliente "%s" obtido com êxito', $customer->getFantasyName());
 
 		return $result;
 	}
@@ -144,15 +138,14 @@ class CustomerService extends DefaultSiteService
 	 *
 	 * @ApiPermissionAnnotation({})
 	 * @param ApiContent $content
-	 * @return ApiResultCustomer
+	 * @return ApiResultObject
 	 */
-	public function actionGetAll(ApiContent $content): ApiResultCustomers
+	public function actionGetAll(ApiContent $content): ApiResultObject
 	{
 		$customers = $this->getCustomerControl()->getAll();
 
-		$result = new ApiResultCustomers();
-		$result->setCustomers($customers);
-		$result->setMessage('encontrado %d clientes no banco de dados', $customers->size());
+		$result = new ApiResultObject();
+		$result->setResult($customers, 'encontrado %d clientes no banco de dados', $customers->size());
 
 		return $result;
 	}
@@ -161,9 +154,9 @@ class CustomerService extends DefaultSiteService
 	 *
 	 * @ApiPermissionAnnotation({"params":["filter","value","idCustomer"]})
 	 * @param ApiContent $content
-	 * @return ApiResultCustomers
+	 * @return ApiResultObject
 	 */
-	public function actionSearch(ApiContent $content): ApiResultCustomers
+	public function actionSearch(ApiContent $content): ApiResultObject
 	{
 		$filter = $content->getParameters()->getString('filter');
 
@@ -180,16 +173,15 @@ class CustomerService extends DefaultSiteService
 	/**
 	 *
 	 * @param ApiContent $content
-	 * @return ApiResultCustomers
+	 * @return ApiResultObject
 	 */
-	private function searchByStateRegistry(ApiContent $content): ApiResultCustomers
+	private function searchByStateRegistry(ApiContent $content): ApiResultObject
 	{
 		$stateRegistry = $content->getParameters()->getString('value');
 		$customers = $this->getCustomerControl()->searchByStateRegistry($stateRegistry);
 
-		$result = new ApiResultCustomers();
-		$result->setCustomers($customers);
-		$result->setMessage('encontrados %d clientes com inscrição estadual "%s"', $customers->size(), $stateRegistry);
+		$result = new ApiResultObject();
+		$result->setResult($customers, 'encontrados %d clientes com inscrição estadual "%s"', $customers->size(), $stateRegistry);
 
 		return $result;
 	}
@@ -197,16 +189,15 @@ class CustomerService extends DefaultSiteService
 	/**
 	 *
 	 * @param ApiContent $content
-	 * @return ApiResultCustomers
+	 * @return ApiResultObject
 	 */
-	private function searchByCnpj(ApiContent $content): ApiResultCustomers
+	private function searchByCnpj(ApiContent $content): ApiResultObject
 	{
 		$cnpj = $content->getParameters()->getString('value');
 		$customers = $this->getCustomerControl()->searchByCnpj($cnpj);
 
-		$result = new ApiResultCustomers();
-		$result->setCustomers($customers);
-		$result->setMessage('encontrados %d clientes com CNPJ "%s"', $customers->size(), $cnpj);
+		$result = new ApiResultObject();
+		$result->setResult($customers, 'encontrados %d clientes com CNPJ "%s"', $customers->size(), $cnpj);
 
 		return $result;
 	}
@@ -214,16 +205,15 @@ class CustomerService extends DefaultSiteService
 	/**
 	 *
 	 * @param ApiContent $content
-	 * @return ApiResultCustomers
+	 * @return ApiResultObject
 	 */
-	private function searchByFantasyName(ApiContent $content): ApiResultCustomers
+	private function searchByFantasyName(ApiContent $content): ApiResultObject
 	{
 		$fantasyName = $content->getParameters()->getString('value');
 		$customers = $this->getCustomerControl()->searchByStateRegistry($fantasyName);
 
-		$result = new ApiResultCustomers();
-		$result->setCustomers($customers);
-		$result->setMessage('encontrados %d clientes com nome fantasia "%s"', $customers->size(), $fantasyName);
+		$result = new ApiResultObject();
+		$result->setResult($customers, 'encontrados %d clientes com nome fantasia "%s"', $customers->size(), $fantasyName);
 
 		return $result;
 	}
