@@ -20,6 +20,9 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+09.01.2018 - 0.3.4.170
+- Adicionado scripts de teste para o serviço de gerenciamento de itens de pedido de cotação.
+
 09.01.2018 - 0.3.4.169b
 - Implementação da entidade, DAO, controle e serviço para gerenciamento de itens de pedido de cotação:
 	- Itens de Produto e Itens de Serviço.
