@@ -4,6 +4,7 @@ namespace tercom;
 
 use dProject\Primitive\Session;
 use tercom\entities\Phone;
+use dProject\Primitive\StringUtil;
 
 IncludeThirdParty('simple_html_dom');
 
@@ -14,7 +15,7 @@ class GeradorDeDados
 		if ($emptyAsNull)
 		{
 			foreach ($parameters as $key => $value)
-				if (empty($value))
+				if (is_string($value) && StringUtil::isEmpty($value))
 					unset($parameters[$key]);
 		}
 

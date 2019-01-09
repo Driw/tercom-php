@@ -53,7 +53,10 @@ class OrderItemProductControl extends GenericControl
 	 */
 	public function set(OrderRequest $orderRequest, OrderItemProduct $orderItemProduct): void
 	{
-		if (!$this->orderItemProductDAO->update($orderRequest, $orderItemProduct))
+		if (!$this->orderItemProductDAO->exist($orderRequest, $orderItemProduct->getProduct()))
+			throw OrderItemProductException::newBinded();
+
+		if (!$this->orderItemProductDAO->update($orderItemProduct))
 			throw OrderItemProductException::newUpdated();
 	}
 
@@ -63,7 +66,10 @@ class OrderItemProductControl extends GenericControl
 	 */
 	public function remove(OrderRequest $orderRequest, OrderItemProduct $orderItemProduct): void
 	{
-		if (!$this->orderItemProductDAO->delete($orderRequest, $orderItemProduct))
+		if (!$this->orderItemProductDAO->exist($orderRequest, $orderItemProduct->getProduct()))
+			throw OrderItemProductException::newBinded();
+
+		if (!$this->orderItemProductDAO->delete($orderItemProduct))
 			throw OrderItemProductException::newDeleted();
 	}
 
@@ -79,13 +85,19 @@ class OrderItemProductControl extends GenericControl
 	/**
 	 *
 	 * @param int $idOrderItemProduct
+	 * @param int|NULL $idOrderRequest
 	 * @throws OrderItemProductException
 	 * @return OrderItemProducts
 	 */
-	public function get(int $idOrderItemProduct): OrderItemProduct
+	public function get(int $idOrderItemProduct, ?int $idOrderRequest = null): OrderItemProduct
 	{
-		if (($orderItemProduct = $this->orderItemProductDAO->select($idOrderItemProduct)) === null)
-			throw OrderItemProductException::newSelected();
+		if ($idOrderRequest === null) {
+			if (($orderItemProduct = $this->orderItemProductDAO->select($idOrderItemProduct)) === null)
+				throw OrderItemProductException::newSelected();
+		} else {
+			if (($orderItemProduct = $this->orderItemProductDAO->selectWithOrderRequest($idOrderRequest, $idOrderItemProduct)) === null)
+				throw OrderItemProductException::newSelected();
+		}
 
 		return $orderItemProduct;
 	}

@@ -29,7 +29,7 @@ class ServiceDAO extends GenericDAO
 	/**
 	 * @var array nome das colunas da tabela de serviços.
 	 */
-	public const ALL_COLUMNS = ['name', 'description', 'tags', 'inactive'];
+	public const ALL_COLUMNS = ['id', 'name', 'description', 'tags', 'inactive'];
 
 	/**
 	 * Procedimento interno para validação dos dados de um serviço ao inserir e/ou atualizar.

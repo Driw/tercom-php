@@ -2,13 +2,12 @@
 
 namespace tercom\control;
 
-use tercom\dao\OrderItemServiceDAO;
-use tercom\entities\OrderItemService;
 use tercom\entities\OrderRequest;
+use tercom\entities\OrderItemService;
 use tercom\entities\Service;
+use tercom\dao\OrderItemServiceDAO;
 use tercom\entities\lists\OrderItemServices;
 use tercom\exceptions\OrderItemServiceException;
-use tercom\TercomException;
 
 /**
  *
@@ -48,20 +47,28 @@ class OrderItemServiceControl extends GenericControl
 
 	/**
 	 *
+	 * @param OrderRequest $orderRequest
 	 * @param OrderItemService $orderItemService
 	 * @throws OrderItemServiceException
 	 */
-	public function set(OrderItemService $orderItemService): void
+	public function set(OrderRequest $orderRequest, OrderItemService $orderItemService): void
 	{
-		if (!$this->orderItemServiceDAO->update($orderItemService))
-			throw OrderItemServiceException::newUpdated();
+		if (!$this->orderItemServiceDAO->exist($orderRequest, $orderItemService->getService()))
+			throw OrderItemServiceException::newBinded();
+
+			if (!$this->orderItemServiceDAO->update($orderItemService))
+				throw OrderItemServiceException::newUpdated();
 	}
 
 	/**
+	 * @param $orderRequest OrderRequest
 	 * @param $orderItemService OrderItemService
 	 */
-	public function remove(OrderItemService $orderItemService): void
+	public function remove(OrderRequest $orderRequest, OrderItemService $orderItemService): void
 	{
+		if (!$this->orderItemServiceDAO->exist($orderRequest, $orderItemService->getService()))
+			throw OrderItemServiceException::newBinded();
+
 		if (!$this->orderItemServiceDAO->delete($orderItemService))
 			throw OrderItemServiceException::newDeleted();
 	}
@@ -78,23 +85,18 @@ class OrderItemServiceControl extends GenericControl
 	/**
 	 *
 	 * @param int $idOrderItemService
-	 * @param bool $validateCustomer
+	 * @param int|NULL $idOrderRequest
 	 * @throws OrderItemServiceException
 	 * @return OrderItemServices
 	 */
-	public function get(int $idOrderItemService, bool $validateCustomer = false): OrderItemService
+	public function get(int $idOrderItemService, ?int $idOrderRequest = null): OrderItemService
 	{
-		if ($validateCustomer) {
-
-			if (!$this->hasCustomerLogged())
-				throw TercomException::newCustomerInvliad();
-
-			if (($orderItemService = $this->orderItemServiceDAO->selectWithCustomerEmployee($idOrderItemService, $this->getCustomerLoggedId())) === null)
-				throw OrderItemServiceException::newDeleted();
-
-		} else {
+		if ($idOrderRequest === null) {
 			if (($orderItemService = $this->orderItemServiceDAO->select($idOrderItemService)) === null)
-				throw OrderItemServiceException::newDeleted();
+				throw OrderItemServiceException::newSelected();
+		} else {
+			if (($orderItemService = $this->orderItemServiceDAO->selectWithOrderRequest($idOrderRequest, $idOrderItemService)) === null)
+				throw OrderItemServiceException::newSelected();
 		}
 
 		return $orderItemService;

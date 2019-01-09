@@ -31,7 +31,7 @@ class OrderRequestService extends DefaultSiteService
 	public function actionAdd(ApiContent $content): ApiResultObject
 	{
 		$post = $content->getPost();
-		$customerEmployee = $this->getCustomerEmployeeLogin($content)->getCustomerEmployee();
+		$customerEmployee = $this->getCustomerEmployee();
 
 		$orderRequest = new OrderRequest();
 		$orderRequest->setBudget($post->getFloat('budget'));
@@ -55,7 +55,7 @@ class OrderRequestService extends DefaultSiteService
 	public function actionSet(ApiContent $content): ApiResultObject
 	{
 		$post = $content->getPost();
-		$customerEmployee = $this->getCustomerEmployeeLogin($content)->getCustomerEmployee();
+		$customerEmployee = $this->getCustomerEmployee();
 		$idOrderRequest = $content->getParameters()->getInt('idOrderRequest');
 		$orderRequest = $this->getOrderRequestControl()->get($idOrderRequest, $customerEmployee);
 
@@ -77,7 +77,7 @@ class OrderRequestService extends DefaultSiteService
 	 */
 	public function actionGet(ApiContent $content): ApiResultObject
 	{
-		$customerEmployee = $this->getCustomerEmployeeLogin($content)->getCustomerEmployee();
+		$customerEmployee = $this->getCustomerEmployee();
 		$idOrderRequest = $content->getParameters()->getInt('idOrderRequest');
 		$orderRequest = $this->getOrderRequestControl()->get($idOrderRequest, $customerEmployee);
 
@@ -112,7 +112,7 @@ class OrderRequestService extends DefaultSiteService
 		$idCustomerEmployee = $content->getParameters()->getInt('idCustomerEmployee', false);
 
 		if ($idCustomerEmployee === null)
-			$customerEmployee = $this->getCustomerEmployeeLogin($content)->getCustomerEmployee();
+			$customerEmployee = $this->getCustomerEmployee();
 		else
 			$customerEmployee = $this->getCustomerEmployeeControl()->get($idCustomerEmployee);
 

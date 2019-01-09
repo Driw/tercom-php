@@ -283,6 +283,30 @@ INSERT INTO permissions (packet, action, assignmentLevel) VALUES
 ('orderRequest', 'getByCustomer', 20),
 ('orderRequest', 'getByTercom', 20);
 
+-- Order Item Product Service
+
+INSERT INTO permissions (packet, action, assignmentLevel) VALUES
+('orderItemProduct', 'settings', 20),
+('orderItemProduct', 'add', 20),
+('orderItemProduct', 'set', 20),
+('orderItemProduct', 'remove', 20),
+('orderItemProduct', 'removeAll', 20),
+('orderItemProduct', 'get', 20),
+('orderItemProduct', 'getAll', 20),
+('orderItemProduct', 'avaiable', 20);
+
+-- Order Item Service Service
+
+INSERT INTO permissions (packet, action, assignmentLevel) VALUES
+('orderItemService', 'settings', 20),
+('orderItemService', 'add', 20),
+('orderItemService', 'set', 20),
+('orderItemService', 'remove', 20),
+('orderItemService', 'removeAll', 20),
+('orderItemService', 'get', 20),
+('orderItemService', 'getAll', 20),
+('orderItemService', 'avaiable', 20);
+
 -- TERCOM Profile Permissions
 
 REPLACE INTO tercom_profile_permissions (idTercomProfile, idPermission)

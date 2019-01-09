@@ -33,9 +33,12 @@ use tercom\control\TercomEmployeeControl;
 use tercom\control\TercomPermissionControl;
 use tercom\control\TercomProfileControl;
 use tercom\control\OrderRequestControl;
+use tercom\entities\CustomerEmployee;
 use tercom\entities\LoginCustomer;
 use tercom\entities\LoginTercom;
 use tercom\TercomException;
+use tercom\control\OrderItemProductControl;
+use tercom\control\OrderItemServiceControl;
 
 /**
  * @see ApiServiceInterface
@@ -144,6 +147,14 @@ class DefaultSiteService extends ApiServiceInterface
 	 * @var OrderRequestControl
 	 */
 	private $orderRequestControl;
+	/**
+	 * @var OrderItemProductControl
+	 */
+	private $orderItemProductControl;
+	/**
+	 * @var OrderItemServiceControl
+	 */
+	private $orderItemServiceControl;
 
 	/**
 	 * Cria uma nova instância de um serviço para gerenciamento de stores dos produtos no sistema.
@@ -467,12 +478,48 @@ class DefaultSiteService extends ApiServiceInterface
 	}
 
 	/**
+	 * @return OrderItemProductControl
+	 */
+	protected function getOrderItemProductControl(): OrderItemProductControl
+	{
+		return $this->orderItemProductControl === null ?
+			($this->orderItemProductControl = new OrderItemProductControl()) :
+			$this->orderItemProductControl;
+	}
+
+	/**
+	 * @return OrderItemServiceControl
+	 */
+	protected function getOrderItemServiceControl(): OrderItemServiceControl
+	{
+		return $this->orderItemServiceControl === null ?
+			($this->orderItemServiceControl = new OrderItemServiceControl()) :
+			$this->orderItemServiceControl;
+	}
+
+	/**
 	 * @param ApiContent $content
 	 * @return LoginCustomer
 	 */
-	protected function getCustomerEmployeeLogin(ApiContent $content): LoginCustomer
+	protected function getCustomerEmployeeLogin(): LoginCustomer
 	{
 		return $this->getLoginCustomerControl()->getCurrent();
+	}
+
+	/**
+	 * @return CustomerEmployee
+	 */
+	protected function getCustomerEmployee(): CustomerEmployee
+	{
+		return $this->getCustomerEmployeeLogin()->getCustomerEmployee();
+	}
+
+	/**
+	 * @return CustomerEmployee|NULL
+	 */
+	protected function getCustomerEmployeeNull(): ?CustomerEmployee
+	{
+		return $this->getLoginCustomerControl()->hasLogged() ? $this->getCustomerEmployee() : null;
 	}
 
 	/**
