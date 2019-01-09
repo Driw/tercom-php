@@ -20,6 +20,13 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+09.01.2018 - 0.3.4.169
+- Corrigido a mudança no banco de dados na tabela 'product_category_relationships' referente a rev150.
+
+09.01.2018 - 0.3.4.168
+- Implementação da entidade, DAO, controle e serviço para gerenciamento de itens de pedido de cotação:
+	- Itens de Produto e Itens de Serviço.
+
 09.01.2018 - 0.3.4.167
 - Excluído classes de resultados que não são mais utilizadas em 'tercom/api/site/results'.
 	- Necessário atualizar AddressService, CustomerProfileService, CustomerService e PhoneService.
