@@ -17,6 +17,7 @@ use tercom\control\CustomerProfileControl;
 use tercom\control\LoginCustomerControl;
 use tercom\control\LoginTercomControl;
 use tercom\control\ManufacturerControl;
+use tercom\control\OrderQuoteControl;
 use tercom\control\PermissionControl;
 use tercom\control\PhoneControl;
 use tercom\control\ProductCategoryControl;
@@ -156,6 +157,10 @@ class DefaultSiteService extends ApiServiceInterface
 	 * @var OrderItemServiceControl
 	 */
 	private $orderItemServiceControl;
+	/**
+	 * @var OrderQuoteControl
+	 */
+	private $orderQuoteControl;
 
 	/**
 	 * Cria uma nova instância de um serviço para gerenciamento de stores dos produtos no sistema.
@@ -496,6 +501,16 @@ class DefaultSiteService extends ApiServiceInterface
 		return $this->orderItemServiceControl === null ?
 			($this->orderItemServiceControl = new OrderItemServiceControl()) :
 			$this->orderItemServiceControl;
+	}
+
+	/**
+	 * @return OrderQuoteControl
+	 */
+	protected function getOrderQuoteControl(): OrderQuoteControl
+	{
+		return $this->orderQuoteControl === null ?
+			($this->orderQuoteControl = new OrderQuoteControl()) :
+			$this->orderQuoteControl;
 	}
 
 	/**

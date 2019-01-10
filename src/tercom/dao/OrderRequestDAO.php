@@ -20,6 +20,8 @@ class OrderRequestDAO extends GenericDAO
 	public const SELECT_MODE_TERCOM_CANCEL = 2;
 	public const SELECT_MODE_CANCELED = 3;
 	public const SELECT_MODE_QUEUED = 4;
+	public const SELECT_MODE_QUOTING = 5;
+	public const SELECT_MODE_QUOTED = 6;
 
 	private function validate(OrderRequest $orderRequest, bool $validateId): void
 	{
@@ -98,6 +100,8 @@ class OrderRequestDAO extends GenericDAO
 			case self::SELECT_MODE_TERCOM_CANCEL: return sprintf('status = %d', OrderRequest::ORS_CANCEL_BY_TERCOM);
 			case self::SELECT_MODE_CANCELED: return sprintf('status IN(%d, %d)', OrderRequest::ORS_CANCEL_BY_CUSTOMER, OrderRequest::ORS_CANCEL_BY_TERCOM);
 			case self::SELECT_MODE_QUEUED: return sprintf('status = %d', OrderRequest::ORS_QUEUED);
+			case self::SELECT_MODE_QUOTING: return sprintf('status = %d', OrderRequest::ORS_QUOTING);
+			case self::SELECT_MODE_QUOTED: return sprintf('status = %d', OrderRequest::ORS_QUOTED);
 		}
 
 		return 'status IS NOT NULL';

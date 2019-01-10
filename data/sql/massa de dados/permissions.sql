@@ -1,4 +1,14 @@
 
+-- Customer
+
+INSERT INTO customers (id, stateRegistry, cnpj, companyName, fantasyName, email, inactive) VALUES
+(1, '000000000', '00000000000000', 'A Test Customer Company', 'A Test Customer', 'test@test.com.br', false);
+
+-- Customer Profile
+
+INSERT INTO customer_profiles (id, name, assignmentLevel) VALUES
+(1, 'Administrador', 99);
+
 -- TERCOM Profiles
 
 INSERT INTO tercom_profiles (id, name, assignmentLevel) VALUES
@@ -281,7 +291,7 @@ INSERT INTO permissions (packet, action, assignmentLevel) VALUES
 ('orderRequest', 'get', 20),
 ('orderRequest', 'getAll', 20),
 ('orderRequest', 'getByCustomer', 20),
-('orderRequest', 'getByTercom', 20),
+('orderRequest', 'getByTercom', 20)
 ('orderRequest', 'setQueued', 20),
 ('orderRequest', 'setQuoting', 20);
 
@@ -309,7 +319,23 @@ INSERT INTO permissions (packet, action, assignmentLevel) VALUES
 ('orderItemService', 'getAll', 20),
 ('orderItemService', 'avaiable', 20);
 
+-- Order Quote Service
+
+INSERT INTO permissions (packet, action, assignmentLevel) VALUES
+('orderQuote', 'quote', 20),
+('orderQuote', 'quoted', 20),
+('orderQuote', 'get', 20),
+('orderQuote', 'getByCustomer', 20),
+('orderQuote', 'getByCustomerEmployee', 20),
+('orderQuote', 'getByTercomEmployee', 20),
+('orderQuote', 'getAll', 20);
+
 -- TERCOM Profile Permissions
 
 REPLACE INTO tercom_profile_permissions (idTercomProfile, idPermission)
+SELECT 1, id FROM permissions;
+
+-- Customer Profile Permissions
+
+REPLACE INTO customer_profile_permissions (idCustomerProfile, idPermission)
 SELECT 1, id FROM permissions;

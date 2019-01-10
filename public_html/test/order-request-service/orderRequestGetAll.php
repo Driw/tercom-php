@@ -17,6 +17,8 @@ include '../include.php';
 		<option value='<?php echo OrderRequestDAO::SELECT_MODE_CUSTOMER_CANCEL; ?>'>Cancelado pelo Funcionário de Cliente</option>
 		<option value='<?php echo OrderRequestDAO::SELECT_MODE_TERCOM_CANCEL; ?>'>Cancelado pelo Funcionário TERCOM</option>
 		<option value='<?php echo OrderRequestDAO::SELECT_MODE_CANCELED; ?>'>Cancelado</option>
+		<option value='<?php echo OrderRequestDAO::SELECT_MODE_QUOTING; ?>'>Em Cotação</option>
+		<option value='<?php echo OrderRequestDAO::SELECT_MODE_QUOTED; ?>'>Cotados</option>
 	</select></p>
 	<p><button type='submit'>Continuar</button></p>
 </form>

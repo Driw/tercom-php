@@ -405,3 +405,14 @@ CREATE TABLE IF NOT EXISTS order_item_services
 	CONSTRAINT order_item_services_service_fk FOREIGN KEY (idService) REFERENCES services(id),
 	CONSTRAINT order_item_services_provider_fk FOREIGN KEY (idProvider) REFERENCES providers(id)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_general_ci;
+
+CREATE TABLE IF NOT EXISTS order_quotes
+(
+	id INT NOT NULL AUTO_INCREMENT,
+	idOrderRequest INT NOT NULL,
+	status TINYINT(1) DEFAULT 0 NOT NULL,
+	register DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+
+	CONSTRAINT order_quotes_pk PRIMARY KEY (id),
+	CONSTRAINT order_quotes_request_fk FOREIGN KEY (idOrderRequest) REFERENCES order_requests(id)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_general_ci;

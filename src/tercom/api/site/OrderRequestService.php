@@ -204,24 +204,5 @@ class OrderRequestService extends DefaultSiteService
 
 		return $result;
 	}
-
-	/**
-	 * @ApiPermissionAnnotation({"params":["idOrderRequest"]})
-	 * @param ApiContent $content
-	 * @return ApiResultObject
-	 */
-	public function actionSetQuoting(ApiContent $content): ApiResultObject
-	{
-		$tercomEmployee = $this->getTercomEmployee();
-		$idOrderRequest = $content->getParameters()->getInt('idOrderRequest');
-		$orderRequest = $this->getOrderRequestControl()->get($idOrderRequest);
-		$this->getOrderRequestControl()->setQuoting($tercomEmployee, $orderRequest);
-
-		$result = new ApiResultObject();
-		$result->setResult($orderRequest, 'pedido de código %d em realização de cotação', $orderRequest->getId());
-		// TODO adicionar push para informar o cliente que a cotação foi iniciada.
-
-		return $result;
-	}
 }
 
