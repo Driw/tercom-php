@@ -53,6 +53,9 @@ class CustomerProfileDAO extends GenericDAO
 				throw new DAOException('perfil já identificado');
 		}
 
+		// UNIQUE KEY
+		if ($this->existName($customerProfile->getCustomer(), $customerProfile->getName(), $customerProfile->getId())) throw new DAOException('nome indisponível');
+
 		// NOT NULL
 		if (StringUtil::isEmpty($customerProfile->getName())) throw new DAOException('nome não definido');
 		if ($customerProfile->getAssignmentLevel() === 0) throw new DAOException('nível de assinatura não definido');

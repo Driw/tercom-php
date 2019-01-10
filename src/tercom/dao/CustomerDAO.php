@@ -25,6 +25,11 @@ use tercom\entities\lists\Customers;
 class CustomerDAO extends GenericDAO
 {
 	/**
+	 * @var array vetor com o nome das colunas da tabela de clientes.
+	 */
+	public const ALL_COLUMNS = ['id', 'stateRegistry', 'cnpj', 'companyName', 'fantasyName', 'email', 'inactive', 'register'];
+
+	/**
 	 *
 	 * @param Customer $customer
 	 * @param bool $validateID

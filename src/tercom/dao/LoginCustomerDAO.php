@@ -91,12 +91,14 @@ class LoginCustomerDAO extends GenericDAO
 		$loginColumns = $this->buildQuery(LoginDAO::ALL_COLUMNS, 'logins');
 		$customerEmployeeColumns = $this->buildQuery(CustomerEmployeeDAO::ALL_COLUMNS, 'customer_employees', 'customerEmployee');
 		$customerProfileColumns = $this->buildQuery(CustomerProfileDAO::ALL_COLUMNS, 'customer_profiles', 'customerEmployee_customerProfile');
+		$customerColumns = $this->buildQuery(CustomerDAO::ALL_COLUMNS, 'customers', 'customerEmployee_customerProfile_customer');
 
-		return "SELECT $loginColumns, $customerEmployeeColumns, $customerProfileColumns
+		return "SELECT $loginColumns, $customerEmployeeColumns, $customerProfileColumns, $customerColumns
 				FROM logins_customer
 				INNER JOIN logins ON logins.id = logins_customer.idLogin
 				INNER JOIN customer_employees ON customer_employees.id = logins_customer.idCustomerEmployee
-				INNER JOIN customer_profiles ON customer_employees.idCustomerProfile = customer_profiles.id";
+				INNER JOIN customer_profiles ON customer_employees.idCustomerProfile = customer_profiles.id
+				INNER JOIN customers ON customers.id = customer_profiles.idCustomer";
 	}
 
 	/**
@@ -173,6 +175,7 @@ class LoginCustomerDAO extends GenericDAO
 	{
 		$this->parseEntry($entry, 'customerEmployee');
 		$this->parseEntry($entry['customerEmployee'], 'customerProfile');
+		$this->parseEntry($entry['customerEmployee']['customerProfile'], 'customer');
 
 		$loginCustomer = new LoginCustomer();
 		$loginCustomer->fromArray($entry);

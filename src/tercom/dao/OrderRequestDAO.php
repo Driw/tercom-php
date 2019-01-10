@@ -14,7 +14,7 @@ use dProject\MySQL\Result;
  */
 class OrderRequestDAO extends GenericDAO
 {
-	public const ALL_COLUMNS = ['id', 'idCustomerEmployee', 'idTercomEmployee', 'budget', 'expiration', 'register'];
+	public const ALL_COLUMNS = ['id', 'idCustomerEmployee', 'idTercomEmployee', 'budget', 'status', 'expiration', 'register'];
 	public const SELECT_MODE_ALL = 0;
 	public const SELECT_MODE_CUSTOMER_CANCEL = 1;
 	public const SELECT_MODE_TERCOM_CANCEL = 2;
@@ -42,15 +42,16 @@ class OrderRequestDAO extends GenericDAO
 	{
 		$this->validate($orderRequest, false);
 
-		$sql = 'INSERT INTO order_requests (idCustomerEmployee, idTercomEmployee, budget, expiration, register)
-				VALUES (?, ?, ?, ?, ?)';
+		$sql = 'INSERT INTO order_requests (idCustomerEmployee, idTercomEmployee, status, budget, expiration, register)
+				VALUES (?, ?, ?, ?, ?, ?)';
 
 		$query = $this->createQuery($sql);
 		$query->setInteger(1, $orderRequest->getCustomerEmployeeId());
 		$query->setInteger(2, $this->parseNullID($orderRequest->getTercomEmployeeId()));
 		$query->setFloat(3, $orderRequest->getBudget());
-		$query->setDateTime(4, $orderRequest->getExpiration());
-		$query->setDateTime(5, $orderRequest->getRegister());
+		$query->setInteger(4, $orderRequest->getStatus());
+		$query->setDateTime(5, $orderRequest->getExpiration());
+		$query->setDateTime(6, $orderRequest->getRegister());
 
 		if (($result = $query->execute())->isSuccessful())
 			$orderRequest->setId($result->getInsertID());
@@ -63,15 +64,16 @@ class OrderRequestDAO extends GenericDAO
 		$this->validate($orderRequest, true);
 
 		$sql = 'UPDATE order_requests
-				SET idCustomerEmployee = ?, idTercomEmployee = ?, budget = ?, expiration = ?
+				SET idCustomerEmployee = ?, idTercomEmployee = ?, budget = ?, status = ?, expiration = ?
 				WHERE id = ?';
 
 		$query = $this->createQuery($sql);
 		$query->setInteger(1, $orderRequest->getCustomerEmployeeId());
 		$query->setInteger(2, $this->parseNullID($orderRequest->getTercomEmployeeId()));
 		$query->setFloat(3, $orderRequest->getBudget());
-		$query->setDateTime(4, $orderRequest->getExpiration());
-		$query->setInteger(5, $orderRequest->getId());
+		$query->setInteger(4, $orderRequest->getStatus());
+		$query->setDateTime(5, $orderRequest->getExpiration());
+		$query->setInteger(6, $orderRequest->getId());
 
 		return ($query->execute())->isSuccessful();
 	}
@@ -139,7 +141,6 @@ class OrderRequestDAO extends GenericDAO
 		$query->setInteger(1, $idCustomer);
 
 		$result = $query->execute();
-		die(json_encode($query->toSqlQuery()));
 
 		return $this->parseOrderRequests($result);
 	}

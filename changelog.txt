@@ -20,6 +20,12 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+10.01.2018 - 0.3.4.174
+- Corrigido problema onde um perfil de cliente não poderia repetir o nome mesmo que em clientes diferentes.
+- Adicionado constante ALL_COLUMNS à CustomerDAO.
+- Atualizado LoginCustomerDAO para que considere os dados do cliente.
+- Corrigido OrderRequestDAO que não estava considerando o atributo status nas queries.
+
 09.01.2018 - 0.3.4.173
 - Atualizado README e corrigido de massa de dados 'permissions.sql'.
 
