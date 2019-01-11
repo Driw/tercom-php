@@ -79,7 +79,7 @@ class System
 
 		$settings = new ApiSettings();
 		$settings->setParametersOffset(1);
-		$settings->setEnableDebug(true);
+		$settings->setEnableDebug(DEV);
 		$settings->setEnableTimeUp(true);
 		$settings->setEnableResultClass(true);
 		$settings->setEnableContentLength(true);
@@ -106,7 +106,7 @@ class System
 
 		$settings = new ApiSettings();
 		$settings->setParametersOffset(0);
-		$settings->setEnableDebug(true);
+		$settings->setEnableDebug(DEV);
 		$settings->setEnableTimeUp(true);
 		$settings->setEnableResultClass(true);
 		$settings->setEnableContentLength(true);

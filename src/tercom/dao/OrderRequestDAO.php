@@ -92,6 +92,22 @@ class OrderRequestDAO extends GenericDAO
 				LEFT JOIN tercom_employees ON tercom_employees.id = order_requests.idTercomEmployee";
 	}
 
+	private function newSelectFull(): string
+	{
+		$orderRequestColumns = $this->buildQuery(self::ALL_COLUMNS, 'order_requests');
+		$customerEmployeeColumns = $this->buildQuery(CustomerEmployeeDAO::ALL_COLUMNS, 'customer_employees', 'customerEmployee');
+		$tercomEmployeeColumns = $this->buildQuery(TercomEmployeeDAO::ALL_COLUMNS, 'tercom_employees', 'tercomEmployee');
+		$customerProfileColumns = $this->buildQuery(CustomerProfileDAO::ALL_COLUMNS, 'customer_profiles', 'customerEmployee_customerProfile');
+		$customerColumns = $this->buildQuery(CustomerDAO::ALL_COLUMNS, 'customers', 'customerEmployee_customerProfile_customer');
+
+		return "SELECT $orderRequestColumns, $customerEmployeeColumns, $tercomEmployeeColumns, $customerProfileColumns, $customerColumns
+				FROM order_requests
+				INNER JOIN customer_employees ON customer_employees.id = order_requests.idCustomerEmployee
+				LEFT JOIN tercom_employees ON tercom_employees.id = order_requests.idTercomEmployee
+				INNER JOIN customer_profiles ON customer_profiles.id = customer_employees.idCustomerProfile
+				INNER JOIN customers ON customers.id = customer_profiles.idCustomer";
+	}
+
 	private function newAndStatus(int $mode): string
 	{
 		switch ($mode)
@@ -109,7 +125,7 @@ class OrderRequestDAO extends GenericDAO
 
 	public function select(int $idOrderRequest): ?OrderRequest
 	{
-		$sqlSelect = $this->newSelect();
+		$sqlSelect = $this->newSelectFull();
 		$sql = "$sqlSelect
 				WHERE order_requests.id = ?";
 
@@ -224,6 +240,8 @@ class OrderRequestDAO extends GenericDAO
 	private function newOrderRequest(array $entry): OrderRequest
 	{
 		$this->parseEntry($entry, 'customerEmployee', 'tercomEmployee');
+		$this->parseEntry($entry['customerEmployee'], 'customerProfile');
+		$this->parseEntry($entry['customerEmployee']['customerProfile'], 'customer');
 
 		$orderRequest = new OrderRequest();
 		$orderRequest->fromArray($entry);

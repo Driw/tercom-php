@@ -20,6 +20,17 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+11.01.2018 - 0.3.4.178
+- Validação de cliente ao obter dados de uma solicitação de pedido com get(), OrderRequestControl.
+- Configuração da API para habilitar o modo de DEBUG apenas em ambiente de desenvolvimento.
+- Corrigido nome dos parâmetros de selectWithOrderRequest() que estavam repetindo, OrderItemProductDAO.
+- Modificado OrderRequestDAO para que seja possível obter dados full (perfil de cliente e cliente).
+	- Será considerado apenas para select(), usado na nova validação em OrderRequestControl.
+- Corrigido ProductPriceDAO que estava considerando INNER JOIN ao invés de LEFT JOIN para categoria de produto (atributo opcional).
+
+10.01.2018 - 0.3.4.177
+- Implementação da entidade, DAO, controle e serviço para gerenciamento dos produtos e serviços para cotação do pedido.
+
 10.01.2018 - 0.3.4.176
 - Adicionado scripts de teste do serviço para gerenciamento das cotações de pedido.
 

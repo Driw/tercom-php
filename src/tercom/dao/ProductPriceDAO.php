@@ -178,7 +178,7 @@ class ProductPriceDAO extends GenericDAO
 				FROM product_prices
 				INNER JOIN products ON product_prices.idProduct = products.id
 				INNER JOIN product_units ON products.idProductUnit = product_units.id
-				INNER JOIN product_categories ON products.idProductCategory = product_categories.id
+				LEFT JOIN product_categories ON products.idProductCategory = product_categories.id
 				INNER JOIN product_packages ON product_prices.idProductPackage = product_packages.id
 				LEFT JOIN product_types ON product_prices.idProductType = product_types.id
 				LEFT JOIN manufacturers ON product_prices.idManufacturer = manufacturers.id

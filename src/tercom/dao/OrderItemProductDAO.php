@@ -187,17 +187,17 @@ class OrderItemProductDAO extends GenericDAO
 	/**
 	 *
 	 * @param int $idOrderRequest
-	 * @param int $idOrderRequest
+	 * @param int $idOrderItemProduct
 	 * @return OrderItemProduct
 	 */
-	public function selectWithOrderRequest(int $idOrderRequest, int $idOrderRequest): ?OrderItemProduct
+	public function selectWithOrderRequest(int $idOrderRequest, int $idOrderItemProduct): ?OrderItemProduct
 	{
 		$sqlSelect = $this->newSelect();
 		$sql = "$sqlSelect
 				WHERE order_item_products.id = ? AND order_item_products.idOrderRequest = ?";
 
 		$query = $this->createQuery($sql);
-		$query->setInteger(1, $idOrderRequest);
+		$query->setInteger(1, $idOrderItemProduct);
 		$query->setInteger(2, $idOrderRequest);
 
 		$result = $query->execute();

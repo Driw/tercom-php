@@ -39,6 +39,10 @@ class OrderRequestControl extends GenericControl
 		if (($orderRequest = $this->orderRequestDAO->select($idOrderRequest)) === null)
 			throw OrderRequestException::newSelected();
 
+		if (!$this->isTercomManagement())
+			if ($orderRequest->getCustomerEmployee()->getCustomerProfile()->getCustomerId() !== $this->getCustomerLoggedId())
+				throw TercomException::newCustomerInvliad();
+
 		if (!$onlyView)
 		{
 			switch ($orderRequest->getStatus())
