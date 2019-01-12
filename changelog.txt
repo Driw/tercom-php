@@ -20,6 +20,9 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+12.01.2018 - 0.3.4.181
+- Adicionado scripts de testes do serviço para gerenciamento das cotações de produtos de pedido.
+
 12.01.2018 - 0.3.4.180
 - Implementação da entidade, DAO, controle e serviço para gerenciamento das cotações de produtos de pedido.
 - Ajustes nos scripts de permissão para que funcionem com REPLACE ao invés de INSERT.
