@@ -241,7 +241,9 @@ class OrderRequestDAO extends GenericDAO
 	{
 		$this->parseEntry($entry, 'customerEmployee', 'tercomEmployee');
 		$this->parseEntry($entry['customerEmployee'], 'customerProfile');
-		$this->parseEntry($entry['customerEmployee']['customerProfile'], 'customer');
+
+		if (isset($entry['customerEmployee']['customerProfile']))
+			$this->parseEntry($entry['customerEmployee']['customerProfile'], 'customer');
 
 		$orderRequest = new OrderRequest();
 		$orderRequest->fromArray($entry);

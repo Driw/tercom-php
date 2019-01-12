@@ -1,22 +1,7 @@
 
--- Customer
-
-INSERT INTO customers (id, stateRegistry, cnpj, companyName, fantasyName, email, inactive) VALUES
-(1, '000000000', '00000000000000', 'A Test Customer Company', 'A Test Customer', 'test@test.com.br', false);
-
--- Customer Profile
-
-INSERT INTO customer_profiles (id, name, assignmentLevel) VALUES
-(1, 'Administrador', 99);
-
--- TERCOM Profiles
-
-INSERT INTO tercom_profiles (id, name, assignmentLevel) VALUES
-(1, 'Administrador', 99);
-
 -- Provider Service
 
-INSERT INTO permissions (packet, action, assignmentLevel) VALUES
+REPLACE INTO permissions (packet, action, assignmentLevel) VALUES
 ('provider', 'settings', 20),
 ('provider', 'add', 20),
 ('provider', 'set', 20),
@@ -31,7 +16,7 @@ INSERT INTO permissions (packet, action, assignmentLevel) VALUES
 
 -- Provider Contact Service
 
-INSERT INTO permissions (packet, action, assignmentLevel) VALUES
+REPLACE INTO permissions (packet, action, assignmentLevel) VALUES
 ('providerContact', 'settings', 20),
 ('providerContact', 'add', 20),
 ('providerContact', 'set', 20),
@@ -44,7 +29,7 @@ INSERT INTO permissions (packet, action, assignmentLevel) VALUES
 
 -- Manufacturer Service
 
-INSERT INTO permissions (packet, action, assignmentLevel) VALUES
+REPLACE INTO permissions (packet, action, assignmentLevel) VALUES
 ('manufacturer', 'settings', 20),
 ('manufacturer', 'add', 20),
 ('manufacturer', 'set', 20),
@@ -56,7 +41,7 @@ INSERT INTO permissions (packet, action, assignmentLevel) VALUES
 
 -- Product Unit Service
 
-INSERT INTO permissions (packet, action, assignmentLevel) VALUES
+REPLACE INTO permissions (packet, action, assignmentLevel) VALUES
 ('productUnit', 'settings', 20),
 ('productUnit', 'add', 20),
 ('productUnit', 'set', 20),
@@ -68,7 +53,7 @@ INSERT INTO permissions (packet, action, assignmentLevel) VALUES
 
 -- Product Family Service
 
-INSERT INTO permissions (packet, action, assignmentLevel) VALUES
+REPLACE INTO permissions (packet, action, assignmentLevel) VALUES
 ('productFamily', 'settings', 20),
 ('productFamily', 'add', 20),
 ('productFamily', 'set', 20),
@@ -83,7 +68,7 @@ INSERT INTO permissions (packet, action, assignmentLevel) VALUES
 
 -- Product Group Service
 
-INSERT INTO permissions (packet, action, assignmentLevel) VALUES
+REPLACE INTO permissions (packet, action, assignmentLevel) VALUES
 ('productGroup', 'settings', 20),
 ('productGroup', 'add', 20),
 ('productGroup', 'set', 20),
@@ -96,7 +81,7 @@ INSERT INTO permissions (packet, action, assignmentLevel) VALUES
 
 -- Product Subgroup Service
 
-INSERT INTO permissions (packet, action, assignmentLevel) VALUES
+REPLACE INTO permissions (packet, action, assignmentLevel) VALUES
 ('productSubgroup', 'settings', 20),
 ('productSubgroup', 'add', 20),
 ('productSubgroup', 'set', 20),
@@ -109,7 +94,7 @@ INSERT INTO permissions (packet, action, assignmentLevel) VALUES
 
 -- Product Sector Service
 
-INSERT INTO permissions (packet, action, assignmentLevel) VALUES
+REPLACE INTO permissions (packet, action, assignmentLevel) VALUES
 ('productSector', 'settings', 20),
 ('productSector', 'add', 20),
 ('productSector', 'set', 20),
@@ -121,7 +106,7 @@ INSERT INTO permissions (packet, action, assignmentLevel) VALUES
 
 -- Product Service
 
-INSERT INTO permissions (packet, action, assignmentLevel) VALUES
+REPLACE INTO permissions (packet, action, assignmentLevel) VALUES
 ('product', 'settings', 20),
 ('product', 'add', 20),
 ('product', 'set', 20),
@@ -133,7 +118,7 @@ INSERT INTO permissions (packet, action, assignmentLevel) VALUES
 
 -- Product Package Service
 
-INSERT INTO permissions (packet, action, assignmentLevel) VALUES
+REPLACE INTO permissions (packet, action, assignmentLevel) VALUES
 ('productPackage', 'settings', 20),
 ('productPackage', 'add', 20),
 ('productPackage', 'set', 20),
@@ -145,7 +130,7 @@ INSERT INTO permissions (packet, action, assignmentLevel) VALUES
 
 -- Product Type Service
 
-INSERT INTO permissions (packet, action, assignmentLevel) VALUES
+REPLACE INTO permissions (packet, action, assignmentLevel) VALUES
 ('productType', 'settings', 20),
 ('productType', 'add', 20),
 ('productType', 'set', 20),
@@ -157,7 +142,7 @@ INSERT INTO permissions (packet, action, assignmentLevel) VALUES
 
 -- Product Price Service
 
-INSERT INTO permissions (packet, action, assignmentLevel) VALUES
+REPLACE INTO permissions (packet, action, assignmentLevel) VALUES
 ('productPrice', 'settings', 20),
 ('productPrice', 'add', 20),
 ('productPrice', 'set', 20),
@@ -168,7 +153,7 @@ INSERT INTO permissions (packet, action, assignmentLevel) VALUES
 
 -- Service Service
 
-INSERT INTO permissions (packet, action, assignmentLevel) VALUES
+REPLACE INTO permissions (packet, action, assignmentLevel) VALUES
 ('service', 'settings', 20),
 ('service', 'add', 20),
 ('service', 'set', 20),
@@ -180,7 +165,7 @@ INSERT INTO permissions (packet, action, assignmentLevel) VALUES
 
 -- Service Price Service
 
-INSERT INTO permissions (packet, action, assignmentLevel) VALUES
+REPLACE INTO permissions (packet, action, assignmentLevel) VALUES
 ('servicePrice', 'settings', 20),
 ('servicePrice', 'add', 20),
 ('servicePrice', 'set', 20),
@@ -192,7 +177,7 @@ INSERT INTO permissions (packet, action, assignmentLevel) VALUES
 
 -- Customer Service
 
-INSERT INTO permissions (packet, action, assignmentLevel) VALUES
+REPLACE INTO permissions (packet, action, assignmentLevel) VALUES
 ('customer', 'settings', 20),
 ('customer', 'add', 20),
 ('customer', 'set', 20),
@@ -205,7 +190,7 @@ INSERT INTO permissions (packet, action, assignmentLevel) VALUES
 
 -- Customer Profile Service
 
-INSERT INTO permissions (packet, action, assignmentLevel) VALUES
+REPLACE INTO permissions (packet, action, assignmentLevel) VALUES
 ('customerProfile', 'settings', 20),
 ('customerProfile', 'add', 20),
 ('customerProfile', 'set', 20),
@@ -217,7 +202,7 @@ INSERT INTO permissions (packet, action, assignmentLevel) VALUES
 
 -- Customer Employee Service
 
-INSERT INTO permissions (packet, action, assignmentLevel) VALUES
+REPLACE INTO permissions (packet, action, assignmentLevel) VALUES
 ('customerEmployee', 'settings', 20),
 ('customerEmployee', 'add', 20),
 ('customerEmployee', 'set', 20),
@@ -230,7 +215,7 @@ INSERT INTO permissions (packet, action, assignmentLevel) VALUES
 
 -- Address Service
 
-INSERT INTO permissions (packet, action, assignmentLevel) VALUES
+REPLACE INTO permissions (packet, action, assignmentLevel) VALUES
 ('address', 'settings', 20),
 ('address', 'add', 20),
 ('address', 'set', 20),
@@ -240,7 +225,7 @@ INSERT INTO permissions (packet, action, assignmentLevel) VALUES
 
 -- Tercom Profile Service
 
-INSERT INTO permissions (packet, action, assignmentLevel) VALUES
+REPLACE INTO permissions (packet, action, assignmentLevel) VALUES
 ('tercomProfile', 'settings', 20),
 ('tercomProfile', 'add', 20),
 ('tercomProfile', 'set', 20),
@@ -251,7 +236,7 @@ INSERT INTO permissions (packet, action, assignmentLevel) VALUES
 
 -- Tercom Employee Service
 
-INSERT INTO permissions (packet, action, assignmentLevel) VALUES
+REPLACE INTO permissions (packet, action, assignmentLevel) VALUES
 ('tercomEmployee', 'settings', 20),
 ('tercomEmployee', 'add', 20),
 ('tercomEmployee', 'set', 20),
@@ -263,7 +248,7 @@ INSERT INTO permissions (packet, action, assignmentLevel) VALUES
 
 -- Manage Permission Service
 
-INSERT INTO permissions (packet, action, assignmentLevel) VALUES
+REPLACE INTO permissions (packet, action, assignmentLevel) VALUES
 ('managePermissions', 'settings', 20),
 ('managePermissions', 'add', 20),
 ('managePermissions', 'set', 20),
@@ -273,7 +258,7 @@ INSERT INTO permissions (packet, action, assignmentLevel) VALUES
 
 -- Phone Service
 
-INSERT INTO permissions (packet, action, assignmentLevel) VALUES
+REPLACE INTO permissions (packet, action, assignmentLevel) VALUES
 ('phone', 'settings', 20),
 ('phone', 'add', 20),
 ('phone', 'set', 20),
@@ -283,7 +268,7 @@ INSERT INTO permissions (packet, action, assignmentLevel) VALUES
 
 -- Order Request Service
 
-INSERT INTO permissions (packet, action, assignmentLevel) VALUES
+REPLACE INTO permissions (packet, action, assignmentLevel) VALUES
 ('orderRequest', 'settings', 20),
 ('orderRequest', 'add', 20),
 ('orderRequest', 'set', 20),
@@ -291,13 +276,13 @@ INSERT INTO permissions (packet, action, assignmentLevel) VALUES
 ('orderRequest', 'get', 20),
 ('orderRequest', 'getAll', 20),
 ('orderRequest', 'getByCustomer', 20),
-('orderRequest', 'getByTercom', 20)
+('orderRequest', 'getByTercom', 20),
 ('orderRequest', 'setQueued', 20),
 ('orderRequest', 'setQuoting', 20);
 
 -- Order Item Product Service
 
-INSERT INTO permissions (packet, action, assignmentLevel) VALUES
+REPLACE INTO permissions (packet, action, assignmentLevel) VALUES
 ('orderItemProduct', 'settings', 20),
 ('orderItemProduct', 'add', 20),
 ('orderItemProduct', 'set', 20),
@@ -309,7 +294,7 @@ INSERT INTO permissions (packet, action, assignmentLevel) VALUES
 
 -- Order Item Service Service
 
-INSERT INTO permissions (packet, action, assignmentLevel) VALUES
+REPLACE INTO permissions (packet, action, assignmentLevel) VALUES
 ('orderItemService', 'settings', 20),
 ('orderItemService', 'add', 20),
 ('orderItemService', 'set', 20),
@@ -321,7 +306,7 @@ INSERT INTO permissions (packet, action, assignmentLevel) VALUES
 
 -- Order Quote Service
 
-INSERT INTO permissions (packet, action, assignmentLevel) VALUES
+REPLACE INTO permissions (packet, action, assignmentLevel) VALUES
 ('orderQuote', 'quote', 20),
 ('orderQuote', 'quoted', 20),
 ('orderQuote', 'get', 20),
@@ -329,6 +314,16 @@ INSERT INTO permissions (packet, action, assignmentLevel) VALUES
 ('orderQuote', 'getByCustomerEmployee', 20),
 ('orderQuote', 'getByTercomEmployee', 20),
 ('orderQuote', 'getAll', 20);
+
+-- Order Quote Product Service
+
+REPLACE INTO permissions (packet, action, assignmentLevel) VALUES
+('quotedProductPrices', 'add', 20),
+('quotedProductPrices', 'remove', 20),
+('quotedProductPrices', 'removeAll', 20),
+('quotedProductPrices', 'get', 20),
+('quotedProductPrices', 'getAll', 20),
+('quotedProductPrices', 'prices', 20);
 
 -- TERCOM Profile Permissions
 

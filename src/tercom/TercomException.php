@@ -73,5 +73,13 @@ class TercomException extends \Exception
 	{
 		return new TercomException('ação não autorizada', ApiStatus::PERMISSION_CUSTOMER_INVALID);
 	}
+
+	/**
+	 * @return TercomException
+	 */
+	public static function newResponsability(): TercomException
+	{
+		return new TercomException('você não é reponsável por estes dados', ApiStatus::PERMISSION_RESPONSABILITY);
+	}
 }
 

@@ -3,8 +3,8 @@
 namespace tercom;
 
 use dProject\Primitive\Session;
-use tercom\entities\Phone;
 use dProject\Primitive\StringUtil;
+use tercom\entities\Phone;
 
 IncludeThirdParty('simple_html_dom');
 
@@ -77,15 +77,13 @@ class GeradorDeDados
 				'response' => $jsonResponse,
 			];
 
-		header('Content-type: text/html; charset=utf-8');
-
-		echo "<b>URL:</b> <a href='$url'>$url</a><br>".PHP_EOL;
-		echo "<b>JSON Error:</b> " .json_last_error_msg(). "<br>".PHP_EOL;
-		echo "<b>Response:</b> length(".strlen($response).")<br>".PHP_EOL;
-		echo "$response<br>".PHP_EOL;
-		echo "<b>POST:</b><br>".PHP_EOL;
-		var_dump($parameters);
-		exit;
+		return [
+			'endpoint' => $endpoint,
+			'websercice' => $webservice,
+			'fullUrl' => $url,
+			'post' => $parameters,
+			'response' => $response,
+		];
 	}
 
 	private static function call($acao, $parameters)

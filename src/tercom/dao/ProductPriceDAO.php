@@ -4,6 +4,7 @@ namespace tercom\dao;
 
 use dProject\MySQL\Result;
 use dProject\Primitive\StringUtil;
+use tercom\entities\OrderItemProduct;
 use tercom\entities\ProductPrice;
 use tercom\entities\lists\ProductPrices;
 use tercom\exceptions\ProductPriceException;
@@ -239,6 +240,31 @@ class ProductPriceDAO extends GenericDAO
 		$query->setInteger(1, $idProduct);
 		$query->setInteger(2, $idProvider);
 		$query->setInteger(3, $idProvider);
+
+		$result = $query->execute();
+
+		return $this->parseProductPrices($result);
+	}
+
+	/**
+	 * Seleciona os dados dos preços de produtos disponíveis para um determinado item de produto de pedido.
+	 * @param OrderItemProduct $orderItemProduct objeto do tipo item de produto de pedido à filtrar.
+	 * @return ProductPrices aquisição da lista de preços de produtos disponíveis.
+	 */
+	public function selectByItem(OrderItemProduct $orderItemProduct): ProductPrices
+	{
+		$sqlOrder = $orderItemProduct->isBetterPrice() ? 'ASC' :  'DESC';
+		$sqlSelect = $this->newFullSelect();
+		$sql = "$sqlSelect
+				WHERE	product_prices.idProduct = ?
+					AND ? IN (product_prices.idProvider, 0)
+					AND ? IN (product_prices.idManufacturer, 0)
+				ORDER BY product_prices.price $sqlOrder";
+
+		$query = $this->createQuery($sql);
+		$query->setInteger(1, $orderItemProduct->getProductId());
+		$query->setInteger(2, $orderItemProduct->getProviderId());
+		$query->setInteger(3, $orderItemProduct->getManufacturerId());
 
 		$result = $query->execute();
 

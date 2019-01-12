@@ -3,9 +3,11 @@
 namespace tercom\control;
 
 use tercom\dao\ProductPriceDAO;
+use tercom\entities\OrderItemProduct;
 use tercom\entities\ProductPrice;
 use tercom\entities\lists\ProductPrices;
 use tercom\exceptions\ProductPriceException;
+use tercom\TercomException;
 
 /**
  * Controle de Preço de Produto
@@ -87,6 +89,20 @@ class ProductPriceControl extends GenericControl
 	public function getByProduct(int $idProduct): ProductPrices
 	{
 		return $this->productPriceDAO->selectPrices($idProduct);
+	}
+
+	/**
+	 * Obtém os dados dos preços de produtos disponíveis para um determinado item de produto de pedido.
+	 * @param OrderItemProduct $orderItemProduct objeto do tipo item de produto de pedido à filtrar.
+	 * @throws TercomException apenas se não for solicitado por um funcionário da TERCOM.
+	 * @return ProductPrices aquisição da lista de preços de produtos disponíveis.
+	 */
+	public function searchByItem(OrderItemProduct $orderItemProduct): ProductPrices
+	{
+		if (!$this->isTercomManagement())
+			throw TercomException::newPermissionRestrict();
+
+		return $this->productPriceDAO->selectByItem($orderItemProduct);
 	}
 
 	/**

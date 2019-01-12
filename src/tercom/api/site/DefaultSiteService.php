@@ -17,13 +17,17 @@ use tercom\control\CustomerProfileControl;
 use tercom\control\LoginCustomerControl;
 use tercom\control\LoginTercomControl;
 use tercom\control\ManufacturerControl;
+use tercom\control\OrderItemProductControl;
+use tercom\control\OrderItemServiceControl;
 use tercom\control\OrderQuoteControl;
+use tercom\control\QuotedOrderProductControl;
 use tercom\control\PermissionControl;
 use tercom\control\PhoneControl;
 use tercom\control\ProductCategoryControl;
 use tercom\control\ProductControl;
 use tercom\control\ProductPackageControl;
 use tercom\control\ProductPriceControl;
+use tercom\control\QuotedProductPriceControl;
 use tercom\control\ProductTypeControl;
 use tercom\control\ProductUnitControl;
 use tercom\control\ProviderContactControl;
@@ -39,8 +43,6 @@ use tercom\entities\LoginCustomer;
 use tercom\entities\LoginTercom;
 use tercom\entities\TercomEmployee;
 use tercom\TercomException;
-use tercom\control\OrderItemProductControl;
-use tercom\control\OrderItemServiceControl;
 
 /**
  * @see ApiServiceInterface
@@ -161,6 +163,14 @@ class DefaultSiteService extends ApiServiceInterface
 	 * @var OrderQuoteControl
 	 */
 	private $orderQuoteControl;
+	/**
+	 * @var QuotedOrderProductControl
+	 */
+	private $quotedOrderProductControl;
+	/**
+	 * @var QuotedProductPriceControl
+	 */
+	private $quotedProductPriceControl;
 
 	/**
 	 * Cria uma nova instância de um serviço para gerenciamento de stores dos produtos no sistema.
@@ -511,6 +521,26 @@ class DefaultSiteService extends ApiServiceInterface
 		return $this->orderQuoteControl === null ?
 			($this->orderQuoteControl = new OrderQuoteControl()) :
 			$this->orderQuoteControl;
+	}
+
+	/**
+	 * @return QuotedOrderProductControl
+	 */
+	protected function getQuotedOrderProductControl(): QuotedOrderProductControl
+	{
+		return $this->quotedOrderProductControl === null ?
+			($this->quotedOrderProductControl = new QuotedOrderProductControl()) :
+			$this->quotedOrderProductControl;
+	}
+
+	/**
+	 * @return QuotedProductPriceControl
+	 */
+	protected function getQuotedProductPriceControl(): QuotedProductPriceControl
+	{
+		return $this->quotedProductPriceControl === null ?
+			($this->quotedProductPriceControl = new QuotedProductPriceControl()) :
+			$this->quotedProductPriceControl;
 	}
 
 	/**
