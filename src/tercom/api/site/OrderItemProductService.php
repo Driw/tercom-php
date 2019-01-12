@@ -40,12 +40,10 @@ class OrderItemProductService extends DefaultSiteService
 	 */
 	public function actionAdd(ApiContent $content): ApiResultObject
 	{
-		$customerEmployee = $this->getCustomerEmployee();
-
 		$post = $content->getPost();
 		$idProduct = $post->getInt('idProduct');
 		$idOrderRequest = $content->getParameters()->getInt('idOrderRequest');
-		$orderRequest = $this->getOrderRequestControl()->get($idOrderRequest, $customerEmployee);
+		$orderRequest = $this->getOrderRequestControl()->get($idOrderRequest);
 		$product = $this->getProductControl()->get($idProduct);
 
 		$orderItemProduct = new OrderItemProduct();
@@ -85,7 +83,7 @@ class OrderItemProductService extends DefaultSiteService
 		$parameters = $content->getParameters();
 		$idOrderRequest = $parameters->getInt('idOrderRequest');
 		$idOrderItemProduct = $parameters->getInt('idOrderItemProduct');
-		$orderRequest = $this->getOrderRequestControl()->get($idOrderRequest, $this->getCustomerEmployee());
+		$orderRequest = $this->getOrderRequestControl()->get($idOrderRequest);
 		$orderItemProduct = $this->getOrderItemProductControl()->get($idOrderItemProduct, $idOrderRequest);
 
 		$orderItemProduct->setBetterPrice($post->getBoolean('betterPrice'));
@@ -122,7 +120,7 @@ class OrderItemProductService extends DefaultSiteService
 		$parameters = $content->getParameters();
 		$idOrderRequest = $parameters->getInt('idOrderRequest');
 		$idOrderItemProduct = $parameters->getInt('idOrderItemProduct');
-		$orderRequest = $this->getOrderRequestControl()->get($idOrderRequest, $this->getCustomerEmployeeNull());
+		$orderRequest = $this->getOrderRequestControl()->get($idOrderRequest);
 		$orderItemProduct = $this->getOrderItemProductControl()->get($idOrderItemProduct, $orderRequest->getId());
 		$this->getOrderItemProductControl()->remove($orderRequest, $orderItemProduct);
 
@@ -141,7 +139,7 @@ class OrderItemProductService extends DefaultSiteService
 	public function actionRemoveAll(ApiContent $content): ApiResultObject
 	{
 		$idOrderRequest = $content->getParameters()->getInt('idOrderRequest');
-		$orderRequest = $this->getOrderRequestControl()->get($idOrderRequest, $this->getCustomerEmployeeNull());
+		$orderRequest = $this->getOrderRequestControl()->get($idOrderRequest);
 		$this->getOrderItemProductControl()->removeAll($orderRequest);
 
 		$result = new ApiResultObject();
@@ -178,7 +176,7 @@ class OrderItemProductService extends DefaultSiteService
 	public function actionGetAll(ApiContent $content): ApiResultObject
 	{
 		$idOrderRequest = $content->getParameters()->getInt('idOrderRequest');
-		$orderRequest = $this->getOrderRequestControl()->get($idOrderRequest, $this->getCustomerEmployeeNull());
+		$orderRequest = $this->getOrderRequestControl()->get($idOrderRequest, true);
 		$orderItemProducts = $this->getOrderItemProductControl()->getAll($orderRequest);
 
 		$result = new ApiResultObject();
@@ -213,7 +211,7 @@ class OrderItemProductService extends DefaultSiteService
 	{
 		$idProduct = $content->getParameters()->getInt('value');
 		$idOrderRequest = $content->getParameters()->getInt('idOrderRequest');
-		$orderRequest = $this->getOrderRequestControl()->get($idOrderRequest, $this->getLoginCustomerControl()->getCurrent());
+		$orderRequest = $this->getOrderRequestControl()->get($idOrderRequest, true);
 		$product = $this->getProductControl()->get($idProduct);
 		$avaiable = $this->getOrderItemProductControl()->avaiableProduct($orderRequest, $product);
 

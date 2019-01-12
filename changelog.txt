@@ -20,6 +20,11 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+12.01.2018 - 0.3.4.179
+- Tabela renomeada de 'quoted_order_product' para 'quoted_order_products' conforme esperado.
+- Corrigido problema na utilização de OrderItemProductService devido a validação de funcionário de cliente.
+- Adicionado script para dados falsos com finalidade de facilitar testes dos scripts futuros.
+
 11.01.2018 - 0.3.4.178
 - Validação de cliente ao obter dados de uma solicitação de pedido com get(), OrderRequestControl.
 - Configuração da API para habilitar o modo de DEBUG apenas em ambiente de desenvolvimento.

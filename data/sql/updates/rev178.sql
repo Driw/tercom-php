@@ -1,4 +1,6 @@
 
+-- Novas Tabelas
+
 CREATE TABLE IF NOT EXISTS quoted_product_prices
 (
 	id INT AUTO_INCREMENT,
