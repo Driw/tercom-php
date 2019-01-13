@@ -20,6 +20,9 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+13.01.2018 - 0.3.4.183
+- Correção da massa de dados de 'fake.sql'.
+
 13.01.2018 - 0.3.4.182
 - Documentação das entidades OrderRequest, OrderItemProduct e OrderItemService e DAOs OrderItemProductDAO, OrderRequestDAO e QuotedOrderProductDAO.
 - Adicionado métodos para validação de 'status' em OrderRequest e adicionado à insert() o uso de setRegisterCurrent(), OrderRequestDAO.
