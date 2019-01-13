@@ -7,7 +7,11 @@ use dProject\Primitive\ObjectUtil;
 use dProject\Primitive\StringUtil;
 
 /**
+ * Item de Produto de Pedido
  *
+ * Um pedido possui dois tipos de itens, esta classe representa um dos tipos de itens que é o item de produto.
+ * Cada item de produto é responsável por detalhar as preferências e um dos produtos do pedido para cotação.
+ * Os detalhes incluem preferência de fornecedor, fabricante e se deseja o melhor preço (mais barato).
  *
  * @see AdvancedObject
  * @see Product
@@ -19,37 +23,37 @@ use dProject\Primitive\StringUtil;
 class OrderItemProduct extends AdvancedObject
 {
 	/**
-	 * @var int
+	 * @var int limite de caracteres para observações do item.
 	 */
 	public const MAX_OBSERVATIONS_LEN = 128;
 
 	/**
-	 * @var int
+	 * @var int código de identificação único do item de produto de pedido.
 	 */
 	private $id;
 	/**
-	 * @var Product
+	 * @var Product produto do qual deve ser cotado no pedido.
 	 */
 	private $product;
 	/**
-	 * @var Provider
+	 * @var Provider preferência de fornecedor.
 	 */
 	private $provider;
 	/**
-	 * @var Manufacturer
+	 * @var Manufacturer preferência de fabricante.
 	 */
 	private $manufacturer;
 	/**
-	 * @var bool
+	 * @var bool melhor preço ordena do mais barato para o mais caro.
 	 */
 	private $betterPrice;
 	/**
-	 * @var string
+	 * @var string observações adicionais referente ao item.
 	 */
 	private $observations;
 
 	/**
-	 *
+	 * Cria uma nova instância de um item de produto de pedido.
 	 */
 	public function __construct()
 	{
@@ -58,7 +62,7 @@ class OrderItemProduct extends AdvancedObject
 	}
 
 	/**
-	 * @return int
+	 * @return int aquisição do código de identificação único do item de produto de pedido.
 	 */
 	public function getId(): int
 	{
@@ -66,7 +70,7 @@ class OrderItemProduct extends AdvancedObject
 	}
 
 	/**
-	 * @param int $id
+	 * @param int $id código de identificação único do item de produto de pedido.
 	 */
 	public function setId(int $id): void
 	{
@@ -74,7 +78,7 @@ class OrderItemProduct extends AdvancedObject
 	}
 
 	/**
-	 * @return Product
+	 * @return Product aquisição do produto do qual deve ser cotado no pedido.
 	 */
 	public function getProduct(): Product
 	{
@@ -82,7 +86,7 @@ class OrderItemProduct extends AdvancedObject
 	}
 
 	/**
-	 * @return int
+	 * @return int aquisição do código de identificação do produto do qual deve ser cotado no pedido.
 	 */
 	public function getProductId(): int
 	{
@@ -90,17 +94,15 @@ class OrderItemProduct extends AdvancedObject
 	}
 
 	/**
-	 * @param Product $product
-	 * @return OrderItemProduct
+	 * @param Product $product produto do qual deve ser cotado no pedido.
 	 */
-	public function setProduct(Product $product): OrderItemProduct
+	public function setProduct(Product $product): void
 	{
 		$this->product = $product;
-		return $this;
 	}
 
 	/**
-	 * @return Provider
+	 * @return Provider aquisição da preferência de fornecedor.
 	 */
 	public function getProvider(): Provider
 	{
@@ -108,17 +110,7 @@ class OrderItemProduct extends AdvancedObject
 	}
 
 	/**
-	 * @param Provider $provider
-	 * @return OrderItemProduct
-	 */
-	public function setProvider(Provider $provider): OrderItemProduct
-	{
-		$this->provider = $provider;
-		return $this;
-	}
-
-	/**
-	 * @return int
+	 * @return int aquisição do código de identificação da preferência de fornecedor.
 	 */
 	public function getProviderId(): int
 	{
@@ -126,7 +118,15 @@ class OrderItemProduct extends AdvancedObject
 	}
 
 	/**
-	 * @return Manufacturer
+	 * @param Provider $provider preferência de fornecedor.
+	 */
+	public function setProvider(Provider $provider): void
+	{
+		$this->provider = $provider;
+	}
+
+	/**
+	 * @return Manufacturer aquisição da preferência de fabricante.
 	 */
 	public function getManufacturer(): Manufacturer
 	{
@@ -134,7 +134,7 @@ class OrderItemProduct extends AdvancedObject
 	}
 
 	/**
-	 * @return int
+	 * @return int aquisição do código de identificação da preferência de fabricante.
 	 */
 	public function getManufacturerId(): int
 	{
@@ -142,17 +142,15 @@ class OrderItemProduct extends AdvancedObject
 	}
 
 	/**
-	 * @param Manufacturer $manufacturer
-	 * @return OrderItemProduct
+	 * @param Manufacturer $manufacturer preferência de fabricante.
 	 */
-	public function setManufacturer(Manufacturer $manufacturer): OrderItemProduct
+	public function setManufacturer(Manufacturer $manufacturer): void
 	{
 		$this->manufacturer = $manufacturer;
-		return $this;
 	}
 
 	/**
-	 * @return bool
+	 * @return bool aquisição do melhor preço ordena do mais barato para o mais caro.
 	 */
 	public function isBetterPrice(): bool
 	{
@@ -160,17 +158,15 @@ class OrderItemProduct extends AdvancedObject
 	}
 
 	/**
-	 * @param bool $betterPrice
-	 * @return OrderItemProduct
+	 * @param bool $betterPrice melhor preço ordena do mais barato para o mais caro.
 	 */
-	public function setBetterPrice(bool $betterPrice): OrderItemProduct
+	public function setBetterPrice(bool $betterPrice): void
 	{
 		$this->betterPrice = $betterPrice;
-		return $this;
 	}
 
 	/**
-	 * @return string|NULL
+	 * @return string|NULL aquisição das observações adicionais referente ao item.
 	 */
 	public function getObservations(): ?string
 	{
@@ -178,7 +174,7 @@ class OrderItemProduct extends AdvancedObject
 	}
 
 	/**
-	 * @param string|NULL $observations
+	 * @param string|NULL $observations observações adicionais referente ao item.
 	 */
 	public function setObservations(?string $observations): void
 	{

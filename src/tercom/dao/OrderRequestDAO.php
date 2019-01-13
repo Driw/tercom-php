@@ -43,6 +43,7 @@ class OrderRequestDAO extends GenericDAO
 	public function insert(OrderRequest $orderRequest): bool
 	{
 		$this->validate($orderRequest, false);
+		$orderRequest->setRegisterCurrent();
 
 		$sql = 'INSERT INTO order_requests (idCustomerEmployee, idTercomEmployee, status, budget, expiration, register)
 				VALUES (?, ?, ?, ?, ?, ?)';

@@ -7,7 +7,11 @@ use dProject\Primitive\ObjectUtil;
 use dProject\Primitive\StringUtil;
 
 /**
+ * Item de Serviço de Serviço
  *
+ * Um pedido possui dois tipos de itens, esta classe representa um dos tipos de itens que é o item de serviço.
+ * Cada item de serviço é responsável por detalhar as preferências e um dos serviços do pedido para cotação.
+ * Os detalhes incluem preferência de fornecedor e se deseja o melhor preço (mais barato).
  *
  * @see AdvancedObject
  * @see Service
@@ -18,33 +22,33 @@ use dProject\Primitive\StringUtil;
 class OrderItemService extends AdvancedObject
 {
 	/**
-	 * @var int
+	 * @var int limite de caracteres para observações do item.
 	 */
 	public const MAX_OBSERVATIONS_LEN = 128;
 
 	/**
-	 * @var int
+	 * @var int código de identificação único do item de serviço de pedido.
 	 */
 	private $id;
 	/**
-	 * @var Service
+	 * @var Service serviço do qual deve ser cotado no pedido.
 	 */
 	private $service;
 	/**
-	 * @var Provider
+	 * @var Provider preferência de fornecedor.
 	 */
 	private $provider;
 	/**
-	 * @var bool
+	 * @var bool melhor preço ordena do mais barato para o mais caro.
 	 */
 	private $betterPrice;
 	/**
-	 * @var string
+	 * @var string observações adicionais referente ao item.
 	 */
 	private $observations;
 
 	/**
-	 *
+	 * Cria uma nova instância de um item de serviço de pedido.
 	 */
 	public function __construct()
 	{
@@ -53,7 +57,7 @@ class OrderItemService extends AdvancedObject
 	}
 
 	/**
-	 * @return int
+	 * @return int aquisição do código de identificação único do item de serviço de pedido.
 	 */
 	public function getId(): int
 	{
@@ -61,7 +65,7 @@ class OrderItemService extends AdvancedObject
 	}
 
 	/**
-	 * @param int $id
+	 * @param int $id código de identificação único do item de serviço de pedido.
 	 */
 	public function setId(int $id): void
 	{
@@ -69,7 +73,7 @@ class OrderItemService extends AdvancedObject
 	}
 
 	/**
-	 * @return Service
+	 * @return Service aquisição do serviço do qual deve ser cotado no pedido.
 	 */
 	public function getService(): Service
 	{
@@ -77,7 +81,7 @@ class OrderItemService extends AdvancedObject
 	}
 
 	/**
-	 * @return int
+	 * @return int aquisição do código de identificação do serviço do qual deve ser cotado no pedido.
 	 */
 	public function getServiceId(): int
 	{
@@ -85,17 +89,15 @@ class OrderItemService extends AdvancedObject
 	}
 
 	/**
-	 * @param Service $Service
-	 * @return OrderItemService
+	 * @param Service $service serviço do qual deve ser cotado no pedido.
 	 */
-	public function setService(Service $Service): OrderItemService
+	public function setService(Service $service): void
 	{
-		$this->service = $Service;
-		return $this;
+		$this->service = $service;
 	}
 
 	/**
-	 * @return Provider
+	 * @return Provider aquisição da preferência de fornecedor.
 	 */
 	public function getProvider(): Provider
 	{
@@ -103,7 +105,7 @@ class OrderItemService extends AdvancedObject
 	}
 
 	/**
-	 * @return int
+	 * @return int aquisição do código de identificação da preferência de fornecedor.
 	 */
 	public function getProviderId(): int
 	{
@@ -111,17 +113,15 @@ class OrderItemService extends AdvancedObject
 	}
 
 	/**
-	 * @param Provider $provider
-	 * @return OrderItemService
+	 * @param Provider $provider preferência de fornecedor.
 	 */
-	public function setProvider(Provider $provider): OrderItemService
+	public function setProvider(Provider $provider): void
 	{
 		$this->provider = $provider;
-		return $this;
 	}
 
 	/**
-	 * @return bool
+	 * @return bool aquisição do melhor preço ordena do mais barato para o mais caro.
 	 */
 	public function isBetterPrice(): bool
 	{
@@ -129,17 +129,15 @@ class OrderItemService extends AdvancedObject
 	}
 
 	/**
-	 * @param bool $betterPrice
-	 * @return OrderItemService
+	 * @param bool $betterPrice melhor preço ordena do mais barato para o mais caro.
 	 */
-	public function setBetterPrice(bool $betterPrice): OrderItemService
+	public function setBetterPrice(bool $betterPrice): void
 	{
 		$this->betterPrice = $betterPrice;
-		return $this;
 	}
 
 	/**
-	 * @return string|NULL
+	 * @return string|NULL aquisição das observações adicionais referente ao item.
 	 */
 	public function getObservations(): ?string
 	{
@@ -147,14 +145,14 @@ class OrderItemService extends AdvancedObject
 	}
 
 	/**
-	 * @param string|NULL $observations
+	 * @param string|NULL $observations observações adicionais referente ao item.
 	 */
 	public function setObservations(?string $observations): void
 	{
 		if ($observations !== null && !StringUtil::hasMaxLength($observations, self::MAX_OBSERVATIONS_LEN))
 			throw EntityParseException::new('observações deve possuir até %d caracteres', self::MAX_OBSERVATIONS_LEN);
 
-		$this->observations = $observations;
+			$this->observations = $observations;
 	}
 
 	/**
@@ -166,8 +164,9 @@ class OrderItemService extends AdvancedObject
 		return [
 			'service' => Service::class,
 			'provider' => Provider::class,
+			'manufacturer' => Manufacturer::class,
 			'betterPrice' => ObjectUtil::TYPE_BOOLEAN,
-			'observations' => ObjectUtil::TYPE_STRING,
+			'observation' => ObjectUtil::TYPE_STRING,
 		];
 	}
 }

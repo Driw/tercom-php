@@ -12,7 +12,14 @@ use tercom\entities\lists\OrderItemProducts;
 use tercom\exceptions\OrderItemProductException;
 
 /**
+ * DAO para Item de Produto de Pedido
  *
+ * Classe responsável pela comunicação completa do sistema para com o banco de dados.
+ * Sua responsabilidade é gerenciar os dados dos itens de produto de pedido, incluindo todas operações.
+ * Estas operações consiste em: adicionar, inserir, atualizar excluir e selcionar itens de produto de pedido</b>.
+ *
+ * Item de produto de pedido obrigatoriamente precisa ter um funcionário de cliente, produto e solicitação de pedido de cotação.
+ * Se informado fabricante deve existir e se informado um fornecedor também deve existir.
  *
  * @see GenericDAO
  * @see OrderRequest
@@ -24,16 +31,18 @@ use tercom\exceptions\OrderItemProductException;
 class OrderItemProductDAO extends GenericDAO
 {
 	/**
-	 * @var array
+	 * @var array vetor com o nome das colunas da tabela de item de produto de pedido.
 	 */
 	public const ALL_COLUMNS = ['id', 'idOrderRequest', 'idProduct', 'idProvider', 'idManufacturer', 'betterPrice', 'observations'];
 
 	/**
-	 *
-	 * @param OrderRequest|NULL $orderRequest
-	 * @param OrderItemProduct $orderItemProduct
-	 * @param bool $validateId
-	 * @throws OrderItemProductException
+	 * Procedimento interno para validação dos dados de um item de produto de pedido ao inserir, atualizar e excluir.
+	 * Cotação de produto de pedido precisa ter apenas um item de produto de pedido existente.
+	 * @param OrderRequest|NULL $orderRequest objeto do tipo solicitação de pedido de cotação à considerar,
+	 * caso seja informado o valor NULL será desconsiderado a validação do mesmo.
+	 * @param OrderItemProduct $orderItemProduct objeto do tipo item de produto de pedido à validar.
+	 * @param bool $validateId true para validar o código de identificação único ou false caso contrário.
+	 * @throws OrderItemProductException caso algum dos dados da cotação de produto de pedido não estejam de acordo.
 	 */
 	private function validate(?OrderRequest $orderRequest, OrderItemProduct $orderItemProduct, bool $validateId): void
 	{
@@ -59,11 +68,10 @@ class OrderItemProductDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param OrderRequest $orderRequest
-	 * @param OrderItemProduct $orderItemProduct
-	 * @throws OrderItemProductException
-	 * @return bool
+	 * Insere um novo item de produto de pedido no banco de dados e atualiza o mesmo com o identificador gerado.
+	 * @param OrderRequest $orderRequest objeto do tipo solicitação de pedido de cotação à vincular.
+	 * @param OrderItemProduct $orderItemProduct objeto do tipo item de produto de pedido à adicionar.
+	 * @return bool true se conseguir inserir ou false caso contrário.
 	 */
 	public function insert(OrderRequest $orderRequest, OrderItemProduct $orderItemProduct): bool
 	{
@@ -88,10 +96,9 @@ class OrderItemProductDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param OrderItemProduct $orderItemProduct
-	 * @throws OrderItemProductException
-	 * @return bool
+	 * Atualiza os dados de um item de produto de pedido já existente no banco de dados.
+	 * @param OrderItemProduct $orderItemProduct objeto do tipo item de produto de pedido à atualizar.
+	 * @return bool true se conseguir atualizar ou false caso contrário.
 	 */
 	public function update(OrderItemProduct $orderItemProduct): bool
 	{
@@ -113,10 +120,9 @@ class OrderItemProductDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param OrderItemProduct $orderItemProduct
-	 * @throws OrderItemProductException
-	 * @return bool
+	 * Exlui os dados de um item de produto de pedido já existente no banco de dados.
+	 * @param OrderItemProduct $orderItemProduct objeto do tipo item de produto de pedido à exluir.
+	 * @return bool true se conseguir exluir ou false caso contrário.
 	 */
 	public function delete(OrderItemProduct $orderItemProduct): bool
 	{
@@ -132,9 +138,9 @@ class OrderItemProductDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param OrderRequest $orderRequest
-	 * @return bool
+	 * Exlui todos os itens de produto de pedido vinculados a uma solicitação de pedido de cotação.
+	 * @param OrderRequest $orderRequest objeto do tipo solicitação de pedido de cotação à considerar.
+	 * @return bool true se conseguir excluir ou false caso contrário.
 	 */
 	public function deleteAll(OrderRequest $orderRequest): bool
 	{
@@ -148,8 +154,8 @@ class OrderItemProductDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @return string
+	 * Procedimento interno para centralizar e agilizar a manutenção de queries.
+	 * @return string aquisição da string de consulta simples para SELECT.
 	 */
 	private function newSelect(): string
 	{
@@ -166,9 +172,9 @@ class OrderItemProductDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param int $idOrderItemProduct
-	 * @return OrderItemProduct
+	 * Seleciona os dados de um item de produto de pedido através do código de identificação.
+	 * @param int $idOrderItemProduct código de identificação único do item de produto de pedido.
+	 * @return OrderItemProduct|NULL aquisição do item de produto de pedido selecionado.
 	 */
 	public function select(int $idOrderItemProduct): ?OrderItemProduct
 	{
@@ -185,10 +191,10 @@ class OrderItemProductDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param int $idOrderRequest
-	 * @param int $idOrderItemProduct
-	 * @return OrderItemProduct
+	 * Seleciona os dados de um item de produto de pedido através da solicitação e item do pedido de cotação.
+	 * @param int $idOrderRequest objeto do tipo solicitação de pedido de cotação à considerar.
+	 * @param int $idOrderItemProduct objeto do tipo item de produto de cotação à considerar.
+	 * @return OrderItemProduct|NULL aquisição do item de produto de pedido selecionado.
 	 */
 	public function selectWithOrderRequest(int $idOrderRequest, int $idOrderItemProduct): ?OrderItemProduct
 	{
@@ -206,9 +212,9 @@ class OrderItemProductDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param OrderRequest $orderRequest
-	 * @return OrderItemProducts
+	 * Seleciona os dados dos itens de produto de pedido através de uma solicitação de pedido de cotação.
+	 * @param OrderRequest $orderRequest objeto do tipo solicitação de pedido de cotação à considerar.
+	 * @return OrderItemProducts aquisição da lista com os itens de produto de pedido selecionados.
 	 */
 	public function selectAll(OrderRequest $orderRequest): OrderItemProducts
 	{
@@ -225,10 +231,10 @@ class OrderItemProductDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param OrderRequest $orderRequest
-	 * @param Product $product
-	 * @return bool
+	 * Verifica se um determinado produto já existe como item de produto de pedido.
+	 * @param OrderRequest $orderRequest objeto do tipo solicitação de pedido de cotação à considerar.
+	 * @param Product $product objeto do tipo produto do qual será verificado.
+	 * @return bool true se existir ou false caso contrário.
 	 */
 	public function exist(OrderRequest $orderRequest, Product $product): bool
 	{
@@ -244,9 +250,9 @@ class OrderItemProductDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param Product $product
-	 * @return bool
+	 * Verifica se um determinado produto existe no banco de dados.
+	 * @param Product $product objeto do tipo produto à verificar.
+	 * @return bool true se existir ou false caso contrário.
 	 */
 	public function existProduct(Product $product): bool
 	{
@@ -261,9 +267,9 @@ class OrderItemProductDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param Provider $provider
-	 * @return bool
+	 * Verifica se um determinado fornecedor existe no banco de dados.
+	 * @param Provider $provider objeto do tipo fornecedor à verficiar.
+	 * @return bool true se existir ou false caso contrário.
 	 */
 	public function existProvider(Provider $provider): bool
 	{
@@ -278,9 +284,9 @@ class OrderItemProductDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param Manufacturer $manufacturer
-	 * @return bool
+	 * Verifica se um determinado fabricante existe no banco de dados.
+	 * @param Manufacturer $manufacturer objeto do tipo fabricante à verificar.
+	 * @return bool true se existir ou false caso contrário.
 	 */
 	public function existManufacturer(Manufacturer $manufacturer): bool
 	{
@@ -295,9 +301,9 @@ class OrderItemProductDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param Result $result
-	 * @return OrderItemProduct|NULL
+	 * Procedimento interno para analisar o resultado de uma consulta e criar um objeto de item de produto de pedido.
+	 * @param Result $result referência do resultado da consulta obtido.
+	 * @return OrderItemProduct|NULL objeto do tipo cotação de produto de pedido com dados carregados ou NULL se não houver resultado.
 	 */
 	private function parseOrderItemProduct(Result $result): ?OrderItemProduct
 	{
@@ -305,9 +311,9 @@ class OrderItemProductDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param Result $result
-	 * @return OrderItemProducts
+	 * Procedimento inerno para analisar o resultado de uma consulta e criar os itens de produto de pedido.
+	 * @param Result $result referência do resultado da consulta obtido.
+	 * @return OrderItemProducts aquisição da lista dos itens de produto de pedido a partir da consulta.
 	 */
 	private function parseOrderItemProducts(Result $result): OrderItemProducts
 	{
@@ -323,9 +329,9 @@ class OrderItemProductDAO extends GenericDAO
 	}
 
 	/**
-	 *
-	 * @param array $entry
-	 * @return OrderItemProduct
+	 * Procedimento interno para criar um objeto do tipo item de produto de pedido e carregar os dados de um registro.
+	 * @param array $entry vetor contendo os dados do registro obtido de uma consulta.
+	 * @return OrderItemProduct aquisição de um objeto do tipo item de produto de pedido com dados carregados.
 	 */
 	private function newOrderItemProduct(array $entry): OrderItemProduct
 	{
