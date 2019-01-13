@@ -116,6 +116,25 @@ class ManufacturerService extends DefaultSiteService
 	}
 
 	/**
+	 * Obtém uma lista contendo todos os fabricantes que oferecem ao menos um preço de produto.
+	 * Necessário informar o código de identificação do produto à ser filtrado.
+	 * @ApiPermissionAnnotation({"params":["idProduct"]})
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @return ApiResultObject aquisição do resultado com a lista de fornecedores encontrados.
+	 */
+	public function actionGetByProduct(ApiContent $content): ApiResultObject
+	{
+		$idProduct = $content->getParameters()->getInt('idProduct');
+		$product = $this->getProductControl()->get($idProduct);
+		$manufacturers = $this->getManufacturerControl()->getByProduct($product);
+
+		$result = new ApiResultObject();
+		$result->setResult($manufacturers, 'encontrado %d fabricantes com preços para "%s"', $manufacturers->size(), $product->getName());
+
+		return $result;
+	}
+
+	/**
 	 * Obtém uma lista contendo todos os fabricantes existentes no sistema.
 	 * @ApiPermissionAnnotation({})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.

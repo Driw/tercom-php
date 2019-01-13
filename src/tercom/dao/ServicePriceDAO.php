@@ -30,7 +30,7 @@ class ServicePriceDAO extends GenericDAO
 	/**
 	 * @var array nome das colunas da tabela de preços de serviço.
 	 */
-	public const ALL_COLUMNS = ['idService', 'idProvider', 'name', 'additionalDescription', 'price'];
+	public const ALL_COLUMNS = ['idService', 'idProvider', 'name', 'additionalDescription', 'price', 'lastUpdate'];
 
 	/**
 	 * Procedimento interno para validação dos dados de um preço de serviço ao inserir e/ou atualizar.
@@ -58,9 +58,10 @@ class ServicePriceDAO extends GenericDAO
 	public function insert(ServicePrice $servicePrice): bool
 	{
 		$this->validate($servicePrice, false);
+		$servicePrice->getLastUpdate()->setTimestamp(time());
 
-		$sql = "INSERT INTO service_values (idService, idProvider, name, additionalDescription, price)
-				VALUES (?, ?, ?, ?, ?)";
+		$sql = "INSERT INTO service_values (idService, idProvider, name, additionalDescription, price, lastUpdate)
+				VALUES (?, ?, ?, ?, ?, ?)";
 
 		$query = $this->createQuery($sql);
 		$query->setInteger(1, $servicePrice->getServiceId());
@@ -68,6 +69,7 @@ class ServicePriceDAO extends GenericDAO
 		$query->setString(3, $servicePrice->getName());
 		$query->setString(4, $servicePrice->getAdditionalDescription());
 		$query->setFloat(5, $servicePrice->getPrice());
+		$query->setDateTime(6, $servicePrice->getLastUpdate());
 		$query->setEmptyAsNull(true);
 
 		$result = $query->execute();
@@ -86,17 +88,19 @@ class ServicePriceDAO extends GenericDAO
 	public function update(ServicePrice $servicePrice): bool
 	{
 		$this->validate($servicePrice, true);
+		$servicePrice->getLastUpdate()->setTimestamp(time());
 
 		$sql = "UPDATE service_values
-				SET name = ?, additionalDescription = ?, price = ?
+				SET name = ?, additionalDescription = ?, price = ?, lastUpdate = ?
 				WHERE idService = ? AND idProvider = ?";
 
 		$query = $this->createQuery($sql);
 		$query->setString(1, $servicePrice->getName());
 		$query->setString(2, $servicePrice->getAdditionalDescription());
 		$query->setFloat(3, $servicePrice->getPrice());
-		$query->setInteger(4, $servicePrice->getServiceId());
-		$query->setInteger(5, $servicePrice->getProviderId());
+		$query->setDateTime(4, $servicePrice->getLastUpdate());
+		$query->setInteger(5, $servicePrice->getServiceId());
+		$query->setInteger(6, $servicePrice->getProviderId());
 		$query->setEmptyAsNull(true);
 
 		$result = $query->execute();
@@ -130,7 +134,7 @@ class ServicePriceDAO extends GenericDAO
 	 */
 	private function newSelect(): string
 	{
-		return "SELECT id, idService, idProvider, name, additionalDescription, price
+		return "SELECT id, idService, idProvider, name, additionalDescription, price, lastUpdate
 				FROM service_values";
 	}
 

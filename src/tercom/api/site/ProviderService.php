@@ -115,6 +115,44 @@ class ProviderService extends DefaultSiteService
 	}
 
 	/**
+	 * Obtém uma lista contendo todos os fornecedores que oferecem ao menos um preço de produto.
+	 * Necessário informar o código de identificação do produto à ser filtrado.
+	 * @ApiPermissionAnnotation({"params":["idProduct"]})
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @return ApiResultObject aquisição do resultado com a lista de fornecedores encontrados.
+	 */
+	public function actionGetByProduct(ApiContent $content): ApiResultObject
+	{
+		$idProduct = $content->getParameters()->getInt('idProduct');
+		$product = $this->getProductControl()->get($idProduct);
+		$providers = $this->getProviderControl()->getByProduct($product);
+
+		$result = new ApiResultObject();
+		$result->setResult($providers, 'encontrado %d fornecedores com preços para "%s"', $providers->size(), $product->getName());
+
+		return $result;
+	}
+
+	/**
+	 * Obtém uma lista contendo todos os fornecedores que oferecem ao menos um preço de serviço.
+	 * Necessário informar o código de identificação do serviço à ser filtrado.
+	 * @ApiPermissionAnnotation({"params":["idService"]})
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @return ApiResultObject aquisição do resultado com a lista de fornecedores encontrados.
+	 */
+	public function actionGetByService(ApiContent $content): ApiResultObject
+	{
+		$idService = $content->getParameters()->getInt('idService');
+		$service = $this->getServiceControl()->get($idService);
+		$providers = $this->getProviderControl()->getByService($service);
+
+		$result = new ApiResultObject();
+		$result->setResult($providers, 'encontrado %d fornecedores com preços para "%s"', $providers->size(), $service->getName());
+
+		return $result;
+	}
+
+	/**
 	 * Obtém uma lista contendo todos os fornecedores registrados no sistema.
 	 * @ApiPermissionAnnotation({})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.

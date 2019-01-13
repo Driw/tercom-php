@@ -4,6 +4,7 @@ namespace tercom\control;
 
 use tercom\dao\ManufacturerDAO;
 use tercom\entities\Manufacturer;
+use tercom\entities\Product;
 use tercom\entities\lists\Manufacturers;
 use tercom\exceptions\ManufacturerException;
 
@@ -67,6 +68,16 @@ class ManufacturerControl extends GenericControl
 			throw ManufacturerException::newNotFound();
 
 		return $manufacturer;
+	}
+
+	/**
+	 * Obtém uma lista de fabricantes que oferecem ao menos um preço de produto do produto:
+	 * @param Product $product objeto do tipo produto á ser considerado no filtro.
+	 * @return Manufacturers aquisição da lista de fabricantes encontrados.
+	 */
+	public function getByProduct(Product $product): Manufacturers
+	{
+		return $this->manufactureDAO->selectByProduct($product);
 	}
 
 	/**

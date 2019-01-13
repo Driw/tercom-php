@@ -3,7 +3,9 @@
 namespace tercom\control;
 
 use tercom\dao\ProviderDAO;
+use tercom\entities\Product;
 use tercom\entities\Provider;
+use tercom\entities\Service;
 use tercom\entities\lists\Providers;
 use tercom\exceptions\ProviderException;
 use tercom\Functions;
@@ -111,6 +113,26 @@ class ProviderControl extends GenericControl
 			throw ProviderException::newNotSelected();
 
 		return $provider;
+	}
+
+	/**
+	 * Obtém uma lista de fornecedores que oferecem ao menos um preço de produto do produto:
+	 * @param Product $product objeto do tipo produto á ser considerado no filtro.
+	 * @return Providers aquisição da lista de fornecedores encontrados.
+	 */
+	public function getByProduct(Product $product): Providers
+	{
+		return $this->providerDAO->selectByProduct($product);
+	}
+
+	/**
+	 * Obtém uma lista de fornecedores que oferecem ao menos um preço de serviço do produto:
+	 * @param Service $service objeto do tipo serviço á ser considerado no filtro.
+	 * @return Providers aquisição da lista de fornecedores encontrados.
+	 */
+	public function getByService(Service $service): Providers
+	{
+		return $this->providerDAO->selectByService($service);
 	}
 
 	/**

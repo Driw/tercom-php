@@ -6,6 +6,8 @@ REPLACE INTO permissions (packet, action, assignmentLevel) VALUES
 ('provider', 'add', 20),
 ('provider', 'set', 20),
 ('provider', 'get', 20),
+('provider', 'getByProduct', 20),
+('provider', 'getByService', 20),
 ('provider', 'getAll', 20),
 ('provider', 'list', 20),
 ('provider', 'search', 20),
@@ -35,6 +37,7 @@ REPLACE INTO permissions (packet, action, assignmentLevel) VALUES
 ('manufacturer', 'set', 20),
 ('manufacturer', 'remove', 20),
 ('manufacturer', 'get', 20),
+('manufacturer', 'getByProduct', 20),
 ('manufacturer', 'getAll', 20),
 ('manufacturer', 'search', 20),
 ('manufacturer', 'avaiable', 20);

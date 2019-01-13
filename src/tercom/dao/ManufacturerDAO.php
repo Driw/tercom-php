@@ -4,6 +4,7 @@ namespace tercom\dao;
 
 use dProject\MySQL\Result;
 use tercom\entities\Manufacturer;
+use tercom\entities\Product;
 use tercom\entities\lists\Manufacturers;
 use tercom\exceptions\ManufacturerException;
 use dProject\Primitive\StringUtil;
@@ -146,6 +147,27 @@ class ManufacturerDAO extends GenericDAO
 		$result = $query->execute();
 
 		return $this->parseManufacturer($result);
+	}
+
+	/**
+	 * Seleciona os dados dos fabricantes que oferecem algum preço de produto no sistema.
+	 * @param Product $product objeto do tipo produto à ser considerado na filtragem.
+	 * @return Manufacturers aquisição da lista com os fabricantes disponíveis.
+	 */
+	public function selectByProduct(Product $product): Manufacturers
+	{
+		$providerColumns = $this->buildQuery(self::ALL_COLUMNS, 'manufacturers');
+		$sql = "SELECT $providerColumns
+				FROM manufacturers
+				INNER JOIN product_prices ON product_prices.idManufacturer = manufacturers.id
+				WHERE product_prices.idProduct = ?";
+
+		$query = $this->createQuery($sql);
+		$query->setInteger(1, $product->getId());
+
+		$result = $query->execute();
+
+		return $this->parseManufacturers($result);
 	}
 
 	/**

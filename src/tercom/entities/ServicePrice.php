@@ -61,6 +61,10 @@ class ServicePrice extends AdvancedObject
 	 * @var float preço do serviço.
 	 */
 	private $price;
+	/**
+	 * @var \DateTime horário da última atualização do preço de produto.
+	 */
+	private $lastUpdate;
 
 	/**
 	 *
@@ -71,6 +75,7 @@ class ServicePrice extends AdvancedObject
 		$this->name = '';
 		$this->additionalDescription = '';
 		$this->price = 0.0;
+		$this->lastUpdate = new \DateTime();
 	}
 
 	/**
@@ -209,6 +214,33 @@ class ServicePrice extends AdvancedObject
 	}
 
 	/**
+	 * @return \DateTime aquisição do horário da última atualização do preço de serviço.
+	 */
+	public function getLastUpdate(): \DateTime
+	{
+		return $this->lastUpdate;
+	}
+
+	/**
+	 * @param \DateTime $datetime horário da última atualização do preço de serviço.
+	 */
+	public function setLastUpdate(\DateTime $lastUpdate): void
+	{
+		$this->lastUpdate = $lastUpdate;
+	}
+
+	/**
+	 * O sistema por padrão considera o preço do produto desatualizado após 7 dias.
+	 * @return bool true se for necessário atualizar o preço do produto ou false caso contrário.
+	 */
+	public function isNeedUpdate(): bool
+	{
+		$nextUpdateTimestamp = strtotime('+7 days', $this->lastUpdate->getTimestamp());
+
+		return $nextUpdateTimestamp < time();
+	}
+
+	/**
 	 * {@inheritDoc}
 	 * @see \dProject\Primitive\AdvancedObject::getAttributeTypes()
 	 */
@@ -221,6 +253,7 @@ class ServicePrice extends AdvancedObject
 			'name' => ObjectUtil::TYPE_STRING,
 			'additionalDescription' => ObjectUtil::TYPE_STRING,
 			'price' => ObjectUtil::TYPE_FLOAT,
+			'lastUpdate' => ObjectUtil::TYPE_DATE,
 		];
 	}
 }

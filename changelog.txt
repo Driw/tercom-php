@@ -20,6 +20,14 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+13.01.2018 - 0.3.4.184
+- Adicionado novas massas de dados em 'fake.sql' para serviços e preços de serviço.
+- Adicionada novas ações ao serviço de fornecedores e fabricantes:
+	- 'provider/getByProduct' encontra fornecedores que oferecem ao menos um preço de um produto.
+	- 'provider/getByService' encontra fornecedores que oferecem ao menos um preço de um serviço.
+	- 'manufacturer/getByproduct' encontra fabricantes que oferecem ao menos um preço de um produto.
+- Adicionado campo necessário à Service 'lastUpdate' para indicar quando foi a última atualização dos dados de serviço.
+
 13.01.2018 - 0.3.4.183
 - Correção da massa de dados de 'fake.sql'.
 

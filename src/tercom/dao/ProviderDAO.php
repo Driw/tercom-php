@@ -4,7 +4,9 @@ namespace tercom\dao;
 
 use dProject\MySQL\Result;
 use dProject\Primitive\StringUtil;
+use tercom\entities\Product;
 use tercom\entities\Provider;
+use tercom\entities\Service;
 use tercom\entities\lists\Providers;
 use tercom\exceptions\ProviderException;
 
@@ -200,6 +202,48 @@ class ProviderDAO extends GenericDAO
 		$result = $query->execute();
 
 		return $this->parseProvider($result);
+	}
+
+	/**
+	 * Seleciona os dados dos fornecedores que oferecem algum preço de produto no sistema.
+	 * @param Product $product objeto do tipo produto à ser considerado na filtragem.
+	 * @return Providers aquisição da lista com os fornecedores disponíveis.
+	 */
+	public function selectByProduct(Product $product): Providers
+	{
+		$providerColumns = $this->buildQuery(self::ALL_COLUMNS, 'providers');
+		$sql = "SELECT $providerColumns
+				FROM providers
+				INNER JOIN product_prices ON product_prices.idProvider = providers.id
+				WHERE product_prices.idProduct = ?";
+
+		$query = $this->createQuery($sql);
+		$query->setInteger(1, $product->getId());
+
+		$result = $query->execute();
+
+		return $this->parseProviders($result);
+	}
+
+	/**
+	 * Seleciona os dados dos fornecedores que oferecem algum preço de serviço no sistema.
+	 * @param Service $service objeto do tipo serviço à ser considerado na filtragem.
+	 * @return Providers aquisição da lista com os fornecedores disponíveis.
+	 */
+	public function selectByService(Service $service): Providers
+	{
+		$providerColumns = $this->buildQuery(self::ALL_COLUMNS, 'providers');
+		$sql = "SELECT $providerColumns
+				FROM providers
+				INNER JOIN service_prices ON service_prices.idProvider = providers.id
+				WHERE service_prices.idService = ?";
+
+		$query = $this->createQuery($sql);
+		$query->setInteger(1, $service->getId());
+
+		$result = $query->execute();
+
+		return $this->parseProviders($result);
 	}
 
 	/**
