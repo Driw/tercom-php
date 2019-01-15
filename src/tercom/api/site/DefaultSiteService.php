@@ -27,11 +27,13 @@ use tercom\control\ProductCategoryControl;
 use tercom\control\ProductControl;
 use tercom\control\ProductPackageControl;
 use tercom\control\ProductPriceControl;
+use tercom\control\QuotedOrderServiceControl;
 use tercom\control\QuotedProductPriceControl;
 use tercom\control\ProductTypeControl;
 use tercom\control\ProductUnitControl;
 use tercom\control\ProviderContactControl;
 use tercom\control\ProviderControl;
+use tercom\control\QuotedServicePriceControl;
 use tercom\control\ServiceControl;
 use tercom\control\ServicePriceControl;
 use tercom\control\TercomEmployeeControl;
@@ -171,6 +173,14 @@ class DefaultSiteService extends ApiServiceInterface
 	 * @var QuotedProductPriceControl
 	 */
 	private $quotedProductPriceControl;
+	/**
+	 * @var QuotedOrderServiceControl
+	 */
+	private $quotedOrderServiceControl;
+	/**
+	 * @var QuotedServicePriceControl
+	 */
+	private $quotedServicePriceControl;
 
 	/**
 	 * Cria uma nova instância de um serviço para gerenciamento de stores dos produtos no sistema.
@@ -541,6 +551,26 @@ class DefaultSiteService extends ApiServiceInterface
 		return $this->quotedProductPriceControl === null ?
 			($this->quotedProductPriceControl = new QuotedProductPriceControl()) :
 			$this->quotedProductPriceControl;
+	}
+
+	/**
+	 * @return QuotedOrderServiceControl
+	 */
+	protected function getQuotedOrderServiceControl(): QuotedOrderServiceControl
+	{
+		return $this->quotedOrderServiceControl === null ?
+			($this->quotedOrderServiceControl = new QuotedOrderServiceControl()) :
+			$this->quotedOrderServiceControl;
+	}
+
+	/**
+	 * @return QuotedServicePriceControl
+	 */
+	protected function getQuotedServicePriceControl(): QuotedServicePriceControl
+	{
+		return $this->quotedServicePriceControl === null ?
+			($this->quotedServicePriceControl = new QuotedServicePriceControl()) :
+			$this->quotedServicePriceControl;
 	}
 
 	/**

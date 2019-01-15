@@ -328,6 +328,14 @@ REPLACE INTO permissions (packet, action, assignmentLevel) VALUES
 ('quotedProductPrice', 'getAll', 20),
 ('quotedProductPrice', 'prices', 20);
 
+REPLACE INTO permissions (packet, action, assignmentLevel) VALUES
+('quotedServicePrice', 'add', 20),
+('quotedServicePrice', 'remove', 20),
+('quotedServicePrice', 'removeAll', 20),
+('quotedServicePrice', 'get', 20),
+('quotedServicePrice', 'getAll', 20),
+('quotedServicePrice', 'prices', 20);
+
 -- TERCOM Profile Permissions
 
 REPLACE INTO tercom_profile_permissions (idTercomProfile, idPermission)
