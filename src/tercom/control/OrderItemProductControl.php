@@ -8,6 +8,8 @@ use tercom\entities\Product;
 use tercom\dao\OrderItemProductDAO;
 use tercom\entities\lists\OrderItemProducts;
 use tercom\exceptions\OrderItemProductException;
+use tercom\TercomException;
+use tercom\exceptions\OrderRequestException;
 
 /**
  *
@@ -34,6 +36,15 @@ class OrderItemProductControl extends GenericControl
 		$this->orderItemProductDAO = new OrderItemProductDAO();
 	}
 
+	private function validateOrderRequest(OrderRequest $orderRequest): void
+	{
+		if ($orderRequest->getCustomerEmployee()->getCustomerProfile()->getCustomerId() !== $this->getCustomerLoggedId())
+			throw TercomException::newCustomerInvliad();
+
+		if ($orderRequest->getStatus() !== OrderRequest::ORS_NONE)
+			throw OrderRequestException::newNotManagin();
+	}
+
 	/**
 	 * @param OrderRequest $orderRequest
 	 * @param OrderItemProduct $orderItemProduct
@@ -41,6 +52,8 @@ class OrderItemProductControl extends GenericControl
 	 */
 	public function add(OrderRequest $orderRequest, OrderItemProduct $orderItemProduct): void
 	{
+		$this->validateOrderRequest($orderRequest);
+
 		if (!$this->orderItemProductDAO->insert($orderRequest, $orderItemProduct))
 			throw OrderItemProductException::newInserted();
 	}
@@ -53,6 +66,8 @@ class OrderItemProductControl extends GenericControl
 	 */
 	public function set(OrderRequest $orderRequest, OrderItemProduct $orderItemProduct): void
 	{
+		$this->validateOrderRequest($orderRequest);
+
 		if (!$this->orderItemProductDAO->exist($orderRequest, $orderItemProduct->getProduct()))
 			throw OrderItemProductException::newBinded();
 
@@ -66,6 +81,8 @@ class OrderItemProductControl extends GenericControl
 	 */
 	public function remove(OrderRequest $orderRequest, OrderItemProduct $orderItemProduct): void
 	{
+		$this->validateOrderRequest($orderRequest);
+
 		if (!$this->orderItemProductDAO->exist($orderRequest, $orderItemProduct->getProduct()))
 			throw OrderItemProductException::newBinded();
 
@@ -78,6 +95,8 @@ class OrderItemProductControl extends GenericControl
 	 */
 	public function removeAll(OrderRequest $orderRequest): void
 	{
+		$this->validateOrderRequest($orderRequest);
+
 		if (!$this->orderItemProductDAO->deleteAll($orderRequest))
 			throw OrderItemProductException::newDeletedAll();
 	}

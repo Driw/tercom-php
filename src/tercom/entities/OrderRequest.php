@@ -151,7 +151,7 @@ class OrderRequest extends AdvancedObject
 	 */
 	public function setStatus(int $status): void
 	{
-		if (!self::hasStatus($status))
+		if (!self::hasStatusDescription($status))
 			throw EntityParseException::new('estado desconhecido (status: %d)', $status);
 
 		$this->status = $status;
@@ -286,7 +286,7 @@ class OrderRequest extends AdvancedObject
 	/**
 	 * @return array aquisição de um vetor com os estados disponíveis para solicitações de pedido de cotação.
 	 */
-	public static function getStatus(): array
+	public static function getStatusDescription(): array
 	{
 		return [
 			self::ORS_NONE => 'solicitação criada',
@@ -305,9 +305,9 @@ class OrderRequest extends AdvancedObject
 	 * @param array $status [optional] vetor contendo os estados válidos.
 	 * @return bool true se existir ou false caso contrário.
 	 */
-	public static function hasStatus(int $state, ?array $status = null): bool
+	public static function hasStatusDescription(int $state, ?array $status = null): bool
 	{
-		if ($status === null) $status = self::getStatus();
+		if ($status === null) $status = self::getStatusDescription();
 
 		return isset($status[$state]);
 	}
@@ -320,9 +320,9 @@ class OrderRequest extends AdvancedObject
 	 */
 	public static function getStatusMessageDescription(int $state, ?array $status = null): string
 	{
-		if ($status === null) $status = self::getStatus();
+		if ($status === null) $status = self::getStatusDescription();
 
-		return self::hasStatus($state, $status) ? $status[$state] : "Status#$state";
+		return self::hasStatusDescription($state, $status) ? $status[$state] : "Status#$state";
 	}
 }
 

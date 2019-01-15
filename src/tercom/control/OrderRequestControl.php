@@ -158,7 +158,11 @@ class OrderRequestControl extends GenericControl
 		if ($customerEmployee->getId() !== $orderRequest->getCustomerEmployeeId())
 			throw OrderRequestException::newCustomerEmployeeError();
 
+		if ($orderRequest->getStatus() !== OrderRequest::ORS_NONE)
+			throw OrderRequestException::newNotManagin();
+
 		$orderRequest->setStatus(OrderRequest::ORS_QUEUED);
+		$orderRequest->setTercomEmployee(null);
 
 		if (!$this->orderRequestDAO->update($orderRequest))
 			throw OrderRequestException::newUpdated();
@@ -182,6 +186,9 @@ class OrderRequestControl extends GenericControl
 	{
 		if ($orderRequest->getTercomEmployeeId() !== $tercomEmployee->getId())
 			throw OrderRequestException::newTercomEmployeeError();
+
+		if ($orderRequest->getStatus() !== OrderRequest::ORS_QUOTING)
+			throw OrderRequestException::newNotQuoting();
 
 		$orderRequest->setStatus(OrderRequest::ORS_QUOTED);
 

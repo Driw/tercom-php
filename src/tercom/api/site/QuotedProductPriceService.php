@@ -39,7 +39,7 @@ class QuotedProductPriceService extends DefaultSiteService
 		$this->getQuotedOrderProductControl()->add($quotedOrderProduct, $this->getTercomEmployee());
 
 		$result = new ApiResultObject();
-		$result->setResult($quotedOrderProduct, 'preço do produto "%s" cotado à %.2f', $productPrice->getName(), $productPrice->getAmount());
+		$result->setResult($quotedOrderProduct, 'preço do produto "%s" cotado à R$ %.2f', $productPrice->getName(), $productPrice->getPrice());
 
 		return $result;
 	}

@@ -5,6 +5,7 @@ namespace tercom\dao;
 use dProject\MySQL\Result;
 use dProject\Primitive\StringUtil;
 use tercom\dao\exceptions\DAOException;
+use tercom\entities\OrderItemService;
 use tercom\entities\Provider;
 use tercom\entities\ServicePrice;
 use tercom\entities\lists\ServicePrices;
@@ -60,7 +61,7 @@ class ServicePriceDAO extends GenericDAO
 		$this->validate($servicePrice, false);
 		$servicePrice->getLastUpdate()->setTimestamp(time());
 
-		$sql = "INSERT INTO service_values (idService, idProvider, name, additionalDescription, price, lastUpdate)
+		$sql = "INSERT INTO service_prices (idService, idProvider, name, additionalDescription, price, lastUpdate)
 				VALUES (?, ?, ?, ?, ?, ?)";
 
 		$query = $this->createQuery($sql);
@@ -90,7 +91,7 @@ class ServicePriceDAO extends GenericDAO
 		$this->validate($servicePrice, true);
 		$servicePrice->getLastUpdate()->setTimestamp(time());
 
-		$sql = "UPDATE service_values
+		$sql = "UPDATE service_prices
 				SET name = ?, additionalDescription = ?, price = ?, lastUpdate = ?
 				WHERE idService = ? AND idProvider = ?";
 
@@ -117,7 +118,7 @@ class ServicePriceDAO extends GenericDAO
 	{
 		$this->validate($servicePrice, true);
 
-		$sql = "DELETE FROM service_values
+		$sql = "DELETE FROM service_prices
 				WHERE id = ?";
 
 		$query = $this->createQuery($sql);
@@ -135,7 +136,7 @@ class ServicePriceDAO extends GenericDAO
 	private function newSelect(): string
 	{
 		return "SELECT id, idService, idProvider, name, additionalDescription, price, lastUpdate
-				FROM service_values";
+				FROM service_prices";
 	}
 
 	/**
@@ -191,6 +192,29 @@ class ServicePriceDAO extends GenericDAO
 		$query = $this->createQuery($sql);
 		$query->setInteger(1, $idService);
 		$query->setInteger(2, $idProvider);
+
+		$result = $query->execute();
+
+		return $this->parseServicePrices($result);
+	}
+
+	/**
+	 * Seleciona os dados dos preços de serviços disponíveis para um determinado item de serviço de pedido.
+	 * @param OrderItemService $orderItemService objeto do tipo item de serviço de pedido à filtrar.
+	 * @return ServicePrices aquisição da lista de preços de serviços disponíveis.
+	 */
+	public function selectByItem(OrderItemService $orderItemService): ServicePrices
+	{
+		$sqlOrder = $orderItemService->isBetterPrice() ? 'ASC' :  'DESC';
+		$sqlSelect = $this->newSelect();
+		$sql = "$sqlSelect
+				WHERE	service_prices.idService = ?
+					AND ? IN (service_prices.idProvider, 0)
+				ORDER BY service_prices.price $sqlOrder";
+
+		$query = $this->createQuery($sql);
+		$query->setInteger(1, $orderItemService->getServiceId());
+		$query->setInteger(2, $orderItemService->getProviderId());
 
 		$result = $query->execute();
 

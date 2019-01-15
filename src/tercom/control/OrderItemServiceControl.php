@@ -2,12 +2,14 @@
 
 namespace tercom\control;
 
+use tercom\TercomException;
 use tercom\entities\OrderRequest;
 use tercom\entities\OrderItemService;
 use tercom\entities\Service;
 use tercom\dao\OrderItemServiceDAO;
 use tercom\entities\lists\OrderItemServices;
 use tercom\exceptions\OrderItemServiceException;
+use tercom\exceptions\OrderRequestException;
 
 /**
  *
@@ -34,6 +36,15 @@ class OrderItemServiceControl extends GenericControl
 		$this->orderItemServiceDAO = new OrderItemServiceDAO();
 	}
 
+	private function validateOrderRequest(OrderRequest $orderRequest): void
+	{
+		if ($orderRequest->getCustomerEmployee()->getCustomerProfile()->getCustomerId() !== $this->getCustomerLoggedId())
+			throw TercomException::newCustomerInvliad();
+
+		if ($orderRequest->getStatus() !== OrderRequest::ORS_NONE)
+			throw OrderRequestException::newNotManagin();
+	}
+
 	/**
 	 * @param OrderRequest $orderRequest
 	 * @param OrderItemService $orderItemService
@@ -41,6 +52,8 @@ class OrderItemServiceControl extends GenericControl
 	 */
 	public function add(OrderRequest $orderRequest, OrderItemService $orderItemService): void
 	{
+		$this->validateOrderRequest($orderRequest);
+
 		if (!$this->orderItemServiceDAO->insert($orderRequest, $orderItemService))
 			throw OrderItemServiceException::newInserted();
 	}
@@ -53,11 +66,13 @@ class OrderItemServiceControl extends GenericControl
 	 */
 	public function set(OrderRequest $orderRequest, OrderItemService $orderItemService): void
 	{
+		$this->validateOrderRequest($orderRequest);
+
 		if (!$this->orderItemServiceDAO->exist($orderRequest, $orderItemService->getService()))
 			throw OrderItemServiceException::newBinded();
 
-			if (!$this->orderItemServiceDAO->update($orderItemService))
-				throw OrderItemServiceException::newUpdated();
+		if (!$this->orderItemServiceDAO->update($orderItemService))
+			throw OrderItemServiceException::newUpdated();
 	}
 
 	/**
@@ -66,6 +81,8 @@ class OrderItemServiceControl extends GenericControl
 	 */
 	public function remove(OrderRequest $orderRequest, OrderItemService $orderItemService): void
 	{
+		$this->validateOrderRequest($orderRequest);
+
 		if (!$this->orderItemServiceDAO->exist($orderRequest, $orderItemService->getService()))
 			throw OrderItemServiceException::newBinded();
 
@@ -78,6 +95,8 @@ class OrderItemServiceControl extends GenericControl
 	 */
 	public function removeAll(OrderRequest $orderRequest): void
 	{
+		$this->validateOrderRequest($orderRequest);
+
 		if (!$this->orderItemServiceDAO->deleteAll($orderRequest))
 			throw OrderItemServiceException::newDeletedAll();
 	}

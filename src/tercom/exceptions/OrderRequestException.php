@@ -140,9 +140,27 @@ class OrderRequestException extends ApiStatusException
 	 *
 	 * @return OrderRequestException
 	 */
+	public static function newNotManagin(): OrderRequestException
+	{
+		return new OrderRequestException('pedido de cotação não pode mais ter itens gerenciados', ApiStatus::ORDER_REQUEST_NOT_MANAGING);
+	}
+
+	/**
+	 *
+	 * @return OrderRequestException
+	 */
 	public static function newNotQueued(): OrderRequestException
 	{
-		return new OrderRequestException('pedido de cotação não está em fila de ', ApiStatus::ORDER_REQUEST_NOT_QUEUED);
+		return new OrderRequestException('pedido de cotação não está em fila de espera', ApiStatus::ORDER_REQUEST_NOT_QUEUED);
+	}
+
+	/**
+	 *
+	 * @return OrderRequestException
+	 */
+	public static function newNotQuoting(): OrderRequestException
+	{
+		return new OrderRequestException('pedido de cotação não está mais em processo de cotação', ApiStatus::ORDER_REQUEST_NOT_QUOTING);
 	}
 }
 

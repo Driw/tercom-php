@@ -133,7 +133,7 @@ class ServicePriceService extends DefaultSiteService
 	{
 		$idService = $content->getParameters()->getInt('idService');
 		$service = $this->getServiceControl()->get($idService);
-		$servicePrices = $this->getServicePriceControl()->getByService($idService);
+		$servicePrices = $this->getServicePriceControl()->searchByService($idService);
 
 		$result = new ApiResultObject();
 		$result->setResult($servicePrices, 'encontrado %d preços para o serviço "%s"', $servicePrices->size(), $service->getName());
@@ -153,7 +153,7 @@ class ServicePriceService extends DefaultSiteService
 		$idProvider = $content->getParameters()->getInt('idProvider');
 		$service = $this->getServiceControl()->get($idService);
 		$provider = $this->getProviderControl()->get($idProvider);
-		$servicePrices = $this->getServicePriceControl()->getByService($idService);
+		$servicePrices = $this->getServicePriceControl()->searchByProvider($idProvider);
 
 		$result = new ApiResultObject();
 		$result->setResult($servicePrices, 'encontrado %d preços para o serviço "%s" em "%s"', $servicePrices->size(), $service->getName(), $provider->getFantasyName());

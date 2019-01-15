@@ -183,7 +183,6 @@ class ServicePrice extends AdvancedObject
 
 	/**
 	 * @param string $additionalDescription dascrição adicional.
-	 * @return ServicePrice aquisição do objeto de preço ser serviço usado.
 	 */
 	public function setAdditionalDescription(?string $additionalDescription): void
 	{

@@ -321,12 +321,12 @@ REPLACE INTO permissions (packet, action, assignmentLevel) VALUES
 -- Order Quote Product Service
 
 REPLACE INTO permissions (packet, action, assignmentLevel) VALUES
-('quotedProductPrices', 'add', 20),
-('quotedProductPrices', 'remove', 20),
-('quotedProductPrices', 'removeAll', 20),
-('quotedProductPrices', 'get', 20),
-('quotedProductPrices', 'getAll', 20),
-('quotedProductPrices', 'prices', 20);
+('quotedProductPrice', 'add', 20),
+('quotedProductPrice', 'remove', 20),
+('quotedProductPrice', 'removeAll', 20),
+('quotedProductPrice', 'get', 20),
+('quotedProductPrice', 'getAll', 20),
+('quotedProductPrice', 'prices', 20);
 
 -- TERCOM Profile Permissions
 

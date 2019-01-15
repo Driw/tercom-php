@@ -5,6 +5,8 @@ namespace tercom\control;
 use tercom\dao\ServicePriceDAO;
 use tercom\entities\ServicePrice;
 use tercom\entities\lists\ServicePrices;
+use tercom\entities\OrderItemService;
+use tercom\TercomException;
 
 /**
  * @see GenericControl
@@ -53,14 +55,22 @@ class ServicePriceControl extends GenericControl
 		return $servicePrice;
 	}
 
-	public function getByService(int $idService): ServicePrices
+	public function searchByService(int $idService): ServicePrices
 	{
 		return $this->servicePriceDAO->selectByService($idService);
 	}
 
-	public function getByProvider(int $idService, int $idProvider): ServicePrices
+	public function searchByProvider(int $idProvider): ServicePrices
 	{
-		return $this->servicePriceDAO->selectByProvider($idService, $idProvider);
+		return $this->servicePriceDAO->selectByProvider($idProvider);
+	}
+
+	public function searchByItem(OrderItemService $orderItemService): ServicePrices
+	{
+		if (!$this->isTercomManagement())
+			throw TercomException::newPermissionRestrict();
+
+		return $this->servicePriceDAO->selectByItem($orderItemService);
 	}
 }
 

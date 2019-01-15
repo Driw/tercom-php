@@ -174,7 +174,7 @@ class QuotedOrderProductDAO extends GenericDAO
 	private function existOrderItemProduct(OrderItemProduct $orderItemProduct): bool
 	{
 		$sql = "SELECT COUNT(*) qty
-				FROM product_categories
+				FROM order_item_products
 				WHERE id = ?";
 
 		$query = $this->createQuery($sql);

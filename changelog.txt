@@ -20,6 +20,18 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+14.01.2018 - 0.3.4.184b
+- Adicionado script de teste que não foi enviado na rev184, manufacturerGetByProduct.
+- Atualizado scripts de teste conforme novas opções de filtro, orderRequestGetAll, orderRequestGetByCustomer e orderRequestGetByTercom.
+- Corrigido nome das permissões de 'quotedProductPrices' para 'quotedProductPrice'.
+- Atualizado OrderItemServiceService conforme atualização em get() de OrderRequestControl.
+- Atualizado OrderItemProductControl e OrderItemServiceControl para validar acesso de funcionário de cliente em alguns casos.
+- Adicionado novas valições do estado atual da solicitação de pedido de cotação em OrderRequestControl.
+- Corrigido busca de preços de serviço por fornecedor e adicionado busca por item de serviço de pedido, ServicePriceControl.
+- Corrigido consulta SQL em existOrderItemProduct() de QuotedOrderProductDAO.
+- Atualizado ServicePriceDAO que estava usando tabela antiga 'service_values' ao invés de 'service_prices'.
+	- Também foi adicionado método que permite a busca de preços de serviço por item de serviço de pedido.
+
 13.01.2018 - 0.3.4.184
 - Adicionado novas massas de dados em 'fake.sql' para serviços e preços de serviço.
 - Adicionada novas ações ao serviço de fornecedores e fabricantes:

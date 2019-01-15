@@ -12,7 +12,7 @@ use tercom\exceptions\QuotedProductPriceException;
  * DAO para Preço de Produto Cotado
  *
  * Classe responsável pela comunicação completa do sistema para com o banco de dados.
- * Sua responsabilidade é gerenciar os dados referentes aos preços de produto quotado, incluindo todas operações.
+ * Sua responsabilidade é gerenciar os dados referentes aos preços de produto cotado, incluindo todas operações.
  * Estas operações consiste em: adicionar, excluir e selecionar dados dos preços de produto cotados.
  *
  * Os dados de preços de produtos cotados são réplicas dos preços de produtos em algum momento do sistema.

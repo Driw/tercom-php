@@ -52,7 +52,7 @@ class OrderItemProductException extends ApiStatusException
 	 */
 	public static function newDeleted(): OrderItemProductException
 	{
-		return new OrderItemProductException('não foi possível excluir o produto do pedido', ApiStatus::ORDER_ITEM_PRODUCT_DELETED);
+		return new OrderItemProductException('não foi possível excluir o item de produto do pedido', ApiStatus::ORDER_ITEM_PRODUCT_DELETED);
 	}
 
 	/**
@@ -61,7 +61,7 @@ class OrderItemProductException extends ApiStatusException
 	 */
 	public static function newDeletedAll(): OrderItemProductException
 	{
-		return new OrderItemProductException('não foi possível excluir os produtos do pedido', ApiStatus::ORDER_ITEM_PRODUCT_DELETED_ALL);
+		return new OrderItemProductException('não foi possível excluir os itens de produto do pedido', ApiStatus::ORDER_ITEM_PRODUCT_DELETED_ALL);
 	}
 
 	/**
@@ -70,7 +70,7 @@ class OrderItemProductException extends ApiStatusException
 	 */
 	public static function newSelected(): OrderItemProductException
 	{
-		return new OrderItemProductException('não foi possível obter o produto do pedido', ApiStatus::ORDER_ITEM_PRODUCT_SELECTED);
+		return new OrderItemProductException('não foi possível obter o item de produto do pedido', ApiStatus::ORDER_ITEM_PRODUCT_SELECTED);
 	}
 
 	/**
