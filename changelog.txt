@@ -20,7 +20,13 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
-14.01.2018 - 0.3.4.184b
+15.01.2018 - 0.3.4.186
+- Adicionado scripts de teste do serviço para gerenciamento das cotações de preço de serviço.
+
+15.01.2018 - 0.3.4.185
+- Implementação da entidade, DAO, controle e serviço de gerenciamento de cotação de preço de serviço.
+
+15.01.2018 - 0.3.4.184b
 - Adicionado script de teste que não foi enviado na rev184, manufacturerGetByProduct.
 - Atualizado scripts de teste conforme novas opções de filtro, orderRequestGetAll, orderRequestGetByCustomer e orderRequestGetByTercom.
 - Corrigido nome das permissões de 'quotedProductPrices' para 'quotedProductPrice'.
