@@ -4,6 +4,13 @@ namespace tercom\boundary\dashboard;
 
 use dProject\template\DefaultTemplate;
 
+/**
+ *
+ *
+ * @see DefaultTemplate
+ *
+ * @author Andrew
+ */
 class DashboardTemplate extends DefaultTemplate
 {
 	/**

@@ -11,7 +11,7 @@ use tercom\control\ProductControl;
  * @author Andrew
  */
 
-class ProductBoundary extends DefaultDashboardBoundary
+class ProductBoundary extends DefaultDashboardLoggedBoundary
 {
 	/**
 	 * {@inheritDoc}

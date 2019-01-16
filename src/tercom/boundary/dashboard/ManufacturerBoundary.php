@@ -11,7 +11,7 @@ use tercom\control\ManufacturerControl;
  * @author Andrew
  */
 
-class ManufacturerBoundary extends DefaultDashboardBoundary
+class ManufacturerBoundary extends DefaultDashboardLoggedBoundary
 {
 	/**
 	 * {@inheritDoc}

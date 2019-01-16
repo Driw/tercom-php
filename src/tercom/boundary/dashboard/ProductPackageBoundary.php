@@ -10,7 +10,7 @@ use dProject\restful\template\ApiTemplateResult;
  * @author Andrew
  */
 
-class ProductPackageBoundary extends DefaultDashboardBoundary
+class ProductPackageBoundary extends DefaultDashboardLoggedBoundary
 {
 	/**
 	 * {@inheritDoc}

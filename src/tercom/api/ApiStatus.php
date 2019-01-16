@@ -13,6 +13,7 @@ class ApiStatus
 	public const NOT_LOGGED = 6;
 	public const API_CONNECTION = 7;
 	public const LOGIN_UNEXPECTED = 8;
+	public const DASHBOARD_CONNECTION = 9;
 
 	public const PERMISSION_NOT_ENOUGHT = 51;
 	public const PERMISSION_TERCOM_EMPLOYEE = 52;

@@ -12,7 +12,7 @@ use tercom\entities\Phone;
  * @author Andrew
  */
 
-class ProviderBoundary extends DefaultDashboardBoundary
+class ProviderBoundary extends DefaultDashboardLoggedBoundary
 {
 	/**
 	 * {@inheritDoc}

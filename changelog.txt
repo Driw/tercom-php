@@ -20,6 +20,10 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+15.01.2018 - 0.3.4.187
+- Implementação da validação no dashboard para requisitar o acesso seja ele qual for.
+- Ajustes na exibição das páginas de erro no dashboard para comportar verificação de acesso.
+
 15.01.2018 - 0.3.4.186
 - Adicionado scripts de teste do serviço para gerenciamento das cotações de preço de serviço.
 

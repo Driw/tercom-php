@@ -3,6 +3,7 @@
 namespace tercom\boundary\dashboard\template;
 
 use Exception;
+use dProject\restful\ApiConnection;
 use dProject\restful\exception\ApiBadRequestException;
 use dProject\restful\exception\ApiMethodNotAllowedException;
 use dProject\restful\exception\ApiNotAcceptable;
@@ -11,7 +12,6 @@ use dProject\restful\exception\ApiUnauthorizedException;
 use dProject\restful\template\ApiTemplateResult;
 use tercom\boundary\dashboard\DashboardConfigs;
 use tercom\boundary\dashboard\DefaultDashboardBoundary;
-use dProject\restful\ApiConnection;
 
 class ErrorTemplate extends DefaultDashboardBoundary
 {
@@ -31,16 +31,23 @@ class ErrorTemplate extends DefaultDashboardBoundary
 	/**
 	 * @param string $script [optional]
 	 */
-
 	public function __construct(ApiConnection $connection, $script = 'Error')
 	{
 		parent::__construct($connection, 'Error');
 	}
 
 	/**
+	 * {@inheritDoc}
+	 * @see \tercom\boundary\dashboard\DefaultDashboardBoundary::isVerifyLogin()
+	 */
+	public function isVerifyLogin(): bool
+	{
+		return false;
+	}
+
+	/**
 	 * @param Exception $e
 	 */
-
 	public function setException(Exception $e)
 	{
 		if ($e instanceof ApiBadRequestException)
@@ -75,7 +82,7 @@ class ErrorTemplate extends DefaultDashboardBoundary
 
 		else
 			$this->exceptionMessage = nameOf($e);
-		
+
 		if (DEV)
 			$this->exceptionTrace .= '<br>' .str_replace(PHP_EOL, '<br>'.PHP_EOL, jTraceEx($e));
 	}
@@ -84,10 +91,9 @@ class ErrorTemplate extends DefaultDashboardBoundary
 	 * {@inheritDoc}
 	 * @see \dProject\restful\template\ApiTemplate::callIndex()
 	 */
-
 	public function callIndex()
 	{
-		$dashboardTemplate = $this->newBaseTemplate();
+		$dashboardTemplate = $this->hasLogin() ? $this->newBaseTemplate() : $this->newErrorBaseTemplate();
 		$dashboardTemplate->addFile('IncludeDashboard', 'Error');
 		$dashboardTemplate->ExceptionName = $this->exceptionMessage;
 		$dashboardTemplate->TraceString = $this->exceptionTrace;

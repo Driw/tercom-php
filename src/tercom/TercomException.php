@@ -17,6 +17,13 @@ class TercomException extends \Exception
 	{
 		return new TercomException('conexão de API não inicializada', ApiStatus::API_CONNECTION);
 	}
+	/**
+	 * @return TercomException
+	 */
+	public static function newDashboardConnection(): TercomException
+	{
+		return new TercomException('conexão de Dashboard não inicializada', ApiStatus::DASHBOARD_CONNECTION);
+	}
 
 	/**
 	 * @return TercomException

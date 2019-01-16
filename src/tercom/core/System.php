@@ -43,9 +43,13 @@ class System
 	 */
 	private static $apiOnlyProperties;
 	/**
-	 * @var ApiConnection conexão da API.
+	 * @var ApiConnection conexão da API dos Web Services.
 	 */
 	private static $apiConnection;
+	/**
+	 * @var ApiConnection conexão da API do Dashboard.
+	 */
+	private static $dashboardConnection;
 
 	/**
 	 * Tem como finalidade garantir algumas funcionalidades do sistema do site.
@@ -113,7 +117,7 @@ class System
 		$settings->setApiNameSpace(namespaceOf($listener));
 		$settings->setResponseType(ApiSettings::RESPONSE_TEMPLATE);
 
-		$apiConnection = ApiConnection::getInstance();
+		$apiConnection = (self::$dashboardConnection = ApiConnection::getInstance());
 		$apiConnection->setSettings($settings);
 		$apiConnection->setListener($listener);
 		$apiConnection->start();
@@ -246,10 +250,22 @@ class System
 	 */
 	public static function getApiConnection(): ApiConnection
 	{
-		if (System::$apiConnection === null)
+		if (self::$apiConnection === null)
 			throw TercomException::newApiConnection();
 
-		return System::$apiConnection;
+		return self::$apiConnection;
+	}
+
+	/**
+	 * @throws TercomException quando a conexão de API não tiver sido definida.
+	 * @return ApiConnection aquisição da conexão de API do sistema.
+	 */
+	public static function getDashboardConnection(): ApiConnection
+	{
+		if (self::$dashboardConnection === null)
+			throw TercomException::newDashboardConnection();
+
+		return self::$dashboardConnection;
 	}
 }
 

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>{Head_Title}</title>
+		<meta name="description" content="{Head_Description}">
+		<meta name="viewport" content="{Head_ViewPort}">
+		<meta name="robots" content="{Head_Robots}">
+		<meta name="keywords" content="{Head_keyWords}">
+		<meta name="author" content="{Head_Author}">
+		<meta name='ROBOTS' content='NOINDEX, NOFOLLOW'>
+		<meta name='GOOGLEBOT' content='NOINDEX, NOFOLLOW'>
+		<base href="{Head_BaseURL}">
+		<!-- Fonts -->
+		<!-- BEGIN Fonts -->
+		<link rel='stylesheet' href='{Element}' type='text/css'>
+		<!-- END Fonts -->
+		<!-- CSS -->
+		<!-- BEGIN Stylesheet_CDNJS -->
+		<link rel='stylesheet' href='{Stylesheet_CDNJS_Url}' integrity='{Stylesheet_CDNJS_Integrity}' crossorigin='{Stylesheet_CDNJS_Crossorigin}'>
+		<!-- END Stylesheet_CDNJS -->
+		<!-- BEGIN Stylesheet_ThirdParty -->
+		<link rel='stylesheet' href='{Element}'>
+		<!-- END Stylesheet_ThirdParty -->
+		<!-- BEGIN Stylesheet_Local -->
+		<link rel='stylesheet' href='css/{Element}'>
+		<!-- END Stylesheet_Local -->
+		<!-- JavaScript -->
+		<!-- BEGIN JavaScript_CDNJS -->
+		<script src='{JavaScript_CDNJS_Url}' integrity='{JavaScript_CDNJS_Integrity}' crossorigin='{JavaScript_CDNJS_Crossorigin}'></script>
+		<!-- END JavaScript_CDNJS -->
+		<!-- BEGIN JavaScript_ThirdParty -->
+		<script src='{Element}'></script>
+		<!-- END JavaScript_ThirdParty -->
+		<!-- BEGIN JavaScript_Local -->
+		<script type='text/javascript' src='js/{Element}'></script>
+		<!-- END JavaScript_Local -->
+		<!-- Favicon-->
+		<link rel="shortcut icon" href="{Head_FavIcon}">
+	</head>
+	<body>
+		<div class="page">
+			<div class="page-content d-flex align-items-stretch">
+{IncludeDashboard}
+				<!-- Page Footer-->
+				<footer class="main-footer">
+					<div class="container-fluid">
+						<div class="row">
+							<div class="col-sm-6">
+								<p>TERCOM &copy; {StartYear}{CurrentYear}</p>
+							</div>
+							<div class="col-sm-6 text-right">
+								<p>Design by <a href="https://bootstrapious.com/admin-templates" class="external">Bootstrapious</a></p>
+								<!-- Please do not remove the backlink to us unless you support further theme's development at https://bootstrapious.com/donate. It is part of the license conditions. Thank you for understanding :)-->
+							</div>
+						</div>
+					</div>
+				</footer>
+			</div>
+		</div>
+	</body>
+</html>
