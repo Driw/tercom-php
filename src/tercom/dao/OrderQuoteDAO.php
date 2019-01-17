@@ -122,13 +122,36 @@ class OrderQuoteDAO extends GenericDAO
 	}
 
 	/**
+	 * Procedimento interno para centralizar e agilizar a manutenção de queries.
+	 * @return string aquisição da string de consulta simples para SELECT.
+	 */
+	private function newSelectFull(): string
+	{
+		$orderQuoteColumns = $this->buildQuery(self::ALL_COLUMNS, 'order_quotes');
+		$orderRequestColumns = $this->buildQuery(OrderRequestDAO::ALL_COLUMNS, 'order_requests', 'orderRequest');
+		$customerEmployeeColumns = $this->buildQuery(CustomerEmployeeDAO::ALL_COLUMNS, 'customer_employees', 'orderRequest_customerEmployee');
+		$tercomEmployeeColumns = $this->buildQuery(TercomEmployeeDAO::ALL_COLUMNS, 'tercom_employees', 'orderRequest_tercomEmployee');
+		$customerProfileColumns = $this->buildQuery(CustomerProfileDAO::ALL_COLUMNS, 'customer_profiles', 'orderRequest_customerEmployee_customerProfile');
+		$customerColumns = $this->buildQuery(CustomerDAO::ALL_COLUMNS, 'customers', 'orderRequest_customerEmployee_customerProfile_customer');
+
+		return "SELECT $orderQuoteColumns, $orderRequestColumns, $customerEmployeeColumns, $tercomEmployeeColumns,
+					$customerProfileColumns, $customerColumns
+				FROM order_quotes
+				INNER JOIN order_requests ON order_requests.id = order_quotes.idOrderRequest
+				INNER JOIN customer_employees ON customer_employees.id = order_requests.idCustomerEmployee
+				INNER JOIN tercom_employees ON tercom_employees.id = order_requests.idTercomEmployee
+				INNER JOIN customer_profiles ON customer_profiles.id = customer_employees.idCustomerProfile
+				INNER JOIN customers ON customers.id = customer_profiles.idCustomer";
+	}
+
+	/**
 	 * Selecione os dados de um pedido de cotação através do seu código de identificação único.
 	 * @param int $idOrderQuote código de identificação único do pedido de citação.
 	 * @return OrderQuote|NULL pedido de cotação com os dados carregados ou NULL se não encontrado.
 	 */
 	public function select(int $idOrderQuote): ?OrderQuote
 	{
-		$sqlSelect = $this->newSelect();
+		$sqlSelect = $this->newSelectFull();
 		$sql = "$sqlSelect
 				WHERE order_quotes.id = ?";
 
@@ -285,6 +308,8 @@ class OrderQuoteDAO extends GenericDAO
 	{
 		$this->parseEntry($entry, 'orderRequest');
 		$this->parseEntry($entry['orderRequest'], 'customerEmployee', 'tercomEmployee');
+		$this->parseEntry($entry['orderRequest']['customerEmployee'], 'customerProfile');
+		$this->parseEntry($entry['orderRequest']['customerEmployee']['customerProfile'], 'customer');
 
 		$orderQuote = new OrderQuote();
 		$orderQuote->fromArray($entry);

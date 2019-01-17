@@ -328,6 +328,8 @@ REPLACE INTO permissions (packet, action, assignmentLevel) VALUES
 ('quotedProductPrice', 'getAll', 20),
 ('quotedProductPrice', 'prices', 20);
 
+-- Quoted Service Price Service
+
 REPLACE INTO permissions (packet, action, assignmentLevel) VALUES
 ('quotedServicePrice', 'add', 20),
 ('quotedServicePrice', 'remove', 20),
@@ -335,6 +337,18 @@ REPLACE INTO permissions (packet, action, assignmentLevel) VALUES
 ('quotedServicePrice', 'get', 20),
 ('quotedServicePrice', 'getAll', 20),
 ('quotedServicePrice', 'prices', 20);
+
+-- Order Acceptance Service
+
+REPLACE INTO permissions (packet, action, assignmentLevel) VALUES
+('orderAcceptance', 'add', 20),
+('orderAcceptance', 'set', 20),
+('orderAcceptance', 'setAddress', 20),
+('orderAcceptance', 'get', 20),
+('orderAcceptance', 'getByOrderQuote', 20),
+('orderAcceptance', 'getByCustomer', 20),
+('orderAcceptance', 'getByCustomerEmployee', 20),
+('orderAcceptance', 'getByTercomEmployee', 20);
 
 -- TERCOM Profile Permissions
 

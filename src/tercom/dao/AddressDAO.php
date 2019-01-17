@@ -4,9 +4,9 @@ namespace tercom\dao;
 
 use dProject\MySQL\Result;
 use dProject\Primitive\StringUtil;
-use tercom\dao\exceptions\AddressDAOException;
 use tercom\entities\Address;
 use tercom\entities\lists\Addresses;
+use tercom\exceptions\AddressException;
 
 /**
  * DAO para Endereços
@@ -36,26 +36,26 @@ class AddressDAO extends GenericDAO
 	 * Fornecedores não podem possuir CNPJ, Razão Social e Nome Fantasia não definidos (em branco).
 	 * @param Address $address objeto do tipo fornecedor à ser validado.
 	 * @param bool $validateId true para validar o código de identificação único ou false caso contrário.
-	 * @throws AddressDAOException caso algum dos dados do fornecedor não estejam de acordo.
+	 * @throws AddressException caso algum dos dados do fornecedor não estejam de acordo.
 	 */
 	private function validateAddress(Address $address, bool $validateID)
 	{
 		// PRIMARY KEY
 		if ($validateID) {
 			if ($address->getId() === 0)
-				throw AddressDAOException::newNoId();
+				throw AddressException::newNotIdentified();
 		} else {
 			if ($address->getId() !== 0)
-				throw AddressDAOException::newHasId();
+				throw AddressException::newIdentified();
 		}
 
 		// NOT NULL
-		if (StringUtil::isEmpty($address->getState())) throw AddressDAOException::newStateEmpty();
-		if (StringUtil::isEmpty($address->getCity())) throw AddressDAOException::newCityEmpty();
-		if (StringUtil::isEmpty($address->getCep())) throw AddressDAOException::newCepEmpty();
-		if (StringUtil::isEmpty($address->getNeighborhood())) throw AddressDAOException::newNeighborhoodEmpty();
-		if (StringUtil::isEmpty($address->getStreet())) throw AddressDAOException::newStreetEmpty();
-		if ($address->getNumber() === 0) throw AddressDAOException::newNumberEmpty();
+		if (StringUtil::isEmpty($address->getState())) throw AddressException::newStateEmpty();
+		if (StringUtil::isEmpty($address->getCity())) throw AddressException::newCityEmpty();
+		if (StringUtil::isEmpty($address->getCep())) throw AddressException::newCepEmpty();
+		if (StringUtil::isEmpty($address->getNeighborhood())) throw AddressException::newNeighborhoodEmpty();
+		if (StringUtil::isEmpty($address->getStreet())) throw AddressException::newStreetEmpty();
+		if ($address->getNumber() === 0) throw AddressException::newNumberEmpty();
 	}
 
 	/**

@@ -122,8 +122,8 @@ class QuotedProductPriceDAO extends GenericDAO
 
 		return "SELECT $quotedProductPriceColumns, $productColumns, $productUnitColumns, $productCategoryColumns, $productProviderColumns,
 					$productManufacturerColumns, $productPackageColumns, $productTypeColumns
-				FROM product_prices
-				INNER JOIN products ON product_prices.idProduct = products.id
+				FROM quoted_product_prices
+				INNER JOIN products ON product_prices.idProduct = quoted_product_prices.id
 				INNER JOIN product_units ON products.idProductUnit = product_units.id
 				LEFT JOIN product_categories ON products.idProductCategory = product_categories.id
 				INNER JOIN product_packages ON product_prices.idProductPackage = product_packages.id
@@ -141,7 +141,7 @@ class QuotedProductPriceDAO extends GenericDAO
 	{
 		$sqlSELECT = $this->newFullSelect();
 		$sql = "$sqlSELECT
-				WHERE product_prices.id = ?";
+				WHERE quoted_product_prices.id = ?";
 
 		$query = $this->createQuery($sql);
 		$query->setInteger(1, $idQuotedProductPrice);

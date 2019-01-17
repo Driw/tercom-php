@@ -34,6 +34,10 @@ class CustomerEmployeeDAO extends GenericDAO
 	 * @var array nome das colunas da tabela de funcionários de clientes.
 	 */
 	public const ALL_COLUMNS = ['id', 'idCustomerProfile', 'name', 'email', 'password', 'idPhone', 'idCellPhone', 'enabled', 'register'];
+	/**
+	 * @var array nome das colunas de perfil da tabela de funcionários de clientes.
+	 */
+	public const ALL_PROFILE_COLUMNS = ['id', 'idCustomerProfile', 'name', 'email', 'idPhone', 'idCellPhone'];
 
 	/**
 	 * Procedimento interno para validação dos dados de um funcionário de cliente ao inserir e/ou atualizar.

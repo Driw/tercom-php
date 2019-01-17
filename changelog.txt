@@ -20,6 +20,16 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+17.01.2018 - 0.3.5.189
+- Implementação da entidade, DAO, controle e serviço para gerenciamento de aceitação de pedido.
+- Modio 'dao\exceptions\AddressDAOException' para 'exceptions\AddressException'.
+- Adicionado AddressControl para gerenciamento de outros endereços.
+- Adicionado 'ALL_PROFILE_COLUMNS' à CustomerEmployeeDAO e TercomEmployeeDAO para filtrar dados de retorno.
+	- Há vários webservices que estão obtendo dados desnecessários como 'password' de INNER JOIN.
+- Atualizado OrderQuoteDAO para que select() venha outros dados como CustomerProfile e Customer.
+- Corrigido erro na query base de SELECT e no método select() de QuotedProductPriceDAO.
+- Corrigido CustomerAddressException que iria retornar AddressException ao invés de CustomerAddressException.
+
 16.01.2018 - 0.3.4.188
 - Ajustes para funcionamento correto e por sessão do acesso de funcionário TERCOM e funcionário de Cliente.
 - Implementação da funcionalidade do botão de logout (encerrar sessão).

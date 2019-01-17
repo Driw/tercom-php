@@ -8,6 +8,7 @@ use dProject\restful\ApiContent;
 use dProject\restful\ApiResult;
 use dProject\restful\ApiServiceInterface;
 use tercom\core\System;
+use tercom\control\AddressControl;
 use tercom\control\CustomerAddressControl;
 use tercom\control\CustomerControl;
 use tercom\control\CustomerEmployeeControl;
@@ -17,6 +18,7 @@ use tercom\control\CustomerProfileControl;
 use tercom\control\LoginCustomerControl;
 use tercom\control\LoginTercomControl;
 use tercom\control\ManufacturerControl;
+use tercom\control\OrderAcceptanceControl;
 use tercom\control\OrderItemProductControl;
 use tercom\control\OrderItemServiceControl;
 use tercom\control\OrderQuoteControl;
@@ -102,6 +104,10 @@ class DefaultSiteService extends ApiServiceInterface
 	 */
 	private $servicePriceControl;
 	/**
+	 * @var AddressControl
+	 */
+	private $addressControl;
+	/**
 	 * @var CustomerAddressControl
 	 */
 	private $customerAddressControl;
@@ -181,6 +187,10 @@ class DefaultSiteService extends ApiServiceInterface
 	 * @var QuotedServicePriceControl
 	 */
 	private $quotedServicePriceControl;
+	/**
+	 * @var OrderAcceptanceControl
+	 */
+	private $orderAcceptanceControl;
 
 	/**
 	 * Cria uma nova instância de um serviço para gerenciamento de stores dos produtos no sistema.
@@ -363,7 +373,7 @@ class DefaultSiteService extends ApiServiceInterface
 	protected function getServiceControl(): ServiceControl
 	{
 		return $this->serviceControl === null ?
-			($this->serviceControl = new ServiceControl($this->getMySQL())) :
+			($this->serviceControl = new ServiceControl()) :
 			$this->serviceControl;
 	}
 
@@ -373,8 +383,18 @@ class DefaultSiteService extends ApiServiceInterface
 	protected function getServicePriceControl(): ServicePriceControl
 	{
 		return $this->servicePriceControl === null ?
-			($this->servicePriceControl = new ServicePriceControl($this->getMySQL())) :
+			($this->servicePriceControl = new ServicePriceControl()) :
 			$this->servicePriceControl;
+	}
+
+	/**
+	 * @return AddressControl
+	 */
+	protected function getAddressControl(): AddressControl
+	{
+		return $this->addressControl === null ?
+			($this->addressControl = new AddressControl()) :
+			$this->addressControl;
 	}
 
 	/**
@@ -571,6 +591,16 @@ class DefaultSiteService extends ApiServiceInterface
 		return $this->quotedServicePriceControl === null ?
 			($this->quotedServicePriceControl = new QuotedServicePriceControl()) :
 			$this->quotedServicePriceControl;
+	}
+
+	/**
+	 * @return OrderAcceptanceControl
+	 */
+	protected function getOrderAcceptanceControl(): OrderAcceptanceControl
+	{
+		return $this->orderAcceptanceControl === null ?
+			($this->orderAcceptanceControl = new OrderAcceptanceControl()) :
+			$this->orderAcceptanceControl;
 	}
 
 	/**

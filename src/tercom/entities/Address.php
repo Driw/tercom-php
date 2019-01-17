@@ -259,6 +259,17 @@ class Address extends AdvancedObject implements Entity
 	}
 
 	/**
+	 * @param Address $address
+	 */
+	public function clone(Address $address): void
+	{
+		$array = $address->toArray();
+		unset($array['attributes']['id']);
+
+		$this->fromArray($array);
+	}
+
+	/**
 	 * {@inheritDoc}
 	 * @see \dProject\Primitive\AdvancedObject::getAttributeTypes()
 	 */

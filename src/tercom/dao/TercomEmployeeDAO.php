@@ -21,6 +21,10 @@ class TercomEmployeeDAO extends GenericDAO
 	 * @var array
 	 */
 	public const ALL_COLUMNS = ['id', 'idTercomProfile', 'cpf', 'name', 'email', 'password', 'idPhone', 'idCellPhone', 'enabled', 'register'];
+	/**
+	 * @var array
+	 */
+	public const ALL_PROFILE_COLUMNS = ['id', 'idTercomProfile', 'name', 'email', 'idPhone', 'idCellPhone'];
 
 	private function validate(TercomEmployee $tercomEmployee, bool $validateID)
 	{
