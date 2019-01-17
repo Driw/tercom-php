@@ -172,9 +172,9 @@ class LoginTercomControl extends LoginControl
 				$session->isSetted(SessionVar::LOGIN_ID) &&
 				$session->isSetted(SessionVar::LOGIN_TOKEN))
 			{
-				$idTercomEmployee = $post->getInt(SessionVar::LOGIN_TERCOM_ID);
-				$idLogin = $post->getInt(SessionVar::LOGIN_ID);
-				$token = $post->getString(SessionVar::LOGIN_TOKEN);
+				$idTercomEmployee = $session->getInt(SessionVar::LOGIN_TERCOM_ID);
+				$idLogin = $session->getInt(SessionVar::LOGIN_ID);
+				$token = $session->getString(SessionVar::LOGIN_TOKEN);
 			}
 
 			else

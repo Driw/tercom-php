@@ -5,6 +5,11 @@ namespace tercom\boundary\dashboard;
 use dProject\Primitive\Session;
 use dProject\restful\template\ApiTemplate;
 use tercom\SessionVar;
+use tercom\control\LoginCustomerControl;
+use tercom\control\LoginTercomControl;
+use tercom\entities\LoginCustomer;
+use tercom\entities\LoginTercom;
+use tercom\TercomException;
 
 /**
  * @see ApiTemplate
@@ -17,6 +22,15 @@ abstract class DefaultDashboardBoundary extends ApiTemplate
 	 * @var int
 	 */
 	public const START_YEAR = 2018;
+
+	/**
+	 * @var LoginTercom
+	 */
+	private static $loginTercom;
+	/**
+	 * @var LoginCustomer
+	 */
+	private static $loginCustomer;
 
 	/**
 	 * @var DashboardConfigs
@@ -55,7 +69,7 @@ abstract class DefaultDashboardBoundary extends ApiTemplate
 	 */
 	public function init()
 	{
-		if ($this->isVerifyLogin() && !$this->hasLogin())
+		if ($this->isVerifyLogin() && !$this->doLogin())
 			header('Location: /dashboard/login');
 
 		$this->setLocalJavaScript('');
@@ -133,6 +147,9 @@ abstract class DefaultDashboardBoundary extends ApiTemplate
 		$configs = $this->getConfigs();
 		$dashboardTemplate = new DashboardTemplate('Login/Base');
 
+		if (!empty($this->getLocalJavaScript()))
+			$dashboardTemplate->setDataArray('JavaScriptPage', [ sprintf('boundaries/%s%s.js', $this->getLocalJavaScript(), DEV ? '' : '.min') ]);
+
 		$configs->getHead()->set('BaseURL', sprintf('%sdashboard/', DOMAIN), true, true);
 		$dashboardTemplate->ImportTimestamp = sprintf('?%d', time());
 		$dashboardTemplate->setDataConfig('Head', $configs->getHead());
@@ -162,6 +179,28 @@ abstract class DefaultDashboardBoundary extends ApiTemplate
 	 * @return boolean
 	 */
 	public abstract function isVerifyLogin(): bool;
+
+	/**
+	 * @return LoginTercom
+	 */
+	public function getLoginTercom(): LoginTercom
+	{
+		if (self::$loginTercom === null)
+			throw TercomException::newLoginTercomNotFound();
+
+		return self::$loginTercom;
+	}
+
+	/**
+	 * @return LoginCustomer
+	 */
+	public function getLoginCustomer(): LoginCustomer
+	{
+		if (self::$loginCustomer === null)
+			throw TercomException::newLoginCustomerNotFound();
+
+		return self::$loginCustomer;
+	}
 
 	/**
 	 * @param string $serviceName
@@ -212,12 +251,53 @@ abstract class DefaultDashboardBoundary extends ApiTemplate
 	 */
 	protected function hasLogin(): bool
 	{
+		return self::$loginCustomer !== null || self::$loginTercom !== null;
+	}
+
+	/**
+	 * Verifica se existe uma sessão ativa do qual possua acesso no sistema efetuado, seja ele qual for.
+	 * @return bool true se existir um acesso ou false caso contrário.
+	 */
+	protected function doLogin(): bool
+	{
 		$session = Session::getInstance();
 		$session->start();
-		$hasLogin = $session->isSetted(SessionVar::LOGIN_ID) && $session->isSetted(SessionVar::LOGIN_TOKEN) &&
-		($session->isSetted(SessionVar::LOGIN_CUSTOMER_ID) || $session->isSetted(SessionVar::LOGIN_TERCOM_ID));
 
-		return $hasLogin;
+		if ($session->isSetted(SessionVar::LOGIN_ID) && $session->isSetted(SessionVar::LOGIN_TOKEN) && $session->isSetted(SessionVar::LOGIN_TERCOM_ID))
+		{
+			$loginTercomControl = new LoginTercomControl();
+			self::$loginTercom = $loginTercomControl->getCurrent();
+			return true;
+		}
+
+		else if ($session->isSetted(SessionVar::LOGIN_ID) && $session->isSetted(SessionVar::LOGIN_TOKEN) && $session->isSetted(SessionVar::LOGIN_CUSTOMER_ID))
+		{
+			$loginCustomerControl = new LoginCustomerControl();
+			self::$loginCustomer = $loginCustomerControl->getCurrent();
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Redireciona para a página inicial do Dashboard.
+	 */
+	protected function redirectHome(): void
+	{
+		header('Location: /dashboard');
+	}
+
+	/**
+	 * Redireciona para a página de acesso.
+	 * @param bool $tercom para funcionário TERCOM.
+	 */
+	protected function redirectLogin(bool $tercom): void
+	{
+		if ($tercom)
+			header('Location: /dashboard/login?tercom');
+		else
+			header('Location: /dashboard/login');
 	}
 
 	/**

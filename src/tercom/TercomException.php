@@ -88,5 +88,21 @@ class TercomException extends \Exception
 	{
 		return new TercomException('você não é reponsável por estes dados', ApiStatus::PERMISSION_RESPONSABILITY);
 	}
+
+	/**
+	 * @return TercomException
+	 */
+	public static function newLoginTercomNotFound(): TercomException
+	{
+		return new TercomException('acesso não encontrado', ApiStatus::LOGIN_TERCOM_NOT_FOUND);
+	}
+
+	/**
+	 * @return TercomException
+	 */
+	public static function newLoginCustomerNotFound(): TercomException
+	{
+		return new TercomException('acesso não encontrado', ApiStatus::LOGIN_CUSTOMER_NOT_FOUND);
+	}
 }
 

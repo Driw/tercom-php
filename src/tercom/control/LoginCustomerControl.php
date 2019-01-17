@@ -172,9 +172,9 @@ class LoginCustomerControl extends LoginControl
 				$session->isSetted(SessionVar::LOGIN_ID) &&
 				$session->isSetted(SessionVar::LOGIN_TOKEN))
 			{
-				$idCustomerEmployee = $post->getInt(SessionVar::LOGIN_CUSTOMER_ID);
-				$idLogin = $post->getInt(SessionVar::LOGIN_ID);
-				$token = $post->getString(SessionVar::LOGIN_TOKEN);
+				$idCustomerEmployee = $session->getInt(SessionVar::LOGIN_CUSTOMER_ID);
+				$idLogin = $session->getInt(SessionVar::LOGIN_ID);
+				$token = $session->getString(SessionVar::LOGIN_TOKEN);
 			}
 
 			else
