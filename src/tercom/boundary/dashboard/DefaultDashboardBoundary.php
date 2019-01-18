@@ -22,6 +22,26 @@ abstract class DefaultDashboardBoundary extends ApiTemplate
 	 * @var int
 	 */
 	public const START_YEAR = 2018;
+	/**
+	 * @var string
+	 */
+	public const JS_CONST_LOGIN_ID = 'LOGIN_ID';
+	/**
+	 * @var string
+	 */
+	public const JS_CONST_LOGIN_TOKEN = 'LOGIN_TOKEN';
+	/**
+	 * @var string
+	 */
+	public const JS_CONST_LOGIN_EMPLOYEE_ID = 'LOGIN_EMPLOYEE_ID';
+	/**
+	 * @var string
+	 */
+	public const JS_CONST_LOGIN_PROFILE_ID = 'LOGIN_PROFILE_ID';
+	/**
+	 * @var string
+	 */
+	public const JS_CONST_IS_LOGIN_TERCOM = 'IS_LOGIN_TERCOM';
 
 	/**
 	 * @var LoginTercom
@@ -44,6 +64,10 @@ abstract class DefaultDashboardBoundary extends ApiTemplate
 	 * @var bool
 	 */
 	private $verifyLogin;
+	/**
+	 * @var array
+	 */
+	private $javaScriptConstants;
 
 	/**
 	 * {@inheritDoc}
@@ -69,6 +93,8 @@ abstract class DefaultDashboardBoundary extends ApiTemplate
 	 */
 	public function init()
 	{
+		$this->javaScriptConstants = [];
+
 		if ($this->isVerifyLogin() && !$this->doLogin())
 			header('Location: /dashboard/login');
 
@@ -92,6 +118,18 @@ abstract class DefaultDashboardBoundary extends ApiTemplate
 	}
 
 	/**
+	 * @param string $name
+	 * @param string $value
+	 */
+	public function addJavaScriptConstant(string $name, string $value, bool $quotes = false): void
+	{
+		$this->javaScriptConstants[] = [
+			'Name' => $name,
+			'Value' => $quotes ? "\"$value\"" : $value,
+		];
+	}
+
+	/**
 	 * @return DashboardTemplate
 	 */
 	public function newBaseTemplate(): DashboardTemplate
@@ -104,6 +142,7 @@ abstract class DefaultDashboardBoundary extends ApiTemplate
 
 		$configs->getHead()->set('BaseURL', sprintf('%sdashboard/', DOMAIN), true, true);
 		$dashboardTemplate->ImportTimestamp = sprintf('?%d', time());
+		$dashboardTemplate->setDataArray('JsConstants', $this->javaScriptConstants);
 		$dashboardTemplate->setDataConfig('Head', $configs->getHead());
 		$dashboardTemplate->setDataConfig('Fonts', $configs->getFonts());
 		$dashboardTemplate->setDataConfig('Stylesheet', $configs->getStyleSheets());
@@ -267,6 +306,11 @@ abstract class DefaultDashboardBoundary extends ApiTemplate
 		{
 			$loginTercomControl = new LoginTercomControl();
 			self::$loginTercom = $loginTercomControl->getCurrent();
+			$this->addJavaScriptConstant(self::JS_CONST_LOGIN_ID, self::$loginTercom->getId());
+			$this->addJavaScriptConstant(self::JS_CONST_LOGIN_TOKEN, self::$loginTercom->getToken(), true);
+			$this->addJavaScriptConstant(self::JS_CONST_LOGIN_EMPLOYEE_ID, self::$loginTercom->getTercomEmployeeId());
+			$this->addJavaScriptConstant(self::JS_CONST_LOGIN_PROFILE_ID, self::$loginTercom->getTercomEmployee()->getTercomProfileId());
+			$this->addJavaScriptConstant(self::JS_CONST_IS_LOGIN_TERCOM, 'true');
 			return true;
 		}
 
@@ -274,6 +318,11 @@ abstract class DefaultDashboardBoundary extends ApiTemplate
 		{
 			$loginCustomerControl = new LoginCustomerControl();
 			self::$loginCustomer = $loginCustomerControl->getCurrent();
+			$this->addJavaScriptConstant(self::JS_CONST_LOGIN_ID, self::$loginCustomer->getId());
+			$this->addJavaScriptConstant(self::JS_CONST_LOGIN_TOKEN, self::$loginCustomer->getToken(), true);
+			$this->addJavaScriptConstant(self::JS_CONST_LOGIN_EMPLOYEE_ID, self::$loginCustomer->getCustomerEmployeeId());
+			$this->addJavaScriptConstant(self::JS_CONST_LOGIN_PROFILE_ID, self::$loginCustomer->getCustomerEmployee()->getCustomerProfileId());
+			$this->addJavaScriptConstant(self::JS_CONST_IS_LOGIN_TERCOM, 'false');
 			return true;
 		}
 

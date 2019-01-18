@@ -20,6 +20,11 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+17.01.2018 - 0.3.5.190
+- Atualizado 'ajax.js' para que os chamados dos webservices sejam automaticamente informado os dados de acesso.
+- Ajustes para que os dados de acesso necessário sejam salvos em constantes no JavaScript para uso posterior.
+- Implementação da validação dos itens do menu de navegação conforme permissões do usuário acessado.
+
 17.01.2018 - 0.3.5.189
 - Implementação da entidade, DAO, controle e serviço para gerenciamento de aceitação de pedido.
 - Modio 'dao\exceptions\AddressDAOException' para 'exceptions\AddressException'.

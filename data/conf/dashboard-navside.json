@@ -14,11 +14,12 @@
 			"Name": "Fornecedores",
 			"Icon": "fas fa-boxes",
 			"ID": "dropdown-providers",
+			"PermissionPacket": "provider",
 			"Class": "",
 			"Itens": [
-				{ "Name": "Listar", "Icon": "fas fa-list-ul", "Url": "provider/list" },
-				{ "Name": "Procurar", "Icon": "fas fa-search", "Url": "provider/search" },
-				{ "Name": "Adicionar", "Icon": "fas fa-plus", "Url": "provider/add" }
+				{ "Name": "Listar", "Icon": "fas fa-list-ul", "Url": "provider/list", "PermissionPacket": "provider", "PermissionAction": "getAll" },
+				{ "Name": "Procurar", "Icon": "fas fa-search", "Url": "provider/search", "PermissionPacket": "provider", "PermissionAction": "search" },
+				{ "Name": "Adicionar", "Icon": "fas fa-plus", "Url": "provider/add", "PermissionPacket": "provider", "PermissionAction": "add" }
 			]
 		}
 	},
@@ -28,11 +29,12 @@
 			"Name": "Fabricantes",
 			"Icon": "fas fa-industry",
 			"ID": "dropdown-manufacturers",
+			"PermissionPacket": "manufacturer",
 			"Class": "",
 			"Itens": [
-				{ "Name": "Listar", "Icon": "fas fa-list-ul", "Url": "manufacturer/list" },
-				{ "Name": "Procurar", "Icon": "fas fa-search", "Url": "manufacturer/search" },
-				{ "Name": "Adicionar", "Icon": "fas fa-plus", "Url": "manufacturer/add" }
+				{ "Name": "Listar", "Icon": "fas fa-list-ul", "Url": "manufacturer/list", "PermissionPacket": "manufacturer", "PermissionAction": "getAll" },
+				{ "Name": "Procurar", "Icon": "fas fa-search", "Url": "manufacturer/search", "PermissionPacket": "manufacturer", "PermissionAction": "search" },
+				{ "Name": "Adicionar", "Icon": "fas fa-plus", "Url": "manufacturer/add", "PermissionPacket": "manufacturer", "PermissionAction": "add" }
 			]
 		}
 	},
@@ -42,6 +44,7 @@
 			"Name": "Categorias de Produto",
 			"Icon": "fas fa-layer-group",
 			"ID": "dropdown-product-categories",
+			"PermissionPacket": "productFamily",
 			"Class": "",
 			"Itens": [
 				{ "Name": "Famílias", "Icon": "fas fa-chess-king", "Url": "product/categories/family" },
@@ -57,10 +60,11 @@
 			"Name": "Embalagens de Produto",
 			"Icon": "fas fa-cube",
 			"ID": "dropdown-product-packages",
+			"PermissionPacket": "productPackage",
 			"Class": "",
 			"Itens": [
-				{ "Name": "Listar", "Icon": "fas fa-list-ul", "Url": "productPackage/list" },
-				{ "Name": "Adicionar", "Icon": "fas fa-plus", "Url": "productPackage/add" }
+				{ "Name": "Listar", "Icon": "fas fa-list-ul", "Url": "productPackage/list", "PermissionPacket": "productPackage", "PermissionAction": "getAll" },
+				{ "Name": "Adicionar", "Icon": "fas fa-plus", "Url": "productPackage/add", "PermissionPacket": "productPackage", "PermissionAction": "add" }
 			]
 		}
 	},
@@ -72,21 +76,22 @@
 			"ID": "dropdown-product-units",
 			"Class": "",
 			"Itens": [
-				{ "Name": "Listar", "Icon": "fas fa-list-ul", "Url": "productUnit/list" },
-				{ "Name": "Adicionar", "Icon": "fas fa-plus", "Url": "productUnit/add" }
+				{ "Name": "Listar", "Icon": "fas fa-list-ul", "Url": "productUnit/list", "PermissionPacket": "productUnit", "PermissionAction": "getAll" },
+				{ "Name": "Adicionar", "Icon": "fas fa-plus", "Url": "productUnit/add", "PermissionPacket": "productUnit", "PermissionAction": "add" }
 			]
 		}
 	},
 	{
 		"Dropdown": {
-			"service": "productTypes",
+			"service": "productType",
 			"Name": "Tipos de Produto",
 			"Icon": "fas fa-dolly",
 			"ID": "dropdown-product-types",
+			"PermissionPacket": "productType",
 			"Class": "",
 			"Itens": [
-				{ "Name": "Listar", "Icon": "fas fa-list-ul", "Url": "productType/list" },
-				{ "Name": "Adicionar", "Icon": "fas fa-plus", "Url": "productType/add" }
+				{ "Name": "Listar", "Icon": "fas fa-list-ul", "Url": "productType/list", "PermissionPacket": "productType", "PermissionAction": "getAll" },
+				{ "Name": "Adicionar", "Icon": "fas fa-plus", "Url": "productType/add", "PermissionPacket": "productType", "PermissionAction": "add" }
 			]
 		}
 	},
@@ -96,11 +101,12 @@
 			"Name": "Produtos",
 			"Icon": "fas fa-dolly-flatbed",
 			"ID": "dropdown-product",
+			"PermissionPacket": "product",
 			"Class": "",
 			"Itens": [
-				{ "Name": "Listar", "Icon": "fas fa-list-ul", "Url": "product/list" },
-				{ "Name": "Procurar", "Icon": "fas fa-search", "Url": "product/search" },
-				{ "Name": "Adicionar", "Icon": "fas fa-plus", "Url": "product/add" }
+				{ "Name": "Listar", "Icon": "fas fa-list-ul", "Url": "product/list", "PermissionPacket": "product", "PermissionAction": "getAll" },
+				{ "Name": "Procurar", "Icon": "fas fa-search", "Url": "product/search", "PermissionPacket": "product", "PermissionAction": "search" },
+				{ "Name": "Adicionar", "Icon": "fas fa-plus", "Url": "product/add", "PermissionPacket": "product", "PermissionAction": "add" }
 			]
 		}
 	}

@@ -50,12 +50,11 @@
 					<div class="search-box">
 						<button class="dismiss"><i class="icon-close"></i></button>
 						<form id="searchForm" action="#" role="search">
-							<input type="search" placeholder="Pelo que você está procurando..." class="form-control">
+							<input type="search" placeholder="Pelo que vocÃª estÃ¡ procurando..." class="form-control">
 						</form>
 					</div>
 					<div class="container-fluid">
-						<div
-							class="navbar-holder d-flex align-items-center justify-content-between">
+						<div class="navbar-holder d-flex align-items-center justify-content-between">
 							<!-- Navbar Header-->
 							<div class="navbar-header">
 								<!-- Navbar Brand -->
@@ -104,19 +103,21 @@
 					</div>
 					<!-- Sidebar Navidation Menus-->
 					<span class="heading">Menu</span>
-					<ul class="list-unstyled">
+					<ul class="list-unstyled" id="navbar-permission">
 					<!-- BEGIN NavSide -->
 						<!-- BEGIN NavSide_Item -->
-						<li class="{NavSide_Class}">
+						<li class="{NavSide_Class} nav-item-packet-js" data-permission-packet="{NavSide_Dropdown_PermissionPacket}">
 							<a href="{NavSide_Item_Url}"><i class="{NavSide_Item_Icon}"></i>{NavSide_Item_Name}</a>
 						</li>
 						<!-- END NavSide_Item -->
 						<!-- BEGIN NavSide_Dropdown -->
-						<li class="{NavSide_Dropdown_Class}">
+						<li class="{NavSide_Dropdown_Class} nav-item-packet-js" data-permission-packet="{NavSide_Dropdown_PermissionPacket}">
 							<a href="#{NavSide_Dropdown_ID}" aria-expanded="false" data-toggle="collapse"><i class="{NavSide_Dropdown_Icon}"></i>{NavSide_Dropdown_Name}</a>
 							<ul id="{NavSide_Dropdown_ID}" class="collapse list-unstyled ">
 								<!-- BEGIN NavSide_Dropdown_Itens -->
-								<li><a href="{NavSide_Dropdown_Itens_Url}"><i class="{NavSide_Dropdown_Itens_Icon}"></i>{NavSide_Dropdown_Itens_Name}</a></li>
+								<li class="nav-item-action-js" data-permission-packet="{NavSide_Dropdown_Itens_PermissionPacket}" data-permission-action="{NavSide_Dropdown_Itens_PermissionAction}">
+									<a href="{NavSide_Dropdown_Itens_Url}"><i class="{NavSide_Dropdown_Itens_Icon}"></i>{NavSide_Dropdown_Itens_Name}</a>
+								</li>
 								<!-- END NavSide_Dropdown_Itens -->
 							</ul>
 						</li>
@@ -173,4 +174,9 @@
 			</div>
 		</div>
 	</body>
+	<script type="">
+		<!-- BEGIN JsConstants -->
+		const {JsConstants_Name} = {JsConstants_Value};
+		<!-- END JsConstants -->
+	</script>
 </html>

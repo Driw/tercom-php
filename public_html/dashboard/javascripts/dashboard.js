@@ -14,6 +14,7 @@ $(document).ready(function()
 	initDateTimePicker();
 	initJQueryValidators();
 	initJQueryLoadingOverlay();
+	Dashboard.init();
 });
 
 function initSpoiler()
@@ -333,4 +334,65 @@ var Util = Util ||
 
 		return money === NO_VALUE ? money : money.toFixed(2);
 	},
+}
+
+var Dashboard = Dashboard ||
+{
+	init: function()
+	{
+		Dashboard.initNavbarPermissions();
+	},
+	initNavbarPermissions: function()
+	{
+		if (typeof(IS_LOGIN_TERCOM) === 'undefined')
+			return;
+
+		Dashboard.navbarPermission = $('#navbar-permission');
+		Dashboard.navbarPermission.fadeOut('fast');
+
+		if (IS_LOGIN_TERCOM)
+			alert('BLOCKED');
+		else
+			ws.managePermissions_customer_getAll(Dashboard.navbarPermission, Dashboard.onParsePermissions);
+	},
+	onParsePermissions: function(permissions)
+	{
+		Dashboard.permissions = {};
+
+		for (var i = 0; i < permissions.elements.length; i++)
+		{
+			var permission = permissions.elements[i];
+			var packet = permission.packet;
+			var action = permission.action;
+
+			if (!Dashboard.hasPermissionPacket(packet))
+				Dashboard.permissions[packet] = {};
+
+			Dashboard.permissions[packet][action] = true;
+		}
+
+		$('.nav-item-packet-js').each(function(index, element)
+		{
+			if (element.dataset.permissionPacket !== '' && !Dashboard.hasPermissionPacket(element.dataset.permissionPacket))
+				$(element).remove();
+		});
+
+		$('.nav-item-action-js').each(function(index, element)
+		{
+			if (element.dataset.permissionPacket !== '' &&
+				element.dataset.permissionAction !== '' &&
+				!Dashboard.hasPermissionAction(element.dataset.permissionPacket, element.dataset.permissionAction))
+				$(element).remove();
+		});
+
+		Dashboard.navbarPermission.fadeIn('fast');
+	},
+	hasPermissionPacket: function(packet)
+	{
+		return typeof(Dashboard.permissions[packet]) !== 'undefined';
+	},
+	hasPermissionAction: function(packet, action)
+	{
+		return Dashboard.hasPermissionPacket(packet) && typeof(Dashboard.permissions[packet][action]) !== 'undefined';
+	}
 }

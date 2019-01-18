@@ -82,6 +82,20 @@ Ajax.prototype.setJQueryForm = function(form)
 };
 Ajax.prototype.setFormData = function(formData)
 {
+	if (typeof(LOGIN_ID) !== 'undefined' &&
+		typeof(LOGIN_TOKEN) !== 'undefined' &&
+		typeof(LOGIN_EMPLOYEE_ID) !== 'undefined' &&
+		typeof(IS_LOGIN_TERCOM) !== 'undefined')
+	{
+		formData.append('login_id', LOGIN_ID);
+		formData.append('login_token', LOGIN_TOKEN);
+
+		if (IS_LOGIN_TERCOM)
+			formData.append('login_tercomEmployee', LOGIN_EMPLOYEE_ID);
+		else
+			formData.append('login_customerEmployee', LOGIN_EMPLOYEE_ID);
+	}
+
 	this.setData(formData);
 	this.setProcessData(false);
 	this.setContentType(false);

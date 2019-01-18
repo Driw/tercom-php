@@ -11,6 +11,9 @@ Webservice.prototype.setOptions = function(options)
 };
 Webservice.prototype.setOptionsAndExecute = function(options)
 {
+	if (typeof(options.form) === 'undefined')
+		options.form = new FormData();
+
 	this.setOptions(options);
 	this.execute();
 };
@@ -461,6 +464,18 @@ Webservice.prototype.productPrice_getAll = function(idProduct, target, listener)
 		'target': target,
 		'listener': listener,
 		'errorMessage': this.newBaseErrorMessage('obter lista de preços do produto'),
+	});
+};
+
+// Login Reference
+
+Webservice.prototype.managePermissions_customer_getAll = function(target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'managePermissions/getAll/customer/' +LOGIN_PROFILE_ID,
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter lista de permissões'),
 	});
 };
 
