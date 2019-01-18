@@ -1,0 +1,62 @@
+					<!-- Lista de Preços de Produto -->
+					<section class="dashboard-counts">
+						<div class="container-fluid">
+							<div class="row justify-content-center">
+								<div class="card col-8 pl-0 pr-0">
+									<div class="card-header d-flex align-items-center">
+										<h3 class="h4">Preços de Produto</h3>
+									</div>
+									<div class="card-body">
+										<form class="tercom-form tercom-form-md" id="form-product-prices">
+											<input type="hidden" name="idProduct" value="{idProduct}">
+											<fieldset>
+												<div class="form-group">
+													<div class="input-group">
+														<div class="input-group-prepend">
+															<span class="input-group-text">Produto</span>
+														</div>
+														<input type="text" class="form-control" name="name" disabled>
+													</div>
+												</div>
+												<div class="form-group">
+													<div class="input-group">
+														<div class="input-group-prepend">
+															<span class="input-group-text">Unidade</span>
+														</div>
+														<input type="text" class="form-control" name="unit" disabled>
+													</div>
+												</div>
+												<div class="form-group">
+													<div class="input-group">
+														<div class="input-group-prepend">
+															<span class="input-group-text">Descrição</span>
+														</div>
+														<textarea class="form-control" rows="5" name="description" disabled></textarea>
+													</div>
+												</div>
+												<div class="form-group text-center">
+													<div class="btn-group">
+														<button type="button" class="btn btn-primary" onclick="Util.redirect('product/addPrice/{idProduct}', true)">Novo Preço</button>
+													</div>
+												</div>
+											</fieldset>
+										</form>
+										<table class="table table-striped table-hover" id="table-product-prices">
+											<thead>
+												<tr>
+													<th>Nome</th>
+													<th>Quantidade</th>
+													<th>Preço</th>
+													<th>Pacote</th>
+													<th>Tipo</th>
+													<th></th>
+												</tr>
+											</thead>
+											<tbody>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</section>

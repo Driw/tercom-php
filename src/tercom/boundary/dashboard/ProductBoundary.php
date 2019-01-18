@@ -5,6 +5,7 @@ namespace tercom\boundary\dashboard;
 use dProject\restful\template\ApiTemplateResult;
 use dProject\restful\ApiContent;
 use tercom\control\ProductControl;
+use tercom\core\System;
 
 /**
  * @see BoundaryManager
@@ -14,10 +15,14 @@ use tercom\control\ProductControl;
 class ProductBoundary extends DefaultDashboardLoggedBoundary
 {
 	/**
+	 * @var string
+	 */
+	public const BASE_PATH = 'Product/';
+
+	/**
 	 * {@inheritDoc}
 	 * @see \dProject\restful\ApiServiceInterface::init()
 	 */
-
 	public function init()
 	{
 		parent::init();
@@ -29,23 +34,18 @@ class ProductBoundary extends DefaultDashboardLoggedBoundary
 	 * {@inheritDoc}
 	 * @see \dproject\restful\template\ApiTemplate::callIndex()
 	 */
-
 	public function callIndex()
 	{
-		$baseTemplate = $this->newBaseTemplate();
-		$result = new ApiTemplateResult();
-		$result->add($baseTemplate);
-
-		return $result;
+		return $this->onList(System::getApiConnection()->getContent());
 	}
 
 	/**
 	 * @return ApiTemplateResult
 	 */
-
-	public function onList(): ApiTemplateResult
+	public function onList(ApiContent $content): ApiTemplateResult
 	{
-		$dashboardTemplate = $this->prepareInclude('ProductList');
+		$dashboardTemplate = $this->newBaseTemplate();
+		$dashboardTemplate = $this->prepareInclude(self::BASE_PATH. 'ProductList');
 
 		$result = new ApiTemplateResult();
 		$result->add($dashboardTemplate);
@@ -56,12 +56,110 @@ class ProductBoundary extends DefaultDashboardLoggedBoundary
 	/**
 	 * @return ApiTemplateResult
 	 */
-
-	public function onSearch()
+	public function onSearch(ApiContent $content)
 	{
 		$dashboardTemplate = $this->newBaseTemplate();
-		$dashboardTemplate = $this->prepareInclude('ProductSearch');
+		$dashboardTemplate = $this->prepareInclude(self::BASE_PATH. 'ProductSearch');
 		$dashboardTemplate->setDataArray('FilterOption', $this->getFilterOptions());
+
+		$result = new ApiTemplateResult();
+		$result->add($dashboardTemplate);
+
+		return $result;
+	}
+
+	/**
+	 * @return ApiTemplateResult
+	 */
+	public function onAdd(ApiContent $content): ApiTemplateResult
+	{
+		$dashboardTemplate = $this->newBaseTemplate();
+		$dashboardTemplate = $this->prepareInclude(self::BASE_PATH. 'ProductAdd');
+
+		$result = new ApiTemplateResult();
+		$result->add($dashboardTemplate);
+
+		return $result;
+	}
+
+	/**
+	 * @ApiAnnotation({"params":["idProduct"]})
+	 * @param ApiContent $content
+	 * @return ApiTemplateResult
+	 */
+	public function onView(ApiContent $content): ApiTemplateResult
+	{
+		$dashboardTemplate = $this->newBaseTemplate();
+		$dashboardTemplate = $this->prepareInclude(self::BASE_PATH. 'ProductView');
+		$dashboardTemplate->idProduct = $content->getParameters()->getInt('idProduct');
+
+		$result = new ApiTemplateResult();
+		$result->add($dashboardTemplate);
+
+		return $result;
+	}
+
+	/**
+	 * @ApiAnnotation({"params":["idProduct"]})
+	 * @param ApiContent $content
+	 * @return ApiTemplateResult
+	 */
+	public function onViewPrices(ApiContent $content): ApiTemplateResult
+	{
+		$dashboardTemplate = $this->newBaseTemplate();
+		$dashboardTemplate = $this->prepareInclude(self::BASE_PATH. 'ProductPriceList');
+		$dashboardTemplate->idProduct = $content->getParameters()->getInt('idProduct');
+
+		$result = new ApiTemplateResult();
+		$result->add($dashboardTemplate);
+
+		return $result;
+	}
+
+	/**
+	 * @ApiAnnotation({"params":["idProduct"]})
+	 * @param ApiContent $content
+	 * @return ApiTemplateResult
+	 */
+	public function onAddPrice(ApiContent $content): ApiTemplateResult
+	{
+		$dashboardTemplate = $this->newBaseTemplate();
+		$dashboardTemplate = $this->prepareInclude(self::BASE_PATH. 'ProductPriceAdd');
+		$dashboardTemplate->idProduct = $content->getParameters()->getInt('idProduct');
+
+		$result = new ApiTemplateResult();
+		$result->add($dashboardTemplate);
+
+		return $result;
+	}
+
+	/**
+	 * @ApiAnnotation({"params":["idProductPrice"]})
+	 * @param ApiContent $content
+	 * @return ApiTemplateResult
+	 */
+	public function onViewPrice(ApiContent $content): ApiTemplateResult
+	{
+		$dashboardTemplate = $this->newBaseTemplate();
+		$dashboardTemplate = $this->prepareInclude(self::BASE_PATH. 'ProductPriceView');
+		$dashboardTemplate->idProductPrice = $content->getParameters()->getInt('idProductPrice');
+
+		$result = new ApiTemplateResult();
+		$result->add($dashboardTemplate);
+
+		return $result;
+	}
+
+	/**
+	 * @ApiAnnotation({"params":["idProductPrice"]})
+	 * @param ApiContent $content
+	 * @return ApiTemplateResult
+	 */
+	public function onRemovePrice(ApiContent $content): ApiTemplateResult
+	{
+		$dashboardTemplate = $this->newBaseTemplate();
+		$dashboardTemplate = $this->prepareInclude(self::BASE_PATH. 'ProductPriceRemove');
+		$dashboardTemplate->idProductPrice = $content->getParameters()->getInt('idProductPrice');
 
 		$result = new ApiTemplateResult();
 		$result->add($dashboardTemplate);
@@ -72,7 +170,6 @@ class ProductBoundary extends DefaultDashboardLoggedBoundary
 	/**
 	 * @return array
 	 */
-
 	private function getFilterOptions(): array
 	{
 		$providerFilters = ProductControl::getFilters();
@@ -81,112 +178,7 @@ class ProductBoundary extends DefaultDashboardLoggedBoundary
 		foreach ($providerFilters as $value => $option)
 			$filterOptions[] = [ 'Value' => $value, 'Option' => $option ];
 
-		return $filterOptions;
-	}
-
-	/**
-	 * @return ApiTemplateResult
-	 */
-
-	public function onAdd(): ApiTemplateResult
-	{
-		$dashboardTemplate = $this->newBaseTemplate();
-		$dashboardTemplate = $this->prepareInclude('ProductAdd');
-
-		$result = new ApiTemplateResult();
-		$result->add($dashboardTemplate);
-
-		return $result;
-	}
-
-	/**
-	 * @ApiAnnotation({"params":["idProduct"]})
-	 * @param ApiContent $content
-	 * @return ApiTemplateResult
-	 */
-
-	public function onView(ApiContent $content): ApiTemplateResult
-	{
-		$dashboardTemplate = $this->newBaseTemplate();
-		$dashboardTemplate = $this->prepareInclude('ProductView');
-		$dashboardTemplate->idProduct = $content->getParameters()->getInt('idProduct');
-
-		$result = new ApiTemplateResult();
-		$result->add($dashboardTemplate);
-
-		return $result;
-	}
-
-	/**
-	 * @ApiAnnotation({"params":["idProduct"]})
-	 * @param ApiContent $content
-	 * @return ApiTemplateResult
-	 */
-
-	public function onViewPrices(ApiContent $content): ApiTemplateResult
-	{
-		$dashboardTemplate = $this->newBaseTemplate();
-		$dashboardTemplate = $this->prepareInclude('ProductPriceList');
-		$dashboardTemplate->idProduct = $content->getParameters()->getInt('idProduct');
-
-		$result = new ApiTemplateResult();
-		$result->add($dashboardTemplate);
-
-		return $result;
-	}
-
-	/**
-	 * @ApiAnnotation({"params":["idProduct"]})
-	 * @param ApiContent $content
-	 * @return ApiTemplateResult
-	 */
-
-	public function onAddPrice(ApiContent $content): ApiTemplateResult
-	{
-		$dashboardTemplate = $this->newBaseTemplate();
-		$dashboardTemplate = $this->prepareInclude('ProductPriceAdd');
-		$dashboardTemplate->idProduct = $content->getParameters()->getInt('idProduct');
-
-		$result = new ApiTemplateResult();
-		$result->add($dashboardTemplate);
-
-		return $result;
-	}
-
-	/**
-	 * @ApiAnnotation({"params":["idProductPrice"]})
-	 * @param ApiContent $content
-	 * @return ApiTemplateResult
-	 */
-
-	public function onViewPrice(ApiContent $content): ApiTemplateResult
-	{
-		$dashboardTemplate = $this->newBaseTemplate();
-		$dashboardTemplate = $this->prepareInclude('ProductPriceView');
-		$dashboardTemplate->idProductPrice = $content->getParameters()->getInt('idProductPrice');
-
-		$result = new ApiTemplateResult();
-		$result->add($dashboardTemplate);
-
-		return $result;
-	}
-
-	/**
-	 * @ApiAnnotation({"params":["idProductPrice"]})
-	 * @param ApiContent $content
-	 * @return ApiTemplateResult
-	 */
-
-	public function onRemovePrice(ApiContent $content): ApiTemplateResult
-	{
-		$dashboardTemplate = $this->newBaseTemplate();
-		$dashboardTemplate = $this->prepareInclude('ProductPriceRemove');
-		$dashboardTemplate->idProductPrice = $content->getParameters()->getInt('idProductPrice');
-
-		$result = new ApiTemplateResult();
-		$result->add($dashboardTemplate);
-
-		return $result;
+			return $filterOptions;
 	}
 }
 

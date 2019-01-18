@@ -4,6 +4,7 @@ namespace tercom\boundary\dashboard;
 
 use dProject\restful\ApiContent;
 use dProject\restful\template\ApiTemplateResult;
+use tercom\core\System;
 
 /**
  * @see BoundaryManager
@@ -13,10 +14,14 @@ use dProject\restful\template\ApiTemplateResult;
 class ProductUnitBoundary extends DefaultDashboardLoggedBoundary
 {
 	/**
+	 * @var string
+	 */
+	public const BASE_PATH = 'ProductUnit/';
+
+	/**
 	 * {@inheritDoc}
 	 * @see \dProject\restful\ApiServiceInterface::init()
 	 */
-
 	public function init()
 	{
 		parent::init();
@@ -28,23 +33,17 @@ class ProductUnitBoundary extends DefaultDashboardLoggedBoundary
 	 * {@inheritDoc}
 	 * @see \dproject\restful\template\ApiTemplate::callIndex()
 	 */
-
 	public function callIndex()
 	{
-		$baseTemplate = $this->newBaseTemplate();
-		$result = new ApiTemplateResult();
-		$result->add($baseTemplate);
-
-		return $result;
+		return $this->onList(System::getDashboardConnection()->getContent());
 	}
 
 	/**
 	 * @return ApiTemplateResult
 	 */
-
-	public function onList(): ApiTemplateResult
+	public function onList(ApiContent $content): ApiTemplateResult
 	{
-		$dashboardTemplate = $this->prepareInclude('ProductUnitList');
+		$dashboardTemplate = $this->prepareInclude(self::BASE_PATH. 'ProductUnitList');
 
 		$result = new ApiTemplateResult();
 		$result->add($dashboardTemplate);
@@ -55,11 +54,10 @@ class ProductUnitBoundary extends DefaultDashboardLoggedBoundary
 	/**
 	 * @return ApiTemplateResult
 	 */
-
-	public function onAdd(): ApiTemplateResult
+	public function onAdd(ApiContent $content): ApiTemplateResult
 	{
 		$dashboardTemplate = $this->getApiParent()->newBaseTemplate();
-		$dashboardTemplate = $this->prepareInclude('ProductUnitAdd');
+		$dashboardTemplate = $this->prepareInclude(self::BASE_PATH. 'ProductUnitAdd');
 
 		$result = new ApiTemplateResult();
 		$result->add($dashboardTemplate);
@@ -72,11 +70,10 @@ class ProductUnitBoundary extends DefaultDashboardLoggedBoundary
 	 * @param ApiContent $content
 	 * @return ApiTemplateResult
 	 */
-
 	public function onView(ApiContent $content): ApiTemplateResult
 	{
 		$dashboardTemplate = $this->getApiParent()->newBaseTemplate();
-		$dashboardTemplate = $this->prepareInclude('ProductUnitView');
+		$dashboardTemplate = $this->prepareInclude(self::BASE_PATH. 'ProductUnitView');
 		$dashboardTemplate->idProductUnit = $content->getParameters()->getInt('idProductUnit');
 
 		$result = new ApiTemplateResult();

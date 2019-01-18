@@ -5,20 +5,25 @@ namespace tercom\boundary\dashboard;
 use dProject\restful\template\ApiTemplateResult;
 use dProject\restful\ApiContent;
 use tercom\control\ProviderControl;
+use tercom\core\System;
 use tercom\entities\Phone;
 
 /**
  * @see BoundaryManager
+ *
  * @author Andrew
  */
-
 class ProviderBoundary extends DefaultDashboardLoggedBoundary
 {
+	/**
+	 * @var string
+	 */
+	public const BASE_PATH = 'Provider/';
+
 	/**
 	 * {@inheritDoc}
 	 * @see \dProject\restful\ApiServiceInterface::init()
 	 */
-
 	public function init()
 	{
 		parent::init();
@@ -27,12 +32,20 @@ class ProviderBoundary extends DefaultDashboardLoggedBoundary
 	}
 
 	/**
+	 * {@inheritDoc}
+	 * @see \dproject\restful\template\ApiTemplate::callIndex()
+	 */
+	public function callIndex()
+	{
+		return $this->onList(System::getDashboardConnection()->getContent());
+	}
+
+	/**
 	 * @return ApiTemplateResult
 	 */
-
-	public function onList(): ApiTemplateResult
+	public function onList(ApiContent $content): ApiTemplateResult
 	{
-		$dashboardTemplate = $this->prepareInclude('ProviderList');
+		$dashboardTemplate = $this->prepareInclude(self::BASE_PATH. 'ProviderList');
 
 		$result = new ApiTemplateResult();
 		$result->add($dashboardTemplate);
@@ -43,11 +56,10 @@ class ProviderBoundary extends DefaultDashboardLoggedBoundary
 	/**
 	 * @return ApiTemplateResult
 	 */
-
-	public function onSearch()
+	public function onSearch(ApiContent $content)
 	{
 		$dashboardTemplate = $this->newBaseTemplate();
-		$dashboardTemplate = $this->prepareInclude('ProviderSearch');
+		$dashboardTemplate = $this->prepareInclude(self::BASE_PATH. 'ProviderSearch');
 		$dashboardTemplate->setDataArray('FilterOption', $this->getFilterOptions());
 
 		$result = new ApiTemplateResult();
@@ -57,28 +69,12 @@ class ProviderBoundary extends DefaultDashboardLoggedBoundary
 	}
 
 	/**
-	 * @return array
-	 */
-
-	private function getFilterOptions(): array
-	{
-		$providerFilters = ProviderControl::getFilters();
-		$filterOptions = [];
-
-		foreach ($providerFilters as $value => $option)
-			$filterOptions[] = [ 'Value' => $value, 'Option' => $option ];
-
-		return $filterOptions;
-	}
-
-	/**
 	 * @return ApiTemplateResult
 	 */
-
-	public function onAdd(): ApiTemplateResult
+	public function onAdd(ApiContent $content): ApiTemplateResult
 	{
 		$dashboardTemplate = $this->newBaseTemplate();
-		$dashboardTemplate = $this->prepareInclude('ProviderAdd');
+		$dashboardTemplate = $this->prepareInclude(self::BASE_PATH. 'ProviderAdd');
 
 		$result = new ApiTemplateResult();
 		$result->add($dashboardTemplate);
@@ -91,12 +87,11 @@ class ProviderBoundary extends DefaultDashboardLoggedBoundary
 	 * @param ApiContent $content
 	 * @return ApiTemplateResult
 	 */
-
 	public function onView(ApiContent $content): ApiTemplateResult
 	{
 		$phoneTypeOptions = DashboardService::parseOptions(Phone::getTypes());
 		$dashboardTemplate = $this->newBaseTemplate();
-		$dashboardTemplate = $this->prepareInclude('ProviderView');
+		$dashboardTemplate = $this->prepareInclude(self::BASE_PATH. 'ProviderView');
 		$dashboardTemplate->ProviderID = $content->getParameters()->getInt('idProvider');
 		$dashboardTemplate->setDataArray('Commercial_PhoneType', $phoneTypeOptions);
 		$dashboardTemplate->setDataArray('Otherphone_PhoneType', $phoneTypeOptions);
@@ -110,13 +105,17 @@ class ProviderBoundary extends DefaultDashboardLoggedBoundary
 	}
 
 	/**
-	 * {@inheritDoc}
-	 * @see \dproject\restful\template\ApiTemplate::callIndex()
+	 * @return array
 	 */
-
-	public function callIndex()
+	private function getFilterOptions(): array
 	{
-		return $this->callIndex();
+		$providerFilters = ProviderControl::getFilters();
+		$filterOptions = [];
+
+		foreach ($providerFilters as $value => $option)
+			$filterOptions[] = [ 'Value' => $value, 'Option' => $option ];
+
+		return $filterOptions;
 	}
 }
 

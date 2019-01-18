@@ -1,0 +1,337 @@
+					<!-- Dados do Fornecedor -->
+					<section class="dashboard-counts">
+						<div class="container-fluid">
+							<div class="row justify-content-center">
+								<div class="card col-8 pl-0 pr-0">
+									<div class="card-header d-flex align-items-center">
+										<h3 class="h4">Dados do Fornecedor</h3>
+									</div>
+									<div class="card-body">
+										<form id="form-view" class="tercom-form tercom-form-md form-horizontal">
+											<fieldset>
+												<div class="form-group">
+													<div class="input-group">
+														<div class="input-group-prepend">
+															<span class="input-group-text">ID</span>
+														</div>
+														<input type="text" class="form-control" name="id" value="{ProviderID}" readonly>
+													</div>
+												</div>
+												<div class="form-group">
+													<div class="input-group">
+														<div class="input-group-prepend">
+															<span class="input-group-text">CNPJ</span>
+														</div>
+														<input type="text" class="form-control mask-cnpj" name="cnpj">
+													</div>
+												</div>
+												<div class="form-group">
+													<div class="input-group">
+														<div class="input-group-prepend">
+															<span class="input-group-text">Razão Social</span>
+														</div>
+														<input type="text" class="form-control mask-alphabetic" name="companyName">
+													</div>
+												</div>
+												<div class="form-group">
+													<div class="input-group">
+														<div class="input-group-prepend">
+															<span class="input-group-text">Nome Fantasia</span>
+														</div>
+														<input type="text" class="form-control mask-alphabetic" name="fantasyName">
+													</div>
+												</div>
+												<div class="form-group">
+													<div class="input-group">
+														<div class="input-group-prepend">
+															<span class="input-group-text">Representante</span>
+														</div>
+														<input type="text" class="form-control mask-alphabetic" name="spokesman">
+													</div>
+												</div>
+												<div class="form-group">
+													<div class="input-group">
+														<div class="input-group-prepend">
+															<span class="input-group-text">Site</span>
+														</div>
+														<input type="url" class="form-control" name="site">
+													</div>
+												</div>
+												<div class="form-group text-center">
+													<div class="btn-group">
+														<button type="button" class="btn btn-success" id="controller-save">Salvar</button>
+														<button type="button" class="btn btn-info" id="controller-reload">Recarregar</button>
+													</div>
+												</div>
+											</fieldset>
+										</form>
+									</div>
+								</div>
+								<div class="card col-5 mr-1 pl-0 pr-0">
+									<div class="card-header d-flex align-items-center">
+										<h3 class="h4">Telefone Comercial</h3>
+									</div>
+									<div class="card-body">
+										<form id="form-commercial" class="tercom-form tercom-form-md form-horizontal">
+											<input type="hidden" name="idPhone">
+											<fieldset>
+												<div class="form-group">
+													<div class="input-group">
+														<div class="input-group-prepend">
+															<span class="input-group-text">DDD</span>
+														</div>
+														<input type="text" class="form-control mask-integer" name="commercial[ddd]">
+													</div>
+												</div>
+												<div class="form-group">
+													<div class="input-group">
+														<div class="input-group-prepend">
+															<span class="input-group-text">Número</span>
+														</div>
+														<input type="text" class="form-control mask-phone" name="commercial[number]">
+													</div>
+												</div>
+												<div class="form-group">
+													<div class="input-group">
+														<div class="input-group-prepend">
+															<span class="input-group-text">Tipo</span>
+														</div>
+														<select class="form-control" name="commercial[type]">
+															<option value="">Selecione</option>
+															<!-- BEGIN Commercial_PhoneType -->
+															<option value="{Commercial_PhoneType_Value}">{Commercial_PhoneType_Option}</option>
+															<!-- END Commercial_PhoneType -->
+														</select>
+													</div>
+												</div>
+												<div class="form-group text-center">
+													<div class="btn-group" id="commercial-group-add">
+														<button type="button" class="btn btn-primary" id="commercial-add">Adicionar</button>
+													</div>
+													<div class="btn-group" id="commercial-group-exist" style="display: none;">
+														<button type="button" class="btn btn-success" id="commercial-save">Salvar</button>
+														<button type="button" class="btn btn-danger" id="commercial-remove">Exluir</button>
+													</div>
+												</div>
+											</fieldset>
+										</form>
+									</div>
+								</div>
+								<div class="card col-5 ml-1 pl-0 pr-0">
+									<div class="card-header d-flex align-items-center">
+										<h3 class="h4">Telefone Secundário</h3>
+									</div>
+									<div class="card-body">
+										<form id="form-otherphone" class="tercom-form tercom-form-md form-horizontal">
+											<input type="hidden" name="idPhone">
+											<fieldset>
+												<div class="form-group">
+													<div class="input-group">
+														<div class="input-group-prepend">
+															<span class="input-group-text">DDD</span>
+														</div>
+														<input type="text" class="form-control mask-integer" name="otherphone[ddd]">
+													</div>
+												</div>
+												<div class="form-group">
+													<div class="input-group">
+														<div class="input-group-prepend">
+															<span class="input-group-text">Número</span>
+														</div>
+														<input type="text" class="form-control mask-phone" name="otherphone[number]">
+													</div>
+												</div>
+												<div class="form-group">
+													<div class="input-group">
+														<div class="input-group-prepend">
+															<span class="input-group-text">Tipo</span>
+														</div>
+														<select class="form-control" name="otherphone[type]">
+															<option value="">Selecione</option>
+															<!-- BEGIN Otherphone_PhoneType -->
+															<option value="{Otherphone_PhoneType_Value}">{Otherphone_PhoneType_Option}</option>
+															<!-- END Otherphone_PhoneType -->
+														</select>
+													</div>
+												</div>
+												<div class="form-group text-center">
+													<div class="btn-group" id="otherphone-group-add">
+														<button type="button" class="btn btn-primary" id="otherphone-add">Adicionar</button>
+													</div>
+													<div class="btn-group" id="otherphone-group-exist" style="display: none;">
+														<button type="button" class="btn btn-success" id="otherphone-save">Salvar</button>
+														<button type="button" class="btn btn-danger" id="otherphone-remove">Exluir</button>
+													</div>
+												</div>
+											</fieldset>
+										</form>
+									</div>
+								</div>
+								<div class="card col-9 pl-0 pr-0">
+									<div class="card-header d-flex align-items-center">
+										<h3 class="h4">Lista de Contatos</h3>
+									</div>
+									<div class="card-body">
+										<form>
+											<div class="form-group text-center">
+												<button type="button" class="btn btn-primary" id="contact-new">Novo Contato</button>
+											</div>
+										</form>
+										<table class="table table-striped table-hover" id="table-contacts">
+											<thead>
+												<tr>
+													<th>Nome</th>
+													<th>Cargo</th>
+													<th>Tel. Comercial</th>
+													<th>Ações</th>
+												</tr>
+											</thead>
+											<tbody>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</section>
+
+					<!-- Modal dos Detalhes do Contato de Fornecedor -->
+					<div class="modal fade" id="modal-contact">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title">Contato para <span id="modal-contact-title"></span></h5>
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body modal-scroll-y">
+									<form class="tercom-form" id="form-contact">
+										<input type="hidden" name="id">
+										<fieldset>
+											<div class="form-group">
+												<div class="input-group">
+													<div class="input-group-prepend">
+														<span class="input-group-text">Nome</span>
+													</div>
+													<input type="text" class="form-control" name="name">
+												</div>
+											</div>
+											<div class="form-group">
+												<div class="input-group">
+													<div class="input-group-prepend">
+														<span class="input-group-text">E-mail</span>
+													</div>
+													<input type="text" class="form-control" name="email">
+												</div>
+											</div>
+											<div class="form-group">
+												<div class="input-group">
+													<div class="input-group-prepend">
+														<span class="input-group-text">Cargo</span>
+													</div>
+													<input type="text" class="form-control" name="position">
+												</div>
+											</div>
+										</fieldset>
+									</form>
+									<div class="hr">
+									</div>
+									<form class="tercom-form" id="form-contact-commercial" style="display: none;">
+										<input type="hidden" name="id">
+										<fieldset>
+											<h4>Telefone Comercial</h4>
+											<div class="form-group">
+												<div class="input-group">
+													<div class="input-group-prepend">
+														<span class="input-group-text">DDD</span>
+													</div>
+													<input type="text" class="form-control mask-integer" name="commercial[ddd]">
+												</div>
+											</div>
+											<div class="form-group">
+												<div class="input-group">
+													<div class="input-group-prepend">
+														<span class="input-group-text">Número</span>
+													</div>
+													<input type="text" class="form-control mask-phone" name="commercial[number]">
+												</div>
+											</div>
+											<div class="form-group">
+												<div class="input-group">
+													<div class="input-group-prepend">
+														<span class="input-group-text">Tipo</span>
+													</div>
+													<select class="form-control" name="commercial[type]">
+														<option value="">Selecione</option>
+														<!-- BEGIN Contact_Commercial_PhoneType -->
+														<option value="{Contact_Commercial_PhoneType_Value}">{Contact_Commercial_PhoneType_Option}</option>
+														<!-- END Contact_Commercial_PhoneType -->
+													</select>
+												</div>
+											</div>
+											<div class="form-group text-center">
+												<div class="btn-group" id="contact-commercial-group-add">
+													<button type="button" class="btn btn-primary" id="contact-commercial-add">Adicionar</button>
+												</div>
+												<div class="btn-group" id="contact-commercial-group-exist" style="display: none;">
+													<button type="button" class="btn btn-success" id="contact-commercial-save">Salvar</button>
+													<button type="button" class="btn btn-danger" id="contact-commercial-remove">Exluir</button>
+												</div>
+											</div>
+										</fieldset>
+									</form>
+									<div class="hr"></div>
+									<form class="tercom-form" id="form-contact-otherphone" style="display: none;">
+										<input type="hidden" name="id">
+										<fieldset>
+											<h4>Telefone Secundário</h4>
+											<div class="form-group">
+												<div class="input-group">
+													<div class="input-group-prepend">
+														<span class="input-group-text">DDD</span>
+													</div>
+													<input type="text" class="form-control mask-integer" name="otherphone[ddd]">
+												</div>
+											</div>
+											<div class="form-group">
+												<div class="input-group">
+													<div class="input-group-prepend">
+														<span class="input-group-text">Número</span>
+													</div>
+													<input type="text" class="form-control mask-phone" name="otherphone[number]">
+												</div>
+											</div>
+											<div class="form-group">
+												<div class="input-group">
+													<div class="input-group-prepend">
+														<span class="input-group-text">Tipo</span>
+													</div>
+													<select class="form-control" name="otherphone[type]">
+														<option value="">Selecione</option>
+														<!-- BEGIN Contact_Otherphone_PhoneType -->
+														<option value="{Contact_Otherphone_PhoneType_Value}">{Contact_Otherphone_PhoneType_Option}</option>
+														<!-- END Contact_Otherphone_PhoneType -->
+													</select>
+												</div>
+											</div>
+											<div class="form-group text-center">
+												<div class="btn-group" id="contact-otherphone-group-add">
+													<button type="button" class="btn btn-primary" id="contact-otherphone-add">Adicionar</button>
+												</div>
+												<div class="btn-group" id="contact-otherphone-group-exist" style="display: none;">
+													<button type="button" class="btn btn-success" id="contact-otherphone-save">Salvar</button>
+													<button type="button" class="btn btn-danger" id="contact-otherphone-remove">Exluir</button>
+												</div>
+											</div>
+										</fieldset>
+									</form>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-success" id="modal-contact-add">Adicionar</button>
+									<button type="button" class="btn btn-success" id="modal-contact-save">Salvar</button>
+									<button type="button" class="btn btn-primary" data-dismiss="modal">Fechar</button>
+								</div>
+							</div>
+						</div>
+					</div>

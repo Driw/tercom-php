@@ -4,6 +4,7 @@ namespace tercom\boundary\dashboard;
 
 use dProject\restful\ApiContent;
 use dProject\restful\template\ApiTemplateResult;
+use tercom\core\System;
 
 /**
  * @see BoundaryManager
@@ -13,10 +14,14 @@ use dProject\restful\template\ApiTemplateResult;
 class ProductPackageBoundary extends DefaultDashboardLoggedBoundary
 {
 	/**
+	 * @var string
+	 */
+	public const BASE_PATH = 'ProductPackage/';
+
+	/**
 	 * {@inheritDoc}
 	 * @see \dProject\restful\ApiServiceInterface::init()
 	 */
-
 	public function init()
 	{
 		parent::init();
@@ -28,23 +33,18 @@ class ProductPackageBoundary extends DefaultDashboardLoggedBoundary
 	 * {@inheritDoc}
 	 * @see \dproject\restful\template\ApiTemplate::callIndex()
 	 */
-
-	public function callIndex()
+	public function callIndex(ApiContent $content)
 	{
-		$baseTemplate = $this->newBaseTemplate();
-		$result = new ApiTemplateResult();
-		$result->add($baseTemplate);
-
-		return $result;
+		return $this->onList(System::getDashboardConnection()->getContent());
 	}
 
 	/**
 	 * @return ApiTemplateResult
 	 */
-
-	public function onList(): ApiTemplateResult
+	public function onList(ApiContent $content): ApiTemplateResult
 	{
-		$dashboardTemplate = $this->prepareInclude('ProductPackageList');
+		$dashboardTemplate = $this->newBaseTemplate();
+		$dashboardTemplate = $this->prepareInclude(self::BASE_PATH. 'ProductPackageList');
 
 		$result = new ApiTemplateResult();
 		$result->add($dashboardTemplate);
@@ -55,11 +55,10 @@ class ProductPackageBoundary extends DefaultDashboardLoggedBoundary
 	/**
 	 * @return ApiTemplateResult
 	 */
-
-	public function onAdd(): ApiTemplateResult
+	public function onAdd(ApiContent $content): ApiTemplateResult
 	{
-		$dashboardTemplate = $this->getApiParent()->newBaseTemplate();
-		$dashboardTemplate = $this->prepareInclude('ProductPackageAdd');
+		$dashboardTemplate = $this->newBaseTemplate();
+		$dashboardTemplate = $this->prepareInclude(self::BASE_PATH. 'ProductPackageAdd');
 
 		$result = new ApiTemplateResult();
 		$result->add($dashboardTemplate);
@@ -72,11 +71,10 @@ class ProductPackageBoundary extends DefaultDashboardLoggedBoundary
 	 * @param ApiContent $content
 	 * @return ApiTemplateResult
 	 */
-
 	public function onView(ApiContent $content): ApiTemplateResult
 	{
-		$dashboardTemplate = $this->getApiParent()->newBaseTemplate();
-		$dashboardTemplate = $this->prepareInclude('ProductPackageView');
+		$dashboardTemplate = $this->newBaseTemplate();
+		$dashboardTemplate = $this->prepareInclude(self::BASE_PATH. 'ProductPackageView');
 		$dashboardTemplate->idProductPackage = $content->getParameters()->getInt('idProductPackage');
 
 		$result = new ApiTemplateResult();
