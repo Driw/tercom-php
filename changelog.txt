@@ -20,6 +20,12 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+18.01.2018 - 0.3.5.192
+- Adicionado OrderAcceptanceControl que não foi enviado na rev189.
+
+18.01.2018 - 0.3.5.191
+- Adicionado scripts de teste de gerenciamento do serviço para aceitações de pedido.
+
 17.01.2018 - 0.3.5.190
 - Atualizado 'ajax.js' para que os chamados dos webservices sejam automaticamente informado os dados de acesso.
 - Ajustes para que os dados de acesso necessário sejam salvos em constantes no JavaScript para uso posterior.
