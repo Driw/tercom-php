@@ -20,6 +20,14 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+18.01.2018 - 0.3.5.194
+- Tabela 'provider_contact' modificada, 'commercial' e 'otherphone' para 'idComemrcial' e 'idOtherphone' respectivamente.
+	- Atualizado ProviderContactDAO respectivamente e adicionado a newSelect() LEFT JOIN para obter dados dos telefones.
+- Ajustes para autenticação correta dos dados enviados por 'webservice.js' para aceitar FormData, JQuery e Object.
+- Revisão das páginas de fornecedores e problemas corrigidos, também foi atualizado para a estrutura de outars páginas.
+- Corrigido problema onde 'remoteapi' não estava funcionando devido a necessidade de autenticação.
+- Corrigido CustomerAddressDAO que estava utilizado CustomerAddressDAOException ao invés de CustomerAddressException.
+
 18.01.2018 - 0.3.5.193
 - Movido templates para subpastas com finalidade de separar por entidade/serviço.
 

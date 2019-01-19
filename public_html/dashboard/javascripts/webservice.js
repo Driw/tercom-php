@@ -19,19 +19,28 @@ Webservice.prototype.setOptionsAndExecute = function(options)
 };
 Webservice.prototype.execute = function()
 {
-	if (this.webservice === undefined) throw new Exception('webservice não informado');
+	if (this.webservice === 'undefined') throw new Exception('webservice não informado');
 
 	var ajax = new Ajax();
 	ajax.setApiModalID('api-error-modal');
 	ajax.setWebservice(this.webservice);
 	ajax.setEnabledLogResponse(DEV);
 
-	if (this.form !== undefined) ajax.setJQueryForm(this.form);
-	if (this.target !== undefined) ajax.setTarget(this.target);
-	if (this.errorMessage !== undefined) ajax.setErrorMessage(this.errorMessage);
-	if (this.errorListener !== undefined) ajax.setErrorListener(this.errorListener);
-	if (this.listener !== undefined) ajax.setListener(this.listener);
-	if (this.error !== undefined) ajax.setError(this.error);
+	if (this.form !== 'undefined')
+	{
+		if (this.form instanceof FormData)
+			ajax.setFormData(this.form);
+		else if (this.form instanceof jQuery)
+			ajax.setJQueryForm(this.form);
+		else if (typeof(this.form))
+			ajax.setObjectData(this.form);
+	}
+
+	if (this.target !== 'undefined') ajax.setTarget(this.target);
+	if (this.errorMessage !== 'undefined') ajax.setErrorMessage(this.errorMessage);
+	if (this.errorListener !== 'undefined') ajax.setErrorListener(this.errorListener);
+	if (this.listener !== 'undefined') ajax.setListener(this.listener);
+	if (this.error !== 'undefined') ajax.setError(this.error);
 
 	ajax.execute();
 };
@@ -64,17 +73,45 @@ Webservice.prototype.provider_add = function(form, listener)
 Webservice.prototype.provider_set = function(idProvider, form, listener)
 {
 	this.setOptionsAndExecute({
-		'webservice': 'provider/set/' +idProvider,
+		'webservice': 'provider/set/{0}'.format(idProvider),
 		'form': form,
 		'target': form,
 		'listener': listener,
 		'errorMessage': this.newBaseErrorMessage('atualizar fornecedor'),
 	});
 };
+Webservice.prototype.provider_setPhones = function(idProvider, form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'provider/setPhones/{0}'.format(idProvider),
+		'target': form,
+		'form': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('atualizar telefone do fornecedor'),
+	});
+};
+Webservice.prototype.provider_removeCommercial = function(idProvider, target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'provider/removeCommercial/{0}'.format(idProvider),
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('excluir telefone comercial'),
+	});
+};
+Webservice.prototype.provider_removeOtherphone = function(idProvider, target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'provider/removeOtherphone/{0}'.format(idProvider),
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('excluir telefone secundário'),
+	});
+};
 Webservice.prototype.provider_get = function(idProvider, form, listener)
 {
 	this.setOptionsAndExecute({
-		'webservice': 'provider/get/' +idProvider,
+		'webservice': 'provider/get/{0}'.format(idProvider),
 		'target': form,
 		'listener': listener,
 		'errorMessage': this.newBaseErrorMessage('obter fornecedor'),
@@ -87,6 +124,78 @@ Webservice.prototype.provider_getAll = function(target, listener)
 		'target': target,
 		'listener': listener,
 		'errorMessage': this.newBaseErrorMessage('obter os fornecedores'),
+	});
+};
+
+// -- ProviderContact
+
+Webservice.prototype.providerContact_add = function(idProvider, form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'providerContact/add/{0}'.format(idProvider),
+		'target': form,
+		'form': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('adicoinar contato de fornecedor'),
+	});
+};
+Webservice.prototype.providerContact_set = function(idProvider, form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'providerContact/set/{0}'.format(idProvider),
+		'target': form,
+		'form': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('atualizar contato de fornecedor'),
+	});
+};
+Webservice.prototype.providerContact_setPhones = function(idProvider, form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'providerContact/setPhones/{0}'.format(idProvider),
+		'target': form,
+		'form': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('atualizar telefones do contato de fornecedor'),
+	});
+};
+Webservice.prototype.providerContact_removeCommercial = function(idProvider, form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'providerContact/removeCommercial/{0}'.format(idProvider),
+		'target': form,
+		'form': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('excluir telefone comercial do contato de fornecedor'),
+	});
+};
+Webservice.prototype.providerContact_removeOtherphone = function(idProvider, form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'providerContact/removeOtherphone/{0}'.format(idProvider),
+		'target': form,
+		'form': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('excluir telefone secundário do contato de fornecedor'),
+	});
+};
+Webservice.prototype.providerContact_removeContact = function(idProvider, form, target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'providerContact/removeContact/{0}'.format(idProvider),
+		'target': target,
+		'form': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('excluir contato de fornecedor'),
+	});
+};
+Webservice.prototype.providerContact_getAll = function(idProvider, target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'providerContact/getContacts/{0}'.format(idProvider),
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter a lista de contatos do fornecedor'),
 	});
 };
 
@@ -467,8 +576,17 @@ Webservice.prototype.productPrice_getAll = function(idProduct, target, listener)
 	});
 };
 
-// Login Reference
+// Permission
 
+Webservice.prototype.managePermissions_tercom_getAll = function(target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'managePermissions/getAll/tercom/' +LOGIN_PROFILE_ID,
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter lista de permissões'),
+	});
+};
 Webservice.prototype.managePermissions_customer_getAll = function(target, listener)
 {
 	this.setOptionsAndExecute({

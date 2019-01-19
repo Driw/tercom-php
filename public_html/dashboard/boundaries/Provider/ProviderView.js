@@ -1,90 +1,49 @@
 
 $(document).ready(function()
 {
-	Controller.init();
-	Controller.initValidation();
-	Controller.loadProvider();
-
-	$('#controller-reload').click(function() { Controller.loadProvider(); });
-	$('#controller-save').click(function() { Controller.saveProvider(); });
-	$('#commercial-add').click(function() { Controller.addCommercial(); });
-	$('#commercial-save').click(function() { Controller.saveCommercial(); });
-	$('#commercial-remove').click(function() { Controller.removeCommercial(); });
-	$('#otherphone-add').click(function() { Controller.addOtherphone(); });
-	$('#otherphone-save').click(function() { Controller.saveOtherphone(); });
-	$('#otherphone-remove').click(function() { Controller.removeOtherphone(); });
-	$('#contact-new').click(function() { Controller.newContact(); });
-
-	$('#modal-contact-add').click(function() { Controller.addContact(); });
-	$('#modal-contact-save').click(function() { Controller.saveContact(); });
-	$('#contact-commercial-add').click(function() { Controller.addContactPhoneCommercial(); });
-	$('#contact-commercial-save').click(function() { Controller.saveContactPhoneCommercial(); });
-	$('#contact-commercial-remove').click(function() { Controller.removeContactPhoneCommercial(); });
-	$('#contact-otherphone-add').click(function() { Controller.addContactPhoneOtherphone(); });
-	$('#contact-otherphone-save').click(function() { Controller.saveContactPhoneOtherphone(); });
-	$('#contact-otherphone-remove').click(function() { Controller.removeContactPhoneOtherphone(); });
+	ProviderView.init();
+	ProviderView.initValidation();
+	ProviderView.loadProvider();
 });
 
-var Controller = Controller ||
+var ProviderView = ProviderView ||
 {
 	init: function()
 	{
-		this.form = $('#form-view');
-		this.formCommercial = $('#form-commercial');
-		this.formOtherphone = $('#form-otherphone');
-		this.idProvider = this.form[0].id.value;
-		this.provider = {};
+		ProviderView.form = $('#form-view');
+		ProviderView.formCommercial = $('#form-commercial');
+		ProviderView.formOtherphone = $('#form-otherphone');
+		ProviderView.idProvider = ProviderView.form[0].id.value;
+		ProviderView.provider = {};
 
-		this.modalContact = $('#modal-contact');
-		this.formContact = $('#form-contact');
-		this.formContactCommercial = $('#form-contact-commercial');
-		this.formContactOtherphone = $('#form-contact-otherphone');
-		this.tableConctacts = $('#table-contacts');
-		this.tbodyContacts = this.tableConctacts.find('tbody');
-		this.dataTableContacts = newDataTables(this.tableConctacts);
+		ProviderView.modalContact = $('#modal-contact');
+		ProviderView.formContact = $('#form-contact');
+		ProviderView.formContactCommercial = $('#form-contact-commercial');
+		ProviderView.formContactOtherphone = $('#form-contact-otherphone');
+		ProviderView.tableConctacts = $('#table-contacts');
+		ProviderView.tbodyContacts = ProviderView.tableConctacts.find('tbody');
+		ProviderView.dataTableContacts = newDataTables(ProviderView.tableConctacts);
 	},
 	initValidation: function()
 	{
-		$.ajax({
-			'url': API_ENDPOINT+ 'provider/settings',
-			'type': 'POST',
-			'dataType': 'json',
-			'processData': false,
-			beforeSend: function() {
-				Controller.form.LoadingOverlay('show');
-				Controller.formCommercial.LoadingOverlay('show');
-				Controller.formOtherphone.LoadingOverlay('show');
-			},
-			error: function() {
-				showModalApiError('não foi possível obter as validações para fornecedores');
-			},
-			success: function(response) {
-				if (apiNeedShowErrorModal(response))
-					return;
-
-				var result = response.result;
-				var settings = parseAdvancedObject(response.result);
-				Controller.initFormValidation(settings);
-				Controller.initPhoneValidation(settings.phoneSettings);
-			},
-			complete: function() {
-				Controller.form.LoadingOverlay('hide');
-				Controller.formCommercial.LoadingOverlay('hide');
-				Controller.formOtherphone.LoadingOverlay('hide');
-			}
-		});
+		ws.provider_settings(ProviderView.form, ProviderView.onSettings);
+	},
+	onSettings: function(settings)
+	{
+		ProviderView.initFormValidation(settings);
+		ProviderView.initPhoneValidation(settings.phoneSettings);
 	},
 	initFormValidation: function(settings)
 	{
-		this.form.validate({
+		ProviderView.form.validate({
 			'rules': {
 				'cnpj': {
 					'required': true,
 					'remoteapi': {
-						'webservice': 'provider/validate/cnpj/{value}/{idProvider}',
+						'webservice': 'provider/avaiable/cnpj/{value}/{idProvider}',
 						'replacePattern': [ /\D/g, '' ],
 						'parameters' : {
-							'idProvider': function() { return Controller.form[0].id.value; },
+							'idProvider': function() { return ProviderView.form[0].id.value; },
 						}
 					},
 				},
@@ -112,7 +71,7 @@ var Controller = Controller ||
 	},
 	initPhoneValidation: function(settings)
 	{
-		this.formCommercial.validate({
+		ProviderView.formCommercial.validate({
 			'rules': {
 				'commercial[ddd]': {
 					'required': true,
@@ -128,7 +87,7 @@ var Controller = Controller ||
 				},
 			},
 		});
-		this.formOtherphone.validate({
+		ProviderView.formOtherphone.validate({
 			'rules': {
 				'otherphone[ddd]': {
 					'required': true,
@@ -147,286 +106,154 @@ var Controller = Controller ||
 	},
 	loadProvider: function()
 	{
-		$.ajax({
-			'url': API_ENDPOINT+ 'provider/get/' +Controller.idProvider,
-			'type': 'POST',
-			'dataType': 'json',
-			'contentType': 'application/json; charset=utf8',
-			beforeSend: function() {
-				Controller.form.LoadingOverlay('show');
-			},
-			error: function() {
-				showModalApiError('não foi possível obter os dados do fornecedor (id: ' +Controller.idProvider+ ')');
-			},
-			success: function(response) {
-				if (apiNeedShowErrorModal(response))
-					return;
-
-				var provider = parseAdvancedObject(response.result);
-				Controller.setProvider(provider);
-			},
-			complete: function() {
-				Controller.form.LoadingOverlay('hide');
-			}
-		});
+		ws.provider_get(ProviderView.idProvider, ProviderView.form, ProviderView.setProvider);
+		ws.providerContact_getAll(ProviderView.idProvider, ProviderView.tbodyContacts, ProviderView.setContacts);
 	},
 	saveProvider: function()
 	{
-		var formData = this.form.serialize();
-
-		$.ajax({
-			'url': API_ENDPOINT+ 'provider/set/' +Controller.idProvider,
-			'data': formData,
-			'type': 'POST',
-			'dataType': 'json',
-			'processData': false,
-			beforeSend: function() {
-				Controller.form.LoadingOverlay('show');
-			},
-			error: function() {
-				showModalApiError('não foi possível atualizar os dados do fornecedor (id: ' +Controller.idProvider+ ')');
-			},
-			success: function(response) {
-				if (apiNeedShowErrorModal(response))
-					return;
-
-				var provider = parseAdvancedObject(response.result);
-				Controller.setProvider(provider);
-			},
-			complete: function() {
-				Controller.form.LoadingOverlay('hide');
-			}
-		});
+		ws.provider_set(ProviderView.idProvider, ProviderView.form, ProviderView.setProvider);
 	},
 	setProvider: function(provider)
 	{
-		$(this.form[0].cnpj).val(provider.cnpj).trigger('input');
-		this.idProvider = provider.id;
-		this.form[0].companyName.value = provider.companyName;
-		this.form[0].fantasyName.value = provider.fantasyName;
-		this.form[0].spokesman.value = provider.spokesman;
-		this.form[0].site.value = provider.site;
-		this.setCommercial(provider.commercial);
-		this.setOtherphone(provider.otherphone);
-		this.setContacts(provider.contacts);
+		$(ProviderView.form[0].cnpj).val(provider.cnpj).trigger('input');
+		ProviderView.idProvider = provider.id;
+		ProviderView.form[0].companyName.value = provider.companyName;
+		ProviderView.form[0].fantasyName.value = provider.fantasyName;
+		ProviderView.form[0].spokesman.value = provider.spokesman;
+		ProviderView.form[0].site.value = provider.site;
+		ProviderView.setCommercial(provider.commercial);
+		ProviderView.setOtherphone(provider.otherphone);
+		ProviderView.setContacts(provider.contacts);
 	},
 	setCommercial: function(phone)
 	{
-		Controller.onCommercialExists(phone.id !== 0);
+		ProviderView.onCommercialExists(phone !== null);
 
-		if (phone.id === 0)
+		if (phone === null)
 		{
-			this.formCommercial.trigger('reset');
+			ProviderView.formCommercial.trigger('reset');
 			return;
 		}
 
-		$(this.formCommercial[0]['commercial[ddd]']).val(phone.ddd);
-		$(this.formCommercial[0]['commercial[type]']).val(phone.type);
-		$(this.formCommercial[0]['commercial[number]']).val(phone.number).trigger('input');
-		$(this.formCommercial[0]['commercial[idPhone]']).val(phone.id);
+		$(ProviderView.formCommercial[0]['commercial[ddd]']).val(phone.ddd);
+		$(ProviderView.formCommercial[0]['commercial[type]']).val(phone.type);
+		$(ProviderView.formCommercial[0]['commercial[number]']).val(phone.number).trigger('input');
+		$(ProviderView.formCommercial[0]['commercial[idPhone]']).val(phone.id);
 	},
 	setOtherphone: function(phone)
 	{
-		Controller.onOtherphoneExists(phone.id !== 0);
+		ProviderView.onOtherphoneExists(phone !== null);
 
-		if (phone.id === 0)
+		if (phone === null)
 		{
-			this.formOtherphone.trigger('reset');
+			ProviderView.formOtherphone.trigger('reset');
 			return;
 		}
 
-		$(this.formOtherphone[0]['otherphone[ddd]']).val(phone.ddd);
-		$(this.formOtherphone[0]['otherphone[type]']).val(phone.type);
-		$(this.formOtherphone[0]['otherphone[number]']).val(phone.number).trigger('input');
-		$(this.formOtherphone[0]['otherphone[idPhone]']).val(phone.id);
+		$(ProviderView.formOtherphone[0]['otherphone[ddd]']).val(phone.ddd);
+		$(ProviderView.formOtherphone[0]['otherphone[type]']).val(phone.type);
+		$(ProviderView.formOtherphone[0]['otherphone[number]']).val(phone.number).trigger('input');
+		$(ProviderView.formOtherphone[0]['otherphone[idPhone]']).val(phone.id);
 	},
 	setContacts: function(contacts)
 	{
-		this.contacts = [];
+		if (contacts === null)
+			return;
+
+		ProviderView.contacts = [];
 		contacts.elements.forEach(function(contact)
 		{
-			Controller.addRowContact(contact);
+			ProviderView.addRowContact(contact);
 		});
 	},
 	addRowContact: function(contact)
 	{
-		var index = this.contacts.length;
+		var index = ProviderView.contacts.length;
 		contact.index = index;
-		contact.row = Controller.dataTableContacts.row.add(Controller.newDataTablesRowContact(contact)).draw();
-		this.contacts[index] = contact;
+		contact.row = ProviderView.dataTableContacts.row.add(ProviderView.newDataTablesRowContact(contact)).draw();
+		ProviderView.contacts[index] = contact;
 	},
 	addCommercial: function()
 	{
-		this.addPhone(this.formCommercial);
+		if (ProviderView.formCommercial.valid())
+			ws.provider_setPhones(ProviderView.idProvider, ProviderView.formCommercial, ProviderView.setProvider);
 	},
 	addOtherphone: function()
 	{
-		this.addPhone(this.formOtherphone);
-	},
-	addPhone: function(form)
-	{
-		if (form.valid() === false)
-			return;
-
-		var phoneCommercial = form.attr('id') === 'form-commercial';
-		var formData = new FormData(form[0]);
-
-		$.ajax({
-			'url': API_ENDPOINT+ 'provider/setPhones/' +Controller.idProvider,
-			'data': formData,
-			'type': 'POST',
-			'dataType': 'json',
-			'processData': false,
-			'contentType': false,
-			beforeSend: function() {
-				form.LoadingOverlay('show');
-			},
-			error: function() {
-				showModalApiError('não foi adicionar o telefone ' +(phoneCommercial ? 'comercial' : 'secundário'));
-			},
-			success: function(response) {
-				if (apiNeedShowErrorModal(response))
-					return;
-
-				var provider = parseAdvancedObject(response.result);
-				Controller.setProvider(provider);
-			},
-			complete: function() {
-				form.LoadingOverlay('hide');
-			}
-		});
+		if (ProviderView.formOtherphone.valid())
+			ws.provider_setPhones(ProviderView.idProvider, ProviderView.formOtherphone, ProviderView.setProvider);
 	},
 	saveCommercial: function()
 	{
-		this.savePhone(this.formCommercial);
+		if (ProviderView.formCommercial.valid())
+			ws.provider_setPhones(ProviderView.idProvider, ProviderView.formCommercial, ProviderView.setProvider);
 	},
 	saveOtherphone: function()
 	{
-		this.savePhone(this.formOtherphone);
-	},
-	savePhone: function(form)
-	{
-		if (form.valid() === false)
-			return;
-
-		var phoneCommercial = form.attr('id') === 'form-commercial';
-		var formData = new FormData(form[0]);
-
-		$.ajax({
-			'url': API_ENDPOINT+ 'provider/setPhones/' +Controller.idProvider,
-			'data': formData,
-			'type': 'POST',
-			'dataType': 'json',
-			'processData': false,
-			'contentType': false,
-			beforeSend: function() {
-				form.LoadingOverlay('show');
-			},
-			error: function() {
-				showModalApiError('não foi atualizar o telefone ' +(phoneCommercial ? 'comercial' : 'secundário'));
-			},
-			success: function(response) {
-				if (apiNeedShowErrorModal(response))
-					return;
-
-				var provider = parseAdvancedObject(response.result);
-				Controller.setProvider(provider);
-			},
-			complete: function() {
-				form.LoadingOverlay('hide');
-			}
-		});
+		if (ProviderView.formOtherphone.valid())
+			ws.provider_setPhones(ProviderView.idProvider, ProviderView.formOtherphone, ProviderView.setProvider);
 	},
 	removeCommercial: function()
 	{
-		this.removePhone(this.formCommercial);
+		if (ProviderView.formCommercial.valid())
+			ws.provider_removeCommercial(ProviderView.idProvider, ProviderView.formCommercial, ProviderView.setProvider);
 	},
 	removeOtherphone: function()
 	{
-		this.removePhone(this.formOtherphone);
-	},
-	removePhone: function(form)
-	{
-		if (form.valid() === false)
-			return;
-
-		var phoneCommercial = form.attr('id') === 'form-commercial';
-		var formData = new FormData();
-
-		$.ajax({
-			'url': API_ENDPOINT+ 'provider/removePhone/' +Controller.idProvider+ '/' +(phoneCommercial ? 'commercial' : 'otherphone'),
-			'data': formData,
-			'type': 'POST',
-			'dataType': 'json',
-			'processData': false,
-			'contentType': false,
-			beforeSend: function() {
-				form.LoadingOverlay('show');
-			},
-			error: function() {
-				showModalApiError('não foi excluir o telefone ' +(phoneCommercial ? 'comercial' : 'secundário'));
-			},
-			success: function(response) {
-				if (apiNeedShowErrorModal(response))
-					return;
-
-				var provider = parseAdvancedObject(response.result);
-				Controller.setProvider(provider);
-			},
-			complete: function() {
-				form.LoadingOverlay('hide');
-			}
-		});
+		if (ProviderView.formOtherphone.valid())
+			ws.provider_removeOtherphone(ProviderView.idProvider, ProviderView.formOtherphone, ProviderView.setProvider);
 	},
 	newContact: function()
 	{
 		$('#modal-contact-add').show();
 		$('#modal-contact-save').hide();
-		$(this.formContact[0].id).val('');
-		this.formContact.trigger('reset');
-		this.formContactCommercial.trigger('reset');
-		this.formContactOtherphone.trigger('reset');
-		this.modalContact.modal('show');
-		this.formContactCommercial.hide();
-		this.formContactOtherphone.hide();
+		$(ProviderView.formContact[0].id).val('');
+		ProviderView.formContact.trigger('reset');
+		ProviderView.formContactCommercial.trigger('reset');
+		ProviderView.formContactOtherphone.trigger('reset');
+		ProviderView.modalContact.modal('show');
+		ProviderView.formContactCommercial.hide();
+		ProviderView.formContactOtherphone.hide();
 	},
 	newDataTablesRowContact: function(contact)
 	{
 		var index = contact.index;
-		var detailButton = '<button type="button" class="btn btn-primary" data-index="' +index+ '" onclick="Controller.onContactDetail(this)">Detalhes</button>';
-		var removeButton = '<button type="button" class="btn btn-danger" data-index="' +index+ '" onclick="Controller.onContactRemove(this)">Excluir</button>';
+		var detailButton = '<button type="button" class="btn btn-primary" data-index="' +index+ '" onclick="ProviderView.openContact(this)">Detalhes</button>';
+		var removeButton = '<button type="button" class="btn btn-danger" data-index="' +index+ '" onclick="ProviderView.removeContact(this)">Excluir</button>';
 
 		return [
 			contact.name,
 			contact.position,
-			(contact.commercial.id === 0 ? '-' : contact.commercial.ddd+ ' ' +contact.commercial.number),
+			(contact.commercial === null ? '-' : contact.commercial.ddd+ ' ' +contact.commercial.number),
 			'<div class="btn-group">' +detailButton+removeButton+ '</div>',
 		];
 	},
 	setContact: function(contact)
 	{
-		if (this.providerContact !== undefined && this.providerContact.id === contact.id)
+		if (ProviderView.providerContact !== undefined && ProviderView.providerContact.id === contact.id)
 		{
-			contact.index = this.providerContact.index;
-			contact.row = this.providerContact.row;
-			contact.row.data(Controller.newDataTablesRowContact(contact));
-			this.contacts[contact.index] = contact;
+			contact.index = ProviderView.providerContact.index;
+			contact.row = ProviderView.providerContact.row;
+			contact.row.data(ProviderView.newDataTablesRowContact(contact));
+			ProviderView.contacts[contact.index] = contact;
 		}
 
-		this.providerContact = contact;
+		ProviderView.providerContact = contact;
 
-		var form = this.formContact[0];
-		var formCommercial = this.formContactCommercial[0];
-		var formOtherphone = this.formContactOtherphone[0];
+		var form = ProviderView.formContact[0];
+		var formCommercial = ProviderView.formContactCommercial[0];
+		var formOtherphone = ProviderView.formContactOtherphone[0];
 
 		$(form.id).val(contact.id);
 		$(form.name).val(contact.name);
 		$(form.email).val(contact.email);
 		$(form.position).val(contact.position);
-		this.formContactCommercial.trigger('reset');
-		this.formContactOtherphone.trigger('reset');
+		$(formCommercial.id).val(contact.id);
+		$(formOtherphone.id).val(contact.id);
+		ProviderView.formContactCommercial.trigger('reset');
+		ProviderView.formContactOtherphone.trigger('reset');
 
-		if (contact.commercial.id !== 0)
+		if (contact.commercial !== null)
 		{
 			$(formCommercial['commercial[ddd]']).val(contact.commercial.ddd);
 			$(formCommercial['commercial[type]']).val(contact.commercial.type);
@@ -441,7 +268,7 @@ var Controller = Controller ||
 			$('#contact-commercial-group-exist').hide();
 		}
 
-		if (contact.otherphone.id !== 0)
+		if (contact.otherphone !== null)
 		{
 			$(formOtherphone['otherphone[ddd]']).val(contact.otherphone.ddd);
 			$(formOtherphone['otherphone[type]']).val(contact.otherphone.type);
@@ -456,257 +283,47 @@ var Controller = Controller ||
 			$('#contact-otherphone-group-exist').hide();
 		}
 
-		this.formContactCommercial.show();
-		this.formContactOtherphone.show();
+		ProviderView.formContactCommercial.show();
+		ProviderView.formContactOtherphone.show();
 		$('#modal-contact-add').hide();
 		$('#modal-contact-save').show();
 	},
 	addContact: function()
 	{
-		var form = this.formContact;
-		var formData = new FormData(form[0]);
-
-		$.ajax({
-			'url': API_ENDPOINT+ 'providerContact/add/' +this.idProvider,
-			'data': formData,
-			'type': 'POST',
-			'dataType': 'json',
-			'processData': false,
-			'contentType': false,
-			beforeSend: function() {
-				form.LoadingOverlay('show');
-			},
-			error: function() {
-				showModalApiError('não foi possível atualizar o contato ' +contact.name);
-			},
-			success: function(response) {
-				if (apiNeedShowErrorModal(response))
-					return;
-
-				var contact = parseAdvancedObject(response.result);
-				Controller.addRowContact(contact);
-				Controller.setContact(contact);
-			},
-			complete: function() {
-				form.LoadingOverlay('hide');
-			}
-		});
+		ws.providerContact_add(ProviderView.idProvider, ProviderView.formContact, ProviderView.onContactAdded);
+	},
+	onContactAdded: function(contact)
+	{
+		ProviderView.addRowContact(contact);
+		ProviderView.setContact(contact);
 	},
 	saveContact: function()
 	{
-		var form = this.formContact;
-		var formData = new FormData(form[0]);
-
-		$.ajax({
-			'url': API_ENDPOINT+ 'providerContact/set/' +this.idProvider,
-			'data': formData,
-			'type': 'POST',
-			'dataType': 'json',
-			'processData': false,
-			'contentType': false,
-			beforeSend: function() {
-				form.LoadingOverlay('show');
-			},
-			error: function() {
-				showModalApiError('não foi possível atualizar o contato ' +contact.name);
-			},
-			success: function(response) {
-				if (apiNeedShowErrorModal(response))
-					return;
-
-				var contact = parseAdvancedObject(response.result);
-				Controller.setContact(contact);
-			},
-			complete: function() {
-				form.LoadingOverlay('hide');
-			}
-		});
+		ws.providerContact_set(ProviderView.idProvider, ProviderView.formContact, ProviderView.setContact);
 	},
 	addContactPhoneCommercial: function()
 	{
-		var form = this.formContactCommercial;
-		var formData = new FormData(form[0]);
-		formData.append('id', Controller.providerContact.id);
-
-		$.ajax({
-			'url': API_ENDPOINT+ 'providerContact/setPhones/' +this.idProvider,
-			'data': formData,
-			'type': 'POST',
-			'dataType': 'json',
-			'processData': false,
-			'contentType': false,
-			beforeSend: function() {
-				form.LoadingOverlay('show');
-			},
-			error: function() {
-				showModalApiError('não foi possível adicionar o telefone comercial a ' +contact.name);
-			},
-			success: function(response) {
-				if (apiNeedShowErrorModal(response))
-					return;
-
-				var contact = parseAdvancedObject(response.result);
-				Controller.setContact(contact);
-			},
-			complete: function() {
-				form.LoadingOverlay('hide');
-			}
-		});
+		ws.providerContact_setPhones(ProviderView.idProvider, ProviderView.formContactCommercial, ProviderView.setContact);
 	},
 	saveContactPhoneCommercial: function()
 	{
-		var form = this.formContactCommercial;
-		var formData = new FormData(form[0]);
-		formData.append('id', Controller.providerContact.id);
-
-		$.ajax({
-			'url': API_ENDPOINT+ 'providerContact/setPhones/' +this.idProvider,
-			'data': formData,
-			'type': 'POST',
-			'dataType': 'json',
-			'processData': false,
-			'contentType': false,
-			beforeSend: function() {
-				form.LoadingOverlay('show');
-			},
-			error: function() {
-				showModalApiError('não foi possível atualizar o telefone comercial de ' +contact.name);
-			},
-			success: function(response) {
-				if (apiNeedShowErrorModal(response))
-					return;
-
-				var contact = parseAdvancedObject(response.result);
-				Controller.setContact(contact);
-			},
-			complete: function() {
-				form.LoadingOverlay('hide');
-			}
-		});
+		ws.providerContact_setPhones(ProviderView.idProvider, ProviderView.formContactCommercial, ProviderView.setContact);
 	},
 	removeContactPhoneCommercial: function()
 	{
-		var form = this.formContactOtherphone;
-		var formData = new FormData();
-		formData.append('id', Controller.providerContact.id);
-
-		$.ajax({
-			'url': API_ENDPOINT+ 'providerContact/removeCommercial/' +this.idProvider,
-			'data': formData,
-			'type': 'POST',
-			'dataType': 'json',
-			'processData': false,
-			'contentType': false,
-			beforeSend: function() {
-				form.LoadingOverlay('show');
-			},
-			error: function() {
-				showModalApiError('não foi possível adicionar o telefone secundário a ' +contact.name);
-			},
-			success: function(response) {
-				if (apiNeedShowErrorModal(response))
-					return;
-
-				var contact = parseAdvancedObject(response.result);
-				Controller.setContact(contact);
-			},
-			complete: function() {
-				form.LoadingOverlay('hide');
-			}
-		});
+		ws.providerContact_removeCommercial(ProviderView.idProvider, ProviderView.formContactCommercial, ProviderView.setContact);
 	},
 	addContactPhoneOtherphone: function()
 	{
-		var form = this.formContactOtherphone;
-		var formData = new FormData(form[0]);
-		formData.append('id', Controller.providerContact.id);
-
-		$.ajax({
-			'url': API_ENDPOINT+ 'providerContact/setPhones/' +this.idProvider,
-			'data': formData,
-			'type': 'POST',
-			'dataType': 'json',
-			'processData': false,
-			'contentType': false,
-			beforeSend: function() {
-				form.LoadingOverlay('show');
-			},
-			error: function() {
-				showModalApiError('não foi possível adicionar o telefone secundário a ' +contact.name);
-			},
-			success: function(response) {
-				if (apiNeedShowErrorModal(response))
-					return;
-
-				var contact = parseAdvancedObject(response.result);
-				Controller.setContact(contact);
-			},
-			complete: function() {
-				form.LoadingOverlay('hide');
-			}
-		});
+		ws.providerContact_setPhones(ProviderView.idProvider, ProviderView.formContactOtherphone, ProviderView.setContact);
 	},
 	saveContactPhoneOtherphone: function()
 	{
-		var form = this.formContactOtherphone;
-		var formData = new FormData(form[0]);
-		formData.append('id', Controller.providerContact.id);
-
-		$.ajax({
-			'url': API_ENDPOINT+ 'providerContact/setPhones/' +this.idProvider,
-			'data': formData,
-			'type': 'POST',
-			'dataType': 'json',
-			'processData': false,
-			'contentType': false,
-			beforeSend: function() {
-				form.LoadingOverlay('show');
-			},
-			error: function() {
-				showModalApiError('não foi possível salvar o telefone secundário de ' +contact.name);
-			},
-			success: function(response) {
-				if (apiNeedShowErrorModal(response))
-					return;
-
-				var contact = parseAdvancedObject(response.result);
-				Controller.setContact(contact);
-			},
-			complete: function() {
-				form.LoadingOverlay('hide');
-			}
-		});
+		ws.providerContact_setPhones(ProviderView.idProvider, ProviderView.formContactOtherphone, ProviderView.setContact);
 	},
 	removeContactPhoneOtherphone: function()
 	{
-		var form = this.formContactOtherphone;
-		var formData = new FormData();
-		formData.append('id', Controller.providerContact.id);
-
-		$.ajax({
-			'url': API_ENDPOINT+ 'providerContact/removeOtherphone/' +this.idProvider,
-			'data': formData,
-			'type': 'POST',
-			'dataType': 'json',
-			'processData': false,
-			'contentType': false,
-			beforeSend: function() {
-				form.LoadingOverlay('show');
-			},
-			error: function() {
-				showModalApiError('não foi possível excluir o telefone secundário de ' +contact.name);
-			},
-			success: function(response) {
-				if (apiNeedShowErrorModal(response))
-					return;
-
-				var contact = parseAdvancedObject(response.result);
-				Controller.setContact(contact);
-			},
-			complete: function() {
-				form.LoadingOverlay('hide');
-			}
-		});
+		ws.providerContact_removeOtherphone(ProviderView.idProvider, ProviderView.formContactOtherphone, ProviderView.setContact);
 	},
 	onCommercialExists: function(exist)
 	{
@@ -722,42 +339,23 @@ var Controller = Controller ||
 		else
 			$.when($('#otherphone-group-exist').fadeOut('slow')).done(function() { $('#otherphone-group-add').fadeIn('slow'); });
 	},
-	onContactDetail: function(button)
+	openContact: function(button)
 	{
-		var contact = this.contacts[button.dataset.index];
-		this.setContact(contact);
-		this.modalContact.modal('show');
+		var contact = ProviderView.contacts[button.dataset.index];
+		ProviderView.setContact(contact);
+		ProviderView.modalContact.modal('show');
 	},
-	onContactRemove: function(button)
+	removeContact: function(button)
 	{
 		var tr = $(button).parents('tr');
-		var contact = this.contacts[button.dataset.index];
-		console.log(contact);
+		var contact = ProviderView.contacts[button.dataset.index];
 		var formData = new FormData();
 		formData.append('id', contact.id);
 
-		$.ajax({
-			'url': API_ENDPOINT+ 'providerContact/removeContact/' +this.idProvider,
-			'data': formData,
-			'type': 'POST',
-			'dataType': 'json',
-			'processData': false,
-			'contentType': false,
-			beforeSend: function() {
-				tr.LoadingOverlay('show');
-			},
-			error: function() {
-				showModalApiError('não foi excluir o contato ' +contact.name);
-			},
-			success: function(response) {
-				if (apiNeedShowErrorModal(response))
-					return;
-
-				Controller.dataTableContacts.row(tr).remove().draw();
-			},
-			complete: function() {
-				tr.LoadingOverlay('hide');
-			}
-		});
+		ws.providerContact_removeContact(ProviderView.idProvider, formData, tr, function() { ProviderView.onContactRemoved(tr); });
+	},
+	onContactRemoved: function(tr)
+	{
+		ProviderView.dataTableContacts.row(tr).remove().draw();
 	},
 }

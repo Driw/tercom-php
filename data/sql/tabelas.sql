@@ -33,12 +33,12 @@ CREATE TABLE IF NOT EXISTS provider_contact
     name VARCHAR(48) NOT NULL,
     position VARCHAR(32) NULL DEFAULT NULL,
     email VARCHAR(48) NULL DEFAULT NULL,
-	commercial INT NULL DEFAULT NULL,
-	otherphone INT NULL DEFAULT NULL,
+	idCommercial INT NULL DEFAULT NULL,
+	idOtherphone INT NULL DEFAULT NULL,
 
 	CONSTRAINT provider_contact_pk PRIMARY KEY(id),
-	CONSTRAINT provider_contact_fk_commercial FOREIGN KEY (commercial) REFERENCES phones(id) ON DELETE SET NULL,
-	CONSTRAINT provider_contact_fk_otherphone FOREIGN KEY (otherphone) REFERENCES phones(id) ON DELETE SET NULL
+	CONSTRAINT provider_contact_fk_commercial FOREIGN KEY (idCommercial) REFERENCES phones(id) ON DELETE SET NULL,
+	CONSTRAINT provider_contact_fk_otherphone FOREIGN KEY (idOtherphone) REFERENCES phones(id) ON DELETE SET NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_general_ci;
 
 CREATE TABLE IF NOT EXISTS provider_contacts

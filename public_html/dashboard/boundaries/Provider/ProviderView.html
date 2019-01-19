@@ -28,7 +28,7 @@
 												<div class="form-group">
 													<div class="input-group">
 														<div class="input-group-prepend">
-															<span class="input-group-text">Razão Social</span>
+															<span class="input-group-text">RazÃ£o Social</span>
 														</div>
 														<input type="text" class="form-control mask-alphabetic" name="companyName">
 													</div>
@@ -59,8 +59,8 @@
 												</div>
 												<div class="form-group text-center">
 													<div class="btn-group">
-														<button type="button" class="btn btn-success" id="controller-save">Salvar</button>
-														<button type="button" class="btn btn-info" id="controller-reload">Recarregar</button>
+														<button type="button" class="btn btn-success" onclick="ProviderView.saveProvider()">Salvar</button>
+														<button type="button" class="btn btn-info" onclick="ProviderView.loadProvider()">Recarregar</button>
 													</div>
 												</div>
 											</fieldset>
@@ -86,7 +86,7 @@
 												<div class="form-group">
 													<div class="input-group">
 														<div class="input-group-prepend">
-															<span class="input-group-text">Número</span>
+															<span class="input-group-text">NÃºmero</span>
 														</div>
 														<input type="text" class="form-control mask-phone" name="commercial[number]">
 													</div>
@@ -106,11 +106,11 @@
 												</div>
 												<div class="form-group text-center">
 													<div class="btn-group" id="commercial-group-add">
-														<button type="button" class="btn btn-primary" id="commercial-add">Adicionar</button>
+														<button type="button" class="btn btn-primary" onclick="ProviderView.addCommercial()">Adicionar</button>
 													</div>
 													<div class="btn-group" id="commercial-group-exist" style="display: none;">
-														<button type="button" class="btn btn-success" id="commercial-save">Salvar</button>
-														<button type="button" class="btn btn-danger" id="commercial-remove">Exluir</button>
+														<button type="button" class="btn btn-success" onclick="ProviderView.saveCommercial()">Salvar</button>
+														<button type="button" class="btn btn-danger" onclick="ProviderView.removeCommercial()">Exluir</button>
 													</div>
 												</div>
 											</fieldset>
@@ -119,7 +119,7 @@
 								</div>
 								<div class="card col-5 ml-1 pl-0 pr-0">
 									<div class="card-header d-flex align-items-center">
-										<h3 class="h4">Telefone Secundário</h3>
+										<h3 class="h4">Telefone SecundÃ¡rio</h3>
 									</div>
 									<div class="card-body">
 										<form id="form-otherphone" class="tercom-form tercom-form-md form-horizontal">
@@ -136,7 +136,7 @@
 												<div class="form-group">
 													<div class="input-group">
 														<div class="input-group-prepend">
-															<span class="input-group-text">Número</span>
+															<span class="input-group-text">NÃºmero</span>
 														</div>
 														<input type="text" class="form-control mask-phone" name="otherphone[number]">
 													</div>
@@ -156,11 +156,11 @@
 												</div>
 												<div class="form-group text-center">
 													<div class="btn-group" id="otherphone-group-add">
-														<button type="button" class="btn btn-primary" id="otherphone-add">Adicionar</button>
+														<button type="button" class="btn btn-primary"  onclick="ProviderView.addOtherphone()">Adicionar</button>
 													</div>
 													<div class="btn-group" id="otherphone-group-exist" style="display: none;">
-														<button type="button" class="btn btn-success" id="otherphone-save">Salvar</button>
-														<button type="button" class="btn btn-danger" id="otherphone-remove">Exluir</button>
+														<button type="button" class="btn btn-success"  onclick="ProviderView.saveOtherphone()">Salvar</button>
+														<button type="button" class="btn btn-danger"  onclick="ProviderView.removeOtherphone()">Exluir</button>
 													</div>
 												</div>
 											</fieldset>
@@ -174,7 +174,7 @@
 									<div class="card-body">
 										<form>
 											<div class="form-group text-center">
-												<button type="button" class="btn btn-primary" id="contact-new">Novo Contato</button>
+												<button type="button" class="btn btn-primary" onclick="ProviderView.newContact()">Novo Contato</button>
 											</div>
 										</form>
 										<table class="table table-striped table-hover" id="table-contacts">
@@ -183,7 +183,7 @@
 													<th>Nome</th>
 													<th>Cargo</th>
 													<th>Tel. Comercial</th>
-													<th>Ações</th>
+													<th>AÃ§Ãµes</th>
 												</tr>
 											</thead>
 											<tbody>
@@ -252,7 +252,7 @@
 											<div class="form-group">
 												<div class="input-group">
 													<div class="input-group-prepend">
-														<span class="input-group-text">Número</span>
+														<span class="input-group-text">NÃºmero</span>
 													</div>
 													<input type="text" class="form-control mask-phone" name="commercial[number]">
 												</div>
@@ -272,11 +272,11 @@
 											</div>
 											<div class="form-group text-center">
 												<div class="btn-group" id="contact-commercial-group-add">
-													<button type="button" class="btn btn-primary" id="contact-commercial-add">Adicionar</button>
+													<button type="button" class="btn btn-primary" onclick="ProviderView.addContactPhoneCommercial()">Adicionar</button>
 												</div>
 												<div class="btn-group" id="contact-commercial-group-exist" style="display: none;">
-													<button type="button" class="btn btn-success" id="contact-commercial-save">Salvar</button>
-													<button type="button" class="btn btn-danger" id="contact-commercial-remove">Exluir</button>
+													<button type="button" class="btn btn-success" onclick="ProviderView.saveContactPhoneCommercial()">Salvar</button>
+													<button type="button" class="btn btn-danger" onclick="ProviderView.removeContactPhoneCommercial()">Exluir</button>
 												</div>
 											</div>
 										</fieldset>
@@ -285,7 +285,7 @@
 									<form class="tercom-form" id="form-contact-otherphone" style="display: none;">
 										<input type="hidden" name="id">
 										<fieldset>
-											<h4>Telefone Secundário</h4>
+											<h4>Telefone SecundÃ¡rio</h4>
 											<div class="form-group">
 												<div class="input-group">
 													<div class="input-group-prepend">
@@ -297,7 +297,7 @@
 											<div class="form-group">
 												<div class="input-group">
 													<div class="input-group-prepend">
-														<span class="input-group-text">Número</span>
+														<span class="input-group-text">NÃºmero</span>
 													</div>
 													<input type="text" class="form-control mask-phone" name="otherphone[number]">
 												</div>
@@ -317,19 +317,19 @@
 											</div>
 											<div class="form-group text-center">
 												<div class="btn-group" id="contact-otherphone-group-add">
-													<button type="button" class="btn btn-primary" id="contact-otherphone-add">Adicionar</button>
+													<button type="button" class="btn btn-primary" onclick="ProviderView.addContactPhoneOtherphone()">Adicionar</button>
 												</div>
 												<div class="btn-group" id="contact-otherphone-group-exist" style="display: none;">
-													<button type="button" class="btn btn-success" id="contact-otherphone-save">Salvar</button>
-													<button type="button" class="btn btn-danger" id="contact-otherphone-remove">Exluir</button>
+													<button type="button" class="btn btn-success" onclick="ProviderView.saveContactPhoneOtherphone()">Salvar</button>
+													<button type="button" class="btn btn-danger" onclick="ProviderView.removeContactPhoneOtherphone()">Exluir</button>
 												</div>
 											</div>
 										</fieldset>
 									</form>
 								</div>
 								<div class="modal-footer">
-									<button type="button" class="btn btn-success" id="modal-contact-add">Adicionar</button>
-									<button type="button" class="btn btn-success" id="modal-contact-save">Salvar</button>
+									<button type="button" class="btn btn-success" onclick="ProviderView.addContact()">Adicionar</button>
+									<button type="button" class="btn btn-success" onclick="ProviderView.saveContact()">Salvar</button>
 									<button type="button" class="btn btn-primary" data-dismiss="modal">Fechar</button>
 								</div>
 							</div>

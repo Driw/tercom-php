@@ -169,8 +169,8 @@ function initJQueryValidators()
 			'url': url,
 			'type': 'POST',
 			'cache': false,
-			'dataType': 'json',
-			'processData': false,
+			'data': Dashboard.getAuthenticateData(),
+			'dataType': API_DATA_TYPE_JSON,
 			dataFilter: function(response)
 			{
 				var jsonResponse = JSON.parse(response);
@@ -266,6 +266,17 @@ function parseAdvancedObject(advancedObject)
 	return object;
 }
 
+/* OUTROS */
+
+String.prototype.format = function()
+{
+	var args = arguments;
+	return this.replace(/{(\d+)}/g, function(match, number)
+	{
+		return typeof args[number] != 'undefined' ? args[number] : match;
+	});
+};
+
 /* MÉTODOS UTILITÁRIOS */
 
 var Util = Util ||
@@ -351,7 +362,7 @@ var Dashboard = Dashboard ||
 		Dashboard.navbarPermission.fadeOut('fast');
 
 		if (IS_LOGIN_TERCOM)
-			alert('BLOCKED');
+			ws.managePermissions_tercom_getAll(Dashboard.navbarPermission, Dashboard.onParsePermissions);
 		else
 			ws.managePermissions_customer_getAll(Dashboard.navbarPermission, Dashboard.onParsePermissions);
 	},
@@ -394,5 +405,25 @@ var Dashboard = Dashboard ||
 	hasPermissionAction: function(packet, action)
 	{
 		return Dashboard.hasPermissionPacket(packet) && typeof(Dashboard.permissions[packet][action]) !== 'undefined';
+	},
+	getAuthenticateData: function()
+	{
+		var object = {};
+
+		if (typeof(LOGIN_ID) !== 'undefined' &&
+			typeof(LOGIN_TOKEN) !== 'undefined' &&
+			typeof(LOGIN_EMPLOYEE_ID) !== 'undefined' &&
+			typeof(IS_LOGIN_TERCOM) !== 'undefined')
+		{
+			object.login_id = LOGIN_ID;
+			object.login_token = LOGIN_TOKEN;
+
+			if (IS_LOGIN_TERCOM)
+				object.login_tercomEmployee = LOGIN_EMPLOYEE_ID;
+			else
+				object.login_customerEmployee = LOGIN_EMPLOYEE_ID;
+		}
+
+		return object;
 	}
 }

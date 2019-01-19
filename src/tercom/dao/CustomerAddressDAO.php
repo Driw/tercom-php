@@ -3,7 +3,7 @@
 namespace tercom\dao;
 
 use dProject\MySQL\Result;
-use tercom\dao\exceptions\CustomerAddressDAOException;
+use tercom\dao\exceptions\CustomerAddressException;
 use tercom\entities\Address;
 use tercom\entities\Customer;
 use tercom\entities\lists\Addresses;
@@ -29,13 +29,13 @@ class CustomerAddressDAO extends GenericDAO
 	 * Ambos os dados já devem estar registrado no banco logo precisam ter um código de identificação.
 	 * @param Customer $customer objeto do tipo cliente à ser validado.
 	 * @param Address $address objeto do tipo endereço à ser validado.
-	 * @throws CustomerAddressDAOException caso algum dos dados de cliente ou enderçeo não estejam de acordo.
+	 * @throws CustomerAddressException caso algum dos dados de cliente ou enderçeo não estejam de acordo.
 	 */
 	private function validateCustomerAddress(Customer $customer, Address $address)
 	{
 		// FOREIGN KEY
-		if ($customer->getId() === 0) throw CustomerAddressDAOException::newCustomerNotIdentified();
-		if ($address->getId() === 0) throw CustomerAddressDAOException::newAddressNotIdentified();
+		if ($customer->getId() === 0) throw CustomerAddressException::newCustomerNotIdentified();
+		if ($address->getId() === 0) throw CustomerAddressException::newAddressNotIdentified();
 	}
 
 	/**

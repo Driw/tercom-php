@@ -27,6 +27,11 @@ use tercom\exceptions\ProviderContactException;
 class ProviderContactDAO extends GenericDAO
 {
 	/**
+	 * @var array vetor com o nome de todas as colunas da tabela de contatos de fornecedor.
+	 */
+	public const ALL_COLUMNS = ['id', 'name', 'position', 'email', 'idCommercial', 'idOtherphone'];
+
+	/**
 	 * Procedimento interno para validação dos dados de um contato de fornecedor ao inserir e/ou atualizar.
 	 * Contatos de fornecedor não podem possuir nome ou endereço de e-mail não definidos (em branco).
 	 * @param ProviderContact $providerContact objeto do tipo contato de fornecedor à ser validado.
@@ -58,7 +63,7 @@ class ProviderContactDAO extends GenericDAO
 	{
 		$this->validate($providerContact, false);
 
-		$sql = "INSERT INTO provider_contact (name, position, email, commercial, otherphone)
+		$sql = "INSERT INTO provider_contact (name, position, email, idCommercial, idOtherphone)
 				VALUES (?, ?, ?, ?, ?)";
 
 		$query = $this->createQuery($sql);
@@ -87,7 +92,7 @@ class ProviderContactDAO extends GenericDAO
 		$this->validate($providerContact, true);
 
 		$sql = "UPDATE provider_contact
-				SET name = ?, position = ?, email = ?, commercial = ?, otherphone = ?
+				SET name = ?, position = ?, email = ?, idCommercial = ?, idOtherphone = ?
 				WHERE id = ?";
 
 		$query = $this->createQuery($sql);
@@ -112,7 +117,7 @@ class ProviderContactDAO extends GenericDAO
 		$this->validate($providerContact, true);
 
 		$sql = "UPDATE provider_contact
-				SET commercial = ?, otherphone = ?
+				SET idCommercial = ?, idOtherphone = ?
 				WHERE id = ?";
 
 		$query = $this->createQuery($sql);
@@ -184,9 +189,15 @@ class ProviderContactDAO extends GenericDAO
 	 */
 	private function newSelect(): string
 	{
-		return "SELECT id, name, position, email, commercial commercial_id, otherphone otherphone_id
-				FROM provider_contact
-				INNER JOIN provider_contacts ON provider_contacts.idProviderContact = provider_contact.id";
+		$providerContactColumns = $this->buildQuery(self::ALL_COLUMNS, 'pc');
+		$commercialPhoneColumns = $this->buildQuery(PhoneDAO::ALL_COLUMNS, 'phc', 'commercial');
+		$otherphoneColumns = $this->buildQuery(PhoneDAO::ALL_COLUMNS, 'pho', 'otherphone');
+
+		return "SELECT $providerContactColumns, $commercialPhoneColumns, $otherphoneColumns
+				FROM provider_contact pc
+				INNER JOIN provider_contacts ON provider_contacts.idProviderContact = pc.id
+				LEFT JOIN phones phc ON phc.id = pc.idCommercial
+				LEFT JOIN phones pho ON pho.id = pc.idOtherphone";
 	}
 
 	/**

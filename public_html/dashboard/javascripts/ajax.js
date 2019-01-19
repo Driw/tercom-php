@@ -5,7 +5,7 @@ const API_TYPE_POST = 'POST';
 const API_STATUS_SUCCESSFUL = 1;
 
 const API_DATA_TYPE_JSON = 'json';
-const API_CONTENT_TYPE_JSON = 'application/json';
+const API_CONTENT_TYPE_JSON = 'application/json; charset=utf-8';
 const API_CONTENT_TYPE_FORMDATA = 'application/x-www-form-urlencoded; charset=utf-8';
 
 function Ajax(options)
@@ -102,6 +102,7 @@ Ajax.prototype.setFormData = function(formData)
 };
 Ajax.prototype.setObjectData = function(object)
 {
+	$.extend(object, Dashboard.getAuthenticateData());
 	this.setData(object);
 	delete this['contentType'];
 	delete this['processData'];
