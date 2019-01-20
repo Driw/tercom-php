@@ -40,6 +40,7 @@ class ManufacturerBoundary extends DefaultDashboardLoggedBoundary
 	}
 
 	/**
+	 * @param ApiContent $content
 	 * @return ApiTemplateResult
 	 */
 	public function onList(ApiContent $content): ApiTemplateResult
@@ -54,13 +55,14 @@ class ManufacturerBoundary extends DefaultDashboardLoggedBoundary
 	}
 
 	/**
-	* @ApiAnnotation({"params":["fantasyName"]})
+	 * @ApiAnnotation({"params":["fantasyName"]})
+	 * @param ApiContent $content
 	 * @return ApiTemplateResult
 	 */
-	public function onSearch(ApiContent $content)
+	public function onSearch(ApiContent $content): ApiTemplateResult
 	{
 		$dashboardTemplate = $this->getApiParent()->newBaseTemplate();
-		$dashboardTemplate = $this->prepareInclude(self::BASE_PATH. 'ManufactureSearch');
+		$dashboardTemplate = $this->prepareInclude(self::BASE_PATH. 'ManufacturerSearch');
 		$dashboardTemplate->setDataArray('FilterOption', $this->getFilterOptions());
 
 		$result = new ApiTemplateResult();
@@ -70,6 +72,7 @@ class ManufacturerBoundary extends DefaultDashboardLoggedBoundary
 	}
 
 	/**
+	 * @param ApiContent $content
 	 * @return ApiTemplateResult
 	 */
 	public function onAdd(ApiContent $content): ApiTemplateResult
@@ -101,6 +104,23 @@ class ManufacturerBoundary extends DefaultDashboardLoggedBoundary
 	}
 
 	/**
+	 * @ApiAnnotation({"params":["idManufacturer"]})
+	 * @param ApiContent $content
+	 * @return ApiTemplateResult
+	 */
+	public function onRemove(ApiContent $content): ApiTemplateResult
+	{
+		$dashboardTemplate = $this->getApiParent()->newBaseTemplate();
+		$dashboardTemplate = $this->prepareInclude(self::BASE_PATH. 'ManufacturerRemove');
+		$dashboardTemplate->idManufacturer = $content->getParameters()->getInt('idManufacturer');
+
+		$result = new ApiTemplateResult();
+		$result->add($dashboardTemplate);
+
+		return $result;
+	}
+
+	/**
 	 * @return array
 	 */
 	private function getFilterOptions(): array
@@ -111,7 +131,7 @@ class ManufacturerBoundary extends DefaultDashboardLoggedBoundary
 		foreach ($providerFilters as $value => $option)
 			$filterOptions[] = [ 'Value' => $value, 'Option' => $option ];
 
-			return $filterOptions;
+		return $filterOptions;
 	}
 }
 

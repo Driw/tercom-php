@@ -29,7 +29,7 @@ var ManufacturerView = ManufacturerView ||
 					'required': true,
 					'rangelength': [ settings.minFantasyNameLen, settings.maxFantasyNameLen ],
 					'remoteapi': {
-						'webservice': 'manufacture/avaiable/fantasyName/{value}/{idManufacturer}',
+						'webservice': 'manufacturer/avaiable/fantasyName/{value}/{idManufacturer}',
 						'parameters': {
 							'idManufacturer': ManufacturerView.idManufacturer,
 						}

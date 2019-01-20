@@ -213,7 +213,7 @@ Webservice.prototype.providerContact_getAll = function(idProvider, target, liste
 Webservice.prototype.manufacturer_settings = function(target, listener)
 {
 	this.setOptionsAndExecute({
-		'webservice': 'manufacture/settings',
+		'webservice': 'manufacturer/settings',
 		'target': target,
 		'listener': listener,
 		'errorMessage': this.newBaseErrorMessage('obter configuração para fabricante'),
@@ -222,7 +222,7 @@ Webservice.prototype.manufacturer_settings = function(target, listener)
 Webservice.prototype.manufacturer_add = function(form, listener)
 {
 	this.setOptionsAndExecute({
-		'webservice': 'manufacture/add',
+		'webservice': 'manufacturer/add',
 		'form': form,
 		'target': form,
 		'listener': listener,
@@ -232,17 +232,27 @@ Webservice.prototype.manufacturer_add = function(form, listener)
 Webservice.prototype.manufacturer_set = function(idManufacturer, form, listener)
 {
 	this.setOptionsAndExecute({
-		'webservice': 'manufacture/set/' +idManufacturer,
+		'webservice': 'manufacturer/set/{0}'.format(idManufacturer),
 		'form': form,
 		'target': form,
 		'listener': listener,
 		'errorMessage': this.newBaseErrorMessage('atualizar fabricante'),
 	});
 };
+Webservice.prototype.manufacturer_remove = function(idManufacturer, form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'manufacturer/remove/{0}'.format(idManufacturer),
+		'form': form,
+		'target': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('excluir fabricante'),
+	});
+};
 Webservice.prototype.manufacturer_get = function(idManufacturer, form, listener)
 {
 	this.setOptionsAndExecute({
-		'webservice': 'manufacture/get/' +idManufacturer,
+		'webservice': 'manufacturer/get/{0}'.format(idManufacturer),
 		'form': form,
 		'target': form,
 		'listener': listener,
@@ -252,12 +262,23 @@ Webservice.prototype.manufacturer_get = function(idManufacturer, form, listener)
 Webservice.prototype.manufacturer_getAll = function(target, listener)
 {
 	this.setOptionsAndExecute({
-		'webservice': 'manufacture/getAll',
+		'webservice': 'manufacturer/getAll',
 		'target': target,
 		'listener': listener,
 		'errorMessage': this.newBaseErrorMessage('obter os fabricantes'),
 	});
 };
+Webservice.prototype.manufacturer_search = function(filter, value, target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'manufacturer/search/{0}/{1}'.format(filter, encodeURIComponent(value)),
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('procurar por fabricantes'),
+	});
+};
+
+// ProductFamily
 
 Webservice.prototype.productFamily_getAll = function(target, listener)
 {

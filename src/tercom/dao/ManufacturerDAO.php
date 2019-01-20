@@ -223,11 +223,11 @@ class ManufacturerDAO extends GenericDAO
 	/**
 	 * Verifica se um determinado nome fantasia está disponível para um fabricante.
 	 * @param string $fantasyName nome fantasia à ser verificado.
-	 * @param int $idManufacturerr código de identificação do fabricante à desconsiderar
+	 * @param int $idManufacturer código de identificação do fabricante à desconsiderar
 	 * ou zero caso seja um novo fabricante.
 	 * @return bool true se estiver disponível ou false caso contrário.
 	 */
-	public function existFantasyName(string $fantasyName, int $idManufacturerr): bool
+	public function existFantasyName(string $fantasyName, int $idManufacturer): bool
 	{
 		$sql = "SELECT COUNT(*) qty
 				FROM manufacturers
@@ -235,7 +235,7 @@ class ManufacturerDAO extends GenericDAO
 
 		$query = $this->createQuery($sql);
 		$query->setString(1, $fantasyName);
-		$query->setInteger(2, $idManufacturerr);
+		$query->setInteger(2, $idManufacturer);
 
 		return $this->parseQueryExist($query);
 	}

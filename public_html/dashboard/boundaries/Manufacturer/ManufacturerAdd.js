@@ -23,7 +23,7 @@ var ManufacturerAdd = ManufacturerAdd ||
 					'required': true,
 					'rangelength': [ settings.minFantasyNameLen, settings.maxFantasyNameLen ],
 					'remoteapi': {
-						'webservice': 'manufacture/avaiable/fantasyName',
+						'webservice': 'manufacturer/avaiable/fantasyName',
 					},
 				},
 			},

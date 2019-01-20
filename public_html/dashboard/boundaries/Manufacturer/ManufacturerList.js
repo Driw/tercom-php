@@ -8,15 +8,15 @@ var ManufacturerList = ManufacturerList ||
 {
 	init: function()
 	{
-		this.manufacturers = [];
-		this.table = $('#table-manufacturers');
-		this.tbody = this.table.children('tbody');
-		this.datatables = newDataTables(this.table);
-		this.loadManufacturers();
+		ManufacturerList.manufacturers = [];
+		ManufacturerList.table = $('#table-manufacturers');
+		ManufacturerList.tbody = ManufacturerList.table.children('tbody');
+		ManufacturerList.datatables = newDataTables(ManufacturerList.table);
+		ManufacturerList.loadManufacturers();
 	},
 	loadManufacturers: function()
 	{
-		ws.manufacturer_getAll(this.tbody, this.onManufacturersLoaded);
+		ws.manufacturer_getAll(ManufacturerList.tbody, ManufacturerList.onManufacturersLoaded);
 	},
 	onManufacturersLoaded: function(manufacturers)
 	{
@@ -64,7 +64,7 @@ var ManufacturerList = ManufacturerList ||
 		var manufacturer = ManufacturerList.manufacturers[index];
 
 		if (manufacturer !== undefined)
-			Util.redirect('manufacturer/view/' +manufacturer.id, true);
+			Util.redirect('manufacturer/view/{0}'.format(manufacturer.id), true);
 	},
 	onButtonRemove: function(button)
 	{
@@ -72,6 +72,6 @@ var ManufacturerList = ManufacturerList ||
 		var manufacturer = ManufacturerList.manufacturers[index];
 
 		if (manufacturer !== undefined)
-			Util.redirect('manufacturers/remove/' +manufacturer.id, true);
+			Util.redirect('manufacturer/remove/{0}'.format(manufacturer.id), true);
 	},
 }

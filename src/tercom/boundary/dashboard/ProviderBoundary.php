@@ -41,6 +41,7 @@ class ProviderBoundary extends DefaultDashboardLoggedBoundary
 	}
 
 	/**
+	 * @param ApiContent $content
 	 * @return ApiTemplateResult
 	 */
 	public function onList(ApiContent $content): ApiTemplateResult
@@ -54,9 +55,10 @@ class ProviderBoundary extends DefaultDashboardLoggedBoundary
 	}
 
 	/**
+	 * @param ApiContent $content
 	 * @return ApiTemplateResult
 	 */
-	public function onSearch(ApiContent $content)
+	public function onSearch(ApiContent $content): ApiTemplateResult
 	{
 		$dashboardTemplate = $this->newBaseTemplate();
 		$dashboardTemplate = $this->prepareInclude(self::BASE_PATH. 'ProviderSearch');
@@ -69,6 +71,7 @@ class ProviderBoundary extends DefaultDashboardLoggedBoundary
 	}
 
 	/**
+	 * @param ApiContent $content
 	 * @return ApiTemplateResult
 	 */
 	public function onAdd(ApiContent $content): ApiTemplateResult
