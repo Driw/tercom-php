@@ -170,9 +170,9 @@ class ProductUnitService extends DefaultSiteService
 	 * Verifica a disponibilidade de algum valor de atributo para unidades de produto.
 	 * @ApiPermissionAnnotation({"params":["filter","value","idProductUnit"]})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
-	 * @return ApiResultObject aquisição do resultado com a validação da disponibilidade do dado.
+	 * @return ApiResultSimpleValidation aquisição do resultado com a validação da disponibilidade do dado.
 	 */
-	public function actionAvaiable(ApiContent $content): ApiResultObject
+	public function actionAvaiable(ApiContent $content): ApiResultSimpleValidation
 	{
 		$filter = $content->getParameters()->getString('filter');
 
@@ -188,9 +188,9 @@ class ProductUnitService extends DefaultSiteService
 	/**
 	 * Procedimento interno para realizar a disponibilidade de um nome para unidade de produto.
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
-	 * @return ApiResultObject aquisição do resultado com a validação da disponibilidade.
+	 * @return ApiResultSimpleValidation aquisição do resultado com a validação da disponibilidade.
 	 */
-	private function avaiableName(ApiContent $content): ApiResultObject
+	private function avaiableName(ApiContent $content): ApiResultSimpleValidation
 	{
 		$parameters = $content->getParameters();
 		$name = $parameters->getString('value');
@@ -206,9 +206,9 @@ class ProductUnitService extends DefaultSiteService
 	/**
 	 * Procedimento interno para realizar a disponibilidade de uma abreviação para unidade de produto.
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
-	 * @return ApiResultObject aquisição do resultado com a validação da disponibilidade.
+	 * @return ApiResultSimpleValidation aquisição do resultado com a validação da disponibilidade.
 	 */
-	private function avaiableShortName(ApiContent $content): ApiResultObject
+	private function avaiableShortName(ApiContent $content): ApiResultSimpleValidation
 	{
 		$parameters = $content->getParameters();
 		$shortName = $parameters->getString('value');

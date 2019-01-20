@@ -402,17 +402,27 @@ Webservice.prototype.productUnit_add = function(form, listener)
 Webservice.prototype.productUnit_set = function(idProductUnit, form, listener)
 {
 	this.setOptionsAndExecute({
-		'webservice': 'productUnit/set/' +idProductUnit,
+		'webservice': 'productUnit/set/{0}'.format(idProductUnit),
 		'form': form,
 		'target': form,
 		'listener': listener,
 		'errorMessage': this.newBaseErrorMessage('atualizar unidade de produto'),
 	});
 };
+Webservice.prototype.productUnit_remove = function(idProductUnit, form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'productUnit/remove/{0}'.format(idProductUnit),
+		'form': form,
+		'target': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('excluir unidade de produto'),
+	});
+};
 Webservice.prototype.productUnit_get = function(idProductUnit, form, listener)
 {
 	this.setOptionsAndExecute({
-		'webservice': 'productUnit/get/' +idProductUnit,
+		'webservice': 'productUnit/get/{0}'.format(idProductUnit),
 		'form': form,
 		'target': form,
 		'listener': listener,

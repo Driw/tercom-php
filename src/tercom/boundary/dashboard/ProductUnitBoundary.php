@@ -81,5 +81,22 @@ class ProductUnitBoundary extends DefaultDashboardLoggedBoundary
 
 		return $result;
 	}
+
+	/**
+	 * @ApiAnnotation({"params":["idProductUnit"]})
+	 * @param ApiContent $content
+	 * @return ApiTemplateResult
+	 */
+	public function onRemove(ApiContent $content): ApiTemplateResult
+	{
+		$dashboardTemplate = $this->getApiParent()->newBaseTemplate();
+		$dashboardTemplate = $this->prepareInclude(self::BASE_PATH. 'ProductUnitRemove');
+		$dashboardTemplate->idProductUnit = $content->getParameters()->getInt('idProductUnit');
+
+		$result = new ApiTemplateResult();
+		$result->add($dashboardTemplate);
+
+		return $result;
+	}
 }
 

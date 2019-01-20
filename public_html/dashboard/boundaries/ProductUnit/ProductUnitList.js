@@ -8,15 +8,15 @@ var ProductUnitList = ProductUnitList ||
 {
 	init: function()
 	{
-		this.productUnits = [];
-		this.table = $('#table-product-units');
-		this.tbody = this.table.children('tbody');
-		this.datatables = newDataTables(this.table);
-		this.loadProductUnits();
+		ProductUnitList.productUnits = [];
+		ProductUnitList.table = $('#table-product-units');
+		ProductUnitList.tbody = ProductUnitList.table.children('tbody');
+		ProductUnitList.datatables = newDataTables(ProductUnitList.table);
+		ProductUnitList.loadProductUnits();
 	},
 	loadProductUnits: function()
 	{
-		ws.productUnit_getAll(this.tbody, this.onProductUnitsLoaded);
+		ws.productUnit_getAll(ProductUnitList.tbody, ProductUnitList.onProductUnitsLoaded);
 	},
 	onProductUnitsLoaded: function(productUnits)
 	{
@@ -40,7 +40,7 @@ var ProductUnitList = ProductUnitList ||
 		return [
 			productUnit.shortName,
 			productUnit.name,
-			'<div class="btn-group">' + btnView + btnRemove + '</div>',
+			'<div class="btn-group">{0}{1}</div>'.format(btnView, btnRemove),
 		];
 	},
 	onButtonView: function(button)
@@ -49,7 +49,7 @@ var ProductUnitList = ProductUnitList ||
 		var productUnit = ProductUnitList.productUnits[index];
 
 		if (productUnit !== undefined)
-			Util.redirect('productUnit/view/' +productUnit.id, true);
+			Util.redirect('productUnit/view/{0}'.format(productUnit.id), true);
 	},
 	onButtonRemove: function(button)
 	{
@@ -57,6 +57,6 @@ var ProductUnitList = ProductUnitList ||
 		var productUnit = ProductUnitList.productUnits[index];
 
 		if (productUnit !== undefined)
-			Util.redirect('productUnit/remove/' +productUnit.id, true);
+			Util.redirect('productUnit/remove/{0}'.format(productUnit.id), true);
 	},
 }
