@@ -20,9 +20,13 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+20.01.2018 - 0.3.5.197
+- Revisão das páginas para gerenciamento de embalagens de produto.
+- Implementação da página para confirmação da exclusão de uma embalagem de produto.
+- Implementação das páginas para procurar por fabricantes e excluir fabricante.
+
 19.01.2018 - 0.3.5.196
 - Revisão das páginas para gerenciamento de fabricantes.
-- Implementação da página para procurar por fabricantes.
 
 19.01.2018 - 0.3.5.195
 - Corrigido e atualizado ProviderSearch, esperado na rev194.

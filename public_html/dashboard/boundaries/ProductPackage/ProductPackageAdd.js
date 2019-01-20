@@ -42,7 +42,7 @@ var ProductPackageAdd = ProductPackageAdd ||
 	{
 		ws.productPackage_add(ProductPackageAdd.form, ProductPackageAdd.onSubmited);
     },
-	onSubmited: function(manufacturer, message)
+	onSubmited: function(productPackage, message)
 	{
 		$('#row-message').show('slow');
 		$('#row-message-span').html(message);

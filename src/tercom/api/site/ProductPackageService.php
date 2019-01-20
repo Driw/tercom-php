@@ -196,7 +196,7 @@ class ProductPackageService extends DefaultSiteService
 		$avaiable = !$this->getProductPackageControl()->hasName($name, $idProductPackage);
 
 		$result = new ApiResultSimpleValidation();
-		$result->setOk($avaiable, 'nome "%s" %s', $name, $this->getMessageAvaiable($avaiable));
+		$result->setOkMessage($avaiable, 'nome "%s" %s', $name, $this->getMessageAvaiable($avaiable));
 
 		return $result;
 	}

@@ -341,17 +341,27 @@ Webservice.prototype.productPackage_add = function(form, listener)
 Webservice.prototype.productPackage_set = function(idProductPackage, form, listener)
 {
 	this.setOptionsAndExecute({
-		'webservice': 'productPackage/set/' +idProductPackage,
+		'webservice': 'productPackage/set/{0}'.format(idProductPackage),
 		'form': form,
 		'target': form,
 		'listener': listener,
 		'errorMessage': this.newBaseErrorMessage('atualizar embalagem de produto'),
 	});
 };
+Webservice.prototype.productPackage_remove = function(idProductPackage, form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'productPackage/remove/{0}'.format(idProductPackage),
+		'form': form,
+		'target': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('excluir embalagem de produto'),
+	});
+};
 Webservice.prototype.productPackage_get = function(idProductPackage, form, listener)
 {
 	this.setOptionsAndExecute({
-		'webservice': 'productPackage/get/' +idProductPackage,
+		'webservice': 'productPackage/get/{0}'.format(idProductPackage),
 		'form': form,
 		'target': form,
 		'listener': listener,

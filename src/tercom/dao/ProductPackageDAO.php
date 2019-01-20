@@ -100,7 +100,7 @@ class ProductPackageDAO extends GenericDAO
 	 */
 	public function dalete(ProductPackage $productPackage): bool
 	{
-		$this->validate($productPackage, false);
+		$this->validate($productPackage, true);
 
 		if ($this->existOnProductPrice($productPackage->getId()))
 			throw ProductPackageException::newHasUses();
