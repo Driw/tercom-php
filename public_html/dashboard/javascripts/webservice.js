@@ -126,6 +126,15 @@ Webservice.prototype.provider_getAll = function(target, listener)
 		'errorMessage': this.newBaseErrorMessage('obter os fornecedores'),
 	});
 };
+Webservice.prototype.provider_search = function(filter, value, target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'provider/search/{0}/{1}'.format(filter, encodeURIComponent(value)),
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('procurar fornecedores'),
+	});
+};
 
 // -- ProviderContact
 

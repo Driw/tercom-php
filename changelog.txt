@@ -20,7 +20,10 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
-18.01.2018 - 0.3.5.194
+19.01.2018 - 0.3.5.195
+- Corrigido e atualizado ProviderSearch, esperado na rev194.
+
+19.01.2018 - 0.3.5.194
 - Tabela 'provider_contact' modificada, 'commercial' e 'otherphone' para 'idComemrcial' e 'idOtherphone' respectivamente.
 	- Atualizado ProviderContactDAO respectivamente e adicionado a newSelect() LEFT JOIN para obter dados dos telefones.
 - Ajustes para autenticação correta dos dados enviados por 'webservice.js' para aceitar FormData, JQuery e Object.
