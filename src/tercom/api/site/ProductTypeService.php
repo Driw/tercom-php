@@ -120,7 +120,7 @@ class ProductTypeService extends DefaultSiteService
 	 */
 	public function actionGetAll(ApiContent $content): ApiResultObject
 	{
-		$productTypes = $this->getProductPackageControl()->getAll();
+		$productTypes = $this->getProductTypeControl()->getAll();
 
 		$result = new ApiResultObject();
 		$result->setResult($productTypes, 'há "%d" tipos de produto registradas no sistema', $productTypes->size());
@@ -170,7 +170,7 @@ class ProductTypeService extends DefaultSiteService
 	 * @throws FilterException somente se o filtro informado não existir na ação.
 	 * @return ApiResultSimpleValidation aquisição do resultado informado a disponibilidade do dado.
 	 */
-	public function actionAvaiable(ApiContent $content):ApiResultObject
+	public function actionAvaiable(ApiContent $content): ApiResultSimpleValidation
 	{
 		$filter = $content->getParameters()->getString('filter');
 
@@ -187,7 +187,7 @@ class ProductTypeService extends DefaultSiteService
 	 * @param ApiContent $content conteúdo fornecedido na solicitação do serviço.
 	 * @return ApiResultSimpleValidation aquisição do resultado informado a disponibilidade.
 	 */
-	private function avaiableName(ApiContent $content): ApiResultObject
+	private function avaiableName(ApiContent $content): ApiResultSimpleValidation
 	{
 		$parameters = $content->getParameters();
 		$name = $parameters->getString('value');

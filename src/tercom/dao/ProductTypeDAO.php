@@ -195,10 +195,7 @@ class ProductTypeDAO extends GenericDAO
 		$query->setString(1, $name);
 		$query->setInteger(2, $idProductType);
 
-		$result = $query->execute();
-		$productType = $result->next();
-
-		return intval($productType['qtd']) === 1;
+		return $this->parseQueryExist($query);
 	}
 
 	/**

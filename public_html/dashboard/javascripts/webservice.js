@@ -463,17 +463,27 @@ Webservice.prototype.productType_add = function(form, listener)
 Webservice.prototype.productType_set = function(idProductType, form, listener)
 {
 	this.setOptionsAndExecute({
-		'webservice': 'productType/set/' +idProductType,
+		'webservice': 'productType/set/{0}'.format(idProductType),
 		'form': form,
 		'target': form,
 		'listener': listener,
 		'errorMessage': this.newBaseErrorMessage('atualizar tipo de produto'),
 	});
 };
+Webservice.prototype.productType_remove = function(idProductType, form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'productType/remove/{0}'.format(idProductType),
+		'form': form,
+		'target': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('excluir tipo de produto'),
+	});
+};
 Webservice.prototype.productType_get = function(idProductType, form, listener)
 {
 	this.setOptionsAndExecute({
-		'webservice': 'productType/get/' +idProductType,
+		'webservice': 'productType/get/{0}'.format(idProductType),
 		'form': form,
 		'target': form,
 		'listener': listener,

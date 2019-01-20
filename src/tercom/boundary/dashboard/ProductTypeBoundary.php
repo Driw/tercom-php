@@ -33,12 +33,13 @@ class ProductTypeBoundary extends DefaultDashboardLoggedBoundary
 	 * {@inheritDoc}
 	 * @see \dproject\restful\template\ApiTemplate::callIndex()
 	 */
-	public function callIndex(ApiContent $content)
+	public function callIndex()
 	{
 		return $this->onList(System::getDashboardConnection()->getContent());
 	}
 
 	/**
+	 * @param ApiContent $content
 	 * @return ApiTemplateResult
 	 */
 	public function onList(ApiContent $content): ApiTemplateResult
@@ -52,6 +53,7 @@ class ProductTypeBoundary extends DefaultDashboardLoggedBoundary
 	}
 
 	/**
+	 * @param ApiContent $content
 	 * @return ApiTemplateResult
 	 */
 	public function onAdd(ApiContent $content): ApiTemplateResult
@@ -74,6 +76,23 @@ class ProductTypeBoundary extends DefaultDashboardLoggedBoundary
 	{
 		$dashboardTemplate = $this->getApiParent()->newBaseTemplate();
 		$dashboardTemplate = $this->prepareInclude(self::BASE_PATH. 'ProductTypeView');
+		$dashboardTemplate->idProductType = $content->getParameters()->getInt('idProductType');
+
+		$result = new ApiTemplateResult();
+		$result->add($dashboardTemplate);
+
+		return $result;
+	}
+
+	/**
+	 * @ApiAnnotation({"params":["idProductType"]})
+	 * @param ApiContent $content
+	 * @return ApiTemplateResult
+	 */
+	public function onRemove(ApiContent $content): ApiTemplateResult
+	{
+		$dashboardTemplate = $this->getApiParent()->newBaseTemplate();
+		$dashboardTemplate = $this->prepareInclude(self::BASE_PATH. 'ProductTypeRemove');
 		$dashboardTemplate->idProductType = $content->getParameters()->getInt('idProductType');
 
 		$result = new ApiTemplateResult();
