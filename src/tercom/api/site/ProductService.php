@@ -2,6 +2,7 @@
 
 namespace tercom\api\site;
 
+use dProject\Primitive\StringUtil;
 use dProject\restful\ApiContent;
 use tercom\api\site\results\ApiResultObject;
 use tercom\api\site\results\ApiResultProductSettings;
@@ -58,7 +59,7 @@ class ProductService extends DefaultSiteService
 		$product->setProductUnit($productUnit);
 
 		if ($post->isSetted('utitlity')) $product->setUtility($post->getString('utility'));
-		if ($post->isSetted('idProductCategory'))
+		if ($post->isSetted('idProductCategory') && !StringUtil::isEmpty($post->getString('idProductCategory')))
 		{
 			$idProductCategory = $post->getInt('idProductCategory');
 			$idProductCategoryType = $this->parseNullToInt($post->getInt('idProductCategoryType', false));
@@ -92,15 +93,14 @@ class ProductService extends DefaultSiteService
 		if ($post->isSetted('utility')) $product->setUtility($post->getString('utility'));
 		if ($post->isSetted('inactive')) $product->setInactive($post->getBoolean('inactive'));
 
-		if ($post->isSetted('idProductUnit'))
+		if ($post->isSetted('idProductUnit') && ($idProductUnit = $post->getInt('idProductUnit')) !== $product->getProductUnitId() && $idProductUnit !== 0)
 		{
-			$idProductUnit = $post->getInt('idProductUnit');
 			$productUnit = $this->getProductUnitControl()->get($idProductUnit);
 			$product->setProductUnit($productUnit);
 		}
-		if ($post->isSetted('idProductCategory'))
+
+		if ($post->isSetted('idProductCategory') && ($idProductCategory = $post->getInt('idProductCategory')) !== $product->getProductCategoryId() && $idProductCategory !== 0)
 		{
-			$idProductCategory = $post->getInt('idProductCategory');
 			$idProductCategoryType = $this->parseNullToInt($post->getInt('idProductCategoryType', false));
 			$productCategory = $this->getProductCategoryControl()->get($idProductCategory, $idProductCategoryType);
 			$product->setProductCategory($productCategory);
@@ -295,9 +295,9 @@ class ProductService extends DefaultSiteService
 	 * Verifica a disponibilidade de um valor para um determinado campo de produto.
 	 * @ApiPermissionAnnotation({"params":["filter","value","idProduct"]})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
-	 * @return ApiResultObject aquisição do resultado com a validação da disponibilidade do dado.
+	 * @return ApiResultSimpleValidation aquisição do resultado com a validação da disponibilidade do dado.
 	 */
-	public function actionAvaiable(ApiContent $content): ApiResultObject
+	public function actionAvaiable(ApiContent $content): ApiResultSimpleValidation
 	{
 		$filter = $content->getParameters()->getString('filter');
 
@@ -312,17 +312,17 @@ class ProductService extends DefaultSiteService
 	/**
 	 * Procedimento interno usado para verificar a disponibilidade de um nome de produto.
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
-	 * @return ApiResultObject aquisição do resultado com a validação da disponibilidade do dado.
+	 * @return ApiResultSimpleValidation aquisição do resultado com a validação da disponibilidade do dado.
 	 */
 	private function avaiableName(ApiContent $content): ApiResultSimpleValidation
 	{
 		$parameters = $content->getParameters();
 		$name = $parameters->getString('value');
 		$idProduct = $this->parseNullToInt($parameters->getInt('idProduct', false));
-		$avaiable = $this->getProductControl()->hasName($name, $idProduct) ? 'disponível' : 'indisponível';
+		$avaiable = !$this->getProductControl()->hasName($name, $idProduct);
 
 		$result = new ApiResultSimpleValidation();
-		$result->setOkMessage($avaiable, 'nome de produto "%s" %s', $name, $avaiable);
+		$result->setOkMessage($avaiable, 'nome de produto "%s" %s', $name, $this->getMessageAvaiable($avaiable));
 
 		return $result;
 	}

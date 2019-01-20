@@ -8,31 +8,32 @@ var ProductView = ProductView ||
 {
 	init: function()
 	{
-		this.form = $('#form-product-view');
-		this.idProduct = $(this.form[0].idProduct).val();
-		this.loadProduct();
-		this.initFormSettings();
+		ProductView.form = $('#form-product-view');
+		ProductView.idProduct = $(ProductView.form[0].idProduct).val();
+		ProductView.loadProduct();
+		ProductView.initFormSettings();
 	},
 	initFormSettings: function()
 	{
-		ws.product_settings(this.form, ProductView.onSettings);
+		ws.product_settings(ProductView.form, ProductView.onSettings);
 	},
 	initSelects: function()
 	{
-		this.selectUnit = $(ProductView.form[0].idProductUnit);
-		this.selectFamily = $(ProductView.form[0].idProductFamily);
-		this.selectGroup = $(ProductView.form[0].idProductGroup);
-		this.selectSubgroup = $(ProductView.form[0].idProductSubGroup);
-		this.selectSector = $(ProductView.form[0].idProductSector);
-		this.selectFamily.change(ProductView.onProductFamily);
-		this.selectGroup.change(ProductView.onProductGroup);
-		this.selectSubgroup.change(ProductView.onProductSubgroup);
-		this.loadProductUnits();
-		this.loadProductFamilies();
+		ProductView.selectUnit = $(ProductView.form[0].idProductUnit);
+		ProductView.selectFamily = $(ProductView.form[0].idProductFamily);
+		ProductView.selectGroup = $(ProductView.form[0].idProductGroup);
+		ProductView.selectSubgroup = $(ProductView.form[0].idProductSubGroup);
+		ProductView.selectSector = $(ProductView.form[0].idProductSector);
+		ProductView.selectFamily.change(ProductView.onProductFamily);
+		ProductView.selectGroup.change(ProductView.onProductGroup);
+		ProductView.selectSubgroup.change(ProductView.onProductSubgroup);
+		ProductView.selectSector.change(ProductView.onProductSector);
+		ProductView.loadProductUnits();
+		ProductView.loadProductFamilies();
 	},
 	loadProduct: function()
 	{
-		ws.product_get(ProductView.idProduct, this.form, ProductView.onLoadProduct);
+		ws.product_get(ProductView.idProduct, ProductView.form, ProductView.onLoadProduct);
 	},
 	loadProductUnits: function()
 	{
@@ -63,6 +64,7 @@ var ProductView = ProductView ||
 		$(form.description).html(product.description);
 		$(form.utility).html(product.utility);
 
+		ProductView.setProductCategoryReset();
 		ProductView.initSelects();
 	},
 	onLoadProductUnits: function(productUnities)
@@ -82,78 +84,64 @@ var ProductView = ProductView ||
 
 		var form = ProductView.form[0];
 
-		if (ProductView.product.unit.id !== 0)
-			$(form.idProductUnit).val(ProductView.product.unit.id);
+		if (ProductView.product.productUnit.id !== 0)
+			$(form.idProductUnit).val(ProductView.product.productUnit.id);
 	},
 	onLoadProductFamilies: function(productFamilies)
 	{
-		ProductView.onSubLoadCategory('Selecione uma família', ProductView.selectFamily, productFamilies.elements);
+		ProductView.onSubLoadCategory('Sem categoria', ProductView.selectFamily, productFamilies.elements);
 	},
 	onLoadProductGroups: function(productFamily)
 	{
-		ProductView.onSubLoadCategory('Selecione um grupo', ProductView.selectGroup, productFamily.productGroups.elements);
+		ProductView.onSubLoadCategory('Selecione um grupo', ProductView.selectGroup, productFamily.productCategories.elements);
 	},
 	onLoadProductSubgroups: function(productGroup)
 	{
-		ProductView.onSubLoadCategory('Selecione um subgrupo', ProductView.selectSubgroup, productGroup.productSubGroups.elements);
+		ProductView.onSubLoadCategory('Selecione um subgrupo', ProductView.selectSubgroup, productGroup.productCategories.elements);
 	},
 	onLoadProductSectores: function(productSubgroup)
 	{
-		ProductView.onSubLoadCategory('Selecione um setor', ProductView.selectSector, productSubgroup.productSectores.elements);
+		ProductView.onSubLoadCategory('Selecione um setor', ProductView.selectSector, productSubgroup.productCategories.elements);
 	},
 	onSubLoadCategory: function(emptyMessage, select, elements)
 	{
 		select.empty();
 
 		var option = Util.createElementOption(emptyMessage, '0');
+		var containsCategory = false;
 		select.append(option);
 
 		elements.forEach(function(element)
 		{
 			var option = Util.createElementOption(element.name, element.id);
+			option[0].dataset.type = element.type;
 			select.append(option);
+
+			if (ProductView.product.productCategory !== null && ProductView.product.productCategory.id === element.id)
+				containsCategory = true;
 		});
 
-		var form = ProductView.form[0];
-
-		switch (select[0].name)
+		if (containsCategory)
 		{
-			case 'idProductFamily':
-				if (ProductView.product.category.family.id !== 0)
-				{
-					select.val(ProductView.product.category.family.id);
-					select.change();
-				}
-				break;
-
-			case 'idProductGroup':
-				if (ProductView.product.category.group.id !== 0)
-				{
-					select.val(ProductView.product.category.group.id);
-					select.change();
-				}
-				break;
-
-			case 'idProductSubGroup':
-				if (ProductView.product.category.subgroup.id !== 0)
-				{
-					select.val(ProductView.product.category.subgroup.id);
-					select.change();
-				}
-				break;
-
-			case 'idProductSector':
-				if (ProductView.product.category.sector.id !== 0)
-				{
-					select.val(ProductView.product.category.sector.id);
-					select.change();
-				}
-				break;
+			select.val(ProductView.product.productCategory.id);
+			select.change();
 		}
+	},
+	setProductCategory: function(name, idProductCategory, idProductCategoryType)
+	{
+		var form = ProductView.form[0];
+		$(form.productCategory).val(name);
+		$(form.idProductCategory).val(idProductCategory);
+		$(form.idProductCategoryType).val(idProductCategoryType);
+	},
+	setProductCategoryReset: function()
+	{
+		ProductView.setProductCategory(ProductView.product.productCategory !== null ? ProductView.product.productCategory.name : '-', 0, 0);
 	},
 	onProductFamily: function()
 	{
-		var idProductFamily = this.options[this.selectedIndex].value;
+		var option = this.options[this.selectedIndex];
+		var idProductFamily = option.value;
 		ProductView.selectGroup.prop('disabled', idProductFamily === '');
 		ProductView.selectSubgroup.prop('disabled', true);
 		ProductView.selectSector.prop('disabled', true);
@@ -161,32 +149,88 @@ var ProductView = ProductView ||
 		ProductView.selectSubgroup.empty();
 		ProductView.selectSector.empty();
 
-		if (idProductFamily !== '')
+		if (idProductFamily != 0)
+		{
 			ProductView.loadProductGroups(idProductFamily);
+			ProductView.setProductCategory($(option).html(), $(option).val(), option.dataset.type);
+		}
+
+		else
+		{
+			ProductView.setProductCategory('', '', '');
+			ProductView.selectGroup.prop('disabled', true);
+		}
 	},
 	onProductGroup: function()
 	{
-		var idProductGroup = this.options[this.selectedIndex].value;
+		var option = this.options[this.selectedIndex];
+		var idProductGroup = option.value;
 		ProductView.selectSubgroup.prop('disabled', idProductGroup === '');
 		ProductView.selectSector.prop('disabled', true);
 		ProductView.selectSubgroup.empty();
 		ProductView.selectSector.empty();
 
-		if (idProductGroup !== '')
+		if (idProductGroup != 0)
+		{
 			ProductView.loadProductSubgroups(idProductGroup);
+			ProductView.setProductCategory($(option).html(), $(option).val(), option.dataset.type);
+		}
+
+		else
+		{
+			ProductView.selectSubgroup.prop('disabled', true);
+			var option = ProductView.selectFamily.find(':selected');
+			ProductView.setProductCategory(
+				option.html(),
+				option.val(),
+				option.data('type'),
+			);
+		}
 	},
 	onProductSubgroup: function()
 	{
-		var idProductSubgroup = this.options[this.selectedIndex].value;
+		var option = this.options[this.selectedIndex];
+		var idProductSubgroup = option.value;
 		ProductView.selectSector.prop('disabled', idProductSubgroup === '');
 		ProductView.selectSector.empty();
 
-		if (idProductSubgroup !== '')
+		if (idProductSubgroup != 0)
+		{
 			ProductView.loadProductSector(idProductSubgroup);
+			ProductView.setProductCategory($(option).html(), $(option).val(), option.dataset.type);
+		}
+
+		else
+		{
+			ProductView.selectSector.prop('disabled', true);
+			var option = ProductView.selectGroup.find(':selected');
+			ProductView.setProductCategory(
+				option.html(),
+				option.val(),
+				option.data('type'),
+			);
+		}
+	},
+	onProductSector: function()
+	{
+		var option = this.options[this.selectedIndex];
+		var idProductSector = option.value;
+
+		if (idProductSector != 0)
+			ProductView.setProductCategory($(option).html(), $(option).val(), option.dataset.type);
+		else
+		{
+			var option = ProductView.selectSubgroup.find(':selected');
+			ProductView.setProductCategory(
+				option.html(),
+				option.val(),
+				option.data('type'),
+			);
+		}
 	},
 	onButtonViewPrices: function()
 	{
-		Util.redirect('product/viewPrices/' +ProductView.idProduct, true);
+		Util.redirect('product/viewPrices/{0}'.format(ProductView.idProduct), true);
 	},
 	submit: function()
 	{

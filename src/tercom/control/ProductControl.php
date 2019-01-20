@@ -95,7 +95,7 @@ class ProductControl extends GenericControl
 
 	public function hasName(string $name, int $idProduct = 0): bool
 	{
-		return !$this->productDAO->existName($name, $idProduct);
+		return $this->productDAO->existName($name, $idProduct);
 	}
 
 	public static function getFilters(): array

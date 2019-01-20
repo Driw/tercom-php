@@ -283,7 +283,7 @@ Webservice.prototype.manufacturer_search = function(filter, value, target, liste
 Webservice.prototype.productFamily_getAll = function(target, listener)
 {
 	this.setOptionsAndExecute({
-		'webservice': 'productFamily/getAll',
+		'webservice': 'productFamily/getAllFamilies',
 		'target': target,
 		'listener': listener,
 		'errorMessage': this.newBaseErrorMessage('obter famílias de produto'),
@@ -292,7 +292,7 @@ Webservice.prototype.productFamily_getAll = function(target, listener)
 Webservice.prototype.productGroup_getAll = function(idProductFamily, target, listener)
 {
 	this.setOptionsAndExecute({
-		'webservice': 'productFamily/getGroups/' +idProductFamily,
+		'webservice': 'productFamily/getCategories/{0}'.format(idProductFamily),
 		'target': target,
 		'listener': listener,
 		'errorMessage': this.newBaseErrorMessage('obter grupos de produto'),
@@ -301,7 +301,7 @@ Webservice.prototype.productGroup_getAll = function(idProductFamily, target, lis
 Webservice.prototype.productSubgroup_getAll = function(idProductGroup, target, listener)
 {
 	this.setOptionsAndExecute({
-		'webservice': 'productGroup/getSubGroups/' +idProductGroup,
+		'webservice': 'productGroup/getCategories/{0}'.format(idProductGroup),
 		'target': target,
 		'listener': listener,
 		'errorMessage': this.newBaseErrorMessage('obter subgrupos de produto'),
@@ -310,7 +310,7 @@ Webservice.prototype.productSubgroup_getAll = function(idProductGroup, target, l
 Webservice.prototype.productSector_getAll = function(idProductSubgroup, target, listener)
 {
 	this.setOptionsAndExecute({
-		'webservice': 'productSubGroup/getSectores/'+ idProductSubgroup,
+		'webservice': 'productSubGroup/getCategories/{0}'.format(idProductSubgroup),
 		'target': target,
 		'listener': listener,
 		'errorMessage': this.newBaseErrorMessage('obter setores de produto'),

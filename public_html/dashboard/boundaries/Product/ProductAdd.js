@@ -8,27 +8,28 @@ var ProductAdd = ProductAdd ||
 {
 	init: function()
 	{
-		this.form = $('#form-product-add');
-		this.initFormSettings();
-		this.initSelects();
-		this.initModal();
+		ProductAdd.form = $('#form-product-add');
+		ProductAdd.initFormSettings();
+		ProductAdd.initSelects();
+		ProductAdd.initModal();
 	},
 	initFormSettings: function()
 	{
-		ws.product_settings(this.form, ProductAdd.onSettings);
+		ws.product_settings(ProductAdd.form, ProductAdd.onSettings);
 	},
 	initSelects: function()
 	{
-		this.selectUnit = $(ProductAdd.form[0].idProductUnit);
-		this.selectFamily = $(ProductAdd.form[0].idProductFamily);
-		this.selectGroup = $(ProductAdd.form[0].idProductGroup);
-		this.selectSubgroup = $(ProductAdd.form[0].idProductSubGroup);
-		this.selectSector = $(ProductAdd.form[0].idProductSector);
-		this.selectFamily.change(ProductAdd.onProductFamily);
-		this.selectGroup.change(ProductAdd.onProductGroup);
-		this.selectSubgroup.change(ProductAdd.onProductSubgroup);
-		this.loadProductUnits();
-		this.loadProductFamilies();
+		ProductAdd.selectUnit = $(ProductAdd.form[0].idProductUnit);
+		ProductAdd.selectFamily = $(ProductAdd.form[0].idProductFamily);
+		ProductAdd.selectGroup = $(ProductAdd.form[0].idProductGroup);
+		ProductAdd.selectSubgroup = $(ProductAdd.form[0].idProductSubGroup);
+		ProductAdd.selectSector = $(ProductAdd.form[0].idProductSector);
+		ProductAdd.selectFamily.change(ProductAdd.onProductFamily);
+		ProductAdd.selectGroup.change(ProductAdd.onProductGroup);
+		ProductAdd.selectSubgroup.change(ProductAdd.onProductSubgroup);
+		ProductAdd.selectSector.change(ProductAdd.onProductSector);
+		ProductAdd.loadProductUnits();
+		ProductAdd.loadProductFamilies();
 	},
 	initModal: function()
 	{
@@ -75,15 +76,15 @@ var ProductAdd = ProductAdd ||
 	},
 	onLoadProductGroups: function(productFamily)
 	{
-		ProductAdd.onSubLoadCategory('Selecione um grupo', ProductAdd.selectGroup, productFamily.productGroups.elements);
+		ProductAdd.onSubLoadCategory('Selecione um grupo', ProductAdd.selectGroup, productFamily.productCategories.elements);
 	},
 	onLoadProductSubgroups: function(productGroup)
 	{
-		ProductAdd.onSubLoadCategory('Selecione um subgrupo', ProductAdd.selectSubgroup, productGroup.productSubGroups.elements);
+		ProductAdd.onSubLoadCategory('Selecione um subgrupo', ProductAdd.selectSubgroup, productGroup.productCategories.elements);
 	},
 	onLoadProductSectores: function(productSubgroup)
 	{
-		ProductAdd.onSubLoadCategory('Selecione um setor', ProductAdd.selectSector, productSubgroup.productSectores.elements);
+		ProductAdd.onSubLoadCategory('Selecione um setor', ProductAdd.selectSector, productSubgroup.productCategories.elements);
 	},
 	onSubLoadCategory: function(emptyMessage, select, elements)
 	{
@@ -95,12 +96,21 @@ var ProductAdd = ProductAdd ||
 		elements.forEach(function(element)
 		{
 			var option = Util.createElementOption(element.name, element.id);
+			option[0].dataset.type = element.type;
 			select.append(option);
 		});
 	},
+	setProductCategory: function(name, idProductCategory, idProductCategoryType)
+	{
+		var form = ProductAdd.form[0];
+		$(form.productCategory).val(name);
+		$(form.idProductCategory).val(idProductCategory);
+		$(form.idProductCategoryType).val(idProductCategoryType);
+	},
 	onProductFamily: function()
 	{
-		var idProductFamily = this.options[this.selectedIndex].value;
+		var option = this.options[this.selectedIndex];
+		var idProductFamily = option.value;
 		ProductAdd.selectGroup.prop('disabled', idProductFamily === '');
 		ProductAdd.selectSubgroup.prop('disabled', true);
 		ProductAdd.selectSector.prop('disabled', true);
@@ -108,28 +118,84 @@ var ProductAdd = ProductAdd ||
 		ProductAdd.selectSubgroup.empty();
 		ProductAdd.selectSector.empty();
 
-		if (idProductFamily !== '')
-			ProductAdd.loadProductGroups(idProductFamily);
+		if (idProductFamily != 0)
+		{
+			ProductAdd.loadProductGroups(idProductFamily);	
+			ProductAdd.setProductCategory($(option).html(), $(option).val(), option.dataset.type);
+		}
+
+		else
+		{
+			ProductAdd.setProductCategory('', '', '');
+			ProductAdd.selectGroup.prop('disabled', true);
+		}
 	},
 	onProductGroup: function()
 	{
-		var idProductGroup = this.options[this.selectedIndex].value;
+		var option = this.options[this.selectedIndex];
+		var idProductGroup = option.value;
 		ProductAdd.selectSubgroup.prop('disabled', idProductGroup === '');
 		ProductAdd.selectSector.prop('disabled', true);
 		ProductAdd.selectSubgroup.empty();
 		ProductAdd.selectSector.empty();
 
-		if (idProductGroup !== '')
+		if (idProductGroup != 0)
+		{
 			ProductAdd.loadProductSubgroups(idProductGroup);
+			ProductAdd.setProductCategory($(option).html(), $(option).val(), option.dataset.type);
+		}
+
+		else
+		{
+			ProductAdd.selectSubgroup.prop('disabled', true);
+			var option = ProductAdd.selectFamily.find(':selected');
+			ProductAdd.setProductCategory(
+				option.html(),
+				option.val(),
+				option.data('type'),
+			);
+		}
 	},
 	onProductSubgroup: function()
 	{
-		var idProductSubgroup = this.options[this.selectedIndex].value;
+		var option = this.options[this.selectedIndex];
+		var idProductSubgroup = option.value;
 		ProductAdd.selectSector.prop('disabled', idProductSubgroup === '');
 		ProductAdd.selectSector.empty();
 
 		if (idProductSubgroup !== '')
+		{
 			ProductAdd.loadProductSector(idProductSubgroup);
+			ProductAdd.setProductCategory($(option).html(), $(option).val(), option.dataset.type);
+		}
+
+		else
+		{
+			ProductAdd.selectSector.prop('disabled', true);
+			var option = ProductAdd.selectGroup.find(':selected');
+			ProductAdd.setProductCategory(
+				option.html(),
+				option.val(),
+				option.data('type'),
+			);
+		}
+	},
+	onProductSector: function()
+	{
+		var option = this.options[this.selectedIndex];
+		var idProductSector = option.value;
+
+		if (idProductSector != 0)
+		ProductAdd.setProductCategory($(option).html(), $(option).val(), option.dataset.type);
+		else
+		{
+			var option = ProductAdd.selectSubgroup.find(':selected');
+			ProductAdd.setProductCategory(
+				option.html(),
+				option.val(),
+				option.data('type'),
+			);
+		}
 	},
 	submit: function() {
 		ws.product_add(ProductAdd.form, ProductAdd.onSubmited);
@@ -181,6 +247,6 @@ var ProductAdd = ProductAdd ||
 	onProductView: function()
 	{
 		if (ProductAdd.lastProduct !== undefined)
-			Util.redirect('product/view/' +ProductAdd.lastProduct.id);
+			Util.redirect('product/view/{0}'.format(ProductAdd.lastProduct.id));
 	}
 };

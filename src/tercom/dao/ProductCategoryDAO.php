@@ -186,15 +186,18 @@ class ProductCategoryDAO extends GenericDAO
 	{
 		$productCategoriesColumns = $this->buildQuery(self::ALL_COLUMNS, 'product_categories');
 
-		return "SELECT $productCategoriesColumns, product_category_types.id type
-				FROM product_categories
-				LEFT JOIN product_category_relationships ON product_category_relationships.idCategory = product_categories.id
-				LEFT JOIN product_category_types ON product_category_types.id = product_category_relationships.idCategoryType
-				WHERE product_category_relationships.idCategoryType = 1
+		return "SELECT $productCategoriesColumns, 1 type
+				FROM product_category_relationships
+			    INNER JOIN product_categories ON product_categories.id = product_category_relationships.idCategoryParent
+			    INNER JOIN product_category_types ON product_category_types.id = product_category_relationships.idCategoryType
+				WHERE product_category_relationships.idCategoryType = 2
 				UNION
-				SELECT $productCategoriesColumns, product_category_types.id type
+				SELECT $productCategoriesColumns, 1 type
 				FROM product_categories
-				LEFT JOIN product_category_relationships ON idCategoryParent = idCategoryType
+				LEFT JOIN product_category_relationships ON (
+					product_category_relationships.idCategoryParent = product_categories.id OR
+					product_category_relationships.idCategory = product_categories.id
+				)
 				LEFT JOIN product_category_types ON product_category_types.id = product_category_relationships.idCategoryType
 				WHERE product_category_relationships.idCategoryType IS NULL";
 	}

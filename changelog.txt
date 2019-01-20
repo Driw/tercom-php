@@ -20,6 +20,11 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+20.01.2018 - 0.3.5.200
+- Revisão das páginas para gerenciamento de produtos.
+- Atualizado o novo formato para definir a categoria do produto ao adicionar produto e atualizar produto.
+- Corrigido validação de nome de produto disponível ou indisponível, estava sempre como 'disponível'.
+
 20.01.2018 - 0.3.5.199
 - Revisão das páginas para gerenciamento de tipos de produto.
 - Implementação da página para confirmação da exclusão de tipo de produto.

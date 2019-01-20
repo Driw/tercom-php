@@ -8,7 +8,7 @@
 									</div>
 									<div class="card-body">
 										<p class="alert alert-info" id="product-add-paragraph" style="display: none;">
-											Último produto adicionado <b id="product-add-message"></b>.
+											Ãšltimo produto adicionado <b id="product-add-message"></b>.
 										</p>
 										<form class="tercom-form tercom-form-md form-horizontal" id="form-product-add">
 											<fieldset>
@@ -23,7 +23,7 @@
 												<div class="form-group">
 													<div class="input-group">
 														<div class="input-group-prepend">
-															<span class="input-group-text">Descrição</span>
+															<span class="input-group-text">DescriÃ§Ã£o</span>
 														</div>
 														<textarea class="form-control" name="description" rows="5"></textarea>
 													</div>
@@ -39,7 +39,7 @@
 												<div class="form-group">
 													<div class="input-group">
 														<div class="input-group-prepend">
-															<span class="input-group-text">Unidade Padrão</span>
+															<span class="input-group-text">Unidade PadrÃ£o</span>
 														</div>
 														<select class="form-control" name="idProductUnit">
 														</select>
@@ -48,7 +48,17 @@
 												<div class="form-group">
 													<div class="input-group">
 														<div class="input-group-prepend">
-															<span class="input-group-text">Família</span>
+															<span class="input-group-text">Categoria</span>
+														</div>
+														<input type="text" class="form-control" name="productCategory" disabled>
+														<input type="hidden" class="form-control" name="idProductCategory">
+														<input type="hidden" class="form-control" name="idProductCategoryType">
+													</div>
+												</div>
+												<div class="form-group">
+													<div class="input-group">
+														<div class="input-group-prepend">
+															<span class="input-group-text">FamÃ­lia</span>
 														</div>
 														<select class="form-control" name="idProductFamily">
 														</select>
@@ -94,7 +104,7 @@
 						</div>
 					</section>
 
-					<!-- Modal Formulário -->
+					<!-- Modal FormulÃ¡rio -->
 					<div class="modal fade" id="modal-product-add" tabindex="-1" role="dialog" aria-labelledby="modal-product-add-label" aria-hidden="true">
 						<div class="modal-dialog modal-lg" role="document">
 							<div class="modal-content">

@@ -18,6 +18,10 @@ class ProductBoundary extends DefaultDashboardLoggedBoundary
 	 * @var string
 	 */
 	public const BASE_PATH = 'Product/';
+	/**
+	 * @var string
+	 */
+	public const BASE_PATH_PRICE = 'ProductPrice/';
 
 	/**
 	 * {@inheritDoc}
@@ -107,7 +111,7 @@ class ProductBoundary extends DefaultDashboardLoggedBoundary
 	public function onViewPrices(ApiContent $content): ApiTemplateResult
 	{
 		$dashboardTemplate = $this->newBaseTemplate();
-		$dashboardTemplate = $this->prepareInclude(self::BASE_PATH. 'ProductPriceList');
+		$dashboardTemplate = $this->prepareInclude(self::BASE_PATH_PRICE. 'ProductPriceList');
 		$dashboardTemplate->idProduct = $content->getParameters()->getInt('idProduct');
 
 		$result = new ApiTemplateResult();
@@ -124,7 +128,7 @@ class ProductBoundary extends DefaultDashboardLoggedBoundary
 	public function onAddPrice(ApiContent $content): ApiTemplateResult
 	{
 		$dashboardTemplate = $this->newBaseTemplate();
-		$dashboardTemplate = $this->prepareInclude(self::BASE_PATH. 'ProductPriceAdd');
+		$dashboardTemplate = $this->prepareInclude(self::BASE_PATH_PRICE. 'ProductPriceAdd');
 		$dashboardTemplate->idProduct = $content->getParameters()->getInt('idProduct');
 
 		$result = new ApiTemplateResult();
@@ -141,7 +145,7 @@ class ProductBoundary extends DefaultDashboardLoggedBoundary
 	public function onViewPrice(ApiContent $content): ApiTemplateResult
 	{
 		$dashboardTemplate = $this->newBaseTemplate();
-		$dashboardTemplate = $this->prepareInclude(self::BASE_PATH. 'ProductPriceView');
+		$dashboardTemplate = $this->prepareInclude(self::BASE_PATH_PRICE. 'ProductPriceView');
 		$dashboardTemplate->idProductPrice = $content->getParameters()->getInt('idProductPrice');
 
 		$result = new ApiTemplateResult();
@@ -158,7 +162,7 @@ class ProductBoundary extends DefaultDashboardLoggedBoundary
 	public function onRemovePrice(ApiContent $content): ApiTemplateResult
 	{
 		$dashboardTemplate = $this->newBaseTemplate();
-		$dashboardTemplate = $this->prepareInclude(self::BASE_PATH. 'ProductPriceRemove');
+		$dashboardTemplate = $this->prepareInclude(self::BASE_PATH_PRICE. 'ProductPriceRemove');
 		$dashboardTemplate->idProductPrice = $content->getParameters()->getInt('idProductPrice');
 
 		$result = new ApiTemplateResult();
