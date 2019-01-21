@@ -25,27 +25,27 @@ class QuotedProductPrice extends AdvancedObject
 	/**
 	 * @var int quantidade mínima de caracteres no nome do preço.
 	 */
-	public const MIN_NAME_LEN = 2;
+	public const MIN_NAME_LEN = ProductPrice::MIN_NAME_LEN;
 	/**
 	 * @var int quantidade máxima de caracteres no nome do preço.
 	 */
-	public const MAX_NAME_LEN = 64;
+	public const MAX_NAME_LEN = ProductPrice::MAX_NAME_LEN;
 	/**
 	 * @var int quantidade mínima do produto por preço.
 	 */
-	public const MIN_AMOUNT = 1;
+	public const MIN_AMOUNT = ProductPrice::MIN_AMOUNT;
 	/**
 	 * @var int quantidade máxima do produto por preço.
 	 */
-	public const MAX_AMOUNT = 9999;
+	public const MAX_AMOUNT = ProductPrice::MAX_AMOUNT;
 	/**
 	 * @var int valor mínimo permitido por preço de produto cotado.
 	 */
-	public const MIN_PRICE = 0.01;
+	public const MIN_PRICE = ProductPrice::MIN_PRICE;
 	/**
 	 * @var int valor máximo permitido por preço de produto cotado.
 	 */
-	public const MAX_PRICE = 99999.99;
+	public const MAX_PRICE = ProductPrice::MAX_PRICE;
 
 	/**
 	 * @var int código de identificação único do preço de produto cotado.

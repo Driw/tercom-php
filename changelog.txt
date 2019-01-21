@@ -20,6 +20,11 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+21.01.2018 - 0.3.5.202
+- Implementação da entidade, DAO, controle e serviço para gerenciar as cotações de produto aceitos.
+- Corrigido query base de SELECT de QuotedProductPriceDAO.
+- Atualizado QuotedProductPrice para que as constantes sejam baseadas nos valores de ProductPrice.
+
 20.01.2018 - 0.3.5.201
 - Script SQL para atualizado de 'product_prices.idProductType' que estava como 'NOT NULL'.
 - Revisão das páginas para gerenciamento dos preços de produto.

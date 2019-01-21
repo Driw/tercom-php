@@ -109,7 +109,7 @@ class QuotedProductPriceDAO extends GenericDAO
 	 * Envolve todos dados referentes ao produto do preço e seus detalhes (unidade e categoria).
 	 * @return string aquisição da query completa para seleção de dados para preço de produtos.
 	 */
-	private function newBasicSelect(): string
+	private function newSelect(): string
 	{
 		$quotedProductPriceColumns = $this->buildQuery(self::ALL_COLUMNS, 'quoted_product_prices');
 		$productColumns = $this->buildQuery(ProductDAO::ALL_COLUMNS, 'products', 'product');
@@ -123,13 +123,13 @@ class QuotedProductPriceDAO extends GenericDAO
 		return "SELECT $quotedProductPriceColumns, $productColumns, $productUnitColumns, $productCategoryColumns, $productProviderColumns,
 					$productManufacturerColumns, $productPackageColumns, $productTypeColumns
 				FROM quoted_product_prices
-				INNER JOIN products ON product_prices.idProduct = quoted_product_prices.id
-				INNER JOIN product_units ON products.idProductUnit = product_units.id
-				LEFT JOIN product_categories ON products.idProductCategory = product_categories.id
-				INNER JOIN product_packages ON product_prices.idProductPackage = product_packages.id
-				LEFT JOIN product_types ON product_prices.idProductType = product_types.id
-				LEFT JOIN manufacturers ON product_prices.idManufacturer = manufacturers.id
-				INNER JOIN providers ON product_prices.idProvider = providers.id";
+				INNER JOIN products ON products.id = quoted_product_prices.idProduct
+				INNER JOIN product_units ON product_units.id = products.idProductUnit
+				LEFT JOIN product_categories ON product_categories.id = products.idProductCategory
+				INNER JOIN providers ON providers.id = quoted_product_prices.idProvider
+				LEFT JOIN manufacturers ON manufacturers.id = quoted_product_prices.idManufacturer
+				INNER JOIN product_packages ON product_packages.id = quoted_product_prices.idProductPackage
+				LEFT JOIN product_types ON product_types.id = quoted_product_prices.idProductType";
 	}
 
 	/**
@@ -139,7 +139,7 @@ class QuotedProductPriceDAO extends GenericDAO
 	 */
 	public function select(int $idQuotedProductPrice): ?QuotedProductPrice
 	{
-		$sqlSELECT = $this->newFullSelect();
+		$sqlSELECT = $this->newSelect();
 		$sql = "$sqlSELECT
 				WHERE quoted_product_prices.id = ?";
 

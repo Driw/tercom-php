@@ -19,6 +19,7 @@ use tercom\control\LoginCustomerControl;
 use tercom\control\LoginTercomControl;
 use tercom\control\ManufacturerControl;
 use tercom\control\OrderAcceptanceControl;
+use tercom\control\OrderAcceptanceProductControl;
 use tercom\control\OrderItemProductControl;
 use tercom\control\OrderItemServiceControl;
 use tercom\control\OrderQuoteControl;
@@ -191,6 +192,10 @@ class DefaultSiteService extends ApiServiceInterface
 	 * @var OrderAcceptanceControl
 	 */
 	private $orderAcceptanceControl;
+	/**
+	 * @var OrderAcceptanceProductControl
+	 */
+	private $orderAcceptanceProductControl;
 
 	/**
 	 * Cria uma nova instância de um serviço para gerenciamento de stores dos produtos no sistema.
@@ -601,6 +606,16 @@ class DefaultSiteService extends ApiServiceInterface
 		return $this->orderAcceptanceControl === null ?
 			($this->orderAcceptanceControl = new OrderAcceptanceControl()) :
 			$this->orderAcceptanceControl;
+	}
+
+	/**
+	 * @return OrderAcceptanceProductControl
+	 */
+	protected function getOrderAcceptanceProductControl(): OrderAcceptanceProductControl
+	{
+		return $this->orderAcceptanceProductControl === null ?
+			($this->orderAcceptanceProductControl = new OrderAcceptanceProductControl()) :
+			$this->orderAcceptanceProductControl;
 	}
 
 	/**
