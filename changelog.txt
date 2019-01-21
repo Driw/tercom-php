@@ -20,6 +20,9 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+21.01.2018 - 0.3.5.203
+- Adicionado scripts de testes do serviço para gerenciamento das cotações de produto aceitos.
+
 21.01.2018 - 0.3.5.202
 - Implementação da entidade, DAO, controle e serviço para gerenciar as cotações de produto aceitos.
 - Corrigido query base de SELECT de QuotedProductPriceDAO.
