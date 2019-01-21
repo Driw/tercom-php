@@ -20,6 +20,9 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+21.01.2018 - 0.3.5.205
+- Adicionado scripts de testes do serviço para gerenciamento das cotações de serviço aceitos.
+
 21.01.2018 - 0.3.5.204
 - Implementação da entidade, DAO, controle e serviço para gerenciar as cotações de serviço aceitos.
 - Corrigido problema onde amountRequest não era obtido corretamente do banco de dados, OrderAcceptanceProduct.
