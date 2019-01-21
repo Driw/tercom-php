@@ -102,16 +102,16 @@ class QuotedServicePriceDAO extends GenericDAO
 	 * Envolve todos dados referentes ao serviço do preço e seus detalhes (unidade e categoria).
 	 * @return string aquisição da query completa para seleção de dados para preço de serviços.
 	 */
-	private function newBasicSelect(): string
+	private function newSelect(): string
 	{
 		$quotedServicePriceColumns = $this->buildQuery(self::ALL_COLUMNS, 'quoted_service_prices');
 		$serviceColumns = $this->buildQuery(ServiceDAO::ALL_COLUMNS, 'services', 'service');
 		$serviceProviderColumns = $this->buildQuery(ProviderDAO::ALL_COLUMNS, 'providers', 'provider');
 
 		return "SELECT $quotedServicePriceColumns, $serviceColumns, $serviceProviderColumns
-				FROM service_prices
-				INNER JOIN services ON service_prices.idService = services.id
-				INNER JOIN providers ON service_prices.idProvider = providers.id";
+				FROM quoted_service_prices
+				INNER JOIN services ON services.id = quoted_service_prices.idService
+				INNER JOIN providers ON providers.id = quoted_service_prices.idProvider";
 	}
 
 	/**
@@ -121,9 +121,9 @@ class QuotedServicePriceDAO extends GenericDAO
 	 */
 	public function select(int $idQuotedServicePrice): ?QuotedServicePrice
 	{
-		$sqlSELECT = $this->newFullSelect();
+		$sqlSELECT = $this->newSelect();
 		$sql = "$sqlSELECT
-				WHERE service_prices.id = ?";
+				WHERE quoted_service_prices.id = ?";
 
 		$query = $this->createQuery($sql);
 		$query->setInteger(1, $idQuotedServicePrice);

@@ -153,7 +153,6 @@ class OrderAcceptanceProduct extends AdvancedObject
 	 */
 	public function setQuotedProductPrice(QuotedProductPrice $quotedProductPrice): void
 	{
-		$this->productPrice = $quotedProductPrice;
 		$array = $quotedProductPrice->toArray(true);
 		$array['idQuotedProductPrice'] = $array['id'];
 		unset($array['id']);

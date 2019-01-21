@@ -360,6 +360,16 @@ REPLACE INTO permissions (packet, action, assignmentLevel) VALUES
 ('orderAcceptanceProduct', 'get', 20),
 ('orderAcceptanceProduct', 'getAll', 20);
 
+-- Order Acceptance Service Service
+
+REPLACE INTO permissions (packet, action, assignmentLevel) VALUES
+('orderAcceptanceService', 'add', 20),
+('orderAcceptanceService', 'set', 20),
+('orderAcceptanceService', 'remove', 20),
+('orderAcceptanceService', 'removeAll', 20),
+('orderAcceptanceService', 'get', 20),
+('orderAcceptanceService', 'getAll', 20);
+
 -- TERCOM Profile Permissions
 
 REPLACE INTO tercom_profile_permissions (idTercomProfile, idPermission)

@@ -23,27 +23,23 @@ class QuotedServicePrice extends AdvancedObject
 	/**
 	 * @var int quantidade mínima de caracteres no nome do preço.
 	 */
-	public const MIN_NAME_LEN = 2;
+	public const MIN_NAME_LEN = ServicePrice::MIN_NAME_LEN;
 	/**
 	 * @var int quantidade máxima de caracteres no nome do preço.
 	 */
-	public const MAX_NAME_LEN = 64;
+	public const MAX_NAME_LEN = ServicePrice::MAX_NAME_LEN;
 	/**
-	 * @var int quantidade mínima do serviço por preço.
+	 * @var int quantidade máxima de caracteres para a descrição adicional.
 	 */
-	public const MIN_AMOUNT = 1;
-	/**
-	 * @var int quantidade máxima do serviço por preço.
-	 */
-	public const MAX_AMOUNT = 9999;
+	public const MAX_ADDITIONAL_DESCRIPTION = ServicePrice::MAX_ADDITIONAL_DESCRIPTION;
 	/**
 	 * @var int valor mínimo permitido por preço de serviço cotado.
 	 */
-	public const MIN_PRICE = 0.01;
+	public const MIN_PRICE = ServicePrice::MIN_PRICE;
 	/**
 	 * @var int valor máximo permitido por preço de serviço cotado.
 	 */
-	public const MAX_PRICE = 99999.99;
+	public const MAX_PRICE = ServicePrice::MAX_PRICE;
 
 	/**
 	 * @var int código de identificação único do preço de serviço cotado.
@@ -200,7 +196,7 @@ class QuotedServicePrice extends AdvancedObject
 	public function setPrice(float $price): void
 	{
 		if (!FloatUtil::inInterval($price, self::MIN_PRICE, self::MAX_PRICE))
-			throw EntityParseException::new("preço deve ser de %.2f a %.2f (preço: $price)", self::MIN_PRICE, self::MAX_PRICE);
+			throw EntityParseException::new("preço deve ser de R$ %.2f a R$ %.2f (preço: $price)", self::MIN_PRICE, self::MAX_PRICE);
 
 		$this->price = $price;
 	}

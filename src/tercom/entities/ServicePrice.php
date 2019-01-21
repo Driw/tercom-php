@@ -36,6 +36,10 @@ class ServicePrice extends AdvancedObject
 	 * @var float valor mínimo permitido para definir o preço do serviço.
 	 */
 	public const MIN_PRICE = 0.0;
+	/**
+	 * @var float valor máximo permitido para definir o preço do serviço.
+	 */
+	public const MAX_PRICE = 99999.99;
 
 	/**
 	 * @var int código de identificação único do preço de serviço.
@@ -88,7 +92,6 @@ class ServicePrice extends AdvancedObject
 
 	/**
 	 * @param int $id código de identificação único do preço de serviço.
-	 * @return ServicePrice aquisição do objeto de preço ser serviço usado.
 	 */
 	public function setId(int $id): void
 	{
@@ -105,7 +108,6 @@ class ServicePrice extends AdvancedObject
 
 	/**
 	 * @param Service $service aquisição do objeto do tipo serviço do qual pertence o preço de serviço.
-	 * @return ServicePrice aquisição do objeto de preço ser serviço usado.
 	 */
 	public function setService(Service $service): void
 	{
@@ -138,7 +140,6 @@ class ServicePrice extends AdvancedObject
 
 	/**
 	 * @param Provider $provider objeto do tipo fornecedor que fornece o preço.
-	 * @return ServicePrice aquisição do objeto de preço ser serviço usado.
 	 */
 	public function setProvider(Provider $provider): void
 	{
@@ -163,7 +164,6 @@ class ServicePrice extends AdvancedObject
 
 	/**
 	 * @param string $name nome do preço de serviço.
-	 * @return ServicePrice aquisição do objeto de preço ser serviço usado.
 	 */
 	public function setName(string $name): void
 	{
@@ -202,12 +202,11 @@ class ServicePrice extends AdvancedObject
 
 	/**
 	 * @param float $price preço do serviço.
-	 * @return ServicePrice aquisição do objeto de preço ser serviço usado.
 	 */
 	public function setPrice(float $price): void
 	{
-		if (!FloatUtil::inMin($price, self::MIN_PRICE))
-			throw EntityParseException::new('preço do serviço deve ser maior ou igual a %.2f', self::MIN_PRICE);
+		if (!FloatUtil::inInterval($price, self::MIN_PRICE, self::MAX_PRICE))
+			throw EntityParseException::new('preço do serviço deve ser de R$ %.2f a R$ %.2f', self::MIN_PRICE, self::MAX_PRICE);
 
 		$this->price = $price;
 	}

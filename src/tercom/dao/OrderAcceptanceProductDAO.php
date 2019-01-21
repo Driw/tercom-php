@@ -21,7 +21,7 @@ class OrderAcceptanceProductDAO extends GenericDAO
 {
 	public const ALL_COLUMNS = [
 		'id', 'idQuotedProductPrice', 'idProduct', 'idProvider', 'idManufacturer', 'idProductPackage', 'idProductType',
-		'name', 'amount', 'amount_request', 'price', 'subprice', 'observations', 'lastUpdate'
+		'name', 'amount', 'amountRequest', 'price', 'subprice', 'observations', 'lastUpdate'
 	];
 
 	private function validate(?OrderAcceptance $orderAcceptance, OrderAcceptanceProduct $orderAcceptanceProduct, bool $validaId): void
@@ -68,7 +68,7 @@ class OrderAcceptanceProductDAO extends GenericDAO
 
 		$sql = "INSERT INTO order_acceptance_products (
 					idOrderAcceptance, idQuotedProductPrice, idProduct, idProvider, idManufacturer, idProductPackage, idProductType,
-					name, amount, amount_request, price, subprice, observations, lastUpdate
+					name, amount, amountRequest, price, subprice, observations, lastUpdate
 				) VALUES (
 					?, ?, ?, ?, ?, ?, ?,
 					?, ?, ?, ?, ?, ?, ?
@@ -102,7 +102,7 @@ class OrderAcceptanceProductDAO extends GenericDAO
 		$this->validate(null, $orderAcceptanceProduct, true);
 
 		$sql = "UPDATE order_acceptance_products
-				SET amount_request = ?, subprice = ?, observations = ?
+				SET amountRequest = ?, subprice = ?, observations = ?
 				WHERE id = ?";
 
 		$query = $this->createQuery($sql);

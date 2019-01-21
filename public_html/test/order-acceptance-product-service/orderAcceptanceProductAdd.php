@@ -12,7 +12,7 @@ include '../include.php';
 ?>
 <form method='get'>
 	<p>Aceitação de Pedido ID: <input type='text' name='idOrderAcceptance' required></p>
-	<p>Cotação de Produto Aceito ID: <input type='text' name='idQuotedProductPrice' required></p>
+	<p>Cotação de Preço de Produto ID: <input type='text' name='idQuotedProductPrice' required></p>
 	<p>Quantidade Solicitada: <input type='text' name='amountRequest' required></p>
 	<p>* Subpreço: <input type='text' name='subprice'></p>
 	<p>* Observações: <input type='text' name='observations'></p>

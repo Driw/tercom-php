@@ -15,7 +15,7 @@ use tercom\ArrayList;
 class OrderAcceptanceProducts extends ArrayList
 {
 	/**
-	 * Cria uma nova lista de permissões definindo o tipo da lista como permissão.
+	 * Cria uma nova lista de preços de produto aceito.
 	 */
 	public function __construct()
 	{
