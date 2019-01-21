@@ -49,7 +49,8 @@ var ProductPriceRemove = ProductPriceRemove ||
 		$(form.product_name).val(productPrice.product.name);
 		$(form.product_description).html(productPrice.product.description);
 		$(form.provider_name).val(productPrice.provider.fantasyName);
-		$(form.manufacturer_name).val(productPrice.manufacture.fantasyName);
+		if (productPrice.manufacturer !== null)
+		$(form.manufacturer_name).val(productPrice.manufacturer.fantasyName);
 		$(form.price_name).val(productPrice.name);
 		$(form.amount).val(productPrice.amount);
 		$(form.price).val(Util.formatMoney(productPrice.price));

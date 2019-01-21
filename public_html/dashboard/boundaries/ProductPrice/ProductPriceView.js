@@ -56,13 +56,13 @@ var ProductPriceView = ProductPriceView ||
 					'required': true,
 				},
 				'idManufacture': {
-					'required': true,
+					'required': false,
 				},
 				'idProductPackage': {
 					'required': true,
 				},
 				'idProductType': {
-					'required': true,
+					'required': false,
 				},
 				'name': {
 					'required': true,
@@ -110,9 +110,13 @@ var ProductPriceView = ProductPriceView ||
 		$(form.amount).val(productPrice.amount);
 		$(form.price).val(Util.formatMoney(productPrice.price));
 		$(form.idProvider).val(productPrice.provider.id).selectpicker('refresh');
-		$(form.idManufacture).val(productPrice.manufacture.id).selectpicker('refresh');
-		$(form.idProductPackage).val(productPrice['package'].id).selectpicker('refresh');
-		$(form.idProductType).val(productPrice.productType.id).selectpicker('refresh');
+		$(form.idProductPackage).val(productPrice.productPackage.id).selectpicker('refresh');
+
+		if (productPrice.manufacturer !== null)
+			$(form.idManufacture).val(productPrice.manufacturer.id).selectpicker('refresh');
+
+		if (productPrice.productType !== null)
+			$(form.idProductType).val(productPrice.productType.id).selectpicker('refresh');
 
 		ws.product_get(productPrice.product.id, ProductPriceView.formProduct, ProductPriceView.onLoadProduct);
 	},
@@ -120,11 +124,11 @@ var ProductPriceView = ProductPriceView ||
 	{
 		var form = ProductPriceView.formProduct[0];
 		$(form.name).val(product.name);
-		$(form.unit).val(product.unit.name);
+		$(form.unit).val(product.productUnit.name);
 		$(form.description).html(product.description);
 		$('#product-price-add').click(function()
 		{
-			Util.redirect('product/addPrice/' +product.id, true);
+			Util.redirect('product/addPrice/{0}'.format(product.id), true);
 		});
 
 		if ($(ProductPriceView.form[0].name).val === '')
@@ -147,12 +151,14 @@ var ProductPriceView = ProductPriceView ||
 	onLoadManufacturers: function(manufacturers)
 	{
 		ProductPriceView.selectManufacturer.empty();
-		ProductPriceView.selectManufacturer.append(Util.createElementOption('selecione um fabricante', ''));
+		ProductPriceView.selectManufacturer.append(Util.createElementOption('selecione um fabricante', 0));
 
 		ProductPriceView.manufacturers = manufacturers.elements;
 		ProductPriceView.manufacturers.forEach(function(manufacturer)
 		{
-			var selected = ProductPriceView.productPrice !== undefined && ProductPriceView.productPrice.manufacture.id === manufacturer.id;
+			var selected =	ProductPriceView.productPrice !== undefined &&
+							ProductPriceView.productPrice.manufacturer !== null &&
+							ProductPriceView.productPrice.manufacturer.id === manufacturer.id;
 			var option = Util.createElementOption(manufacturer.fantasyName, manufacturer.id, selected);
 			ProductPriceView.selectManufacturer.append(option);
 		});
@@ -161,12 +167,12 @@ var ProductPriceView = ProductPriceView ||
 	onLoadProductPackages: function(productPackages)
 	{
 		ProductPriceView.selectProductPackage.empty();
-		ProductPriceView.selectProductPackage.append(Util.createElementOption('selecione uma embalagem de produto', ''));
+		ProductPriceView.selectProductPackage.append(Util.createElementOption('selecione uma embalagem de produto'));
 
 		ProductPriceView.productPackages = productPackages.elements;
 		ProductPriceView.productPackages.forEach(function(productPackage)
 		{
-			var selected = ProductPriceView.productPrice !== undefined && ProductPriceView.productPrice['package'].id === productPackage.id;
+			var selected = ProductPriceView.productPrice !== undefined && ProductPriceView.productPrice.productPackage.id === productPackage.id;
 			var option = Util.createElementOption(productPackage.name, productPackage.id, selected);
 			ProductPriceView.selectProductPackage.append(option);
 		});
@@ -175,12 +181,14 @@ var ProductPriceView = ProductPriceView ||
 	onLoadProductTypes: function(productTypes)
 	{
 		ProductPriceView.selectProductType.empty();
-		ProductPriceView.selectProductType.append(Util.createElementOption('selecione um tipo de produto', ''));
+		ProductPriceView.selectProductType.append(Util.createElementOption('selecione um tipo de produto', 0));
 
 		ProductPriceView.productTypes = productTypes.elements;
 		ProductPriceView.productTypes.forEach(function(productType)
 		{
-			var selected = ProductPriceView.productPrice !== undefined && ProductPriceView.productPrice.productType.id === productType.id;
+			var selected =	ProductPriceView.productPrice !== undefined &&
+							ProductPriceView.productPrice.productType !== null &&
+							ProductPriceView.productPrice.productType.id === productType.id;
 			var option = Util.createElementOption(productType.name, productType.id, selected);
 			ProductPriceView.selectProductType.append(option);
 		});

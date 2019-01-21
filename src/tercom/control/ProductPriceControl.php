@@ -62,7 +62,7 @@ class ProductPriceControl extends GenericControl
 	 * Remove os dados de um preço de produto já existente no sistema.
 	 * @param ProductPrice $productPrice objeto de preço de produto à remover.
 	 */
-	public function remove(ProductPrice $productPrice): bool
+	public function remove(ProductPrice $productPrice): void
 	{
 		if (!$this->productPriceDAO->delete($productPrice))
 			throw ProductPriceException::newNotDeleted();

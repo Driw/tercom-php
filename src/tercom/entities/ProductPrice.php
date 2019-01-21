@@ -164,9 +164,9 @@ class ProductPrice extends AdvancedObject
 	}
 
 	/**
-	 * @return Manufacturer aquisição do objeto do tipo fabricante que oferece o preço.
+	 * @return Manufacturer|NULL aquisição do objeto do tipo fabricante que oferece o preço.
 	 */
-	public function getManufacturer(): Manufacturer
+	public function getManufacturer(): ?Manufacturer
 	{
 		return $this->manufacturer;
 	}
@@ -180,9 +180,9 @@ class ProductPrice extends AdvancedObject
 	}
 
 	/**
-	 * @param int $manufacturer objeto do tipo fabricante que oferece o preço.
+	 * @param Manufacturer $manufacturer|NULL objeto do tipo fabricante que oferece o preço.
 	 */
-	public function setManufacturer(Manufacturer $manufacturer): void
+	public function setManufacturer(?Manufacturer $manufacturer): void
 	{
 		$this->manufacturer = $manufacturer;
 	}
@@ -212,9 +212,9 @@ class ProductPrice extends AdvancedObject
 	}
 
 	/**
-	 * @return ProductType aquisição do objeto do tipo tipo de produto que oferece o preço.
+	 * @return ProductType|NULL aquisição do objeto do tipo tipo de produto que oferece o preço.
 	 */
-	public function getProductType(): ProductType
+	public function getProductType(): ?ProductType
 	{
 		return $this->productType;
 	}
@@ -228,9 +228,9 @@ class ProductPrice extends AdvancedObject
 	}
 
 	/**
-	 * @param ProductType $productType objeto do tipo tipo de produto que oferece o preço.
+	 * @param ProductType|NULL $productType objeto do tipo tipo de produto que oferece o preço.
 	 */
-	public function setProductType(ProductType $productType): void
+	public function setProductType(?ProductType $productType): void
 	{
 		$this->productType = $productType;
 	}

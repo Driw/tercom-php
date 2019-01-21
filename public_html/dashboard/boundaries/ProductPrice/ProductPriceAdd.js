@@ -57,13 +57,13 @@ var ProductPriceAdd = ProductPriceAdd ||
 					'required': true,
 				},
 				'idManufacture': {
-					'required': true,
+					'required': false,
 				},
 				'idProductPackage': {
 					'required': true,
 				},
 				'idProductType': {
-					'required': true,
+					'required': false,
 				},
 				'name': {
 					'required': true,
@@ -107,7 +107,7 @@ var ProductPriceAdd = ProductPriceAdd ||
 	{
 		var form = ProductPriceAdd.formProduct[0];
 		$(form.name).val(product.name);
-		$(form.unit).val(product.unit.name);
+		$(form.unit).val(product.productUnit.name);
 		$(form.description).html(product.description);
 
 		$(ProductPriceAdd.form[0].name).val(product.name);

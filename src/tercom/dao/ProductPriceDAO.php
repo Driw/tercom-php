@@ -412,6 +412,7 @@ class ProductPriceDAO extends GenericDAO
 	private function newProductPrice(array $entry): ProductPrice
 	{
 		$this->parseEntry($entry, 'product', 'provider', 'manufacturer', 'productPackage', 'productType');
+		if (isset($entry['product']))
 		$this->parseEntry($entry['product'], 'productUnit', 'productCategory');
 
 		$productPrice = new ProductPrice();

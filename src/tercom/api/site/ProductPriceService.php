@@ -60,13 +60,13 @@ class ProductPriceService extends DefaultSiteService
 
 		if ($post->isSetted('name')) $productPrice->setName($post->getString('name'));
 
-		if (($idManufacturer = $post->getInt('idManufacturer', false)) !== null)
+		if (($idManufacturer = $post->getInt('idManufacturer', false)) !== null && $idManufacturer !== 0)
 		{
 			$manufacturer = $this->getManufacturerControl()->get($idManufacturer);
 			$productPrice->setManufacturer($manufacturer);
 		}
 
-		if (($idProductType = $post->getInt('idProductType', false)) !== null)
+		if (($idProductType = $post->getInt('idProductType', false)) !== null && $idProductType !== 0)
 		{
 			$productType = $this->getProductTypeControl()->get($idProductType);
 			$productPrice->setProductType($productType);
@@ -104,20 +104,30 @@ class ProductPriceService extends DefaultSiteService
 
 		if (($idManufacturer = $post->getInt('idManufacturer', false)) !== null)
 		{
-			$manufacturer = $this->getManufacturerControl()->get($idManufacturer);
-			$productPrice->setManufacturer($manufacturer);
-		}
-
-		if (($idProductType = $post->getInt('idProductType', false)) !== null)
-		{
-			$productType = $this->getProductTypeControl()->get($idProductType);
-			$productPrice->setProductType($productType);
+			if ($idManufacturer === 0)
+				$productPrice->setManufacturer(null);
+			else
+			{
+				$manufacturer = $this->getManufacturerControl()->get($idManufacturer);
+				$productPrice->setManufacturer($manufacturer);
+			}
 		}
 
 		if (($idProductPackage = $post->getInt('idProductPackage', false)) !== null)
 		{
 			$productPackage = $this->getProductPackageControl()->get($idProductPackage);
 			$productPrice->setProductPackage($productPackage);
+		}
+
+		if (($idProductType = $post->getInt('idProductType', false)) !== null)
+		{
+			if ($idProductType === 0)
+				$productPrice->setProductType(null);
+			else
+			{
+				$productType = $this->getProductTypeControl()->get($idProductType);
+				$productPrice->setProductType($productType);
+			}
 		}
 
 		$this->getProductPriceControl()->set($productPrice);

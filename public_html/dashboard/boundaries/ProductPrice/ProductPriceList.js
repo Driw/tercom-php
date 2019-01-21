@@ -8,29 +8,29 @@ var ProductPriceList = ProductPriceList ||
 {
 	init: function()
 	{
-		this.form = $('#form-product-prices');
-		this.idProduct = $(this.form[0].idProduct).val();
+		ProductPriceList.form = $('#form-product-prices');
+		ProductPriceList.idProduct = $(ProductPriceList.form[0].idProduct).val();
 
-		this.table = $('#table-product-prices');
-		this.tbody = this.table.children('tbody');
-		this.datatables = newDataTables(this.table);
+		ProductPriceList.table = $('#table-product-prices');
+		ProductPriceList.tbody = ProductPriceList.table.children('tbody');
+		ProductPriceList.datatables = newDataTables(ProductPriceList.table);
 
-		this.loadProduct();
-		this.loadProductPrices();
+		ProductPriceList.loadProduct();
+		ProductPriceList.loadProductPrices();
 	},
 	loadProduct: function()
 	{
-		ws.product_get(this.idProduct, this.form, this.onProductLoaded);
+		ws.product_get(ProductPriceList.idProduct, ProductPriceList.form, ProductPriceList.onProductLoaded);
 	},
 	loadProductPrices: function()
 	{
-		ws.productPrice_getAll(this.idProduct, this.tbody, this.onProductPricesLoaded);
+		ws.productPrice_getAll(ProductPriceList.idProduct, ProductPriceList.tbody, ProductPriceList.onProductPricesLoaded);
 	},
 	onProductLoaded: function(product)
 	{
 		var form = ProductPriceList.form[0];
 		$(form.name).val(product.name);
-		$(form.unit).val(product.unit.name);
+		$(form.unit).val(product.productUnit.name);
 		$(form.description).html(product.description);
 	},
 	onProductPricesLoaded: function(productPrices)
@@ -44,16 +44,16 @@ var ProductPriceList = ProductPriceList ||
 	},
 	newDataRow: function(index, productPrice)
 	{
-		var btnView = '<button class="btn btn-primary" data-index="' +index+ '" onclick="ProductPriceList.onButtonView(this)">Ver</button>';
-		var btnRemove = '<button class="btn btn-danger" data-index="' +index+ '" onclick="ProductPriceList.onButtonRemove(this)">Excluir</button>';
+		var btnView = '<button class="btn btn-primary" data-index="{0}" onclick="ProductPriceList.onButtonView(this)">Ver</button>'.format(index);
+		var btnRemove = '<button class="btn btn-danger" data-index="{0}" onclick="ProductPriceList.onButtonRemove(this)">Excluir</button>'.format(index);
 
 		return [
 			productPrice.name,
 			productPrice.amount,
 			productPrice.price,
-			productPrice['package'].name,
+			productPrice.productPackage.name,
 			productPrice.productType.name,
-			'<div class="btn-group">' + btnView + btnRemove + '</div>',
+			'<div class="btn-group">{0}{1}</div>'.format(btnView, btnRemove),
 		];
 	},
 	onButtonView: function(button)
@@ -62,7 +62,7 @@ var ProductPriceList = ProductPriceList ||
 		var productPrice = ProductPriceList.productPrices[index];
 
 		if (productPrice !== undefined)
-			Util.redirect('product/viewPrice/' +productPrice.id, true);
+			Util.redirect('product/viewPrice/{0}'.format(productPrice.id), true);
 	},
 	onButtonRemove: function(button)
 	{
@@ -70,6 +70,6 @@ var ProductPriceList = ProductPriceList ||
 		var productPrice = ProductPriceList.productPrices[index];
 
 		if (productPrice !== undefined)
-			Util.redirect('product/removePrice/' +productPrice.id, true);
+			Util.redirect('product/removePrice/{0}'.format(productPrice.id), true);
 	}
 }
