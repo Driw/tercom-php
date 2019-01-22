@@ -241,10 +241,10 @@ class CustomerDAO extends GenericDAO
 	{
 		$sqlCustomer = $this->newSqlCustomer();
 		$sql = "$sqlCustomer
-				WHERE fantasyName = ?";
+				WHERE fantasyName LIKE ?";
 
 		$query = $this->createQuery($sql);
-		$query->setString(1, $fantasyName);
+		$query->setString(1, "%$fantasyName%");
 
 		$result = $query->execute();
 

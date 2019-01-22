@@ -20,6 +20,14 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+21.01.2018 - 0.3.5.206
+- Implementação das páginas para listar clientes, procurar clientes, adicionar clientes e visualizar clientes.
+- Corrigido selectLikeFantasyName() que não estava consultando com LIKE, CustomerDAO.
+- Realizada algumas correções referentes a CustomerService:
+	- actionSetInactive() para que considere 'inactive' como parâmetro REST ao invés de POST.
+	- searchByFantasyname() que estava consultando por 'stateRegistry' ao invés de 'fantasyName.
+	- actionAvaiable() que não era informado no parâmetro REST a opção de idCustomer.
+
 21.01.2018 - 0.3.5.205
 - Adicionado scripts de testes do serviço para gerenciamento das cotações de serviço aceitos.
 

@@ -524,7 +524,7 @@ Webservice.prototype.product_add = function(form, listener)
 Webservice.prototype.product_set = function(idProduct, form, listener)
 {
 	this.setOptionsAndExecute({
-		'webservice': 'product/set/' +idProduct,
+		'webservice': 'product/set/{0}'.format(idProduct),
 		'form': form,
 		'target': form,
 		'listener': listener,
@@ -534,7 +534,7 @@ Webservice.prototype.product_set = function(idProduct, form, listener)
 Webservice.prototype.product_setActive = function(idProduct, target, listener)
 {
 	this.setOptionsAndExecute({
-		'webservice': 'product/setInactive/' +idProduct+ '/no',
+		'webservice': 'product/setInactive/{0}/no'.format(idProduct),
 		'target': target,
 		'listener': listener,
 		'errorMessage': this.newBaseErrorMessage('atualizar produto'),
@@ -543,7 +543,7 @@ Webservice.prototype.product_setActive = function(idProduct, target, listener)
 Webservice.prototype.product_setInactive = function(idProduct, target, listener)
 {
 	this.setOptionsAndExecute({
-		'webservice': 'product/setInactive/' +idProduct+ '/yes',
+		'webservice': 'product/setInactive/{0}/yes'.format(idProduct),
 		'target': target,
 		'listener': listener,
 		'errorMessage': this.newBaseErrorMessage('atualizar produto'),
@@ -552,7 +552,7 @@ Webservice.prototype.product_setInactive = function(idProduct, target, listener)
 Webservice.prototype.product_get = function(idProduct, target, listener)
 {
 	this.setOptionsAndExecute({
-		'webservice': 'product/get/' +idProduct,
+		'webservice': 'product/get/{0}'.format(idProduct),
 		'target': target,
 		'listener': listener,
 		'errorMessage': this.newBaseErrorMessage('obter produto'),
@@ -570,7 +570,7 @@ Webservice.prototype.product_getAll = function(target, listener)
 Webservice.prototype.product_search = function(filter, value, target, listener)
 {
 	this.setOptionsAndExecute({
-		'webservice': 'product/search/' +filter+ '/' +value,
+		'webservice': 'product/search/{0}/{1}'.format(filter, value),
 		'target': target,
 		'listener': listener,
 		'errorMessage': this.newBaseErrorMessage('procurar produto'),
@@ -591,7 +591,7 @@ Webservice.prototype.productPrice_settings = function(target, listener)
 Webservice.prototype.productPrice_add = function(idProduct, form, listener)
 {
 	this.setOptionsAndExecute({
-		'webservice': 'productPrice/add/' +idProduct,
+		'webservice': 'productPrice/add/{0}'.format(idProduct),
 		'form': form,
 		'target': form,
 		'listener': listener,
@@ -601,7 +601,7 @@ Webservice.prototype.productPrice_add = function(idProduct, form, listener)
 Webservice.prototype.productPrice_set = function(idProductPrice, form, listener)
 {
 	this.setOptionsAndExecute({
-		'webservice': 'productPrice/set/' +idProductPrice,
+		'webservice': 'productPrice/set/{0}'.format(idProductPrice),
 		'form': form,
 		'target': form,
 		'listener': listener,
@@ -611,7 +611,7 @@ Webservice.prototype.productPrice_set = function(idProductPrice, form, listener)
 Webservice.prototype.productPrice_remove = function(idProductPrice, target, listener)
 {
 	this.setOptionsAndExecute({
-		'webservice': 'productPrice/remove/' +idProductPrice,
+		'webservice': 'productPrice/remove/{0}'.format(idProductPrice),
 		'target': target,
 		'listener': listener,
 		'errorMessage': this.newBaseErrorMessage('obter preço do produto'),
@@ -620,7 +620,7 @@ Webservice.prototype.productPrice_remove = function(idProductPrice, target, list
 Webservice.prototype.productPrice_get = function(idProductPrice, target, listener)
 {
 	this.setOptionsAndExecute({
-		'webservice': 'productPrice/get/' +idProductPrice,
+		'webservice': 'productPrice/get/{0}'.format(idProductPrice),
 		'target': target,
 		'listener': listener,
 		'errorMessage': this.newBaseErrorMessage('obter preço do produto'),
@@ -629,7 +629,7 @@ Webservice.prototype.productPrice_get = function(idProductPrice, target, listene
 Webservice.prototype.productPrice_getAll = function(idProduct, target, listener)
 {
 	this.setOptionsAndExecute({
-		'webservice': 'productPrice/getAll/' +idProduct,
+		'webservice': 'productPrice/getAll/{0}'.format(idProduct),
 		'target': target,
 		'listener': listener,
 		'errorMessage': this.newBaseErrorMessage('obter lista de preços do produto'),
@@ -641,7 +641,7 @@ Webservice.prototype.productPrice_getAll = function(idProduct, target, listener)
 Webservice.prototype.managePermissions_tercom_getAll = function(target, listener)
 {
 	this.setOptionsAndExecute({
-		'webservice': 'managePermissions/getAll/tercom/' +LOGIN_PROFILE_ID,
+		'webservice': 'managePermissions/getAll/tercom/{0}'.format(LOGIN_PROFILE_ID),
 		'target': target,
 		'listener': listener,
 		'errorMessage': this.newBaseErrorMessage('obter lista de permissões'),
@@ -650,10 +650,96 @@ Webservice.prototype.managePermissions_tercom_getAll = function(target, listener
 Webservice.prototype.managePermissions_customer_getAll = function(target, listener)
 {
 	this.setOptionsAndExecute({
-		'webservice': 'managePermissions/getAll/customer/' +LOGIN_PROFILE_ID,
+		'webservice': 'managePermissions/getAll/customer/{0}'.format(LOGIN_PROFILE_ID),
 		'target': target,
 		'listener': listener,
 		'errorMessage': this.newBaseErrorMessage('obter lista de permissões'),
+	});
+};
+
+// - Customer
+
+Webservice.prototype.customer_settings = function(target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'customer/settings',
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter configurações para cliente'),
+	});
+};
+Webservice.prototype.customer_add = function(form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'customer/add',
+		'form': form,
+		'target': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('adicionar cliente'),
+	});
+};
+Webservice.prototype.customer_set = function(idCustomer, form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'customer/set/{0}'.format(idCustomer),
+		'form': form,
+		'target': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('atualizar cliente'),
+	});
+};
+Webservice.prototype.customer_get = function(idCustomer, target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'customer/get/{0}'.format(idCustomer),
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter cliente'),
+	});
+};
+Webservice.prototype.customer_getAll = function(target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'customer/getAll',
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter todos clientes'),
+	});
+};
+Webservice.prototype.customer_getByCnpj = function(cnpj, target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'customer/getByCnpj/{0}'.format(cnpj),
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter cliente'),
+	});
+};
+Webservice.prototype.customer_search = function(filter, value, target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'customer/search/{0}/{1}'.format(filter, value),
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('procurar cliente'),
+	});
+};
+Webservice.prototype.customer_setActive = function(idCustomer, target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'customer/setInactive/{0}/no'.format(idCustomer),
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('atualizar cliente'),
+	});
+};
+Webservice.prototype.customer_setInactive = function(idCustomer, target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'customer/setInactive/{0}/yes'.format(idCustomer),
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('atualizar cliente'),
 	});
 };
 

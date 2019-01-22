@@ -82,7 +82,6 @@ var ProductList = ProductList ||
 		var index = button.dataset.index;
 		var product = ProductList.products[index];
 		var tr = $(button).parents('tr');
-		var td = $(button).parents('td');
 
 		ws.product_setActive(product.id, tr, ProductList.onProductSetInactive);
 	},
@@ -91,7 +90,6 @@ var ProductList = ProductList ||
 		var index = button.dataset.index;
 		var product = ProductList.products[index];
 		var tr = $(button).parents('tr');
-		var td = $(button).parents('td');
 
 		ws.product_setInactive(product.id, tr, ProductList.onProductSetInactive);
 	},
@@ -100,6 +98,6 @@ var ProductList = ProductList ||
 		var tr = $('#product-' +product.id).parents('tr');
 		var index = ProductList.setProduct(product);
 		var productRowData = ProductList.newProductRowData(index, product);
-		var row = ProductList.datatables.row(tr).data(productRowData);
+		ProductList.datatables.row(tr).data(productRowData);
 	},
 }

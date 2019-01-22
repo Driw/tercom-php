@@ -205,5 +205,18 @@ class CustomerControl extends GenericControl
 	{
 		return !$this->customerDAO->existCompanyName($companyName, $idCustomer);
 	}
+
+	/**
+	 *
+	 * @return array
+	 */
+	public static function getFilters(): array
+	{
+		return [
+			'stateRegistry' => 'IE',
+			'cnpj' => 'CNPJ',
+			'fantasyName' => 'Nome Fantasia',
+		];
+	}
 }
 

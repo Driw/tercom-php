@@ -80,17 +80,16 @@ class CustomerService extends DefaultSiteService
 
 	/**
 	 *
-	 * @ApiPermissionAnnotation({"method":"post","params":["idCustomer"]})
+	 * @ApiPermissionAnnotation({"method":"post","params":["idCustomer","inactive"]})
 	 * @param ApiContent $content
 	 * @return ApiResultObject
 	 */
 	public function actionSetInactive(ApiContent $content): ApiResultObject
 	{
-		$post = $content->getPost();
-		$idCustomer = $content->getParameters()->getInt('idCustomer');
+		$parameters = $content->getParameters();
+		$idCustomer = $parameters->getInt('idCustomer');
 		$customer = $this->getCustomerControl()->get($idCustomer);
-
-		if ($post->isSetted('inactive')) $customer->setInactive($post->getBoolean('inactive'));
+		$customer->setInactive($parameters->getBoolean('inactive'));
 
 		$this->getCustomerControl()->set($customer);
 
@@ -210,7 +209,7 @@ class CustomerService extends DefaultSiteService
 	private function searchByFantasyName(ApiContent $content): ApiResultObject
 	{
 		$fantasyName = $content->getParameters()->getString('value');
-		$customers = $this->getCustomerControl()->searchByStateRegistry($fantasyName);
+		$customers = $this->getCustomerControl()->searchByFantasyName($fantasyName);
 
 		$result = new ApiResultObject();
 		$result->setResult($customers, 'encontrados %d clientes com nome fantasia "%s"', $customers->size(), $fantasyName);
@@ -220,7 +219,7 @@ class CustomerService extends DefaultSiteService
 
 	/**
 	 *
-	 * @ApiPermissionAnnotation({"params":["filter","value"]})
+	 * @ApiPermissionAnnotation({"params":["filter","value","idCustomer"]})
 	 * @param ApiContent $content
 	 * @throws FilterException
 	 * @return ApiResultSimpleValidation
@@ -247,12 +246,10 @@ class CustomerService extends DefaultSiteService
 	{
 		$cnpj = $content->getParameters()->getString('value');
 		$idCustomer = $this->parseNullToInt($content->getParameters()->getInt('idCustomer', false));
-		$result = new ApiResultSimpleValidation();
+		$avaiable = $this->getCustomerControl()->hasAvaiableCnpj($cnpj, $idCustomer);
 
-		if ($this->getCustomerControl()->hasAvaiableCnpj($cnpj, $idCustomer))
-			$result->setOkMessage(true, 'CNPJ "%s" disponível', $cnpj);
-		else
-			$result->setOkMessage(false, 'CNPJ "%s" indisponível', $cnpj);
+		$result = new ApiResultSimpleValidation();
+		$result->setOkMessage($avaiable, 'CNPJ "%s" %s', $cnpj, $this->getMessageAvaiable($avaiable));
 
 		return $result;
 	}
@@ -266,12 +263,10 @@ class CustomerService extends DefaultSiteService
 	{
 		$companyName = $content->getParameters()->getString('value');
 		$idCustomer = $this->parseNullToInt($content->getParameters()->getInt('idCustomer', false));
-		$result = new ApiResultSimpleValidation();
+		$avaiable = $this->getCustomerControl()->hasAvaiableCompanyName($companyName, $idCustomer);
 
-		if ($this->getCustomerControl()->hasAvaiableCompanyName($companyName, $idCustomer))
-			$result->setOkMessage(true, 'razão social "%s" disponível', $companyName);
-		else
-			$result->setOkMessage(false, 'razão social "%s" indisponível', $companyName);
+		$result = new ApiResultSimpleValidation();
+		$result->setOkMessage($avaiable, 'razão social "%s" %s', $companyName, $this->getMessageAvaiable($avaiable));
 
 		return $result;
 	}

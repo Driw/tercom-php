@@ -109,5 +109,20 @@
 				{ "Name": "Adicionar", "Icon": "fas fa-plus", "Url": "product/add", "PermissionPacket": "product", "PermissionAction": "add" }
 			]
 		}
+	},
+	{
+		"Dropdown": {
+			"service": "customer",
+			"Name": "Clientes",
+			"Icon": "fas fa-hashtag",
+			"ID": "dropdown-customer",
+			"PermissionPacket": "customer",
+			"Class": "",
+			"Itens": [
+				{ "Name": "Listar", "Icon": "fas fa-list-ul", "Url": "customer/list", "PermissionPacket": "customer", "PermissionAction": "getAll" },
+				{ "Name": "Procurar", "Icon": "fas fa-search", "Url": "customer/search", "PermissionPacket": "customer", "PermissionAction": "search" },
+				{ "Name": "Adicionar", "Icon": "fas fa-plus", "Url": "customer/add", "PermissionPacket": "customer", "PermissionAction": "add" }
+			]
+		}
 	}
 ]

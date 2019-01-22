@@ -1,0 +1,59 @@
+                    <!-- Atualizar Cliente -->
+                    <section class="dashboard-counts">
+                        <div class="container-fluid">
+                            <div class="row justify-content-center">
+                                <div class="card col-8 pl-0 pr-0">
+                                    <div class="card-header d-flex align-items-center">
+                                        <h3 class="h4">Atualizar Cliente</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <form class="tercom-form tercom-form-sm form-horizontal" id="form-customer-view" novalidate="novalidate">
+                                            <input type="hidden" name="idCustomer" value="{idCustomer}">
+                                            <fieldset>
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text">Registro Estatal</span>
+                                                        </div>
+                                                        <input type="text" class="form-control" name="stateRegistry">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text">CNPJ</span>
+                                                        </div>
+                                                        <input type="text" class="form-control mask-cnpj" name="cnpj">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text">Nome da Compania</span>
+                                                        </div>
+                                                        <input type="text" class="form-control" name="companyName">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text">Email</span>
+                                                        </div>
+                                                        <input type="email" class="form-control" name="email">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group text-center">
+                                                    <div class="btn-group">
+                                                        <button type="submit" class="btn btn-primary">Atualizar</button>
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                        </form>
+                                        <div class="row" style="display: none;" id="row-message">
+                                            <p class="alert alert-success col-12">Último cliente adicionado: <span id="row-message-span"></span></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
