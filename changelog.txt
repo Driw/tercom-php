@@ -20,6 +20,9 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+21.01.2018 - 0.3.5.207
+- Adicionado CustomerBoundary referente a rev206.
+
 21.01.2018 - 0.3.5.206
 - Implementação das páginas para listar clientes, procurar clientes, adicionar clientes e visualizar clientes.
 - Corrigido selectLikeFantasyName() que não estava consultando com LIKE, CustomerDAO.
