@@ -20,14 +20,14 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+22.01.2018 - 0.3.5.209b
+- Atualizado lista de clientes para exibir um novo botão 'Endereços'.
+- Implementação das páginas para adicionar endereço, atualizar endereço, excluir endereço e listar endereços.
+
 22.01.2018 - 0.3.5.209
 - Adicionado novo arquivo de configurações para o sistema em produção, separando o DEV de PROD.
 - Corrigido falha com customer_profiles e providers referente ao script SQL 'fake.sql'.
 - Ajuste de atualizações recentes de tabelas que não foram aplicados a 'tabelas.sql'.
-
-22.01.2018 - 0.3.5.208
-- Atualizado lista de clientes para exibir um novo botão 'Endereços'.
-- Implementação das páginas para adicionar endereço, atualizar endereço, excluir endereço e listar endereços.
 
 21.01.2018 - 0.3.5.207
 - Adicionado CustomerBoundary referente a rev206.

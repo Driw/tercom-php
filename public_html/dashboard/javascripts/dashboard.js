@@ -128,6 +128,11 @@ function initDateTimePicker()
 
 function initJQueryValidators()
 {
+	jQuery.validator.addMethod("length", function (value, element, param)
+	{
+		return this.optional(element) || value.length == param;
+	}, $.validator.format("Por favor inserir {0} caracteres."));
+
 	$.validator.addMethod('remoteapi', function(value, element, params)
 	{
 		var settings = {};

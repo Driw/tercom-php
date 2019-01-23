@@ -35,16 +35,17 @@ var CustomerList = CustomerList ||
 	newCustomerRowData: function(index, customer)
 	{
 		var id = customer.id;
-		var btnView = '<button type="button" class="btn btn-info" data-index="{0}" onclick="CustomerList.onClickBtnView(this)">Ver</button>'.format(index);
-		var btnActive = '<button type="button" class="btn btn-primary" data-index="{0}" onclick="CustomerList.onClickBtnActive(this)">Ativar</button>'.format(index);
-		var btnDesactive = '<button type="button" class="btn btn-secondary" data-index="{0}" onclick="CustomerList.onClickBtnInactive(this)">Desativar</button>'.format(index);
+		var btnView = '<button type="button" class="btn btn-sm btn-info" data-index="{0}" onclick="CustomerList.onClickBtnView(this)">Ver</button>'.format(index);
+		var btnAddresses = '<button type="button" class="btn btn-sm btn-info" data-index="{0}" onclick="CustomerList.onClickBtnAddresses(this)">Endereços</button>'.format(index);
+		var btnActive = '<button type="button" class="btn btn-sm btn-primary" data-index="{0}" onclick="CustomerList.onClickBtnActive(this)">Ativar</button>'.format(index);
+		var btnDesactive = '<button type="button" class="btn btn-sm btn-secondary" data-index="{0}" onclick="CustomerList.onClickBtnInactive(this)">Desativar</button>'.format(index);
 
 		return [
 			customer.id,
 			customer.cnpj,
 			customer.fantasyName,
             customer.email,
-			'<div class="btn-group" id="customer-{0}">{1}{2}</div>'.format(customer.id, btnView, customer.inactive ? btnActive : btnDesactive),
+			'<div class="btn-group" id="customer-{0}">{1}{2}{3}</div>'.format(customer.id, btnView, btnAddresses, customer.inactive ? btnActive : btnDesactive),
 		];
 	},
 	setCustomer: function(customer)
@@ -67,6 +68,12 @@ var CustomerList = CustomerList ||
 		var index = button.dataset.index;
 		var customer = CustomerList.customers[index];
 		Util.redirect('customer/view/{0}'.format(customer.id), true);
+	},
+	onClickBtnAddresses: function(button)
+	{
+		var index = button.dataset.index;
+		var customer = CustomerList.customers[index];
+		Util.redirect('customer/viewAddresses/{0}'.format(customer.id), true);
 	},
 	onClickBtnActive: function(button)
 	{

@@ -1,0 +1,93 @@
+                    <!-- Atualizar Endereço -->
+                    <section class="dashboard-counts">
+                        <div class="container-fluid">
+                            <div class="row justify-content-center">
+                                <div class="card col-8 pl-0 pr-0">
+                                    <div class="card-header d-flex align-items-center">
+                                        <h3 class="h4">Atualizar Endereço</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <form class="tercom-form tercom-form-sm form-horizontal" id="form-address-view">
+                                            <input type="hidden" name="relationship" value="{relationship}">
+                                            <input type="hidden" name="idRelationship" value="{idRelationship}">
+                                            <input type="hidden" name="idAddress" value="{idAddress}">
+                                            <fieldset>
+                                                <div class="form-group">
+                                                    <p>* Campos opcionais</p>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text">Estado</span>
+                                                        </div>
+                                                        <select class="form-control" name="state">
+                                                            <option value="">Selecione um estado</option>
+                                                            <!-- BEGIN StateOption -->
+                                                            <option value="{StateOption_Value}">{StateOption_Option}</option>
+                                                            <!-- END StateOption -->
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text">Cidade</span>
+                                                        </div>
+                                                        <input type="text" class="form-control" name="city">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text">CEP</span>
+                                                        </div>
+                                                        <input type="text" class="form-control mask-cep" name="cep">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text">Bairro</span>
+                                                        </div>
+                                                        <input type="text" class="form-control" name="neighborhood">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text">Rua</span>
+                                                        </div>
+                                                        <input type="text" class="form-control" name="street">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text">Número</span>
+                                                        </div>
+                                                        <input type="text" class="form-control mask-integer" name="number">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text">* Complemento</span>
+                                                        </div>
+                                                            <input type="text" class="form-control" name="complement">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group text-center">
+                                                    <div class="btn-group">
+                                                        <button type="submit" class="btn btn-primary">Atualizar</button>
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                        </form>
+                                        <div class="row" style="display: none;" id="row-message">
+                                            <p class="alert alert-success col-12">Resultado: <span id="row-message-span"></span></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>

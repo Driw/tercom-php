@@ -743,4 +743,63 @@ Webservice.prototype.customer_setInactive = function(idCustomer, target, listene
 	});
 };
 
+// - Address
+
+Webservice.prototype.address_settings = function(target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'address/settings',
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter configurações para endereço'),
+	});
+};
+Webservice.prototype.address_add = function(relationship, idRelationship, form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'address/add/{0}/{1}'.format(relationship, idRelationship),
+		'form': form,
+		'target': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('adicionar endereço'),
+	});
+};
+Webservice.prototype.address_set = function(relationship, idRelationship, idAddress, form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'address/set/{0}/{1}/{2}'.format(relationship, idRelationship, idAddress),
+		'form': form,
+		'target': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('atualizar endereço'),
+	});
+};
+Webservice.prototype.address_remove = function(relationship, idRelationship, idItem, target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'address/remove/{0}/{1}/{2}'.format(relationship, idRelationship, idItem),
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('excluir endereço'),
+	});
+}
+Webservice.prototype.address_get = function(relationship, idRelationship, idAddress, target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'address/get/{0}/{1}/{2}'.format(relationship, idRelationship, idAddress),
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter endereço'),
+	});
+}
+Webservice.prototype.address_getAll = function(relationship, idRelationship, target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'address/getAll/{0}/{1}'.format(relationship, idRelationship),
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter lista de endereços'),
+	});
+}
+
 const ws = new Webservice();
