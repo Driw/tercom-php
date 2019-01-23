@@ -154,10 +154,10 @@ class CustomerProfileControl extends GenericControl
 	 *
 	 * @return CustomerProfiles
 	 */
-	public function getAll(int $assignmentLevel): CustomerProfiles
+	public function getAll(): CustomerProfiles
 	{
 		if ($this->hasCustomerLogged())
-			return $this->getByCustomerLevel($this->getCustomerLogged(), $assignmentLevel);
+			return $this->getByCustomerLevel($this->getCustomerLogged(), (new LoginCustomerControl())->getCurrent()->getCustomer()->getProfile()->getAssignmentLevel());
 
 		return $this->customerProfileDAO->selectAll();
 	}

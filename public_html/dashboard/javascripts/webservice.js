@@ -818,7 +818,7 @@ Webservice.prototype.customerProfile_add = function(form, listener)
 	this.setOptionsAndExecute({
 		'webservice': 'customerProfile/add',
 		'form': form,
-		'target': target,
+		'target': form,
 		'listener': listener,
 		'errorMessage': this.newBaseErrorMessage('adicionar perfil de cliente'),
 	});
@@ -826,9 +826,9 @@ Webservice.prototype.customerProfile_add = function(form, listener)
 Webservice.prototype.customerProfile_set = function(idCustomerProfile, form, listener)
 {
 	this.setOptionsAndExecute({
-		'webservice': 'customerProfile/set/' + idCustomerProfile,
+		'webservice': 'customerProfile/set/{0}'.format(idCustomerProfile),
 		'form': form,
-		'target': target,
+		'target': form,
 		'listener': listener,
 		'errorMessage': this.newBaseErrorMessage('atualizar perfil de cliente'),
 	});
@@ -857,9 +857,9 @@ Webservice.prototype.customerProfile_getByCustomer = function(idCustomer, target
 		'errorMessage': this.newBaseErrorMessage('obter perfil de cliente'),
 	});
 };
-Webservice.prototype.customerProfile_getAll = function(target, listener) {
+Webservice.prototype.customerProfile_getAll = function(idCustomer, target, listener) {
 	this.setOptionsAndExecute({
-		'webservice': 'customerProfile/getAll',
+		'webservice': 'customerProfile/getAll/{0}'.format(idCustomer),
 		'target': target,
 		'listener': listener,
 		'errorMessage': this.newBaseErrorMessage('obter todos perfis de cliente'),

@@ -20,6 +20,10 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+23.01.2018 - 0.3.5.211
+- Implementação das páginas para adicionar perfil de cliente, atualizar perfil de cliente, excluir perfil de cliente e listar perfil de cliente.
+- Corrigido getAll() em CustomerProfileControl onde era obrigatório infomrar 'assignmentLevel' quando não deveria se quer ser um parâmetro.
+
 22.01.2018 - 0.3.5.210
 - Atualização do espaçamento (identação) de arquivos HTML e JavaScript.
 

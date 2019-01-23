@@ -242,6 +242,14 @@ abstract class DefaultDashboardBoundary extends ApiTemplate
 	}
 
 	/**
+	 * @return boolean
+	 */
+	public function isLoginTercom(): bool
+	{
+		return self::$loginTercom !== null;
+	}
+
+	/**
 	 * @param string $serviceName
 	 * @return bool
 	 */
