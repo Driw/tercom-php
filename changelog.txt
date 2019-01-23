@@ -20,6 +20,9 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+23.01.2018 - 0.3.5.214
+- Atualizado gerenciamento de Aceite de Pedido para atualizar seu estado no sistema.
+
 23.01.2018 - 0.3.5.213
 - Atualizado 'tabelas.sql' conforme últimas tabelas adicionadas referente a Aceite de Pedido.
 

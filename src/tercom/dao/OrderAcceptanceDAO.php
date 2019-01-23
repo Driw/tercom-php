@@ -123,6 +123,27 @@ class OrderAcceptanceDAO extends GenericDAO
 
 	/**
 	 *
+	 * @param OrderAcceptance $orderAcceptance
+	 * @return bool
+	 */
+	public function updateStatus(OrderAcceptance $orderAcceptance): bool
+	{
+		$this->validate($orderAcceptance, true);
+
+		$sql = "UPDATE order_acceptances
+				SET status = ?
+				WHERE id = ?";
+
+		$query = $this->createQuery($sql);
+		$query->setEmptyAsNull(true);
+		$query->setInteger(1, $orderAcceptance->getStatus());
+		$query->setInteger(2, $orderAcceptance->getId());
+
+		return ($query->execute())->isSuccessful();
+	}
+
+	/**
+	 *
 	 * @return string
 	 */
 	private function newSelectBase(): string

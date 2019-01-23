@@ -348,7 +348,11 @@ REPLACE INTO permissions (packet, action, assignmentLevel) VALUES
 ('orderAcceptance', 'getByOrderQuote', 20),
 ('orderAcceptance', 'getByCustomer', 20),
 ('orderAcceptance', 'getByCustomerEmployee', 20),
-('orderAcceptance', 'getByTercomEmployee', 20);
+('orderAcceptance', 'getByTercomEmployee', 20),
+('orderAcceptance', 'approve', 20),
+('orderAcceptance', 'request', 20),
+('orderAcceptance', 'pay', 20),
+('orderAcceptance', 'deliver', 20);
 
 -- Order Acceptance Product Service
 

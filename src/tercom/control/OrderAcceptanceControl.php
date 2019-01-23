@@ -46,6 +46,16 @@ class OrderAcceptanceControl extends GenericControl
 	/**
 	 *
 	 * @param OrderAcceptance $orderAcceptance
+	 * @return bool
+	 */
+	private function isValidCustomerLogged(OrderAcceptance $orderAcceptance): bool
+	{
+		return $orderAcceptance->getCustomerEmployee()->getCustomerProfile()->getCustomerId() === $this->getCustomerLoggedId();
+	}
+
+	/**
+	 *
+	 * @param OrderAcceptance $orderAcceptance
 	 * @throws OrderAcceptanceException
 	 */
 	public function add(OrderAcceptance $orderAcceptance): void
@@ -136,10 +146,8 @@ class OrderAcceptanceControl extends GenericControl
 			if ($orderAcceptance->getCustomerEmployee()->getCustomerProfile()->getCustomerId() !== $this->getCustomerLoggedId())
 				throw TercomException::newCustomerInvliad();
 
-		if (!$onlyView)
-		{
-			// FIXME verificar estado de orderAcceptance
-		}
+		if (!$onlyView && $orderAcceptance->getStatus() !== OrderAcceptance::OAS_APPROVING)
+			throw OrderAcceptanceException::newManage();
 
 		return $orderAcceptance;
 	}
@@ -199,6 +207,86 @@ class OrderAcceptanceControl extends GenericControl
 			throw TercomException::newPermissionRestrict();
 
 		return $this->orderAcceptanceDAO->selectAll();
+	}
+
+	/**
+	 *
+	 * @param OrderAcceptance $orderAcceptance
+	 * @throws OrderAcceptanceException
+	 * @throws TercomException
+	 */
+	public function approved(OrderAcceptance $orderAcceptance): void
+	{
+		if ($orderAcceptance->getStatus() !== OrderAcceptance::OAS_APPROVING)
+			throw OrderAcceptanceException::newApproving();
+
+		if ($this->isTercomManagement() || !$this->isValidCustomerLogged($orderAcceptance))
+			throw TercomException::newPermissionRestrict();
+
+		$orderAcceptance->setStatus(OrderAcceptance::OAS_APPROVED);
+
+		if (!$this->orderAcceptanceDAO->updateStatus($orderAcceptance))
+			throw OrderAcceptanceException::newInserted();
+	}
+
+	/**
+	 *
+	 * @param OrderAcceptance $orderAcceptance
+	 * @throws OrderAcceptanceException
+	 * @throws TercomException
+	 */
+	public function request(OrderAcceptance $orderAcceptance): void
+	{
+		if ($orderAcceptance->getStatus() !== OrderAcceptance::OAS_APPROVED)
+			throw OrderAcceptanceException::newApproved();
+
+		if (!$this->isTercomManagement())
+			throw TercomException::newPermissionRestrict();
+
+		$orderAcceptance->setStatus(OrderAcceptance::OAS_REQUEST);
+
+		if (!$this->orderAcceptanceDAO->updateStatus($orderAcceptance))
+			throw OrderAcceptanceException::newInserted();
+	}
+
+	/**
+	 *
+	 * @param OrderAcceptance $orderAcceptance
+	 * @throws OrderAcceptanceException
+	 * @throws TercomException
+	 */
+	public function paid(OrderAcceptance $orderAcceptance): void
+	{
+		if ($orderAcceptance->getStatus() !== OrderAcceptance::OAS_REQUEST)
+			throw OrderAcceptanceException::newRequest();
+
+		if ($this->isTercomManagement() || !$this->isValidCustomerLogged($orderAcceptance))
+			throw TercomException::newPermissionRestrict();
+
+		$orderAcceptance->setStatus(OrderAcceptance::OAS_PAID);
+
+		if (!$this->orderAcceptanceDAO->updateStatus($orderAcceptance))
+			throw OrderAcceptanceException::newInserted();
+	}
+
+	/**
+	 *
+	 * @param OrderAcceptance $orderAcceptance
+	 * @throws OrderAcceptanceException
+	 * @throws TercomException
+	 */
+	public function onTheWay(OrderAcceptance $orderAcceptance): void
+	{
+		if ($orderAcceptance->getStatus() !== OrderAcceptance::OAS_PAID)
+			throw OrderAcceptanceException::newPaid();
+
+		if (!$this->isTercomManagement())
+			throw TercomException::newPermissionRestrict();
+
+		$orderAcceptance->setStatus(OrderAcceptance::OAS_ON_THE_WAY);
+
+		if (!$this->orderAcceptanceDAO->updateStatus($orderAcceptance))
+			throw OrderAcceptanceException::newInserted();
 	}
 }
 

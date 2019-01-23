@@ -117,9 +117,41 @@ class OrderAcceptanceException extends ApiStatusException
 	/**
 	 * @return OrderAcceptanceException
 	 */
-	public static function newQuoteExist(): OrderAcceptanceException
+	public static function newManage(): OrderAcceptanceException
 	{
-		return new OrderAcceptanceException('cotação já possui aceite de pedido registrado', ApiStatus::ORDER_ACCEPTANCE_QUOTE_EXIST);
+		return new OrderAcceptanceException('aceitação de pedido não pode mais ser alterada', ApiStatus::ORDER_ACCEPTANCE_MANAGE);
+	}
+
+	/**
+	 * @return OrderAcceptanceException
+	 */
+	public static function newApproving(): OrderAcceptanceException
+	{
+		return new OrderAcceptanceException('aceitação de pedido não está em aprovação', ApiStatus::ORDER_ACCEPTANCE_APPROVING);
+	}
+
+	/**
+	 * @return OrderAcceptanceException
+	 */
+	public static function newApproved(): OrderAcceptanceException
+	{
+		return new OrderAcceptanceException('aceitação de pedido não está aprovada', ApiStatus::ORDER_ACCEPTANCE_APPROVED);
+	}
+
+	/**
+	 * @return OrderAcceptanceException
+	 */
+	public static function newRequest(): OrderAcceptanceException
+	{
+		return new OrderAcceptanceException('aceitação de pedido ainda não foi solicitada', ApiStatus::ORDER_ACCEPTANCE_REQUEST);
+	}
+
+	/**
+	 * @return OrderAcceptanceException
+	 */
+	public static function newPaid(): OrderAcceptanceException
+	{
+		return new OrderAcceptanceException('aceitação de pedido ainda sem confirmação do pagamento', ApiStatus::ORDER_ACCEPTANCE_PAID);
 	}
 }
 

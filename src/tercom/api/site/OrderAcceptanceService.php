@@ -114,7 +114,7 @@ class OrderAcceptanceService extends DefaultSiteService
 	public function actionGet(ApiContent $content): ApiResultObject
 	{
 		$idOrderAcceptance = $content->getParameters()->getInt('idOrderAcceptance');
-		$orderAcceptance = $this->getOrderAcceptanceControl()->get($idOrderAcceptance);
+		$orderAcceptance = $this->getOrderAcceptanceControl()->get($idOrderAcceptance, true);
 
 		$result = new ApiResultObject();
 		$result->setResult($orderAcceptance, 'aceitação de pedido obtida com êxito');
@@ -132,7 +132,7 @@ class OrderAcceptanceService extends DefaultSiteService
 	{
 		$idOrderQuote = $content->getParameters()->getInt('idOrderQuote');
 		$orderQuote = $this->getOrderQuoteControl()->get($idOrderQuote);
-		$orderAcceptance = $this->getOrderAcceptanceControl()->getByOrderQuote($orderQuote);
+		$orderAcceptance = $this->getOrderAcceptanceControl()->getByOrderQuote($orderQuote, true);
 
 		$result = new ApiResultObject();
 		$result->setResult($orderAcceptance, 'aceitação de pedido obtida com êxito');
@@ -190,6 +190,78 @@ class OrderAcceptanceService extends DefaultSiteService
 
 		$result = new ApiResultObject();
 		$result->setResult($orderAcceptances, 'encontrado %d aceitações de pedido cotadas por "%s"', $orderAcceptances->size(), $tercomEmployee->getName());
+
+		return $result;
+	}
+
+	/**
+	 *
+	 * @ApiPermissionAnnotation({"params":["idOrderAcceptance"]})
+	 * @param ApiContent $content
+	 * @return ApiResultObject
+	 */
+	public function actionApprove(ApiContent $content): ApiResultObject
+	{
+		$idOrderAcceptance = $content->getParameters()->getInt('idOrderAcceptance');
+		$orderAcceptance = $this->getOrderAcceptanceControl()->get($idOrderAcceptance, true);
+		$this->getOrderAcceptanceControl()->approved($orderAcceptance);
+
+		$result = new ApiResultObject();
+		$result->setResult($orderAcceptance, 'aceitação de pedido atualizado para "%s"', $orderAcceptance->getStatusDescription());
+
+		return $result;
+	}
+
+	/**
+	 *
+	 * @ApiPermissionAnnotation({"params":["idOrderAcceptance"]})
+	 * @param ApiContent $content
+	 * @return ApiResultObject
+	 */
+	public function actionRequest(ApiContent $content): ApiResultObject
+	{
+		$idOrderAcceptance = $content->getParameters()->getInt('idOrderAcceptance');
+		$orderAcceptance = $this->getOrderAcceptanceControl()->get($idOrderAcceptance, true);
+		$this->getOrderAcceptanceControl()->request($orderAcceptance);
+
+		$result = new ApiResultObject();
+		$result->setResult($orderAcceptance, 'aceitação de pedido atualizado para "%s"', $orderAcceptance->getStatusDescription());
+
+		return $result;
+	}
+
+	/**
+	 *
+	 * @ApiPermissionAnnotation({"params":["idOrderAcceptance"]})
+	 * @param ApiContent $content
+	 * @return ApiResultObject
+	 */
+	public function actionPay(ApiContent $content): ApiResultObject
+	{
+		$idOrderAcceptance = $content->getParameters()->getInt('idOrderAcceptance');
+		$orderAcceptance = $this->getOrderAcceptanceControl()->get($idOrderAcceptance, true);
+		$this->getOrderAcceptanceControl()->paid($orderAcceptance);
+
+		$result = new ApiResultObject();
+		$result->setResult($orderAcceptance, 'aceitação de pedido atualizado para "%s"', $orderAcceptance->getStatusDescription());
+
+		return $result;
+	}
+
+	/**
+	 *
+	 * @ApiPermissionAnnotation({"params":["idOrderAcceptance"]})
+	 * @param ApiContent $content
+	 * @return ApiResultObject
+	 */
+	public function actionDeliver(ApiContent $content): ApiResultObject
+	{
+		$idOrderAcceptance = $content->getParameters()->getInt('idOrderAcceptance');
+		$orderAcceptance = $this->getOrderAcceptanceControl()->get($idOrderAcceptance, true);
+		$this->getOrderAcceptanceControl()->onTheWay($orderAcceptance);
+
+		$result = new ApiResultObject();
+		$result->setResult($orderAcceptance, 'aceitação de pedido atualizado para "%s"', $orderAcceptance->getStatusDescription());
 
 		return $result;
 	}
