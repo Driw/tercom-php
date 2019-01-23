@@ -1,18 +1,18 @@
 
 $(document).ready(function()
 {
-        ProductPackageRemove.init();
+		ProductPackageRemove.init();
 });
 
 var ProductPackageRemove = ProductPackageRemove ||
 {
-    init: function()
-    {
+	init: function()
+	{
 		this.form = $('#form-product-package-remove');
 		this.idProductPackage = $(this.form[0].idProductPackage).val();
 		this.initForm();
 		this.loadProductPackage();
-    },
+	},
 	initForm: function()
 	{
 		ProductPackageRemove.form.validate({
@@ -36,10 +36,10 @@ var ProductPackageRemove = ProductPackageRemove ||
 		var form = ProductPackageRemove.form[0];
 		$(form.name).val(productPackage.name);
 	},
-    submit: function(form)
+	submit: function(form)
 	{
 		ws.productPackage_remove(ProductPackageRemove.idProductPackage, form, ProductPackageRemove.onSubmited);
-    },
+	},
 	onSubmited: function(productPackage, message)
 	{
 		ProductPackageRemove.onProductPackageLoaded(productPackage);

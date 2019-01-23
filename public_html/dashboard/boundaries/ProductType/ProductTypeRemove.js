@@ -1,18 +1,18 @@
 
 $(document).ready(function()
 {
-        ProductTypeRemove.init();
+		ProductTypeRemove.init();
 });
 
 var ProductTypeRemove = ProductTypeRemove ||
 {
-    init: function()
-    {
+	init: function()
+	{
 		this.form = $('#form-product-type-remove');
 		this.idProductType = $(this.form[0].idProductType).val();
 		this.initForm();
 		this.loadProductType();
-    },
+	},
 	initForm: function()
 	{
 		ProductTypeRemove.form.validate({
@@ -36,10 +36,10 @@ var ProductTypeRemove = ProductTypeRemove ||
 		var form = ProductTypeRemove.form[0];
 		$(form.name).val(productType.name);
 	},
-    submit: function(form)
+	submit: function(form)
 	{
 		ws.productType_remove(ProductTypeRemove.idProductType, form, ProductTypeRemove.onSubmited);
-    },
+	},
 	onSubmited: function(productType, message)
 	{
 		ProductTypeRemove.onProductTypeLoaded(productType);

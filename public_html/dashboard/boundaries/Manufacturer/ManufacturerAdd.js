@@ -1,16 +1,16 @@
 
 $(document).ready(function()
 {
-        ManufacturerAdd.init();
+		ManufacturerAdd.init();
 });
 
 var ManufacturerAdd = ManufacturerAdd ||
 {
-    init: function()
-    {
-        this.form = $('#form-manufacturer-add');
+	init: function()
+	{
+		this.form = $('#form-manufacturer-add');
 		this.initForm();
-    },
+	},
 	initForm: function()
 	{
 		ws.manufacturer_settings(this.form, this.onFormSettings);
@@ -38,10 +38,10 @@ var ManufacturerAdd = ManufacturerAdd ||
 			},
 		});
 	},
-    submit: function()
+	submit: function()
 	{
 		ws.manufacturer_add(ManufacturerAdd.form, ManufacturerAdd.onSubmited);
-    },
+	},
 	onSubmited: function(manufacturer, message)
 	{
 		$('#row-message').show('slow');

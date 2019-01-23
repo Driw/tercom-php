@@ -44,7 +44,7 @@ var CustomerList = CustomerList ||
 			customer.id,
 			customer.cnpj,
 			customer.fantasyName,
-            customer.email,
+			customer.email,
 			'<div class="btn-group" id="customer-{0}">{1}{2}{3}</div>'.format(customer.id, btnView, btnAddresses, customer.inactive ? btnActive : btnDesactive),
 		];
 	},

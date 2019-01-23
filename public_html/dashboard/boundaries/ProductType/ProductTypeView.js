@@ -1,18 +1,18 @@
 
 $(document).ready(function()
 {
-        ProductTypeView.init();
+		ProductTypeView.init();
 });
 
 var ProductTypeView = ProductTypeView ||
 {
-    init: function()
-    {
+	init: function()
+	{
 		this.form = $('#form-product-type-view');
 		this.idProductType = $(this.form[0].idProductType).val();
 		this.initForm();
 		this.loadProductType();
-    },
+	},
 	initForm: function()
 	{
 		ws.productType_settings(this.form, this.onFormSettings);
@@ -53,10 +53,10 @@ var ProductTypeView = ProductTypeView ||
 		var form = ProductTypeView.form[0];
 		$(form.name).val(productType.name);
 	},
-    submit: function(form)
+	submit: function(form)
 	{
 		ws.productType_set(ProductTypeView.idProductType, form, ProductTypeView.onSubmited);
-    },
+	},
 	onSubmited: function(productType, message)
 	{
 		ProductTypeView.onProductTypeLoaded(productType);

@@ -1,18 +1,18 @@
 
 $(document).ready(function()
 {
-        ManufacturerView.init();
+		ManufacturerView.init();
 });
 
 var ManufacturerView = ManufacturerView ||
 {
-    init: function()
-    {
+	init: function()
+	{
 		this.form = $('#form-manufacturer-view');
 		this.idManufacturer = $(this.form[0].idManufacturer).val();
 		this.initForm();
 		this.loadManufacturer();
-    },
+	},
 	initForm: function()
 	{
 		ws.manufacturer_settings(this.form, this.onFormSettings);
@@ -52,10 +52,10 @@ var ManufacturerView = ManufacturerView ||
 		var form = ManufacturerView.form[0];
 		$(form.fantasyName).val(manufacturer.fantasyName);
 	},
-    submit: function(form)
+	submit: function(form)
 	{
 		ws.manufacturer_set(ManufacturerView.idManufacturer, form, ManufacturerView.onSubmited);
-    },
+	},
 	onSubmited: function(manufacturer, message)
 	{
 		ManufacturerView.onManufacturerLoaded(manufacturer);

@@ -1,16 +1,16 @@
 
 $(document).ready(function()
 {
-        ProductUnitAdd.init();
+		ProductUnitAdd.init();
 });
 
 var ProductUnitAdd = ProductUnitAdd ||
 {
-    init: function()
-    {
-        this.form = $('#form-product-unit-add');
+	init: function()
+	{
+		this.form = $('#form-product-unit-add');
 		this.initForm();
-    },
+	},
 	initForm: function()
 	{
 		ws.productUnit_settings(this.form, this.onFormSettings);
@@ -45,10 +45,10 @@ var ProductUnitAdd = ProductUnitAdd ||
 			},
 		});
 	},
-    submit: function()
+	submit: function()
 	{
 		ws.productUnit_add(ProductUnitAdd.form, ProductUnitAdd.onSubmited);
-    },
+	},
 	onSubmited: function(productUnit, message)
 	{
 		$('#row-message').show('slow');

@@ -802,4 +802,68 @@ Webservice.prototype.address_getAll = function(relationship, idRelationship, tar
 	});
 }
 
+// - CustomerProfile
+
+Webservice.prototype.customerProfile_settings = function(target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'customerProfile/settings',
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter configurações de perfil de cliente'),
+	});
+};
+Webservice.prototype.customerProfile_add = function(form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'customerProfile/add',
+		'form': form,
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('adicionar perfil de cliente'),
+	});
+};
+Webservice.prototype.customerProfile_set = function(idCustomerProfile, form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'customerProfile/set/' + idCustomerProfile,
+		'form': form,
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('atualizar perfil de cliente'),
+	});
+};
+Webservice.prototype.customerProfile_remove = function(idCustomerProfile, target, listener) {
+	this.setOptionsAndExecute({
+		'webservice': 'customerProfile/remove/{0}'.format(idCustomerProfile),
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('excluir perfil de cliente'),
+	});
+};
+Webservice.prototype.customerProfile_get = function(idCustomerProfile, target, listener) {
+	this.setOptionsAndExecute({
+		'webservice': 'customerProfile/get/{0}'.format(idCustomerProfile),
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter perfil de cliente'),
+	});
+};
+Webservice.prototype.customerProfile_getByCustomer = function(idCustomer, target, listener) {
+	this.setOptionsAndExecute({
+		'webservice': 'customerProfile/customer/{0}'.format(idCustomer),
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter perfil de cliente'),
+	});
+};
+Webservice.prototype.customerProfile_getAll = function(target, listener) {
+	this.setOptionsAndExecute({
+		'webservice': 'customerProfile/getAll',
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter todos perfis de cliente'),
+	});
+};
+
 const ws = new Webservice();

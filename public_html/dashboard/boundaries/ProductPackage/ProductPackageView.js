@@ -1,18 +1,18 @@
 
 $(document).ready(function()
 {
-        ProductPackageView.init();
+		ProductPackageView.init();
 });
 
 var ProductPackageView = ProductPackageView ||
 {
-    init: function()
-    {
+	init: function()
+	{
 		this.form = $('#form-product-package-view');
 		this.idProductPackage = $(this.form[0].idProductPackage).val();
 		this.initForm();
 		this.loadProductPackage();
-    },
+	},
 	initForm: function()
 	{
 		ws.productPackage_settings(this.form, this.onFormSettings);
@@ -53,10 +53,10 @@ var ProductPackageView = ProductPackageView ||
 		var form = ProductPackageView.form[0];
 		$(form.name).val(productPackage.name);
 	},
-    submit: function(form)
+	submit: function(form)
 	{
 		ws.productPackage_set(ProductPackageView.idProductPackage, form, ProductPackageView.onSubmited);
-    },
+	},
 	onSubmited: function(productPackage, message)
 	{
 		ProductPackageView.onProductPackageLoaded(productPackage);

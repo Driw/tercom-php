@@ -1,16 +1,16 @@
 
 $(document).ready(function()
 {
-    ProductPackageAdd.init();
+	ProductPackageAdd.init();
 });
 
 var ProductPackageAdd = ProductPackageAdd ||
 {
-    init: function()
-    {
-        this.form = $('#form-product-package-add');
+	init: function()
+	{
+		this.form = $('#form-product-package-add');
 		this.initForm();
-    },
+	},
 	initForm: function()
 	{
 		ws.productPackage_settings(this.form, this.onFormSettings);
@@ -38,10 +38,10 @@ var ProductPackageAdd = ProductPackageAdd ||
 			},
 		});
 	},
-    submit: function()
+	submit: function()
 	{
 		ws.productPackage_add(ProductPackageAdd.form, ProductPackageAdd.onSubmited);
-    },
+	},
 	onSubmited: function(productPackage, message)
 	{
 		$('#row-message').show('slow');

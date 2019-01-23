@@ -1,18 +1,18 @@
 
 $(document).ready(function()
 {
-        ProductUnitView.init();
+		ProductUnitView.init();
 });
 
 var ProductUnitView = ProductUnitView ||
 {
-    init: function()
-    {
+	init: function()
+	{
 		this.form = $('#form-product-unit-view');
 		this.idProductUnit = $(this.form[0].idProductUnit).val();
 		this.initForm();
 		this.loadProductUnit();
-    },
+	},
 	initForm: function()
 	{
 		ws.productUnit_settings(this.form, this.onFormSettings);
@@ -63,10 +63,10 @@ var ProductUnitView = ProductUnitView ||
 		$(form.name).val(productUnit.name);
 		$(form.shortName).val(productUnit.shortName);
 	},
-    submit: function(form)
+	submit: function(form)
 	{
 		ws.productUnit_set(ProductUnitView.idProductUnit, form, ProductUnitView.onSubmited);
-    },
+	},
 	onSubmited: function(productUnit, message)
 	{
 		ProductUnitView.onProductUnitLoaded(productUnit);

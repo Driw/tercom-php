@@ -1,16 +1,16 @@
 
 $(document).ready(function()
 {
-        ProductTypeAdd.init();
+		ProductTypeAdd.init();
 });
 
 var ProductTypeAdd = ProductTypeAdd ||
 {
-    init: function()
-    {
-        this.form = $('#form-product-type-add');
+	init: function()
+	{
+		this.form = $('#form-product-type-add');
 		this.initForm();
-    },
+	},
 	initForm: function()
 	{
 		ws.productType_settings(this.form, this.onFormSettings);
@@ -38,10 +38,10 @@ var ProductTypeAdd = ProductTypeAdd ||
 			},
 		});
 	},
-    submit: function()
+	submit: function()
 	{
 		ws.productType_add(ProductTypeAdd.form, ProductTypeAdd.onSubmited);
-    },
+	},
 	onSubmited: function(manufacturer, message)
 	{
 		$('#row-message').show('slow');
