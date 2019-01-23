@@ -451,3 +451,74 @@ CREATE TABLE IF NOT EXISTS quoted_order_products
 	CONSTRAINT order_quotes_products_item_fk FOREIGN KEY (idOrderItemProduct) REFERENCES order_item_products(id),
 	CONSTRAINT order_quotes_products_price_fk FOREIGN KEY (idQuotedProductPrice) REFERENCES quoted_product_prices(id)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_general_ci;
+
+CREATE TABLE order_acceptances
+(
+	id INT NOT NULL AUTO_INCREMENT,
+	idOrderQuote INT NOT NULL,
+	idCustomerEmployee INT NOT NULL,
+	idTercomEmployee INT NOT NULL,
+	idAddress INT NOT NULL,
+	status INT NOT NULL DEFAULT 0,
+	observations TINYTEXT NULL DEFAULT NULL,
+	register DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+	CONSTRAINT order_acceptances_pk PRIMARY KEY (id),
+	CONSTRAINT order_acceptances_uk UNIQUE KEY (idOrderQuote),
+	CONSTRAINT order_acceptances_order_fk FOREIGN KEY (idOrderQuote) REFERENCES order_quotes(id),
+	CONSTRAINT order_acceptances_customer_fk FOREIGN KEY (idCustomerEmployee) REFERENCES customer_employees(id),
+	CONSTRAINT order_acceptances_tercom_fk FOREIGN KEY (idTercomEmployee) REFERENCES tercom_employees(id),
+	CONSTRAINT order_acceptances_address_fk FOREIGN KEY (idAddress) REFERENCES addresses(id)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_general_ci;
+
+CREATE TABLE order_acceptance_products
+(
+	id INT NOT NULL AUTO_INCREMENT,
+	idOrderAcceptance INT NOT NULL,
+	idQuotedProductPrice INT NOT NULL,
+	idProduct INT NOT NULL,
+	idProvider INT NOT NULL,
+	idManufacturer INT NULL DEFAULT NULL,
+	idProductPackage INT NOT NULL,
+	idProductType INT NULL DEFAULT NULL,
+	name VARCHAR(64) NULL DEFAULT NULL,
+	amount SMALLINT NOT NULL,
+	amountRequest SMALLINT NOT NULL,
+	price DECIMAL(10,2) NOT NULL,
+	subprice DECIMAL(10,2) NOT NULL,
+	observations TINYTEXT NULL DEFAULT NULL,
+	lastUpdate DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+	CONSTRAINT order_acceptance_products_pk PRIMARY KEY (id),
+	CONSTRAINT order_acceptance_products_uk UNIQUE KEY (idOrderAcceptance, idQuotedProductPrice),
+	CONSTRAINT order_acceptance_products_acceptance_fk FOREIGN KEY (idOrderAcceptance) REFERENCES order_acceptances(id) ON DELETE RESTRICT,
+	CONSTRAINT order_acceptance_products_quoted_fk FOREIGN KEY (idQuotedProductPrice) REFERENCES quoted_product_prices(id) ON DELETE RESTRICT,
+	CONSTRAINT order_acceptance_products_product_fk FOREIGN KEY (idProduct) REFERENCES products(id) ON DELETE RESTRICT,
+	CONSTRAINT order_acceptance_products_provider_fk FOREIGN KEY (idProvider) REFERENCES providers(id) ON DELETE CASCADE,
+	CONSTRAINT order_acceptance_products_manufacture_fk FOREIGN KEY (idManufacturer) REFERENCES manufacturers(id) ON DELETE RESTRICT,
+	CONSTRAINT order_acceptance_products_package_fk FOREIGN KEY (idProductPackage) REFERENCES product_packages(id) ON DELETE RESTRICT,
+	CONSTRAINT order_acceptance_products_type_fk FOREIGN KEY (idProductType) REFERENCES product_types(id) ON DELETE RESTRICT
+) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_general_ci;
+
+CREATE TABLE order_acceptance_services
+(
+	id INT NOT NULL AUTO_INCREMENT,
+	idOrderAcceptance INT NOT NULL,
+	idQuotedServicePrice INT NOT NULL,
+	idService INT NOT NULL,
+	idProvider INT NOT NULL,
+	name VARCHAR(64) NULL DEFAULT NULL,
+	additionalDescription VARCHAR(256) NULL DEFAULT NULL,
+	amountRequest SMALLINT NOT NULL,
+	price DECIMAL(10,2) NOT NULL,
+	subprice DECIMAL(10,2) NOT NULL,
+	observations TINYTEXT NULL DEFAULT NULL,
+	lastUpdate DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+	CONSTRAINT order_acceptance_services_pk PRIMARY KEY (id),
+	CONSTRAINT order_acceptance_services_uk UNIQUE KEY (idOrderAcceptance, idQuotedServicePrice),
+	CONSTRAINT order_acceptance_services_acceptance_fk FOREIGN KEY (idOrderAcceptance) REFERENCES order_acceptances(id) ON DELETE RESTRICT,
+	CONSTRAINT order_acceptance_services_quoted_fk FOREIGN KEY (idQuotedServicePrice) REFERENCES quoted_service_prices(id) ON DELETE RESTRICT,
+	CONSTRAINT order_acceptance_services_service_fk FOREIGN KEY (idService) REFERENCES services(id) ON DELETE RESTRICT,
+	CONSTRAINT order_acceptance_services_provider_fk FOREIGN KEY (idProvider) REFERENCES providers(id) ON DELETE CASCADE
+) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_general_ci;
