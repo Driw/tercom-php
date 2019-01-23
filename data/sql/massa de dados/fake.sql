@@ -6,8 +6,8 @@ REPLACE INTO customers (id, stateRegistry, cnpj, companyName, fantasyName, email
 
 -- Perfis de Cliente
 
-REPLACE INTO customer_profiles (id, name, assignmentLevel) VALUES
-(1, 'Administrador', 99);
+REPLACE INTO customer_profiles (id, idCustomer, name, assignmentLevel) VALUES
+(1, 1, 'Administrador', 99);
 
 -- Perfis TERCOM
 
@@ -202,6 +202,16 @@ REPLACE INTO products (id, name, description, utility, inactive, idProductUnit, 
 (78, 'Nome do Produto 78', 'Descrição do Produto 78', 'Utilidade do Produto 78', false, 6, 18),
 (79, 'Nome do Produto 79', 'Descrição do Produto 79', 'Utilidade do Produto 79', false, 7, 19),
 (80, 'Nome do Produto 80', 'Descrição do Produto 80', 'Utilidade do Produto 80', false, 8, 20);
+
+-- Fornecedores
+
+REPLACE INTO providers (id, cnpj, companyName, fantasyName, spokesman, site, commercial, otherphone, inactive) VALUES
+(1, '01630034000122', 'Mirella e Mariane Limpeza Ltda', 'Mirella e Mariane Limpeza', 'Diego Lucca Caldeira', 'http://www.mirellaemarianelimpezaltda.com.br', NULL, NULL, 0),
+(2, '39248771000138', 'Fornecedor de Eletrônicos Ltda', 'Fornecedor de Eletrônicos', NULL, NULL, NULL, NULL, 0),
+(3, '82567626000149', 'Fornecedor de Alimentos Ltda', 'Fornecedor de Alimentos', NULL, NULL, NULL, NULL, 0),
+(4, '04483419000100', 'Fornecedor de Cosméticos Ltda', 'Fornecedor de Cosméticos', NULL, NULL, NULL, NULL, 0),
+(5, '07608059000106', 'Fornecedor de Produtos Diversos Ltda', 'Fornecedor de Produtos Diversos', NULL, NULL, NULL, NULL, 0);
+
 
 -- Preços de Produto
 

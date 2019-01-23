@@ -84,7 +84,7 @@ CREATE TABLE IF NOT EXISTS product_category_relationships
 	idCategory INT NOT NULL,
 	idCategoryType INT NOT NULL,
 
-	CONSTRAINT product_category_relationships_pk PRIMARY KEY (idCategory, idCategory),
+	CONSTRAINT product_category_relationships_pk PRIMARY KEY (idCategoryParent, idCategory),
 	CONSTRAINT product_category_relationships_cat_fk FOREIGN KEY (idCategoryParent) REFERENCES product_categories(id),
 	CONSTRAINT product_category_relationships_rel_fk FOREIGN KEY (idCategory) REFERENCES product_categories(id),
 	CONSTRAINT product_category_relationships_type_fk FOREIGN KEY (idCategoryType) REFERENCES product_category_types(id)
@@ -175,6 +175,7 @@ CREATE TABLE IF NOT EXISTS service_prices
 	name VARCHAR(48) NULL DEFAULT NULL,
 	additionalDescription VARCHAR(256) NULL DEFAULT NULL,
 	price DECIMAL(10, 2) NOT NULL,
+	lastUpdate DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
 	CONSTRAINT service_prices_pk PRIMARY KEY (id),
 	CONSTRAINT service_prices_product_fk FOREIGN KEY (idService) REFERENCES services(id) ON DELETE RESTRICT,

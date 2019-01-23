@@ -36,9 +36,9 @@ return [
 	'MySQL'				=> [
 		'System'			=> [
 			'Host'				=> 'localhost',
-			'Username'			=> 'yiylkyhp_tercom',
+			'Username'			=> 'tercom_dev',
 			'Password'			=> 'HwBPbbBv3oFCTIon',
-			'Database'			=> 'yiylkyhp_tercom',
+			'Database'			=> 'tercom_dev',
 			'Charset'			=> 'utf8',
 		]
 	],

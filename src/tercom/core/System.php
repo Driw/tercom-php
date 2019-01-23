@@ -171,7 +171,7 @@ class System
 
 	private static function initConfigs()
 	{
-		self::$config = Config::parse(DIR_DATA. 'conf/system.php');
+		self::$config = Config::parse(DIR_DATA. format('conf/%s', DEV ? 'system.php' : 'system_prod.php'));
 	}
 
 	/**
