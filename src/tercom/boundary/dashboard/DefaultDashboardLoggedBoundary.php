@@ -24,11 +24,12 @@ abstract class DefaultDashboardLoggedBoundary extends DefaultDashboardBoundary
 
 	/**
 	 * @param ApiContent $content
+	 * @param bool $throws [optional]
 	 * @return int
 	 */
-	protected function getCustomerId(ApiContent $content): int
+	protected function getCustomerId(ApiContent $content, bool $throws = true): ?int
 	{
-		return $this->isLoginTercom() ? $content->getParameters()->getInt('idCustomer') : $this->getLoginCustomer()->getCustomerEmployee()->getCustomerProfile()->getCustomerId();
+		return $this->isLoginTercom() ? $content->getParameters()->getInt('idCustomer', $throws) : $this->getLoginCustomer()->getCustomerEmployee()->getCustomerProfile()->getCustomerId();
 	}
 }
 

@@ -117,10 +117,10 @@ class CustomerProfileService extends DefaultSiteService
 	{
 		$idCustomer = $content->getParameters()->getInt('idCustomer');
 		$customer = $this->getCustomerControl()->get($idCustomer);
-		$customerProfiles = $this->getCustomerProfileControl()->getByCustomer($customer, $this->getCurrentAssignmentLevel());
+		$customerProfiles = $this->getCustomerProfileControl()->getByCustomer($customer);
 
 		$result = new ApiResultObject();
-		$result->setResult($customerProfiles, 'encontrado %d perfis de cliente', $customerProfiles->size());
+		$result->setResult($customerProfiles, 'encontrado %d perfis no cliente "%s"', $customerProfiles->size(), $customer->getFantasyName());
 
 		return $result;
 	}

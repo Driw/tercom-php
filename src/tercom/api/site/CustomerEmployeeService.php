@@ -2,6 +2,7 @@
 
 namespace tercom\api\site;
 
+use dProject\Primitive\StringUtil;
 use dProject\restful\ApiContent;
 use tercom\api\exceptions\FilterException;
 use tercom\api\site\results\ApiResultCustomerEmployeeSettings;
@@ -41,7 +42,7 @@ class CustomerEmployeeService extends DefaultSiteService
 		$customerEmployee->setName($post->getString('name'));
 		$customerEmployee->setEmail($post->getString('email'));
 		$customerEmployee->setPassword($post->getString('password'), false);
-		$customerEmployee->setEnable($post->getBoolean('enable'));
+		$customerEmployee->setEnabled(!$post->isSetted('enabled') || $post->getBoolean('enable'));
 		$this->getCustomerEmployeeControl()->add($customerEmployee, $this->getCurrentAssignmentLevel());
 
 		$result = new ApiResultObject();
@@ -69,10 +70,10 @@ class CustomerEmployeeService extends DefaultSiteService
 
 		if ($post->isSetted('name')) $customerEmployee->setName($post->getString('name'));
 		if ($post->isSetted('email')) $customerEmployee->setEmail($post->getString('email'));
-		if ($post->isSetted('password')) $customerEmployee->setPassword($post->getString('password'), false);
 		if ($post->isSetted('phone')) $customerEmployee->setPhone($post->getInt('phone'));
 		if ($post->isSetted('cellphone')) $customerEmployee->setCellphone($post->getInstance('cellphone'));
-		if ($post->isSetted('enable')) $customerEmployee->setEnable($post->getBoolean('enable'));
+		if ($post->isSetted('enable')) $customerEmployee->setEnabled($post->getBoolean('enable'));
+		if ($post->isSetted('password') && !StringUtil::isEmpty($post->getString('password'))) $customerEmployee->setPassword($post->getString('password'), false);
 
 		$this->getCustomerEmployeeControl()->set($customerEmployee, $customerProfile, $this->getCurrentAssignmentLevel());
 
@@ -84,16 +85,16 @@ class CustomerEmployeeService extends DefaultSiteService
 
 	/**
 	 *
-	 * @ApiPermissionAnnotation({"method":"post","params":["idCustomerEmployee"]})
+	 * @ApiPermissionAnnotation({"method":"post","params":["idCustomerEmployee","enable"]})
 	 * @param ApiContent $content
 	 * @return ApiResultObject
 	 */
 	public function actionEnable(ApiContent $content): ApiResultObject
 	{
-		$post = $content->getPost();
-		$idCustomerEmployee = $content->getParameters('idCustomerEmployee');
+		$parameters = $content->getParameters();
+		$idCustomerEmployee = $parameters->getInt('idCustomerEmployee');
 		$customerEmployee = $this->getCustomerEmployeeControl()->get($idCustomerEmployee);
-		$customerEmployee->setEnable(($enable = $post->getBoolean('enable')));
+		$customerEmployee->setEnabled(($enable = $parameters->getBoolean('enable')));
 		$this->getCustomerEmployeeControl()->setEnabled($customerEmployee);
 		$enabled = $enable ? 'habilitado' : 'desabilitado';
 
@@ -200,7 +201,7 @@ class CustomerEmployeeService extends DefaultSiteService
 	{
 		$parameters = $content->getParameters();
 		$email = $parameters->getString('value');
-		$idCustomerEmployee = $this->parseNullToInt($parameters->getInt('idCustomerEmployee'));
+		$idCustomerEmployee = $this->parseNullToInt($parameters->getInt('idCustomerEmployee', false));
 		$avaiable = $this->getCustomerEmployeeControl()->avaiableEmail($email, $idCustomerEmployee);
 
 		$result = new ApiResultSimpleValidation();

@@ -131,7 +131,7 @@ class CustomerProfileControl extends GenericControl
 	 * @param Customer $customer
 	 * @return CustomerProfiles
 	 */
-	public function getByCustomer(Customer $customer, int $assignmentLevel): CustomerProfiles
+	public function getByCustomer(Customer $customer): CustomerProfiles
 	{
 		if (!$this->isTercomManagement())
 			throw TercomException::newPermissionRestrict();

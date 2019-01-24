@@ -20,6 +20,14 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+23.01.2018 - 0.3.5.216
+- Corrigido nome de atributo de CustomerEmployee 'enable' para 'enabled' conforme tabela do banco de dados.
+- Excluído parâmetro 'assignmentLevel' de getByCustomer() em CustomerProfileControl, não há necessidade.
+- Modificações para  CustomerEmployeeService:
+	- actionEnable() para que seja considerado parâmetro REST ao invés de parâmetro POST,.
+	- actionAdd() agora considera 'enabled' como padrão 'true' se não for informado.
+	- actionSet() a senha será trocada apenas se for informada e não for em branco.
+
 23.01.2018 - 0.3.5.215
 - Adicionado configurações para ignorar os atributos HTML 'integrity' e 'crossorigin'.
 

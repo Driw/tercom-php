@@ -76,7 +76,7 @@ class CustomerEmployee extends AdvancedObject
 	/**
 	 * @var bool
 	 */
-	private $enable;
+	private $enabled;
 	/**
 	 * @var \DateTime
 	 */
@@ -256,17 +256,17 @@ class CustomerEmployee extends AdvancedObject
 	/**
 	 * @return bool funcionário habilitado para uso do sistema.
 	 */
-	public function isEnable(): bool
+	public function isEnabled(): bool
 	{
-		return $this->enable;
+		return $this->enabled;
 	}
 
 	/**
 	 * @param bool $enable funcionário habilitado para uso do sistema.
 	 */
-	public function setEnable(bool $enable)
+	public function setEnabled(bool $enabled)
 	{
-		$this->enable = $enable;
+		$this->enabled = $enabled;
 	}
 
 	/**
@@ -298,7 +298,7 @@ class CustomerEmployee extends AdvancedObject
 			'password' => ObjectUtil::TYPE_STRING,
 			'phone' => Phone::class,
 			'cellphone' => Phone::class,
-			'enable' => ObjectUtil::TYPE_BOOLEAN,
+			'enabled' => ObjectUtil::TYPE_BOOLEAN,
 			'register' => ObjectUtil::TYPE_DATE,
 		];
 	}

@@ -91,7 +91,7 @@ class CustomerEmployeeDAO extends GenericDAO
 		$query->setString(4, $customerEmplyee->getPassword());
 		$query->setInteger(5, $this->parseNullID($customerEmplyee->getPhone()->getId()));
 		$query->setInteger(6, $this->parseNullID($customerEmplyee->getCellphone()->getId()));
-		$query->setBoolean(7, $customerEmplyee->isEnable());
+		$query->setBoolean(7, $customerEmplyee->isEnabled());
 
 		if (($result = $query->execute())->isSuccessful())
 			$customerEmplyee->setId($result->getInsertID());
@@ -119,7 +119,7 @@ class CustomerEmployeeDAO extends GenericDAO
 		$query->setString(4, $customerEmplyee->getPassword());
 		$query->setInteger(5, $this->parseNullID($customerEmplyee->getPhone()->getId()));
 		$query->setInteger(6, $this->parseNullID($customerEmplyee->getCellphone()->getId()));
-		$query->setBoolean(7, $customerEmplyee->isEnable());
+		$query->setBoolean(7, $customerEmplyee->isEnabled());
 		$query->setInteger(8, $customerEmplyee->getId());
 
 		return ($query->execute())->isSuccessful();
@@ -137,7 +137,7 @@ class CustomerEmployeeDAO extends GenericDAO
 				WHERE id = ?";
 
 		$query = $this->createQuery($sql);
-		$query->setBoolean(1, $customerEmplyee->isEnable());
+		$query->setBoolean(1, $customerEmplyee->isEnabled());
 		$query->setInteger(2, $customerEmplyee->getId());
 
 		return ($query->execute())->isSuccessful();

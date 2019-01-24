@@ -833,7 +833,8 @@ Webservice.prototype.customerProfile_set = function(idCustomerProfile, form, lis
 		'errorMessage': this.newBaseErrorMessage('atualizar perfil de cliente'),
 	});
 };
-Webservice.prototype.customerProfile_remove = function(idCustomerProfile, target, listener) {
+Webservice.prototype.customerProfile_remove = function(idCustomerProfile, target, listener)
+{
 	this.setOptionsAndExecute({
 		'webservice': 'customerProfile/remove/{0}'.format(idCustomerProfile),
 		'target': target,
@@ -841,7 +842,8 @@ Webservice.prototype.customerProfile_remove = function(idCustomerProfile, target
 		'errorMessage': this.newBaseErrorMessage('excluir perfil de cliente'),
 	});
 };
-Webservice.prototype.customerProfile_get = function(idCustomerProfile, target, listener) {
+Webservice.prototype.customerProfile_get = function(idCustomerProfile, target, listener)
+{
 	this.setOptionsAndExecute({
 		'webservice': 'customerProfile/get/{0}'.format(idCustomerProfile),
 		'target': target,
@@ -849,7 +851,8 @@ Webservice.prototype.customerProfile_get = function(idCustomerProfile, target, l
 		'errorMessage': this.newBaseErrorMessage('obter perfil de cliente'),
 	});
 };
-Webservice.prototype.customerProfile_getByCustomer = function(idCustomer, target, listener) {
+Webservice.prototype.customerProfile_getByCustomer = function(idCustomer, target, listener)
+{
 	this.setOptionsAndExecute({
 		'webservice': 'customerProfile/customer/{0}'.format(idCustomer),
 		'target': target,
@@ -857,12 +860,72 @@ Webservice.prototype.customerProfile_getByCustomer = function(idCustomer, target
 		'errorMessage': this.newBaseErrorMessage('obter perfil de cliente'),
 	});
 };
-Webservice.prototype.customerProfile_getAll = function(idCustomer, target, listener) {
+Webservice.prototype.customerProfile_getAll = function(idCustomer, target, listener)
+{
 	this.setOptionsAndExecute({
 		'webservice': 'customerProfile/getAll/{0}'.format(idCustomer),
 		'target': target,
 		'listener': listener,
 		'errorMessage': this.newBaseErrorMessage('obter todos perfis de cliente'),
+	});
+};
+
+// - CustomerEmployee
+
+Webservice.prototype.customerEmployee_settings = function(target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'customerEmployee/settings',
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter configurações de funcionário de cliente'),
+	});
+};
+Webservice.prototype.customerEmployee_add = function(form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'customerEmployee/add',
+		'form': form,
+		'target': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('adicionar funcionário de cliente'),
+	});
+};
+Webservice.prototype.customerEmployee_set = function(idCustomerEmployee, form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'customerEmployee/set/{0}'.format(idCustomerEmployee),
+		'form': form,
+		'target': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('atualizar funcionário de cliente'),
+	});
+};
+Webservice.prototype.customerEmployee_enabled = function(idCustomerEmployee, enable, target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'customerEmployee/enable/{0}/{1}'.format(idCustomerEmployee, enable),
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('{0} funcionário de cliente'.format(enable ? 'ativar' : 'desativar')),
+	});
+};
+Webservice.prototype.customerEmployee_getAll = function(target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'customerEmployee/getAll',
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter todos funcionários de cliente'),
+	});
+};
+Webservice.prototype.customerEmployee_get = function(idCustomerEmployee, target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'customerEmployee/get/{0}'.format(idCustomerEmployee),
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter funcionário de cliente'),
 	});
 };
 

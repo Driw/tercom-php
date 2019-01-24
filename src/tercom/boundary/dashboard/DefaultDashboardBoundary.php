@@ -7,6 +7,7 @@ use dProject\restful\template\ApiTemplate;
 use tercom\SessionVar;
 use tercom\control\LoginCustomerControl;
 use tercom\control\LoginTercomControl;
+use tercom\entities\Customer;
 use tercom\entities\LoginCustomer;
 use tercom\entities\LoginTercom;
 use tercom\TercomException;
@@ -247,6 +248,14 @@ abstract class DefaultDashboardBoundary extends ApiTemplate
 	public function isLoginTercom(): bool
 	{
 		return self::$loginTercom !== null;
+	}
+
+	/**
+	 * @return Customer
+	 */
+	public function getCustomerLogged(): Customer
+	{
+		return $this->getLoginCustomer()->getCustomerEmployee()->getCustomerProfile()->getCustomer();
 	}
 
 	/**
