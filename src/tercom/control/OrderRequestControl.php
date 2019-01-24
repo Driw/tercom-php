@@ -62,9 +62,9 @@ class OrderRequestControl extends GenericControl
 		if ($this->isTercomManagement())
 			throw TercomException::newPermissionRestrict();
 
-		$customerEmployee = $this->getCustomerLogged();
+		$customer = $this->getCustomerLogged();
 
-		if ($customerEmployee->getId() !== $orderRequest->getCustomerEmployeeId())
+		if ($customer->getId() !== $orderRequest->getCustomerEmployeeId())
 			throw OrderRequestException::newCustomerEmployeeError();
 
 		$orderRequest->setCustomerEmployee($customerEmployee);

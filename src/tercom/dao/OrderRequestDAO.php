@@ -45,7 +45,7 @@ class OrderRequestDAO extends GenericDAO
 		$this->validate($orderRequest, false);
 		$orderRequest->setRegisterCurrent();
 
-		$sql = 'INSERT INTO order_requests (idCustomerEmployee, idTercomEmployee, status, budget, expiration, register)
+		$sql = 'INSERT INTO order_requests (idCustomerEmployee, idTercomEmployee, budget, status, expiration, register)
 				VALUES (?, ?, ?, ?, ?, ?)';
 
 		$query = $this->createQuery($sql);
