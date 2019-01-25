@@ -153,5 +153,34 @@
 				{ "Name": "Adicionar", "Icon": "fas fa-plus", "Url": "customerEmployee/add", "PermissionPacket": "customer", "PermissionAction": "add" }
 			]
 		}
+	},
+	{
+		"Dropdown": {
+			"service": "tercomProfile",
+			"Name": "Perfis TERCOM",
+			"Icon": "fas fa-hashtag",
+			"ID": "dropdown-tercom-profile",
+			"PermissionPacket": "tercomProfile",
+			"Class": "",
+			"Itens": [
+				{ "Name": "Listar", "Icon": "fas fa-list-ul", "Url": "tercomProfile/list", "PermissionPacket": "tercomProfile", "PermissionAction": "getAll" },
+				{ "Name": "Adicionar", "Icon": "fas fa-plus", "Url": "tercomProfile/add", "PermissionPacket": "tercomProfile", "PermissionAction": "add" }
+			]
+		}
+	},
+	{
+		"Dropdown": {
+			"service": "tercomEmployee",
+			"Name": "Funcionários TERCOM",
+			"Icon": "fas fa-hashtag",
+			"ID": "dropdown-tercom-employee",
+			"PermissionPacket": "tercomEmployee",
+			"Class": "",
+			"Itens": [
+				{ "Name": "Listar", "Icon": "fas fa-list-ul", "Url": "tercomEmployee/list", "PermissionPacket": "tercomEmployee", "PermissionAction": "getAll" },
+				{ "Name": "Por Perfil", "Icon": "fas fa-list-ul", "Url": "tercomEmployee/listByProfile", "PermissionPacket": "tercomEmployee", "PermissionAction": "getByProfile" },
+				{ "Name": "Adicionar", "Icon": "fas fa-plus", "Url": "tercomEmployee/add", "PermissionPacket": "tercomEmployee", "PermissionAction": "add" }
+			]
+		}
 	}
 ]

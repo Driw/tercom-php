@@ -929,4 +929,63 @@ Webservice.prototype.customerEmployee_get = function(idCustomerEmployee, target,
 	});
 };
 
+// - TercomProfile
+
+Webservice.prototype.tercomProfile_settings = function(target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'tercomProfile/settings',
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter configurações de perfil de tercom'),
+	});
+};
+Webservice.prototype.tercomProfile_add = function(form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'tercomProfile/add',
+		'form': form,
+		'target': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('adicionar perfil de tercom'),
+	});
+};
+Webservice.prototype.tercomProfile_set = function(idTercomProfile, form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'tercomProfile/set/{0}'.format(idTercomProfile),
+		'form': form,
+		'target': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('atualizar perfil de tercom'),
+	});
+};
+Webservice.prototype.tercomProfile_remove = function(idTercomProfile, target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'tercomProfile/remove/{0}'.format(idTercomProfile),
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('excluir perfil de tercom'),
+	});
+};
+
+Webservice.prototype.tercomProfile_get = function(idTercomProfile, target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'tercomProfile/get/{0}'.format(idTercomProfile),
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter perfil de tercom'),
+	});
+};
+Webservice.prototype.tercomProfile_getAll = function(target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'tercomProfile/getAll',
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter todos perfis de tercom'),
+	});
+};
 const ws = new Webservice();

@@ -140,23 +140,6 @@ class TercomEmployeeService extends DefaultSiteService
 
 	/**
 	 *
-	 * @ApiPermissionAnnotation({"params":["assignmentLevel"]})
-	 * @param ApiContent $content
-	 * @return ApiResultObject
-	 */
-	public function actionGetByAssignmentLevel(ApiContent $content): ApiResultObject
-	{
-		$assignmentLevel = $content->getParameters()->getInt('assignmentLevel');
-		$tercomEmployees = $this->getTercomEmployeeControl()->getByAssignmentLevel($assignmentLevel);
-
-		$result = new ApiResultObject();
-		$result->setResult($tercomEmployees, 'encontrado %d funcionários da TERCOM por nível de permissão', $tercomEmployees->size());
-
-		return $result;
-	}
-
-	/**
-	 *
 	 * @ApiPermissionAnnotation({"params":["idTercomProfile"]})
 	 * @param ApiContent $content
 	 * @return ApiResultObject
