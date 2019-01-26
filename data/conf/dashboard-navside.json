@@ -149,7 +149,6 @@
 			"Class": "",
 			"Itens": [
 				{ "Name": "Listar", "Icon": "fas fa-list-ul", "Url": "customerEmployee/list", "PermissionPacket": "customer", "PermissionAction": "getAll" },
-				{ "Name": "Por Perfil", "Icon": "fas fa-list-ul", "Url": "customerEmployee/listByProfile", "PermissionPacket": "customer", "PermissionAction": "getByProfile" },
 				{ "Name": "Adicionar", "Icon": "fas fa-plus", "Url": "customerEmployee/add", "PermissionPacket": "customer", "PermissionAction": "add" }
 			]
 		}
@@ -178,7 +177,6 @@
 			"Class": "",
 			"Itens": [
 				{ "Name": "Listar", "Icon": "fas fa-list-ul", "Url": "tercomEmployee/list", "PermissionPacket": "tercomEmployee", "PermissionAction": "getAll" },
-				{ "Name": "Por Perfil", "Icon": "fas fa-list-ul", "Url": "tercomEmployee/listByProfile", "PermissionPacket": "tercomEmployee", "PermissionAction": "getByProfile" },
 				{ "Name": "Adicionar", "Icon": "fas fa-plus", "Url": "tercomEmployee/add", "PermissionPacket": "tercomEmployee", "PermissionAction": "add" }
 			]
 		}

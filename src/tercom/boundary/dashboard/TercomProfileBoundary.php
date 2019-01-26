@@ -53,7 +53,6 @@ class TercomProfileBoundary extends DefaultDashboardLoggedBoundary
 	}
 
 	/**
-	 * @ApiAnnotation({"params"["idTercom"]})
 	 * @param ApiContent $content
 	 * @return ApiTemplateResult
 	 */

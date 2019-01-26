@@ -20,6 +20,15 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+25.01.2018 - 0.3.5.219
+- Adicionado páginas para adicionar funcionário TERCOM, atualizar funcionário TERCOM e listar funcionários TERCOM.
+- Corrigido link de redirecionamento da lista de perfis para listar funcionários TERCOM por perfil.
+- Corrigido atributo 'enable' para 'enabled' conforme a estrutura do banco de dados, TercomEmployee.
+- Corrigido retorno 'bool' e esperado 'void' com set() em TercomEmployeeControl.
+- Ajustes para  TercomEmployeeService:
+	- actionSet() para que considere senha somente se for informada e não for em branco.
+	- actionEnable() agora não considera 'enable' em POST mas sim 'enabled' em REST.
+
 24.01.2018 - 0.3.5.218
 - Adicionado páginas para adicionar perfil TERCOM, atualizar perfil TERCOM, excluir perfil TERCOM e listar perfis TERCOM.
 

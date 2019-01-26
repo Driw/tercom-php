@@ -2,6 +2,7 @@
 
 namespace tercom\api\site;
 
+use dProject\Primitive\StringUtil;
 use dProject\restful\ApiContent;
 use tercom\api\exceptions\FilterException;
 use tercom\api\site\results\ApiResultObject;
@@ -42,7 +43,7 @@ class TercomEmployeeService extends DefaultSiteService
 		$tercomEmployee->setName($post->getString('name'));
 		$tercomEmployee->setEmail($post->getString('email'));
 		$tercomEmployee->setPassword($post->getString('password'), false);
-		$tercomEmployee->setEnable($post->getBoolean('enable'));
+		$tercomEmployee->setEnabled(!$post->isSetted('enabled') || $post->getBoolean('enabled'));
 		$this->getTercomEmployeeControl()->add($tercomEmployee);
 
 		$result = new ApiResultObject();
@@ -71,10 +72,10 @@ class TercomEmployeeService extends DefaultSiteService
 		if ($post->isSetted('cpf')) $tercomEmployee->setName($post->getString('cpf'));
 		if ($post->isSetted('name')) $tercomEmployee->setName($post->getString('name'));
 		if ($post->isSetted('email')) $tercomEmployee->setEmail($post->getString('email'));
-		if ($post->isSetted('password')) $tercomEmployee->setPassword($post->getString('password'), false);
 		if ($post->isSetted('phone')) $tercomEmployee->setPhone($post->getInt('phone'));
 		if ($post->isSetted('cellphone')) $tercomEmployee->setCellphone($post->getInstance('cellphone'));
-		if ($post->isSetted('enable')) $tercomEmployee->setEnable($post->getBoolean('enable'));
+		if ($post->isSetted('enabled')) $tercomEmployee->setEnabled($post->getBoolean('enable'));
+		if ($post->isSetted('password') && !StringUtil::isEmpty($post->getString('password'))) $tercomEmployee->setPassword($post->getString('password'), false);
 
 		$this->getTercomEmployeeControl()->set($tercomEmployee, $tercomProfile);
 
@@ -86,16 +87,16 @@ class TercomEmployeeService extends DefaultSiteService
 
 	/**
 	 *
-	 * @ApiPermissionAnnotation({"method":"post","params":["idTercomEmployee"]})
+	 * @ApiPermissionAnnotation({"method":"post","params":["idTercomEmployee","enabled"]})
 	 * @param ApiContent $content
 	 * @return ApiResultObject
 	 */
 	public function actionEnable(ApiContent $content): ApiResultObject
 	{
-		$post = $content->getPost();
-		$idTercomEmployee = $content->getParameters('idTercomEmployee');
+		$parameters = $content->getParameters();
+		$idTercomEmployee = $parameters->getInt('idTercomEmployee');
 		$tercomEmployee = $this->getTercomEmployeeControl()->get($idTercomEmployee);
-		$tercomEmployee->setEnable(($enable = $post->getBoolean('enable')));
+		$tercomEmployee->setEnabled(($enable = $parameters->getBoolean('enabled')));
 		$this->getTercomEmployeeControl()->setEnabled($tercomEmployee);
 		$enabled = $enable ? 'habilitado' : 'desabilitado';
 
@@ -185,7 +186,7 @@ class TercomEmployeeService extends DefaultSiteService
 	{
 		$parameters = $content->getParameters();
 		$cpf = $parameters->getString('value');
-		$idTercomEmployee = $this->parseNullToInt($parameters->getInt('idTercomEmployee'));
+		$idTercomEmployee = $this->parseNullToInt($parameters->getInt('idTercomEmployee', false));
 		$avaiable = $this->getTercomEmployeeControl()->avaiableCpf($cpf, $idTercomEmployee);
 
 		$result = new ApiResultSimpleValidation();
@@ -203,7 +204,7 @@ class TercomEmployeeService extends DefaultSiteService
 	{
 		$parameters = $content->getParameters();
 		$email = $parameters->getString('value');
-		$idTercomEmployee = $this->parseNullToInt($parameters->getInt('idTercomEmployee'));
+		$idTercomEmployee = $this->parseNullToInt($parameters->getInt('idTercomEmployee', false));
 		$avaiable = $this->getTercomEmployeeControl()->avaiableEmail($email, $idTercomEmployee);
 
 		$result = new ApiResultSimpleValidation();

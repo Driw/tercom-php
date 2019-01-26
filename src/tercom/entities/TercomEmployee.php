@@ -76,7 +76,7 @@ class TercomEmployee extends AdvancedObject
 	/**
 	 * @var bool funcionário habilitado para uso do sistema.
 	 */
-	private $enable;
+	private $enabled;
 	/**
 	 * @var \DateTime horário de registro do funcionário.
 	 */
@@ -93,7 +93,7 @@ class TercomEmployee extends AdvancedObject
 		$this->email = '';
 		$this->password = '';
 		$this->register = new \DateTime();
-		$this->enable = false;
+		$this->enabled = false;
 	}
 
 	/**
@@ -260,17 +260,17 @@ class TercomEmployee extends AdvancedObject
 	/**
 	 * @return bool funcionário habilitado para uso do sistema.
 	 */
-	public function isEnable(): bool
+	public function isEnabled(): bool
 	{
-		return $this->enable;
+		return $this->enabled;
 	}
 
 	/**
 	 * @param bool $enable funcionário habilitado para uso do sistema.
 	 */
-	public function setEnable(bool $enable): void
+	public function setEnabled(bool $enabled): void
 	{
-		$this->enable = $enable;
+		$this->enabled = $enabled;
 	}
 
 	/**
@@ -303,7 +303,7 @@ class TercomEmployee extends AdvancedObject
 			'password' => ObjectUtil::TYPE_STRING,
 			'phone' => Phone::class,
 			'cellphone' => Phone::class,
-			'enable' => ObjectUtil::TYPE_BOOLEAN,
+			'enabled' => ObjectUtil::TYPE_BOOLEAN,
 			'register' => ObjectUtil::TYPE_DATE,
 		];
 	}

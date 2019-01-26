@@ -60,7 +60,7 @@ var CustomerEmployeeView = CustomerEmployeeView ||
 			},
 			'messages': {
 				'repassword': {
-					'equalTo': 'As senhas nÃ£o conferem',
+					'equalTo': 'As senhas não conferem',
 				},
 			},
 			submitHandler: function(form) {

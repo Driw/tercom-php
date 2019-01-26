@@ -64,7 +64,7 @@ class TercomEmployeeDAO extends GenericDAO
 		$query->setString(5, $tercomEmplyee->getPassword());
 		$query->setInteger(6, $this->parseNullID($tercomEmplyee->getPhone()->getId()));
 		$query->setInteger(7, $this->parseNullID($tercomEmplyee->getCellphone()->getId()));
-		$query->setBoolean(8, $tercomEmplyee->isEnable());
+		$query->setBoolean(8, $tercomEmplyee->isEnabled());
 
 		if (($result = $query->execute())->isSuccessful())
 			$tercomEmplyee->setId($result->getInsertID());
@@ -93,7 +93,7 @@ class TercomEmployeeDAO extends GenericDAO
 		$query->setString(5, $tercomEmplyee->getPassword());
 		$query->setInteger(6, $this->parseNullID($tercomEmplyee->getPhone()->getId()));
 		$query->setInteger(7, $this->parseNullID($tercomEmplyee->getCellphone()->getId()));
-		$query->setBoolean(8, $tercomEmplyee->isEnable());
+		$query->setBoolean(8, $tercomEmplyee->isEnabled());
 		$query->setInteger(9, $tercomEmplyee->getId());
 
 		return ($query->execute())->isSuccessful();
@@ -111,7 +111,7 @@ class TercomEmployeeDAO extends GenericDAO
 				WHERE id = ?";
 
 		$query = $this->createQuery($sql);
-		$query->setBoolean(1, $tercomEmplyee->isEnable());
+		$query->setBoolean(1, $tercomEmplyee->isEnabled());
 		$query->setInteger(2, $tercomEmplyee->getId());
 
 		return ($query->execute())->isSuccessful();

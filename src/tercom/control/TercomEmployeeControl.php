@@ -71,7 +71,7 @@ class TercomEmployeeControl extends GenericControl
 	 * @param TercomEmployee $tercomEmployee
 	 * @throws ControlException
 	 */
-	public function setEnabled(TercomEmployee $tercomEmployee): bool
+	public function setEnabled(TercomEmployee $tercomEmployee): void
 	{
 		if (!$this->tercomEmployeeDAO->updateEnabled($tercomEmployee))
 			throw new ControlException('não foi possível atualizar o funcionário');

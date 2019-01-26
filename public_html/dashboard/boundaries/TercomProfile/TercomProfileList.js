@@ -52,7 +52,7 @@ var TercomProfileList = TercomProfileList ||
 		var tercomProfile = TercomProfileList.tercomProfiles[index];
 
 		if (tercomProfile !== undefined)
-			Util.redirect('tercomEmployees/listByProfile/{0}'.format(tercomProfile.id), true);
+			Util.redirect('tercomEmployee/listByProfile/{0}'.format(tercomProfile.id), true);
 	},
 	onButtonRemove: function(index)
 	{

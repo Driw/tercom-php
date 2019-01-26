@@ -988,4 +988,72 @@ Webservice.prototype.tercomProfile_getAll = function(target, listener)
 		'errorMessage': this.newBaseErrorMessage('obter todos perfis de tercom'),
 	});
 };
+
+// - Tercom Employee
+
+Webservice.prototype.tercomEmployee_settings = function(target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'tercomEmployee/settings',
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter configurações de funcionário TERCOM'),
+	});
+};
+Webservice.prototype.tercomEmployee_add = function(form, listener) {
+	this.setOptionsAndExecute({
+		'webservice': 'tercomEmployee/add',
+		'form': form,
+		'target': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('adicionar funcionário TERCOM'),
+	});
+};
+Webservice.prototype.tercomEmployee_set = function(idTercomEmployee, form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'tercomEmployee/set/{0}'.format(idTercomEmployee),
+		'form': form,
+		'target': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('atualizar funcionário TERCOM'),
+	});
+};
+Webservice.prototype.tercomEmployee_enable = function(idTercomEmployee, enable, target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'tercomEmployee/enable/{0}/{1}'.format(idTercomEmployee, enable),
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage(' funcionário TERCOM'),
+	});
+};
+Webservice.prototype.tercomEmployee_get = function(idTercomEmployee, target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'tercomEmployee/get/{0}'.format(idTercomEmployee),
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter funcionário TERCOM'),
+	});
+};
+Webservice.prototype.tercomEmployee_getByProfile = function(idTercomProfile, target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'tercomEmployee/getByProfile/{0}'.format(idTercomProfile),
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter funcionários TERCOM por perfil'),
+	});
+};
+Webservice.prototype.tercomEmployee_getAll = function(target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'tercomEmployee/getAll',
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter todos funcionários TERCOM'),
+	});
+};
+
 const ws = new Webservice();
