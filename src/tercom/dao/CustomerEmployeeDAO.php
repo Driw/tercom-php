@@ -2,13 +2,12 @@
 
 namespace tercom\dao;
 
+use dProject\MySQL\Result;
+use dProject\Primitive\StringUtil;
+use tercom\entities\Customer;
 use tercom\entities\CustomerEmployee;
 use tercom\entities\CustomerProfile;
 use tercom\entities\lists\CustomerEmployees;
-use dProject\MySQL\Result;
-use tercom\Functions;
-use dProject\Primitive\StringUtil;
-use tercom\entities\Customer;
 use tercom\dao\exceptions\DAOException;
 
 /**
@@ -89,8 +88,8 @@ class CustomerEmployeeDAO extends GenericDAO
 		$query->setString(2, $customerEmplyee->getName());
 		$query->setString(3, $customerEmplyee->getEmail());
 		$query->setString(4, $customerEmplyee->getPassword());
-		$query->setInteger(5, $this->parseNullID($customerEmplyee->getPhone()->getId()));
-		$query->setInteger(6, $this->parseNullID($customerEmplyee->getCellphone()->getId()));
+		$query->setInteger(5, $this->parseNullID($customerEmplyee->getPhoneId()));
+		$query->setInteger(6, $this->parseNullID($customerEmplyee->getCellphoneId()));
 		$query->setBoolean(7, $customerEmplyee->isEnabled());
 
 		if (($result = $query->execute())->isSuccessful())
@@ -117,10 +116,31 @@ class CustomerEmployeeDAO extends GenericDAO
 		$query->setString(2, $customerEmplyee->getName());
 		$query->setString(3, $customerEmplyee->getEmail());
 		$query->setString(4, $customerEmplyee->getPassword());
-		$query->setInteger(5, $this->parseNullID($customerEmplyee->getPhone()->getId()));
-		$query->setInteger(6, $this->parseNullID($customerEmplyee->getCellphone()->getId()));
+		$query->setInteger(5, $this->parseNullID($customerEmplyee->getPhoneId()));
+		$query->setInteger(6, $this->parseNullID($customerEmplyee->getCellphoneId()));
 		$query->setBoolean(7, $customerEmplyee->isEnabled());
 		$query->setInteger(8, $customerEmplyee->getId());
+
+		return ($query->execute())->isSuccessful();
+	}
+
+	/**
+	 * Atualiza os dados de telefone de um funcionário de cliente já existente no banco de dados.
+	 * @param CustomerEmployee $customerEmplyee objeto do tipo funcionário de cliente à atualizar.
+	 * @return bool true se for atualizado ou false caso contrário.
+	 */
+	public function updatePhones(CustomerEmployee $customerEmplyee): bool
+	{
+		$this->validate($customerEmplyee, true);
+
+		$sql = "UPDATE customer_employees
+				SET idPhone = ?, idCellPhone = ?
+				WHERE id = ?";
+
+		$query = $this->createQuery($sql);
+		$query->setInteger(1, $this->parseNullID($customerEmplyee->getPhoneId()));
+		$query->setInteger(2, $this->parseNullID($customerEmplyee->getCellphoneId()));
+		$query->setInteger(3, $customerEmplyee->getId());
 
 		return ($query->execute())->isSuccessful();
 	}
@@ -147,7 +167,7 @@ class CustomerEmployeeDAO extends GenericDAO
 	 * Procedimento interno para centralizar e agilizar a manutenção de queries.
 	 * @return string aquisição da string de consulta simples para SELECT.
 	 */
-	private function newSelectProfile(): string
+	private function newSelect(): string
 	{
 		$customerEmployeeColumns = $this->buildQuery(self::ALL_COLUMNS, 'customer_employees');
 		$customerProfileColumns = $this->buildQuery(CustomerProfileDAO::ALL_COLUMNS, 'customer_profiles', 'customerProfile');
@@ -155,6 +175,24 @@ class CustomerEmployeeDAO extends GenericDAO
 		return "SELECT $customerEmployeeColumns, $customerProfileColumns
 				FROM customer_employees
 				INNER JOIN customer_profiles ON customer_profiles.id = customer_employees.idCustomerProfile";
+	}
+
+	/**
+	 * Procedimento interno para centralizar e agilizar a manutenção de queries.
+	 * @return string aquisição da string de consulta completa para SELECT.
+	 */
+	private function newSelectProfile(): string
+	{
+		$customerEmployeeColumns = $this->buildQuery(self::ALL_COLUMNS, 'customer_employees');
+		$customerProfileColumns = $this->buildQuery(CustomerProfileDAO::ALL_COLUMNS, 'customer_profiles', 'customerProfile');
+		$cellPhoneColumns = $this->buildQuery(PhoneDAO::ALL_COLUMNS, 'cellphone', 'cellphone');
+		$phoneColumns = $this->buildQuery(PhoneDAO::ALL_COLUMNS, 'phone', 'phone');
+
+		return "SELECT $customerEmployeeColumns, $customerProfileColumns, $cellPhoneColumns, $phoneColumns
+				FROM customer_employees
+				INNER JOIN customer_profiles ON customer_profiles.id = customer_employees.idCustomerProfile
+				LEFT JOIN phones phone ON phone.id = customer_employees.idPhone
+				LEFT JOIN phones cellphone ON cellphone.id = customer_employees.idCellPhone";
 	}
 
 	/**
@@ -202,7 +240,7 @@ class CustomerEmployeeDAO extends GenericDAO
 	 */
 	public function selectAll(): CustomerEmployees
 	{
-		$sqlSelectProfile = $this->newSelectProfile();
+		$sqlSelectProfile = $this->newSelect();
 		$sql = "$sqlSelectProfile
 				ORDER BY customer_employees.name";
 
@@ -219,7 +257,7 @@ class CustomerEmployeeDAO extends GenericDAO
 	 */
 	public function selectByProfile(CustomerProfile $customerProfile): CustomerEmployees
 	{
-		$sqlSelectProfile = $this->newSelectProfile();
+		$sqlSelectProfile = $this->newSelect();
 		$sql = "$sqlSelectProfile
 				WHERE customer_profiles.id = ?
 				ORDER BY customer_employees.name";
@@ -239,7 +277,7 @@ class CustomerEmployeeDAO extends GenericDAO
 	 */
 	public function selectByCustomer(Customer $customer): CustomerEmployees
 	{
-		$sqlSelectProfile = $this->newSelectProfile();
+		$sqlSelectProfile = $this->newSelect();
 		$sql = "$sqlSelectProfile
 				INNER JOIN customers ON customers.id = customer_profiles.idCustomer
 				WHERE customers.id = ?
@@ -308,12 +346,10 @@ class CustomerEmployeeDAO extends GenericDAO
 	 */
 	private function newCustomerEmployee(array $entry): CustomerEmployee
 	{
-		$customerProfile = Functions::parseEntrySQL($entry, 'customerProfile');
-		$customerProfile['customer']['id'] = $customerProfile['idCustomer']; unset($customerProfile['idCustomer']);
+		$this->parseEntry($entry, 'customerProfile', 'phone', 'cellphone');
 
 		$customerEmployee = new CustomerEmployee();
 		$customerEmployee->fromArray($entry);
-		$customerEmployee->getCustomerProfile()->fromArray($customerProfile);
 
 		return $customerEmployee;
 	}

@@ -34,6 +34,10 @@ class ApiResultCustomerEmployeeSettings extends AdvancedObject implements ApiRes
 	 * @var int
 	 */
 	private $maxPasswordLen;
+	/**
+	 * @var ApiResultPhoneSettings
+	 */
+	private $phoneSettings;
 
 	/**
 	 *
@@ -45,6 +49,7 @@ class ApiResultCustomerEmployeeSettings extends AdvancedObject implements ApiRes
 		$this->maxEmailLen = CustomerEmployee::MAX_EMAIL_LEN;
 		$this->minPasswordLen = CustomerEmployee::MIN_PASSWORD_LEN;
 		$this->maxPasswordLen = CustomerEmployee::MAX_PASSWORD_LEN;
+		$this->phoneSettings = new ApiResultPhoneSettings();
 	}
 
 	/**

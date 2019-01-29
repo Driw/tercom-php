@@ -1,4 +1,4 @@
-					<!-- Atualizar Funcionรกrio de Cliente -->
+					<!-- Atualizar Funcionário de Cliente -->
 					<section class="dashboard-counts">
 						<div class="container-fluid">
 							<div class="row justify-content-center">
@@ -70,6 +70,106 @@
 										<div class="row" style="display: none;" id="row-message">
 											<p class="alert alert-success col-12">Resultado: <span id="row-message-span"></span></p>
 										</div>
+									</div>
+								</div>
+								<div class="card col-4 ml-1 pl-0 pr-0">
+									<div class="card-header d-flex align-items-center">
+										<h3 class="h4">Telefone</h3>
+									</div>
+									<div class="card-body">
+										<form id="form-customer-employee-phone" class="tercom-form tercom-form-md form-horizontal">
+											<input type="hidden" name="idPhone">
+											<fieldset>
+												<div class="form-group">
+													<div class="input-group">
+														<div class="input-group-prepend">
+															<span class="input-group-text">DDD</span>
+														</div>
+														<input type="text" class="form-control mask-integer" name="phone[ddd]">
+													</div>
+												</div>
+												<div class="form-group">
+													<div class="input-group">
+														<div class="input-group-prepend">
+															<span class="input-group-text">Número</span>
+														</div>
+														<input type="text" class="form-control mask-phone" name="phone[number]">
+													</div>
+												</div>
+												<div class="form-group">
+													<div class="input-group">
+														<div class="input-group-prepend">
+															<span class="input-group-text">Tipo</span>
+														</div>
+														<select class="form-control" name="phone[type]">
+															<option value="">Selecione</option>
+															<!-- BEGIN PhoneType -->
+															<option value="{PhoneType_Value}">{PhoneType_Option}</option>
+															<!-- END PhoneType -->
+														</select>
+													</div>
+												</div>
+												<div class="form-group text-center">
+													<div class="btn-group" id="phone-group-add">
+														<button type="button" class="btn btn-primary" onclick="CustomerEmployeeView.addPhone()">Adicionar</button>
+													</div>
+													<div class="btn-group" id="phone-group-exist" style="display: none;">
+														<button type="button" class="btn btn-success" onclick="CustomerEmployeeView.savePhone()">Salvar</button>
+														<button type="button" class="btn btn-danger" onclick="CustomerEmployeeView.removePhone()">Exluir</button>
+													</div>
+												</div>
+											</fieldset>
+										</form>
+									</div>
+								</div>
+								<div class="card col-4 mr-1 pl-0 pr-0">
+									<div class="card-header d-flex align-items-center">
+										<h3 class="h4">Telefone Celular</h3>
+									</div>
+									<div class="card-body">
+										<form id="form-customer-employee-cellphone" class="tercom-form tercom-form-md form-horizontal">
+											<input type="hidden" name="idPhone">
+											<fieldset>
+												<div class="form-group">
+													<div class="input-group">
+														<div class="input-group-prepend">
+															<span class="input-group-text">DDD</span>
+														</div>
+														<input type="text" class="form-control mask-integer" name="cellphone[ddd]">
+													</div>
+												</div>
+												<div class="form-group">
+													<div class="input-group">
+														<div class="input-group-prepend">
+															<span class="input-group-text">Número</span>
+														</div>
+														<input type="text" class="form-control mask-phone" name="cellphone[number]">
+													</div>
+												</div>
+												<div class="form-group">
+													<div class="input-group">
+														<div class="input-group-prepend">
+															<span class="input-group-text">Tipo</span>
+														</div>
+														<select class="form-control" name="cellphone[type]">
+															<option value="">Selecione</option>
+															<!-- BEGIN CellPhoneType -->
+															<option value="{CellPhoneType_Value}">{CellPhoneType_Option}</option>
+															<!-- END CellPhoneType -->
+														</select>
+													</div>
+												</div>
+												<div class="form-group text-center">
+													<div class="btn-group" id="cellphone-group-add">
+														<button type="button" class="btn btn-primary" onclick="CustomerEmployeeView.addCellphone()">Adicionar</button>
+													</div>
+													<div class="btn-group" id="cellphone-group-exist" style="display: none;">
+														<button type="button" class="btn btn-success"onclick="CustomerEmployeeView.saveCellphone()">Salvar</button>
+														<button type="button" class="btn btn-danger"onclick="CustomerEmployeeView.removeCellphone()">Exluir</button>
+													</div>
+												</div>
+											</fieldset>
+										</form>
 									</div>
 								</div>
 							</div>

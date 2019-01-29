@@ -5,6 +5,7 @@ namespace tercom\entities;
 use dProject\Primitive\AdvancedObject;
 use dProject\Primitive\ObjectUtil;
 use dProject\Primitive\StringUtil;
+use tercom\entities\lists\Phones;
 
 /**
  * Funcionário de Cliente
@@ -216,7 +217,7 @@ class CustomerEmployee extends AdvancedObject
 	/**
 	 * @param Phone $phone dados do telefone principal para contato.
 	 */
-	public function setPhone(Phone $phone)
+	public function setPhone(?Phone $phone)
 	{
 		$this->phone = $phone;
 	}
@@ -240,7 +241,7 @@ class CustomerEmployee extends AdvancedObject
 	/**
 	 * @param Phone $cellphone dados do telefone celular para contato.
 	 */
-	public function setCellphone(Phone $cellphone)
+	public function setCellphone(?Phone $cellphone)
 	{
 		$this->cellphone = $cellphone;
 	}
@@ -251,6 +252,18 @@ class CustomerEmployee extends AdvancedObject
 	public function getCellphoneId(): int
 	{
 		return $this->cellphone === null ? 0 : $this->cellphone->getId();
+	}
+
+	/**
+	 * @return Phones aquisição da lista contendo os dois telefones do funcionário.
+	 */
+	public function getPhones(): Phones
+	{
+		$phones = new Phones();
+		$phones->add($this->getPhone());
+		$phones->add($this->getCellphone());
+
+		return $phones;
 	}
 
 	/**

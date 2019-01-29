@@ -58,7 +58,7 @@ class ApiListener extends ApiConnectionAdapter
 
 				case ArrayDataException::PARSE_TYPE:
 					$response->setStatus(ApiResponse::API_MISS_PARAM);
-					$response->setMessage(format('parâmetro %s inválido', $e->getMessage()));
+					$response->setMessage(format('parâmetro %s', $e->getMessage()));
 					break;
 			}
 		}

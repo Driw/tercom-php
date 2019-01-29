@@ -4,7 +4,6 @@ namespace tercom\dao;
 
 use dProject\MySQL\Result;
 use dProject\Primitive\StringUtil;
-use tercom\Functions;
 use tercom\entities\TercomEmployee;
 use tercom\entities\TercomProfile;
 use tercom\entities\lists\TercomEmployees;
@@ -121,7 +120,7 @@ class TercomEmployeeDAO extends GenericDAO
 	 *
 	 * @return string
 	 */
-	private function newSelectProfile(): string
+	private function newSelect(): string
 	{
 		$tercomEmployeeColumns = $this->buildQuery(self::ALL_COLUMNS, 'tercom_employees');
 		$tercomProfileColumns = $this->buildQuery(TercomProfileDAO::ALL_COLUMNS, 'tercom_profiles', 'tercomProfile');
@@ -129,6 +128,24 @@ class TercomEmployeeDAO extends GenericDAO
 		return "SELECT $tercomEmployeeColumns, $tercomProfileColumns
 				FROM tercom_employees
 				INNER JOIN tercom_profiles ON tercom_profiles.id = tercom_employees.idTercomProfile";
+	}
+
+	/**
+	 *
+	 * @return string
+	 */
+	private function newSelectProfile(): string
+	{
+		$tercomEmployeeColumns = $this->buildQuery(self::ALL_COLUMNS, 'tercom_employees');
+		$tercomProfileColumns = $this->buildQuery(TercomProfileDAO::ALL_COLUMNS, 'tercom_profiles', 'tercomProfile');
+		$cellPhoneColumns = $this->buildQuery(PhoneDAO::ALL_COLUMNS, 'cellphone', 'cellphone');
+		$phoneColumns = $this->buildQuery(PhoneDAO::ALL_COLUMNS, 'phone', 'phone');
+
+		return "SELECT $tercomEmployeeColumns, $tercomProfileColumns, $cellPhoneColumns, $phoneColumns
+				FROM tercom_employees
+				INNER JOIN tercom_profiles ON tercom_profiles.id = tercom_employees.idTercomProfile
+				LEFT JOIN phones phone ON phone.id = tercom_employees.idPhone
+				LEFT JOIN phones cellphone ON cellphone.id = tercom_employees.idCellPhone";
 	}
 
 	/**
@@ -175,7 +192,7 @@ class TercomEmployeeDAO extends GenericDAO
 	 */
 	public function selectAll(): TercomEmployees
 	{
-		$sqlSelectProfile = $this->newSelectProfile();
+		$sqlSelectProfile = $this->newSelect();
 		$sql = "$sqlSelectProfile
 				ORDER BY tercom_employees.name";
 
@@ -192,7 +209,7 @@ class TercomEmployeeDAO extends GenericDAO
 	 */
 	public function selectByProfile(TercomProfile $tercomProfile): TercomEmployees
 	{
-		$sqlSelectProfile = $this->newSelectProfile();
+		$sqlSelectProfile = $this->newSelect();
 		$sql = "$sqlSelectProfile
 				WHERE tercom_profiles.id = ?
 				ORDER BY tercom_employees.name";
@@ -284,11 +301,10 @@ class TercomEmployeeDAO extends GenericDAO
 	 */
 	private function newTercomEmployee(array $entry): TercomEmployee
 	{
-		$tercomProfile = Functions::parseEntrySQL($entry, 'tercomProfile');
+		$this->parseEntry($entry, 'tercomProfile', 'phone', 'cellphone');
 
 		$tercomEmployee = new TercomEmployee();
 		$tercomEmployee->fromArray($entry);
-		$tercomEmployee->getTercomProfile()->fromArray($tercomProfile);
 
 		return $tercomEmployee;
 	}

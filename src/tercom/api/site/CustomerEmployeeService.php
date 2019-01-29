@@ -2,6 +2,7 @@
 
 namespace tercom\api\site;
 
+use dProject\Primitive\ArrayData;
 use dProject\Primitive\StringUtil;
 use dProject\restful\ApiContent;
 use tercom\api\exceptions\FilterException;
@@ -70,15 +71,67 @@ class CustomerEmployeeService extends DefaultSiteService
 
 		if ($post->isSetted('name')) $customerEmployee->setName($post->getString('name'));
 		if ($post->isSetted('email')) $customerEmployee->setEmail($post->getString('email'));
-		if ($post->isSetted('phone')) $customerEmployee->setPhone($post->getInt('phone'));
-		if ($post->isSetted('cellphone')) $customerEmployee->setCellphone($post->getInstance('cellphone'));
 		if ($post->isSetted('enable')) $customerEmployee->setEnabled($post->getBoolean('enable'));
 		if ($post->isSetted('password') && !StringUtil::isEmpty($post->getString('password'))) $customerEmployee->setPassword($post->getString('password'), false);
+
+		if ($post->isSetted('phone'))
+		{
+			$arrayPhone = $post->getArray('phone');
+			$phone = new ArrayData($arrayPhone);
+			$customerEmployee->getPhone()->setDDD($phone->getInt('ddd'));
+			$customerEmployee->getPhone()->setNumber($phone->getString('number'));
+			$customerEmployee->getPhone()->setType($phone->getString('type'));
+		}
+
+		if ($post->isSetted('cellphone'))
+		{
+			$arrayCellphone = $post->getArray('cellphone');
+			$cellphone = new ArrayData($arrayCellphone);
+			$customerEmployee->getCellphone()->setDDD($cellphone->getInt('ddd'));
+			$customerEmployee->getCellphone()->setNumber($cellphone->getString('number'));
+			$customerEmployee->getCellphone()->setType($cellphone->getString('type'));
+		}
 
 		$this->getCustomerEmployeeControl()->set($customerEmployee, $customerProfile, $this->getCurrentAssignmentLevel());
 
 		$result = new ApiResultObject();
 		$result->setResult($customerEmployee, 'funcionário de cliente "%s" atualizado com êxito', $customerEmployee->getName());
+
+		return $result;
+	}
+
+	/**
+	 *
+	 * @ApiPermissionAnnotation({"method":"post","params":["idCustomerEmployee"]})
+	 * @param ApiContent $content
+	 * @return ApiResultObject
+	 */
+	public function actionRemovePhone(ApiContent $content): ApiResultObject
+	{
+		$idCustomerEmployee = $content->getParameters()->getInt('idCustomerEmployee');
+		$customerEmployee = $this->getCustomerEmployeeControl()->get($idCustomerEmployee);
+		$this->getCustomerEmployeeControl()->removePhone($customerEmployee);
+
+		$result = new ApiResultObject();
+		$result->setResult($customerEmployee, 'telefone excluído com êxito', $customerEmployee->getName());
+
+		return $result;
+	}
+
+	/**
+	 *
+	 * @ApiPermissionAnnotation({"method":"post","params":["idCustomerEmployee"]})
+	 * @param ApiContent $content
+	 * @return ApiResultObject
+	 */
+	public function actionRemoveCellphone(ApiContent $content): ApiResultObject
+	{
+		$idCustomerEmployee = $content->getParameters()->getInt('idCustomerEmployee');
+		$customerEmployee = $this->getCustomerEmployeeControl()->get($idCustomerEmployee);
+		$this->getCustomerEmployeeControl()->removeCellphone($customerEmployee);
+
+		$result = new ApiResultObject();
+		$result->setResult($customerEmployee, 'telefone celular excluído com êxito', $customerEmployee->getName());
 
 		return $result;
 	}

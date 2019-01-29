@@ -901,6 +901,26 @@ Webservice.prototype.customerEmployee_set = function(idCustomerEmployee, form, l
 		'errorMessage': this.newBaseErrorMessage('atualizar funcionário de cliente'),
 	});
 };
+Webservice.prototype.customerEmployee_removePhone = function(idCustomerEmployee, form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'customerEmployee/removePhone/{0}'.format(idCustomerEmployee),
+		'form': form,
+		'target': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('excluir telefone funcionário de cliente'),
+	});
+};
+Webservice.prototype.customerEmployee_removeCellphone = function(idCustomerEmployee, form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'customerEmployee/removeCellphone/{0}'.format(idCustomerEmployee),
+		'form': form,
+		'target': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('excluir telefone celular funcionário de cliente'),
+	});
+};
 Webservice.prototype.customerEmployee_enabled = function(idCustomerEmployee, enable, target, listener)
 {
 	this.setOptionsAndExecute({

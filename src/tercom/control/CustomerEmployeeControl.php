@@ -91,8 +91,53 @@ class CustomerEmployeeControl extends GenericControl
 			$customerEmployee->setCustomerProfile($customerProfile);
 		}
 
+		if (!$this->phoneControl->keepPhones($customerEmployee->getPhones()))
+			throw new ControlException('não foi possível atualizar os dados do(s) telefone(s)');
+
 		if (!$this->customerEmployeeDAO->update($customerEmployee))
 			throw new ControlException('não foi possível atualizar o funcionário de cliente');
+	}
+
+	/**
+	 *
+	 * @param CustomerEmployee $customerEmployee
+	 * @throws ControlException
+	 */
+	public function removePhone(CustomerEmployee $customerEmployee): void
+	{
+		$this->customerEmployeeDAO->beginTransaction();
+		{
+			$phone = $customerEmployee->getPhone();
+			$customerEmployee->setPhone(null);
+
+			if (!$this->customerEmployeeDAO->update($customerEmployee) || !$this->phoneControl->removePhone($phone))
+			{
+				$this->customerEmployeeDAO->rollback();
+				throw new ControlException('não foi possível excluir o número de telefone');
+			}
+		}
+		$this->customerEmployeeDAO->commit();
+	}
+
+	/**
+	 *
+	 * @param CustomerEmployee $customerEmployee
+	 * @throws ControlException
+	 */
+	public function removeCellphone(CustomerEmployee $customerEmployee): void
+	{
+		$this->customerEmployeeDAO->beginTransaction();
+		{
+			$cellphone = $customerEmployee->getCellphone();
+			$customerEmployee->setCellphone(null);
+
+			if (!$this->customerEmployeeDAO->update($customerEmployee) || !$this->phoneControl->removePhone($cellphone))
+			{
+				$this->customerEmployeeDAO->rollback();
+				throw new ControlException('não foi possível excluir o número de celular');
+			}
+		}
+		$this->customerEmployeeDAO->commit();
 	}
 
 	/**
