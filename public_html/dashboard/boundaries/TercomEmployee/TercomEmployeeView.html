@@ -71,6 +71,106 @@
 										</div>
 									</div>
 								</div>
+								<div class="card col-4 ml-1 pl-0 pr-0">
+									<div class="card-header d-flex align-items-center">
+										<h3 class="h4">Telefone</h3>
+									</div>
+									<div class="card-body">
+										<form id="form-tercom-employee-phone" class="tercom-form tercom-form-md form-horizontal">
+											<input type="hidden" name="idPhone">
+											<fieldset>
+												<div class="form-group">
+													<div class="input-group">
+														<div class="input-group-prepend">
+															<span class="input-group-text">DDD</span>
+														</div>
+														<input type="text" class="form-control mask-integer" name="phone[ddd]">
+													</div>
+												</div>
+												<div class="form-group">
+													<div class="input-group">
+														<div class="input-group-prepend">
+															<span class="input-group-text">N?mero</span>
+														</div>
+														<input type="text" class="form-control mask-phone" name="phone[number]">
+													</div>
+												</div>
+												<div class="form-group">
+													<div class="input-group">
+														<div class="input-group-prepend">
+															<span class="input-group-text">Tipo</span>
+														</div>
+														<select class="form-control" name="phone[type]">
+															<option value="">Selecione</option>
+															<!-- BEGIN PhoneType -->
+															<option value="{PhoneType_Value}">{PhoneType_Option}</option>
+															<!-- END PhoneType -->
+														</select>
+													</div>
+												</div>
+												<div class="form-group text-center">
+													<div class="btn-group" id="phone-group-add">
+														<button type="button" class="btn btn-primary" onclick="TercomEmployeeView.addPhone()">Adicionar</button>
+													</div>
+													<div class="btn-group" id="phone-group-exist" style="display: none;">
+														<button type="button" class="btn btn-success" onclick="TercomEmployeeView.savePhone()">Salvar</button>
+														<button type="button" class="btn btn-danger" onclick="TercomEmployeeView.removePhone()">Exluir</button>
+													</div>
+												</div>
+											</fieldset>
+										</form>
+									</div>
+								</div>
+								<div class="card col-4 mr-1 pl-0 pr-0">
+									<div class="card-header d-flex align-items-center">
+										<h3 class="h4">Telefone Celular</h3>
+									</div>
+									<div class="card-body">
+										<form id="form-tercom-employee-cellphone" class="tercom-form tercom-form-md form-horizontal">
+											<input type="hidden" name="idPhone">
+											<fieldset>
+												<div class="form-group">
+													<div class="input-group">
+														<div class="input-group-prepend">
+															<span class="input-group-text">DDD</span>
+														</div>
+														<input type="text" class="form-control mask-integer" name="cellphone[ddd]">
+													</div>
+												</div>
+												<div class="form-group">
+													<div class="input-group">
+														<div class="input-group-prepend">
+															<span class="input-group-text">N?mero</span>
+														</div>
+														<input type="text" class="form-control mask-phone" name="cellphone[number]">
+													</div>
+												</div>
+												<div class="form-group">
+													<div class="input-group">
+														<div class="input-group-prepend">
+															<span class="input-group-text">Tipo</span>
+														</div>
+														<select class="form-control" name="cellphone[type]">
+															<option value="">Selecione</option>
+															<!-- BEGIN CellPhoneType -->
+															<option value="{CellPhoneType_Value}">{CellPhoneType_Option}</option>
+															<!-- END CellPhoneType -->
+														</select>
+													</div>
+												</div>
+												<div class="form-group text-center">
+													<div class="btn-group" id="cellphone-group-add">
+														<button type="button" class="btn btn-primary" onclick="TercomEmployeeView.addCellphone()">Adicionar</button>
+													</div>
+													<div class="btn-group" id="cellphone-group-exist" style="display: none;">
+														<button type="button" class="btn btn-success"onclick="TercomEmployeeView.saveCellphone()">Salvar</button>
+														<button type="button" class="btn btn-danger"onclick="TercomEmployeeView.removeCellphone()">Exluir</button>
+													</div>
+												</div>
+											</fieldset>
+										</form>
+									</div>
+								</div>
 							</div>
 						</div>
 					</section>

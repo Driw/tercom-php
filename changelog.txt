@@ -20,6 +20,13 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+29.01.2018 - 0.3.5.221
+- Adicionado a página para atualizar funcionário TERCOM formulários de telefone e telefone celular.
+- Modificado a forma como os dados de telefone não salvos nos funcionários TERCOM, TercomEmployeeService:
+	- Antes era necessário informar o 'id' do telefone ou telefone celular, agora é informado os dados.
+	- Adicionado duas novas ações, uma para excluir o telefone e a outra para excluir o telefone celular.
+- Corrigido falha no fomrmulário validado durante o preenchimento do telefone celular de funcionário de cliente.
+
 28.01.2018 - 0.3.5.220
 - Adicionado a página para atualizar funcionário de cliente formulários de telefone e telefone celular.
 - Modificado a forma como os dados de telefone não salvos nos funcionários de cliente, CustomerEmployeeService:

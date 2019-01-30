@@ -34,6 +34,10 @@ class ApiResultTercomEmployeeSettings extends AdvancedObject implements ApiResul
 	 * @var int
 	 */
 	private $maxPasswordLen;
+	/**
+	 * @var ApiResultPhoneSettings
+	 */
+	private $phoneSettings;
 
 	/**
 	 *
@@ -45,6 +49,7 @@ class ApiResultTercomEmployeeSettings extends AdvancedObject implements ApiResul
 		$this->maxEmailLen = TercomEmployee::MAX_EMAIL_LEN;
 		$this->minPasswordLen = TercomEmployee::MIN_PASSWORD_LEN;
 		$this->maxPasswordLen = TercomEmployee::MAX_PASSWORD_LEN;
+		$this->phoneSettings = new ApiResultPhoneSettings();
 	}
 
 	/**

@@ -125,27 +125,6 @@ class CustomerEmployeeDAO extends GenericDAO
 	}
 
 	/**
-	 * Atualiza os dados de telefone de um funcionário de cliente já existente no banco de dados.
-	 * @param CustomerEmployee $customerEmplyee objeto do tipo funcionário de cliente à atualizar.
-	 * @return bool true se for atualizado ou false caso contrário.
-	 */
-	public function updatePhones(CustomerEmployee $customerEmplyee): bool
-	{
-		$this->validate($customerEmplyee, true);
-
-		$sql = "UPDATE customer_employees
-				SET idPhone = ?, idCellPhone = ?
-				WHERE id = ?";
-
-		$query = $this->createQuery($sql);
-		$query->setInteger(1, $this->parseNullID($customerEmplyee->getPhoneId()));
-		$query->setInteger(2, $this->parseNullID($customerEmplyee->getCellphoneId()));
-		$query->setInteger(3, $customerEmplyee->getId());
-
-		return ($query->execute())->isSuccessful();
-	}
-
-	/**
 	 * Atualiza o estado de inatividade de um funcionário de cliente no banco de dados.
 	 * @param CustomerEmployee $customerEmplyee objeto do tipo funcionário de cliente à atualizar.
 	 * @return bool true se atualizado ou false caso contrário.

@@ -908,7 +908,7 @@ Webservice.prototype.customerEmployee_removePhone = function(idCustomerEmployee,
 		'form': form,
 		'target': form,
 		'listener': listener,
-		'errorMessage': this.newBaseErrorMessage('excluir telefone funcionário de cliente'),
+		'errorMessage': this.newBaseErrorMessage('excluir telefone do funcionário de cliente'),
 	});
 };
 Webservice.prototype.customerEmployee_removeCellphone = function(idCustomerEmployee, form, listener)
@@ -918,7 +918,7 @@ Webservice.prototype.customerEmployee_removeCellphone = function(idCustomerEmplo
 		'form': form,
 		'target': form,
 		'listener': listener,
-		'errorMessage': this.newBaseErrorMessage('excluir telefone celular funcionário de cliente'),
+		'errorMessage': this.newBaseErrorMessage('excluir telefone celular do funcionário de cliente'),
 	});
 };
 Webservice.prototype.customerEmployee_enabled = function(idCustomerEmployee, enable, target, listener)
@@ -1046,6 +1046,26 @@ Webservice.prototype.tercomEmployee_enable = function(idTercomEmployee, enable, 
 		'target': target,
 		'listener': listener,
 		'errorMessage': this.newBaseErrorMessage(' funcionário TERCOM'),
+	});
+};
+Webservice.prototype.tercomEmployee_removePhone = function(idTercomEmployee, form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'tercomEmployee/removePhone/{0}'.format(idTercomEmployee),
+		'form': form,
+		'target': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('excluir telefone do funcionário TERCOM'),
+	});
+};
+Webservice.prototype.tercomEmployee_removeCellphone = function(idTercomEmployee, form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'tercomEmployee/removeCellphone/{0}'.format(idTercomEmployee),
+		'form': form,
+		'target': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('excluir telefone celular funcionário TERCOM'),
 	});
 };
 Webservice.prototype.tercomEmployee_get = function(idTercomEmployee, target, listener)

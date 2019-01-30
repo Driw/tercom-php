@@ -2,6 +2,7 @@
 
 namespace tercom\api\site;
 
+use dProject\Primitive\ArrayData;
 use dProject\Primitive\StringUtil;
 use dProject\restful\ApiContent;
 use tercom\api\exceptions\FilterException;
@@ -72,15 +73,67 @@ class TercomEmployeeService extends DefaultSiteService
 		if ($post->isSetted('cpf')) $tercomEmployee->setName($post->getString('cpf'));
 		if ($post->isSetted('name')) $tercomEmployee->setName($post->getString('name'));
 		if ($post->isSetted('email')) $tercomEmployee->setEmail($post->getString('email'));
-		if ($post->isSetted('phone')) $tercomEmployee->setPhone($post->getInt('phone'));
-		if ($post->isSetted('cellphone')) $tercomEmployee->setCellphone($post->getInstance('cellphone'));
 		if ($post->isSetted('enabled')) $tercomEmployee->setEnabled($post->getBoolean('enable'));
 		if ($post->isSetted('password') && !StringUtil::isEmpty($post->getString('password'))) $tercomEmployee->setPassword($post->getString('password'), false);
+
+		if ($post->isSetted('phone'))
+		{
+			$arrayPhone = $post->getArray('phone');
+			$phone = new ArrayData($arrayPhone);
+			$tercomEmployee->getPhone()->setDDD($phone->getInt('ddd'));
+			$tercomEmployee->getPhone()->setNumber($phone->getString('number'));
+			$tercomEmployee->getPhone()->setType($phone->getString('type'));
+		}
+
+		if ($post->isSetted('cellphone'))
+		{
+			$arrayCellphone = $post->getArray('cellphone');
+			$cellphone = new ArrayData($arrayCellphone);
+			$tercomEmployee->getCellphone()->setDDD($cellphone->getInt('ddd'));
+			$tercomEmployee->getCellphone()->setNumber($cellphone->getString('number'));
+			$tercomEmployee->getCellphone()->setType($cellphone->getString('type'));
+		}
 
 		$this->getTercomEmployeeControl()->set($tercomEmployee, $tercomProfile);
 
 		$result = new ApiResultObject();
 		$result->setResult($tercomEmployee, 'funcionário da TERCOM "%s" atualizado com êxito', $tercomEmployee->getName());
+
+		return $result;
+	}
+
+	/**
+	 *
+	 * @ApiPermissionAnnotation({"method":"post","params":["idTercomEmployee"]})
+	 * @param ApiContent $content
+	 * @return ApiResultObject
+	 */
+	public function actionRemovePhone(ApiContent $content): ApiResultObject
+	{
+		$idTercomEmployee = $content->getParameters()->getInt('idTercomEmployee');
+		$tercomEmployee = $this->getTercomEmployeeControl()->get($idTercomEmployee);
+		$this->getTercomEmployeeControl()->removePhone($tercomEmployee);
+
+		$result = new ApiResultObject();
+		$result->setResult($tercomEmployee, 'telefone excluído com êxito', $tercomEmployee->getName());
+
+		return $result;
+	}
+
+	/**
+	 *
+	 * @ApiPermissionAnnotation({"method":"post","params":["idTercomEmployee"]})
+	 * @param ApiContent $content
+	 * @return ApiResultObject
+	 */
+	public function actionRemoveCellphone(ApiContent $content): ApiResultObject
+	{
+		$idTercomEmployee = $content->getParameters()->getInt('idTercomEmployee');
+		$tercomEmployee = $this->getTercomEmployeeControl()->get($idTercomEmployee);
+		$this->getTercomEmployeeControl()->removeCellphone($tercomEmployee);
+
+		$result = new ApiResultObject();
+		$result->setResult($tercomEmployee, 'telefone celular excluído com êxito', $tercomEmployee->getName());
 
 		return $result;
 	}

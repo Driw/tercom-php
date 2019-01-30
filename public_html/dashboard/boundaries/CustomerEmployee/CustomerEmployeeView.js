@@ -1,7 +1,7 @@
 
 $(document).ready(function()
 {
-		CustomerEmployeeView.init();
+	CustomerEmployeeView.init();
 });
 
 var CustomerEmployeeView = CustomerEmployeeView ||
@@ -173,6 +173,7 @@ var CustomerEmployeeView = CustomerEmployeeView ||
 			var option = Util.createElementOption(customerProfile.name, customerProfile.id);
 			CustomerEmployeeView.selectProfiles.append(option);
 		});
+
 		if (CustomerEmployeeView.customerEmployee !== undefined)
 			CustomerEmployeeView.selectProfiles.val(CustomerEmployeeView.customerEmployee.customerProfile.id);
 	},
@@ -196,12 +197,12 @@ var CustomerEmployeeView = CustomerEmployeeView ||
 	},
 	addCellphone: function()
 	{
-		if (CustomerEmployeeView.formPhone.valid())
+		if (CustomerEmployeeView.formCellphone.valid())
 			ws.customerEmployee_set(CustomerEmployeeView.id, CustomerEmployeeView.formCellphone, CustomerEmployeeView.onCustomerEmployeeLoaded);
 	},
 	saveCellphone: function()
 	{
-		if (CustomerEmployeeView.formPhone.valid())
+		if (CustomerEmployeeView.formCellphone.valid())
 			ws.customerEmployee_set(CustomerEmployeeView.id, CustomerEmployeeView.formCellphone, CustomerEmployeeView.onCustomerEmployeeLoaded);
 	},
 	removeCellphone: function()

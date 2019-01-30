@@ -62,8 +62,53 @@ class TercomEmployeeControl extends GenericControl
 		if ($tercomProfile !== null)
 			$tercomEmployee->setTercomProfile($tercomProfile);
 
+		if (!$this->phoneControl->keepPhones($tercomEmployee->getPhones()))
+			throw new ControlException('não foi possível atualizar os dados do(s) telefone(s)');
+
 		if (!$this->tercomEmployeeDAO->update($tercomEmployee))
 			throw new ControlException('não foi possível atualizar o funcionário');
+	}
+
+	/**
+	 *
+	 * @param TercomEmployee $tercomEmployee
+	 * @throws ControlException
+	 */
+	public function removePhone(TercomEmployee $tercomEmployee): void
+	{
+		$this->tercomEmployeeDAO->beginTransaction();
+		{
+			$phone = $tercomEmployee->getPhone();
+			$tercomEmployee->setPhone(null);
+
+			if (!$this->tercomEmployeeDAO->update($tercomEmployee) || !$this->phoneControl->removePhone($phone))
+			{
+				$this->tercomEmployeeDAO->rollback();
+				throw new ControlException('não foi possível excluir o número de telefone');
+			}
+		}
+		$this->tercomEmployeeDAO->commit();
+	}
+
+	/**
+	 *
+	 * @param TercomEmployee $tercomEmployee
+	 * @throws ControlException
+	 */
+	public function removeCellphone(TercomEmployee $tercomEmployee): void
+	{
+		$this->tercomEmployeeDAO->beginTransaction();
+		{
+			$cellphone = $tercomEmployee->getCellphone();
+			$tercomEmployee->setCellphone(null);
+
+			if (!$this->tercomEmployeeDAO->update($tercomEmployee) || !$this->phoneControl->removePhone($cellphone))
+			{
+				$this->tercomEmployeeDAO->rollback();
+				throw new ControlException('não foi possível excluir o número de celular');
+			}
+		}
+		$this->tercomEmployeeDAO->commit();
 	}
 
 	/**

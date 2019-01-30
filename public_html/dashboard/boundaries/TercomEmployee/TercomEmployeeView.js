@@ -9,6 +9,8 @@ var TercomEmployeeView = TercomEmployeeView ||
 	init: function()
 	{
 		TercomEmployeeView.form = $('#form-tercom-employee-view');
+		TercomEmployeeView.formPhone = $('#form-tercom-employee-phone');
+		TercomEmployeeView.formCellphone = $('#form-tercom-employee-cellphone');
 		TercomEmployeeView.selectProfiles = $(this.form[0].idTercomProfile);
 		TercomEmployeeView.id = $(this.form[0].idTercomEmployee).val();
 		TercomEmployeeView.initFormSettings();
@@ -25,7 +27,7 @@ var TercomEmployeeView = TercomEmployeeView ||
 	},
 	loadTercomEmployee: function()
 	{
-		ws.tercomEmployee_get(TercomEmployeeView.id, TercomEmployeeView.form, this.onLoadTercomEmployee);
+		ws.tercomEmployee_get(TercomEmployeeView.id, TercomEmployeeView.form, TercomEmployeeView.onTercomEmployeeLoaded);
 	},
 	onSettings: function(settings)
 	{
@@ -78,18 +80,101 @@ var TercomEmployeeView = TercomEmployeeView ||
 				return false;
 			}
 		});
+
+		TercomEmployeeView.onSettingsPhone(settings.phoneSettings);
+		TercomEmployeeView.onSettingsCellphone(settings.phoneSettings);
 	},
-	onLoadTercomEmployee: function(tercomEmployee)
+	onSettingsPhone: function(settings)
 	{
+		TercomEmployeeView.formPhone.validate({
+			'rules': {
+				'phone[ddd]': {
+					'required': true,
+					'min': settings.minDDD,
+					'max': settings.maxDDD,
+				},
+				'phone[number]': {
+					'required': true,
+					'rangelength': [ settings.minNumberLen + 1, settings.maxNumberLen + 1 ],
+				},
+				'phone[type]': {
+					'required': true,
+				},
+			},
+			submitHandler: function(form) {
+				return false;
+			},
+		});
+	},
+	onSettingsCellphone: function(settings)
+	{
+		TercomEmployeeView.formCellphone.validate({
+			'rules': {
+				'cellphone[ddd]': {
+					'required': true,
+					'min': settings.minDDD,
+					'max': settings.maxDDD,
+				},
+				'cellphone[number]': {
+					'required': true,
+					'rangelength': [ settings.minNumberLen + 1, settings.maxNumberLen + 1 ],
+				},
+				'cellphone[type]': {
+					'required': true,
+				},
+			},
+			submitHandler: function(form) {
+				return false;
+			},
+		});
+	},
+	onTercomEmployeeLoaded: function(tercomEmployee)
+	{
+		TercomEmployeeView.tercomEmployee = tercomEmployee;
 		var form = TercomEmployeeView.form[0];
 		$(form.cpf).val(tercomEmployee.cpf).trigger('input');
 		$(form.name).val(tercomEmployee.name);
 		$(form.email).val(tercomEmployee.email);
 		TercomEmployeeView.tercomEmployee = tercomEmployee;
 		TercomEmployeeView.selectProfiles.val(tercomEmployee.tercomProfile.id);
+		TercomEmployeeView.formPhone.trigger('reset');
+		TercomEmployeeView.formCellphone.trigger('reset');
+
+		if (tercomEmployee.cellphone !== null && tercomEmployee.cellphone.id !== 0)
+		{
+			var formCellphone = TercomEmployeeView.formCellphone[0];
+			$(formCellphone['cellphone[ddd]']).val(tercomEmployee.cellphone.ddd);
+			$(formCellphone['cellphone[number]']).val(tercomEmployee.cellphone.number).trigger('input');
+			$(formCellphone['cellphone[type]']).val(tercomEmployee.cellphone.type);
+			$('#cellphone-group-add').fadeOut('fast');
+			$('#cellphone-group-exist').fadeIn('fast');
+		}
+
+		else
+		{
+			$('#cellphone-group-add').fadeIn('fast');
+			$('#cellphone-group-exist').fadeOut('fast');
+		}
+
+		if (tercomEmployee.phone !== null && tercomEmployee.phone.id !== 0)
+		{
+			var formPhone = TercomEmployeeView.formPhone[0];
+			$(formPhone['phone[ddd]']).val(tercomEmployee.phone.ddd);
+			$(formPhone['phone[number]']).val(tercomEmployee.phone.number).trigger('input');
+			$(formPhone['phone[type]']).val(tercomEmployee.phone.type);
+			$('#phone-group-add').fadeOut('fast');
+			$('#phone-group-exist').fadeIn('fast');
+		}
+
+		else
+		{
+			$('#phone-group-add').fadeIn('fast');
+			$('#phone-group-exist').fadeOut('fast');
+		}
 	},
 	onLoadProfiles: function(tercomProfiles)
 	{
+		console.log(tercomProfiles);
 		TercomEmployeeView.selectProfiles.empty();
 		TercomEmployeeView.selectProfiles.append(Util.createElementOption('Selecione um Perfil', ''));
 		TercomEmployeeView.tercomProfiles = tercomProfiles.elements;
@@ -105,9 +190,37 @@ var TercomEmployeeView = TercomEmployeeView ||
 	{
 		ws.tercomEmployee_set(TercomEmployeeView.id, TercomEmployeeView.form, TercomEmployeeView.onSubmited);
 	},
+	addPhone: function()
+	{
+		if (TercomEmployeeView.formPhone.valid())
+			ws.tercomEmployee_set(TercomEmployeeView.id, TercomEmployeeView.formPhone, TercomEmployeeView.onTercomEmployeeLoaded);
+	},
+	savePhone: function()
+	{
+		if (TercomEmployeeView.formPhone.valid())
+			ws.tercomEmployee_set(TercomEmployeeView.id, TercomEmployeeView.formPhone, TercomEmployeeView.onTercomEmployeeLoaded);
+	},
+	removePhone: function()
+	{
+		ws.tercomEmployee_removePhone(TercomEmployeeView.id, TercomEmployeeView.formPhone, TercomEmployeeView.onTercomEmployeeLoaded);
+	},
+	addCellphone: function()
+	{
+		if (TercomEmployeeView.formCellphone.valid())
+			ws.tercomEmployee_set(TercomEmployeeView.id, TercomEmployeeView.formCellphone, TercomEmployeeView.onTercomEmployeeLoaded);
+	},
+	saveCellphone: function()
+	{
+		if (TercomEmployeeView.formCellphone.valid())
+			ws.tercomEmployee_set(TercomEmployeeView.id, TercomEmployeeView.formCellphone, TercomEmployeeView.onTercomEmployeeLoaded);
+	},
+	removeCellphone: function()
+	{
+		ws.tercomEmployee_removeCellphone(TercomEmployeeView.id, TercomEmployeeView.formCellphone, TercomEmployeeView.onTercomEmployeeLoaded);
+	},
 	onSubmited: function(tercomEmployee, message)
 	{
-		TercomEmployeeView.onLoadTercomEmployee(tercomEmployee);
+		TercomEmployeeView.onTercomEmployeeLoaded(tercomEmployee);
 
 		$('#row-message').show(DEFAULT_FADE);
 		$('#row-message-span').html(message);

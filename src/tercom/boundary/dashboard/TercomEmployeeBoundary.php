@@ -5,6 +5,7 @@ namespace tercom\boundary\dashboard;
 use dProject\restful\template\ApiTemplateResult;
 use dProject\restful\ApiContent;
 use tercom\core\System;
+use tercom\entities\Phone;
 
 /**
  * @see BoundaryManager
@@ -91,9 +92,12 @@ class TercomEmployeeBoundary extends DefaultDashboardLoggedBoundary
 	 */
 	public function onView(ApiContent $content): ApiTemplateResult
 	{
+		$phoneTypeOptions = DashboardService::parseOptions(Phone::getTypes());
 		$dashboardTemplate = $this->newBaseTemplate();
 		$dashboardTemplate = $this->prepareInclude(self::BASE_PATH. 'TercomEmployeeView');
 		$dashboardTemplate->idTercomEmployee = $content->getParameters()->getInt('idTercomEmployee');
+		$dashboardTemplate->setDataArray('CellPhoneType', $phoneTypeOptions);
+		$dashboardTemplate->setDataArray('PhoneType', $phoneTypeOptions);
 
 		$result = new ApiTemplateResult();
 		$result->add($dashboardTemplate);
