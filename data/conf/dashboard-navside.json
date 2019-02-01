@@ -112,6 +112,21 @@
 	},
 	{
 		"Dropdown": {
+			"service": "service",
+			"Name": "Serviços",
+			"Icon": "fas fa-dolly-flatbed",
+			"ID": "dropdown-service",
+			"PermissionPacket": "service",
+			"Class": "",
+			"Itens": [
+				{ "Name": "Listar", "Icon": "fas fa-list-ul", "Url": "service/list", "PermissionPacket": "service", "PermissionAction": "getAll" },
+				{ "Name": "Procurar", "Icon": "fas fa-search", "Url": "service/search", "PermissionPacket": "service", "PermissionAction": "search" },
+				{ "Name": "Adicionar", "Icon": "fas fa-plus", "Url": "service/add", "PermissionPacket": "service", "PermissionAction": "add" }
+			]
+		}
+	},
+	{
+		"Dropdown": {
 			"service": "customer",
 			"Name": "Clientes",
 			"Icon": "fas fa-hashtag",

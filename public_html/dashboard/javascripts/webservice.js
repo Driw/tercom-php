@@ -636,6 +636,142 @@ Webservice.prototype.productPrice_getAll = function(idProduct, target, listener)
 	});
 };
 
+// - Service
+
+Webservice.prototype.service_settings = function(target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'service/settings',
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter configurações para serviço'),
+	});
+};
+Webservice.prototype.service_add = function(form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'service/add',
+		'form': form,
+		'target': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('adicionar serviço'),
+	});
+};
+Webservice.prototype.service_set = function(idService, form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'service/set/{0}'.format(idService),
+		'form': form,
+		'target': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('atualizar serviço'),
+	});
+};
+Webservice.prototype.service_setInactive = function(idService, inactive, target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'service/setInactive/{0}/{1}'.format(idService, inactive),
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('atualizar serviço para {0}'.format(inactive ? 'inativo' : 'ativo')),
+	});
+};
+Webservice.prototype.service_get = function(idService, target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'service/get/{0}'.format(idService),
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter serviço'),
+	});
+};
+Webservice.prototype.service_getAll = function(target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'service/getAll',
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter todos serviços'),
+	});
+};
+Webservice.prototype.service_search = function(filter, value, target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'service/search/{0}/{1}'.format(filter, value),
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('procurar serviços'),
+	});
+};
+
+// - ServicePrice
+
+Webservice.prototype.servicePrice_settings = function(target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'servicePrice/settings',
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter configurações para preço de serviço'),
+	});
+};
+Webservice.prototype.servicePrice_add = function(form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'servicePrice/add',
+		'form': form,
+		'target': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('adicionar preço de serviço'),
+	});
+};
+Webservice.prototype.servicePrice_set = function(idServicePrice, form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'servicePrice/set/{0}'.format(idServicePrice),
+		'form': form,
+		'target': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('atualizar preço de serviço'),
+	});
+};
+Webservice.prototype.servicePrice_remove = function(idServicePrice, target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'servicePrice/remove/{0}'.format(idServicePrice),
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('excluir preço de serviço'),
+	});
+};
+Webservice.prototype.servicePrice_get = function(idServicePrice, target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'servicePrice/get/{0}'.format(idServicePrice),
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter preço de serviço'),
+	});
+};
+Webservice.prototype.servicePrice_getAll = function(idService, target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'servicePrice/getAll/{0}'.format(idService),
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter lista de preços do serviço'),
+	});
+};
+Webservice.prototype.servicePrice_getProvider = function(idService, idProvider, target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'servicePrice/getProvider/{0}/{1}'.format(idService, idProvider),
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter fornecedor'),
+	});
+};
+
 // Permission
 
 Webservice.prototype.managePermissions_tercom_getAll = function(target, listener)

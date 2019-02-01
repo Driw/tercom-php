@@ -78,20 +78,20 @@ class ServiceService extends DefaultSiteService
 	}
 
 	/**
-	 * @ApiPermissionAnnotation({"params":["idService"]})
+	 * @ApiPermissionAnnotation({"params":["idService","inactive"]})
 	 * @param ApiContent $content
 	 * @return ApiResultObject
 	 */
 	public function actionSetInactive(ApiContent $content): ApiResultObject
 	{
-		$post = $content->getPost();
-		$idService = $content->getParameters()->getInt('idService');
+		$parameters = $content->getParameters();
+		$idService = $parameters->getInt('idService');
 		$service = $this->getServiceControl()->get($idService);
-		$service->setInactive(($avaiable = $post->getBoolean('inactive')));
+		$service->setInactive($parameters->getBoolean('inactive'));
 		$this->getServiceControl()->set($service);
 
 		$result = new ApiResultObject();
-		$result->setResult($service, 'serviço %s atualizado para %s', $service->getName(), $this->getMessageAvaiable($avaiable));
+		$result->setResult($service, 'serviço %s atualizado para %s', $service->getName(), $this->getMessageAvaiable(!$service->isInactive()));
 
 		return $result;
 	}

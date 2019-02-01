@@ -140,15 +140,31 @@ class ServicePriceDAO extends GenericDAO
 	}
 
 	/**
+	 * Procedimento interno para centralizar e agilizar a manutenção de queries.
+	 * @return string aquisição da string de consulta simples para SELECT.
+	 */
+	private function newFullSelect(): string
+	{
+		$servicePriceColumns = $this->buildQuery(ServicePriceDAO::ALL_COLUMNS, 'service_prices');
+		$serviceColumns = $this->buildQuery(ServiceDAO::ALL_COLUMNS, 'services', 'service');
+		$providerColumns = $this->buildQuery(ProviderDAO::ALL_COLUMNS, 'providers', 'provider');
+
+		return "SELECT $servicePriceColumns, $serviceColumns, $providerColumns
+				FROM service_prices
+				INNER JOIN services ON services.id = service_prices.idService
+				INNER JOIN providers ON providers.id = service_prices.idProvider";
+	}
+
+	/**
 	 * Selecione os dados de um preço de serviço através do seu código de identificação único.
 	 * @param int $idServicePrice código de identificação único do preço de serviço.
 	 * @return ServicePrice|NULL preço de serviço com os dados carregados ou NULL se não encontrado.
 	 */
 	public function select(int $idServicePrice): ?ServicePrice
 	{
-		$sqlSelect = $this->newSelect();
+		$sqlSelect = $this->newFullSelect();
 		$sql = "$sqlSelect
-				WHERE id = ?";
+				WHERE service_prices.id = ?";
 
 		$query = $this->createQuery($sql);
 		$query->setInteger(1, $idServicePrice);
@@ -280,13 +296,10 @@ class ServicePriceDAO extends GenericDAO
 	 */
 	private function newServicePrice(array $entry): ServicePrice
 	{
-		$idService = intval($entry['idService']);
-		$idProvider = intval($entry['idProvider']);
+		$this->parseEntry($entry, 'service', 'provider');
 
 		$servicePrice = new ServicePrice();
 		$servicePrice->fromArray($entry);
-		$servicePrice->getService()->setId($idService);
-		$servicePrice->getProvider()->setID($idProvider);
 
 		return $servicePrice;
 	}

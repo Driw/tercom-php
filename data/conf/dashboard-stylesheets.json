@@ -24,6 +24,10 @@
 			"Url": "https://use.fontawesome.com/releases/v5.2.0/css/all.css",
 			"Integrity": "sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ",
 			"Crossorigin": "anonymous"
+		},{
+			"Url": "https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.css",
+			"Integrity": "sha256-uKEg9s9/RiqVVOIWQ8vq0IIqdJTdnxDMok9XhiqnApU=",
+			"Crossorigin": "anonymous"
 		}
 	],
 	"ThirdParty": [

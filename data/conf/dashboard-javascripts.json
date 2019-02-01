@@ -64,6 +64,10 @@
 			"Url": "https://cdnjs.cloudflare.com/ajax/libs/jquery-loading-overlay/2.1.5/loadingoverlay.min.js",
 			"Integrity": "sha256-GhHe8GSgsaXMAaJkzy9Ycn0k90mYDh0R02BKx+pQkM8=",
 			"Crossorigin": "anonymous"
+		},{
+			"Url": "https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.min.js",
+			"Integrity": "sha256-tQ3x4V2JW+L0ew/P3v2xzL46XDjEWUExFkCDY0Rflqc=",
+			"Crossorigin": "anonymous"
 		}
 	],
 	"ThirdParty": [
