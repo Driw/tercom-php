@@ -135,16 +135,6 @@ class ServicePriceDAO extends GenericDAO
 	 */
 	private function newSelect(): string
 	{
-		return "SELECT id, idService, idProvider, name, additionalDescription, price, lastUpdate
-				FROM service_prices";
-	}
-
-	/**
-	 * Procedimento interno para centralizar e agilizar a manutenção de queries.
-	 * @return string aquisição da string de consulta simples para SELECT.
-	 */
-	private function newFullSelect(): string
-	{
 		$servicePriceColumns = $this->buildQuery(ServicePriceDAO::ALL_COLUMNS, 'service_prices');
 		$serviceColumns = $this->buildQuery(ServiceDAO::ALL_COLUMNS, 'services', 'service');
 		$providerColumns = $this->buildQuery(ProviderDAO::ALL_COLUMNS, 'providers', 'provider');
@@ -162,7 +152,7 @@ class ServicePriceDAO extends GenericDAO
 	 */
 	public function select(int $idServicePrice): ?ServicePrice
 	{
-		$sqlSelect = $this->newFullSelect();
+		$sqlSelect = $this->newSelect();
 		$sql = "$sqlSelect
 				WHERE service_prices.id = ?";
 
@@ -183,7 +173,7 @@ class ServicePriceDAO extends GenericDAO
 	{
 		$sqlSelect = $this->newSelect();
 		$sql = "$sqlSelect
-				WHERE idService = ?";
+				WHERE service_prices.idService = ?";
 
 		$query = $this->createQuery($sql);
 		$query->setInteger(1, $idService);
@@ -203,7 +193,7 @@ class ServicePriceDAO extends GenericDAO
 	{
 		$sqlSelect = $this->newSelect();
 		$sql = "$sqlSelect
-				WHERE idService = ? AND idProvider";
+				WHERE service_prices.idService = ? AND service_prices.idProvider = ?";
 
 		$query = $this->createQuery($sql);
 		$query->setInteger(1, $idService);

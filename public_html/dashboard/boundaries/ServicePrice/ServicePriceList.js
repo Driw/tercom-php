@@ -36,8 +36,9 @@ var ServicePriceList = ServicePriceList ||
 		return [
 			servicePrice.id,
 			servicePrice.name,
-			Util.formatMoney(servicePrice.price),
+			servicePrice.provider.fantasyName,
 			servicePrice.service.description,
+			Util.formatMoney(servicePrice.price),
 			'<div class="btn-group">{0}{1}</div>'.format(btnView, btnRemove),
 		];
 	},
