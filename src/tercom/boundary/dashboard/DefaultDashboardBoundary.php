@@ -347,6 +347,14 @@ abstract class DefaultDashboardBoundary extends ApiTemplate
 	}
 
 	/**
+	 * Redireciona para a página relativamente ao Dashboard.
+	 */
+	protected function redirectRelative(string $path): void
+	{
+		header("Location: /dashboard/$path");
+	}
+
+	/**
 	 * Redireciona para a página inicial do Dashboard.
 	 */
 	protected function redirectHome(): void

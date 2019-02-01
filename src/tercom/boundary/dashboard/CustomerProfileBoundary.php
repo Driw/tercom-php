@@ -44,6 +44,9 @@ class CustomerProfileBoundary extends DefaultDashboardLoggedBoundary
 	 */
 	public function onList(ApiContent $content): ApiTemplateResult
 	{
+		if (!$content->getParameters()->isSetted('idCustomer'))
+			$this->redirectRelative('customer/list');
+
 		$dashboardTemplate = $this->newBaseTemplate();
 		$dashboardTemplate = $this->prepareInclude(self::BASE_PATH. 'CustomerProfileList');
 		$dashboardTemplate->idCustomer = $this->getCustomerId($content);
