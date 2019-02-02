@@ -151,11 +151,7 @@ class CustomerPermissionDAO extends GenericDAO
 		$query->setInteger(1, $customerProfile->getId());
 		$query->setInteger(2, $permission->getId());
 
-		$result = $query->execute();
-		$entry = $result->next();
-		$result->free();
-
-		return intval($entry['qty']) > 0;
+		return $this->parseQueryExist($query);
 	}
 
 	/**

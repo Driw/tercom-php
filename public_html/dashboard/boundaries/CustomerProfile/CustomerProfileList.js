@@ -16,7 +16,7 @@ var CustomerProfileList = CustomerProfileList ||
 	},
 	loadCustomerProfiles: function()
 	{
-		ws.customerProfile_getAll(CustomerProfileList.idCustomer, CustomerProfileList.tbody, CustomerProfileList.onCustomerProfilesLoaded);
+		ws.customerProfile_getByCustomer(CustomerProfileList.idCustomer, CustomerProfileList.tbody, CustomerProfileList.onCustomerProfilesLoaded);
 	},
 	onCustomerProfilesLoaded: function(customerProfiles)
 	{
@@ -29,27 +29,34 @@ var CustomerProfileList = CustomerProfileList ||
 	},
 	newAddressRowData: function(index, customerProfile)
 	{
-		var btnView = '<button type="button" class="btn btn-sm btn-primary" data-index="{0}" onclick="CustomerProfileList.onBtnView(this)">Ver</button>'.format(index);
-		var btnRemove = '<button type="button" class="btn btn-sm btn-danger" data-index="{0}" onclick="CustomerProfileList.onBtnRemove(this)">Excluir</button>'.format(index);
+		var btnTemplate = '<button type="button" class="btn btn-sm btn-{0}" onclick="CustomerProfileList.{1}({2})">{3}</button>';
+		var btnView = btnTemplate.format('info', 'onBtnView', index, 'Ver');
+		var btnPermissions = btnTemplate.format('info', 'onBtnPermissions', index, 'Permissões');
+		var btnRemove = btnTemplate.format('danger', 'onBtnRemove', index, 'Excluir');
 
 		return [
 			customerProfile.id,
 			customerProfile.name,
 			customerProfile.assignmentLevel,
-			'<div class="btn-group">{0}{1}</div>'.format(btnView, btnRemove),
+			'<div class="btn-group">{0}{1}{2}</div>'.format(btnView, btnPermissions, btnRemove),
 		];
 	},
-	onBtnView: function(button)
+	onBtnView: function(index)
 	{
-		var index = button.dataset.index;
 		var customerProfile = CustomerProfileList.customerProfiles[index];
 
 		if (customerProfile !== undefined)
 			Util.redirect('customerProfile/view/{0}/{1}'.format(customerProfile.id, CustomerProfileList.idCustomer), true);
 	},
-	onBtnRemove: function(button)
+	onBtnPermissions: function(index)
 	{
-		var index = button.dataset.index;
+		var customerProfile = CustomerProfileList.customerProfiles[index];
+
+		if (customerProfile !== undefined)
+			Util.redirect('customerProfile/permissions/{0}'.format(customerProfile.id), true);
+	},
+	onBtnRemove: function(index)
+	{
 		var customerProfile = CustomerProfileList.customerProfiles[index];
 
 		if (customerProfile !== undefined)

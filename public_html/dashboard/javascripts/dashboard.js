@@ -373,6 +373,7 @@ var Dashboard = Dashboard ||
 	},
 	onParsePermissions: function(permissions)
 	{
+		Dashboard.rawPermissions = permissions.elements;
 		Dashboard.permissions = {};
 
 		for (var i = 0; i < permissions.elements.length; i++)

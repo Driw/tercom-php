@@ -16,6 +16,10 @@ class TercomProfileBoundary extends DefaultDashboardLoggedBoundary
 	 * @var string
 	 */
 	public const BASE_PATH = 'TercomProfile/';
+	/**
+	 * @var string
+	 */
+	public const PERMISSION_BASE_PATH = 'Permission/';
 
 	/**
 	 * {@inheritDoc}
@@ -94,6 +98,24 @@ class TercomProfileBoundary extends DefaultDashboardLoggedBoundary
 		$dashboardTemplate = $this->newBaseTemplate();
 		$dashboardTemplate = $this->prepareInclude(self::BASE_PATH. 'TercomProfileRemove');
 		$dashboardTemplate->idTercomProfile = $content->getParameters()->getInt('idTercomProfile');
+
+		$result = new ApiTemplateResult();
+		$result->add($dashboardTemplate);
+
+		return $result;
+	}
+
+	/**
+	 * @ApiAnnotation({"params":["idTercomProfile"]})
+	 * @param ApiContent $content
+	 * @return ApiTemplateResult
+	 */
+	public function onPermissions(ApiContent $content): ApiTemplateResult
+	{
+		$dashboardTemplate = $this->newBaseTemplate();
+		$dashboardTemplate = $this->prepareInclude(self::PERMISSION_BASE_PATH. 'PermissionList');
+		$dashboardTemplate->relationship = 'tercom';
+		$dashboardTemplate->idRelationship = $content->getParameters()->getInt('idTercomProfile');
 
 		$result = new ApiTemplateResult();
 		$result->add($dashboardTemplate);

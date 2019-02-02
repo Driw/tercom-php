@@ -34,18 +34,19 @@ var CustomerList = CustomerList ||
 	},
 	newCustomerRowData: function(index, customer)
 	{
-		var id = customer.id;
-		var btnView = '<button type="button" class="btn btn-sm btn-info" data-index="{0}" onclick="CustomerList.onClickBtnView(this)">Ver</button>'.format(index);
-		var btnAddresses = '<button type="button" class="btn btn-sm btn-info" data-index="{0}" onclick="CustomerList.onClickBtnAddresses(this)">Endereços</button>'.format(index);
-		var btnActive = '<button type="button" class="btn btn-sm btn-primary" data-index="{0}" onclick="CustomerList.onClickBtnActive(this)">Ativar</button>'.format(index);
-		var btnDesactive = '<button type="button" class="btn btn-sm btn-secondary" data-index="{0}" onclick="CustomerList.onClickBtnInactive(this)">Desativar</button>'.format(index);
+		var btntemplate = '<button type="button" class="btn btn-sm btn-{0}" onclick="CustomerList.{1}({2})">{3}</button>';
+		var btnView = btntemplate.format('primary', 'onClickBtnView', index, 'Ver');
+		var btnAddresses = btntemplate.format('info', 'onClickBtnAddresses', index, 'Endereços');
+		var btnProfiles = btntemplate.format('info', 'onClickBtnProfiles', index, 'Perfis');
+		var btnActive = btntemplate.format('success', 'onClickBtnActive', index, 'Ativar');
+		var btnDesactive = btntemplate.format('danger', 'onClickBtnInactive', index, 'Desativar');
 
 		return [
 			customer.id,
 			customer.cnpj,
 			customer.fantasyName,
 			customer.email,
-			'<div class="btn-group" id="customer-{0}">{1}{2}{3}</div>'.format(customer.id, btnView, btnAddresses, customer.inactive ? btnActive : btnDesactive),
+			'<div class="btn-group" id="customer-{0}">{1}{2}{3}{4}</div>'.format(customer.id, btnView, btnProfiles, btnAddresses, customer.inactive ? btnActive : btnDesactive),
 		];
 	},
 	setCustomer: function(customer)
@@ -63,29 +64,30 @@ var CustomerList = CustomerList ||
 
 		return -1;
 	},
-	onClickBtnView: function(button)
+	onClickBtnView: function(index)
 	{
-		var index = button.dataset.index;
 		var customer = CustomerList.customers[index];
 		Util.redirect('customer/view/{0}'.format(customer.id), true);
 	},
-	onClickBtnAddresses: function(button)
+	onClickBtnAddresses: function(index)
 	{
-		var index = button.dataset.index;
 		var customer = CustomerList.customers[index];
 		Util.redirect('customer/viewAddresses/{0}'.format(customer.id), true);
 	},
-	onClickBtnActive: function(button)
+	onClickBtnProfiles: function(index)
 	{
-		var index = button.dataset.index;
+		var customer = CustomerList.customers[index];
+		Util.redirect('customerProfile/list/{0}'.format(customer.id), true);
+	},
+	onClickBtnActive: function(index)
+	{
 		var customer = CustomerList.customers[index];
 		var tr = $(this).parents('tr');
 
 		ws.customer_setActive(customer.id, tr, CustomerList.onCustomerSetInactive);
 	},
-	onClickBtnInactive: function(button)
+	onClickBtnInactive: function(index)
 	{
-		var index = button.dataset.index;
 		var customer = CustomerList.customers[index];
 		var tr = $(this).parents('tr');
 

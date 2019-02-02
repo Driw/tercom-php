@@ -772,6 +772,38 @@ Webservice.prototype.servicePrice_getProvider = function(idService, idProvider, 
 	});
 };
 
+// - ManagePermissions
+
+Webservice.prototype.managePermissions_add = function(relationship, idRelationship, idItem, form, target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'managePermissions/add/{0}/{1}/{2}'.format(relationship, idRelationship, idItem),
+		'form': form,
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('adicionar permissão'),
+	});
+};
+Webservice.prototype.managePermissions_remove = function(relationship, idRelationship, idItem, form, target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'managePermissions/remove/{0}/{1}/{2}'.format(relationship, idRelationship, idItem),
+		'form': form,
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('remover permissão'),
+	});
+};
+Webservice.prototype.managePermissions_getAll = function(relationship, idRelationship, target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'managePermissions/getAll/{0}/{1}'.format(relationship, idRelationship),
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter lista de permissões'),
+	});
+};
+
 // Permission
 
 Webservice.prototype.managePermissions_tercom_getAll = function(target, listener)
@@ -993,16 +1025,16 @@ Webservice.prototype.customerProfile_getByCustomer = function(idCustomer, target
 		'webservice': 'customerProfile/customer/{0}'.format(idCustomer),
 		'target': target,
 		'listener': listener,
-		'errorMessage': this.newBaseErrorMessage('obter perfil de cliente'),
+		'errorMessage': this.newBaseErrorMessage('obter lista de perfis do cliente'),
 	});
 };
-Webservice.prototype.customerProfile_getAll = function(idCustomer, target, listener)
+Webservice.prototype.customerProfile_getAll = function(target, listener)
 {
 	this.setOptionsAndExecute({
-		'webservice': 'customerProfile/getAll/{0}'.format(idCustomer),
+		'webservice': 'customerProfile/getAll',
 		'target': target,
 		'listener': listener,
-		'errorMessage': this.newBaseErrorMessage('obter todos perfis de cliente'),
+		'errorMessage': this.newBaseErrorMessage('obter todos perfis de clientes'),
 	});
 };
 

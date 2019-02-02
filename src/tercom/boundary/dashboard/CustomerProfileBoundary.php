@@ -16,6 +16,10 @@ class CustomerProfileBoundary extends DefaultDashboardLoggedBoundary
 	 * @var string
 	 */
 	public const BASE_PATH = 'CustomerProfile/';
+	/**
+	 * @var string
+	 */
+	public const PERMISSION_BASE_PATH = 'Permission/';
 
 	/**
 	 * {@inheritDoc}
@@ -38,7 +42,7 @@ class CustomerProfileBoundary extends DefaultDashboardLoggedBoundary
 	}
 
 	/**
-	 * @ApiAnnotation({"params"["idCustomer"]})
+	 * @ApiAnnotation({"params":["idCustomer"]})
 	 * @param ApiContent $content
 	 * @return ApiTemplateResult
 	 */
@@ -103,6 +107,24 @@ class CustomerProfileBoundary extends DefaultDashboardLoggedBoundary
 		$dashboardTemplate = $this->prepareInclude(self::BASE_PATH. 'CustomerProfileRemove');
 		$dashboardTemplate->idCustomer = $this->getCustomerId($content);
 		$dashboardTemplate->idCustomerProfile = $content->getParameters()->getInt('idCustomerProfile');
+
+		$result = new ApiTemplateResult();
+		$result->add($dashboardTemplate);
+
+		return $result;
+	}
+
+	/**
+	 * @ApiAnnotation({"params":["idCustomerProfile"]})
+	 * @param ApiContent $content
+	 * @return ApiTemplateResult
+	 */
+	public function onPermissions(ApiContent $content): ApiTemplateResult
+	{
+		$dashboardTemplate = $this->newBaseTemplate();
+		$dashboardTemplate = $this->prepareInclude(self::PERMISSION_BASE_PATH. 'PermissionList');
+		$dashboardTemplate->relationship = 'customer';
+		$dashboardTemplate->idRelationship = $content->getParameters()->getInt('idCustomerProfile');
 
 		$result = new ApiTemplateResult();
 		$result->add($dashboardTemplate);
