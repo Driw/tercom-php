@@ -31,7 +31,7 @@ class ServicePriceDAO extends GenericDAO
 	/**
 	 * @var array nome das colunas da tabela de preços de serviço.
 	 */
-	public const ALL_COLUMNS = ['idService', 'idProvider', 'name', 'additionalDescription', 'price', 'lastUpdate'];
+	public const ALL_COLUMNS = ['id', 'idService', 'idProvider', 'name', 'additionalDescription', 'price', 'lastUpdate'];
 
 	/**
 	 * Procedimento interno para validação dos dados de um preço de serviço ao inserir e/ou atualizar.
