@@ -23,12 +23,18 @@ var ProductGroupList = ProductGroupList ||
 	},
 	loadProductCategories: function()
 	{
-		if (ProductGroupList.selectFamily.val() > 0)
-			ws.productGroup_getAll(ProductGroupList.idProductFamily, ProductGroupList.tbody, ProductGroupList.onProductCategoriesLoaded);
+		if (ProductGroupList.idProductFamily > 0)
+			ws.productFamily_getCategories(ProductGroupList.idProductFamily, ProductGroupList.tbody, ProductGroupList.onProductFamilyLoaded);
+		else
+			ws.productGroup_getAll(ProductGroupList.tbody, ProductGroupList.onProductCategoriesLoaded);
 	},
 	onProductFamiliesLoaded: function(productFamilies)
 	{
 		ProductGroupList.selectFamily.selectpicker();
+
+		var option = Util.createElementOption('Todas', 0);
+		ProductGroupList.selectFamily.append(option);
+
 		ProductGroupList.productFamilies = productFamilies.elements;
 		ProductGroupList.productFamilies.forEach(productFamily =>
 		{
@@ -37,19 +43,28 @@ var ProductGroupList = ProductGroupList ||
 		});
 		ProductGroupList.selectFamily.selectpicker('refresh');
 	},
-	onProductCategoriesLoaded: function(productFamily)
+	onProductFamilyLoaded: function(productFamily)
+	{
+		ProductGroupList.loadDatatables(productFamily.productCategories.elements);
+	},
+	onProductCategoriesLoaded: function(productGroups)
+	{
+		ProductGroupList.loadDatatables(productGroups.elements);
+	},
+	loadDatatables: function(productCategories)
 	{
 		ProductGroupList.datatables.clear().draw();
-		ProductGroupList.productCategories = productFamily.productCategories.elements;
+		ProductGroupList.productCategories = productCategories;
 		ProductGroupList.productCategories.forEach((productCategory, index) =>
 		{
 			var rowData = ProductGroupList.newProductCategoryRowData(index, productCategory);
 			ProductGroupList.datatables.row.add(rowData).draw();
 		});
+
 	},
 	onProductFamilyChange: function()
 	{
-		ProductGroupList.idProductFamily = $(this).find(":selected").val();
+		ProductGroupList.idProductFamily = $(this).val();
 		ProductGroupList.loadProductCategories();
 	},
 	newProductCategoryRowData: function(index, productCategory)

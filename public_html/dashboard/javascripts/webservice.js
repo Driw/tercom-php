@@ -321,6 +321,16 @@ Webservice.prototype.productFamily_set = function(idProductFamily, form, listene
 		'errorMessage': this.newBaseErrorMessage('atualizar família de produto'),
 	});
 };
+Webservice.prototype.productFamily_remove = function(idProductFamily, form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'productFamily/remove/{0}'.format(idProductFamily),
+		'form': form,
+		'target': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('excluir família de produto'),
+	});
+};
 Webservice.prototype.productFamily_get = function(idProductFamily, form, listener)
 {
 	this.setOptionsAndExecute({
@@ -329,6 +339,15 @@ Webservice.prototype.productFamily_get = function(idProductFamily, form, listene
 		'target': form,
 		'listener': listener,
 		'errorMessage': this.newBaseErrorMessage('obter família de produto'),
+	});
+};
+Webservice.prototype.productFamily_getCategories = function(idProductFamily, target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'productFamily/getCategories/{0}'.format(idProductFamily),
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter grupos da família de produto'),
 	});
 };
 Webservice.prototype.productFamily_getAll = function(target, listener)
@@ -349,13 +368,13 @@ Webservice.prototype.productGroup_settings = function(target, listener)
 		'webservice': 'productFamily/settings',
 		'target': target,
 		'listener': listener,
-		'errorMessage': this.newBaseErrorMessage('obter configurações de família de produto'),
+		'errorMessage': this.newBaseErrorMessage('obter configurações de grupo de produto'),
 	});
 };
-Webservice.prototype.productGroup_add = function(idProductFamily, form, listener)
+Webservice.prototype.productGroup_add = function(form, listener)
 {
 	this.setOptionsAndExecute({
-		'webservice': 'productGroup/add/{0}'.format(idProductFamily),
+		'webservice': 'productGroup/add',
 		'form': form,
 		'target': form,
 		'listener': listener,
@@ -392,28 +411,150 @@ Webservice.prototype.productGroup_get = function(idProductGroup, form, listener)
 		'errorMessage': this.newBaseErrorMessage('obter grupo de produto'),
 	});
 };
-Webservice.prototype.productGroup_getAll = function(idProductFamily, target, listener)
-{
-	this.setOptionsAndExecute({
-		'webservice': 'productFamily/getCategories/{0}'.format(idProductFamily),
-		'target': target,
-		'listener': listener,
-		'errorMessage': this.newBaseErrorMessage('obter grupos de produto'),
-	});
-};
-Webservice.prototype.productSubgroup_getAll = function(idProductGroup, target, listener)
+Webservice.prototype.productGroup_getCategories = function(idProductGroup, target, listener)
 {
 	this.setOptionsAndExecute({
 		'webservice': 'productGroup/getCategories/{0}'.format(idProductGroup),
 		'target': target,
 		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter subgrupos do grupo de produto'),
+	});
+};
+Webservice.prototype.productGroup_getAll = function(target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'productGroup/getAll',
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter grupos de produto'),
+	});
+};
+
+// ProductSubgroup
+
+Webservice.prototype.productSubgroup_settings = function(target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'productGroup/settings',
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter configurações de subgrupo de produto'),
+	});
+};
+Webservice.prototype.productSubgroup_add = function(form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'productSubgroup/add',
+		'form': form,
+		'target': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('adicionar subgrupo de produto'),
+	});
+};
+Webservice.prototype.productSubgroup_set = function(idProductSubgroup, form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'productSubgroup/set/{0}'.format(idProductSubgroup),
+		'form': form,
+		'target': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('atualizar subgrupo de produto'),
+	});
+};
+Webservice.prototype.productSubgroup_remove = function(idProductSubgroup, form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'productSubgroup/remove/{0}'.format(idProductSubgroup),
+		'form': form,
+		'target': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('excluir subgrupo de produto'),
+	});
+};
+Webservice.prototype.productSubgroup_get = function(idProductSubgroup, form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'productSubgroup/get/{0}'.format(idProductSubgroup),
+		'form': form,
+		'target': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter subgrupo de produto'),
+	});
+};
+Webservice.prototype.productSubgroup_getCategories = function(idProductGroup, target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'productSubgroup/getCategories/{0}'.format(idProductGroup),
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter setores do subgrupo de produto'),
+	});
+};
+Webservice.prototype.productSubgroup_getAll = function(target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'productSubgroup/getAll',
+		'target': target,
+		'listener': listener,
 		'errorMessage': this.newBaseErrorMessage('obter subgrupos de produto'),
 	});
 };
-Webservice.prototype.productSector_getAll = function(idProductSubgroup, target, listener)
+
+// ProductSector
+
+Webservice.prototype.productSector_settings = function(target, listener)
 {
 	this.setOptionsAndExecute({
-		'webservice': 'productSubGroup/getCategories/{0}'.format(idProductSubgroup),
+		'webservice': 'productSector/settings',
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter configurações de setor de produto'),
+	});
+};
+Webservice.prototype.productSector_add = function(form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'productSector/add',
+		'form': form,
+		'target': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('adicionar setor de produto'),
+	});
+};
+Webservice.prototype.productSector_set = function(idProductSector, form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'productSector/set/{0}'.format(idProductSector),
+		'form': form,
+		'target': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('atualizar setor de produto'),
+	});
+};
+Webservice.prototype.productSector_remove = function(idProductSector, form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'productSector/remove/{0}'.format(idProductSector),
+		'form': form,
+		'target': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('excluir setor de produto'),
+	});
+};
+Webservice.prototype.productSector_get = function(idProductSector, form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'productSector/get/{0}'.format(idProductSector),
+		'form': form,
+		'target': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter setor de produto'),
+	});
+};
+Webservice.prototype.productSector_getAll = function(target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'productSector/getAll',
 		'target': target,
 		'listener': listener,
 		'errorMessage': this.newBaseErrorMessage('obter setores de produto'),

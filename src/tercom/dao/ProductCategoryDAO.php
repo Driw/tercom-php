@@ -250,18 +250,39 @@ class ProductCategoryDAO extends GenericDAO
 
 	/**
 	 * Seleciona os dados de todas as categorias de produto registradas no banco de dados sem ordenação.
+	 * @param int $idProductCategoryType tipo da categoria de produto do qual deseja listar tudo.
 	 * @return ProductCategories aquisição da lista de categorias de produto atualmente registrados.
 	 */
-	public function selectAll(): ProductCategories
+	public function selectAll(int $idProductCategoryType): ProductCategories
 	{
-		$sql = "SELECT id, name
-				FROM product_categories";
+		switch ($idProductCategoryType)
+		{
+			case ProductCategory::CATEGORY_NONE:
+				$sql = "SELECT id, name
+						FROM product_categories";
+				$query = $this->createQuery($sql);
+				break;
 
-		$query = $this->createQuery($sql);
+			case ProductCategory::CATEGORY_FAMILY:
+				$sql = $this->newSelectFamilies();
+				$query = $this->createQuery($sql);
+				break;
+
+			case ProductCategory::CATEGORY_GROUP:
+			case ProductCategory::CATEGORY_SUBGROUP:
+			case ProductCategory::CATEGORY_SECTOR:
+				$sqlSelect = $this->newSelect();
+				$sql = "$sqlSelect
+						WHERE product_category_types.id = ?";
+				$query = $this->createQuery($sql);
+				$query->setInteger(1, $idProductCategoryType);
+				break;
+		}
+
 		$result = $query->execute();
 
 		return $this->parseProductCategories($result);
-	}
+}
 
 	/**
 	 * Seleciona os dados de todas as categorias de produto relacionadas a uma outra categoria de produto.

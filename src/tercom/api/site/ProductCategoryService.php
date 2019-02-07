@@ -183,7 +183,7 @@ abstract class ProductCategoryService extends DefaultSiteService
 	 */
 	public function actionGetAll(ApiContent $content):ApiResult
 	{
-		$productCategories = $this->getProductCategoryControl()->getAll();
+		$productCategories = $this->getProductCategoryControl()->getAll($this->getProductCategoryType());
 
 		$result = new ApiResultObject();
 		$result->setObject($productCategories);

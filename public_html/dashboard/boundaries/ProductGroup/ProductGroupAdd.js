@@ -60,7 +60,7 @@ var ProductGroupAdd = ProductGroupAdd ||
 	},
 	submit: function(form)
 	{
-		ws.productGroup_add(ProductGroupAdd.selectFamily.val(), form, ProductGroupAdd.onSubmited);
+		ws.productGroup_add(form, ProductGroupAdd.onSubmited);
 	},
 	onSubmited: function(productCategory, message)
 	{

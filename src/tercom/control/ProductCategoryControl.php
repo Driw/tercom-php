@@ -143,9 +143,9 @@ class ProductCategoryControl extends GenericControl
 	 *
 	 * @return ProductCategories
 	 */
-	public function getAll(): ProductCategories
+	public function getAll(int $idProductCategoryType): ProductCategories
 	{
-		return $this->productCategoryDAO->selectAll();
+		return $this->productCategoryDAO->selectAll($idProductCategoryType);
 	}
 
 	/**
