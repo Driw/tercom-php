@@ -28,13 +28,16 @@
 			"Url": "https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.css",
 			"Integrity": "sha256-uKEg9s9/RiqVVOIWQ8vq0IIqdJTdnxDMok9XhiqnApU=",
 			"Crossorigin": "anonymous"
+		},{
+			"Url": "https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.5/css/bootstrap-select.min.css",
+			"Integrity": "sha256-+vXzuS+2WfIRKsWKhx57m2MxXLm1lWxXWMvRYvV8EmI=",
+			"Crossorigin": "anonymous"
 		}
 	],
 	"ThirdParty": [
 		"https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.css"
 	],
 	"Local": [
-		"bootstrap-select.min.css",
 		"fontastic.css",
 		"style.blue.css",
 		"dashboard.min.css",

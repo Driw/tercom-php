@@ -68,6 +68,14 @@
 			"Url": "https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.min.js",
 			"Integrity": "sha256-tQ3x4V2JW+L0ew/P3v2xzL46XDjEWUExFkCDY0Rflqc=",
 			"Crossorigin": "anonymous"
+		},{
+			"Url": "https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.5/js/bootstrap-select.min.js",
+			"Integrity": "sha256-sPB0bXhTKTOD26cdIyP0IBbjPU55/RfeXgJmbPZmuXc=",
+			"Crossorigin": "anonymous"
+		},{
+			"Url": "https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.5/js/i18n/defaults-pt_BR.min.js",
+			"Integrity": "sha256-LJWOUX6iePqPqHfoRXLD7Xj5OwnlF/SwXNTN+o/Og/o=",
+			"Crossorigin": "anonymous"
 		}
 	],
 	"ThirdParty": [
@@ -75,7 +83,6 @@
 	],
 	"Local": [
 		"bootstrap-confirmation.min.js",
-		"bootstrap-select.min.js",
 		"ajax.min.js",
 		"front.js",
 		"webservice.min.js",

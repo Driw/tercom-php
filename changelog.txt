@@ -20,6 +20,9 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+07.02.2018 - 0.3.5.227
+- Atualizado dependência de 'bootstrap-select' para a versão '1.13.*' para funcinar corretamente com o bootstrap 4.
+
 02.02.2018 - 0.3.5.226
 - Adicionado páginas para gerenciar as permissões dos perfis de funcionário TERCOM e funcionário de cliente.
 

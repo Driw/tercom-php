@@ -6,6 +6,11 @@ const NO_VALUE = '-';
 const DEFAULT_FADE = 'fast';
 const DEFAULT_TIMEOUT = 3000;
 
+const PRODUCT_FAMILY_TYPE = 1;
+const PRODUCT_GROUP_TYPE = 2;
+const PRODUCT_SUBGROUP_TYPE = 3;
+const PRODUCT_SECTOR_TYPE = 4;
+
 $(document).ready(function()
 {
 	initSpoiler();
@@ -49,8 +54,8 @@ function initMasks()
 
 function initSelectPicker()
 {
-	$.fn.selectpicker.Constructor.BootstrapVersion = '4';
 	$('.select-picker').selectpicker({
+		'liveSearch': true,
 		'liveSearchNormalize': true,
 		'size': 6,
 	});
@@ -314,7 +319,7 @@ var Util = Util ||
 		var option = $(element);
 		option.val(value);
 		option.html(html);
-		option.prop('selected', selected === true);
+		option.prop('selected', selected);
 
 		return option;
 	},
