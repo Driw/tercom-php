@@ -40,17 +40,17 @@
 	},
 	{
 		"Dropdown": {
-			"service": "product.categories",
+			"service": "productCategory",
 			"Name": "Categorias de Produto",
 			"Icon": "fas fa-layer-group",
 			"ID": "dropdown-product-categories",
 			"PermissionPacket": "productFamily",
 			"Class": "",
 			"Itens": [
-				{ "Name": "Famílias", "Icon": "fas fa-chess-king", "Url": "product/categories/family" },
-				{ "Name": "Grupos", "Icon": "fas fa-chess-queen", "Url": "product/categories/group" },
-				{ "Name": "Sub Grupos", "Icon": "fas fa-chess-knight", "Url": "product/categories/subgroup" },
-				{ "Name": "Setores", "Icon": "fas fa-chess-rook", "Url": "product/categories/sector" }
+				{ "Name": "Famílias", "Icon": "fas fa-chess-king", "Url": "productFamily/list" },
+				{ "Name": "Grupos", "Icon": "fas fa-chess-queen", "Url": "productGroup/list" },
+				{ "Name": "Subgrupos", "Icon": "fas fa-chess-knight", "Url": "productSubgroup/list" },
+				{ "Name": "Setores", "Icon": "fas fa-chess-rook", "Url": "productSector/list" }
 			]
 		}
 	},

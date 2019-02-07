@@ -158,5 +158,18 @@ class ProductCategory extends AdvancedObject
 			'productCategories' => ProductCategories::class,
 		];
 	}
+
+	/**
+	 * @return array aquisição dos tipos de categorias de produtos disponíveis.
+	 */
+	public static function getTypes(): array
+	{
+		return [
+			self::CATEGORY_FAMILY => 'Família',
+			self::CATEGORY_GROUP => 'Grupo',
+			self::CATEGORY_SUBGROUP => 'Subgrupo',
+			self::CATEGORY_SECTOR => 'Setor',
+		];
+	}
 }
 

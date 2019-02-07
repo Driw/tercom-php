@@ -20,6 +20,10 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+07.02.2018 - 0.3.5.229
+- Adicionado páginas para gerenciar famílias de produto e grupos de produto.
+- Adicionado permissões que estavam faltando: productGroup.getAll, productSubgroup.getAll e productSector.remove.
+
 07.02.2018 - 0.3.5.228
 - Corrigido avaiableName() e ajustes à actionAvaiable(), ProductCategoryService.
 - Corrigido erro com setTercomEmployee() onde não permitia informar um null, OrderRequest.
