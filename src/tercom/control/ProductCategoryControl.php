@@ -187,9 +187,9 @@ class ProductCategoryControl extends GenericControl
 	 * @param int $idProductCategory
 	 * @return ProductCategories
 	 */
-	public function avaiable(string $name, int $idProductCategory = 0): ProductCategories
+	public function avaiableName(string $name, int $idProductCategory = 0): bool
 	{
-		return $this->productCategoryDAO->existName($name, $idProductCategory);
+		return !$this->productCategoryDAO->existName($name, $idProductCategory);
 	}
 
 	/**

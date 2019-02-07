@@ -262,7 +262,7 @@ class OrderRequest extends AdvancedObject
 	/**
 	 * @param TercomEmployee $tercomEmployee funcionário TERCOM responsável pela cotação da solicitação.
 	 */
-	public function setTercomEmployee(TercomEmployee $tercomEmployee): void
+	public function setTercomEmployee(?TercomEmployee $tercomEmployee): void
 	{
 		$this->tercomEmployee = $tercomEmployee;
 	}

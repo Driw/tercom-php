@@ -20,6 +20,10 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+07.02.2018 - 0.3.5.228
+- Corrigido avaiableName() e ajustes à actionAvaiable(), ProductCategoryService.
+- Corrigido erro com setTercomEmployee() onde não permitia informar um null, OrderRequest.
+
 07.02.2018 - 0.3.5.227
 - Atualizado dependência de 'bootstrap-select' para a versão '1.13.*' para funcinar corretamente com o bootstrap 4.
 

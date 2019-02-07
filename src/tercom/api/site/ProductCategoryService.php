@@ -7,6 +7,7 @@ use dProject\restful\ApiContent;
 use dProject\restful\ApiResult;
 use dProject\restful\exception\ApiException;
 use tercom\api\site\results\ApiResultObject;
+use tercom\api\site\results\ApiResultSimpleValidation;
 use tercom\entities\ProductCategory;
 use tercom\control\ControlException;
 
@@ -213,36 +214,68 @@ abstract class ProductCategoryService extends DefaultSiteService
 	}
 
 	/**
-	 * Pesquisa por subgrupos dos produtos através de um filtro e um valor de busca.
+	 * Pesquisa por categorias dos produtos através de um filtro e um valor de busca.
 	 * @ApiPermissionAnnotation({"params":["filter","value"]})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
-	 * @return ApiResult aquisição do resultado com a lista dos subgrupos dos produtos encontrados.
+	 * @return ApiResult aquisição do resultado com a lista das categorias dos produtos encontrados.
 	 */
 	public function actionSearch(ApiContent $content):ApiResult
 	{
-		$filter = $content->getParameters()->getString('filter');
-		$value = $content->getParameters()->getString('value');
-
-		switch ($filter)
+		switch (($filter = $content->getParameters()->getString('filter')))
 		{
-			case 'name': return $this->actionSearchByName($value);
+			case 'name': return $this->actionSearchByName($content);
 		}
 
-		throw new ApiException('método de pesquisa desconhecido');
+		throw new FilterException($filter);
 	}
 
 	/**
-	 * Procedimento interno utilizado para buscar por subgrupos dos produtos através do nome.
-	 * @param string $name nome parcial ou completo do subgrupo dos produtos à ser procurada.
-	 * @return ApiResultObject aquisição do resultado com a lista dos subgrupos dos produtos encontrados.
+	 * Procedimento interno utilizado para buscar por categoria dos produtos através do nome.
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @return ApiResultObject aquisição do resultado com a lista das categorias dos produtos encontrados.
 	 */
-	private function actionSearchByName(string $name): ApiResultObject
+	private function actionSearchByName(ApiContent $content): ApiResultObject
 	{
+		$name = $content->getParameters()->getString('value');
 		$productCategories = $this->getProductCategoryControl()->searchByname($name, $this->getProductCategoryType());
 
 		$result = new ApiResultObject();
 		$result->setObject($productCategories);
 		$result->setMessage('encontrado %d resultados para "%s"', $productCategories->size(), $name);
+
+		return $result;
+	}
+
+	/**
+	 * Verifica a disponibilidade de um atributo para categoria de produto.
+	 * @ApiPermissionAnnotation({"params":["filter","value","idProductCategory"]})
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @return ApiResultSimpleValidation aquisição do resultado de disponibilidade.
+	 */
+	public function actionAvaiable(ApiContent $content): ApiResultSimpleValidation
+	{
+		switch (($filter = $content->getParameters()->getString('filter')))
+		{
+			case 'name': return $this->avaiableName($content);
+		}
+
+		throw new FilterException($filter);
+	}
+
+	/**
+	 * Procedimento interno utilizado pára verificar a disponibilidade do nome de uma categoria de produto.
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @return ApiResultSimpleValidation aquisição do resultado de disponibilidade.
+	 */
+	private function avaiableName(ApiContent $content): ApiResultSimpleValidation
+	{
+		$parameters = $content->getParameters();
+		$name = $parameters->getString('value');
+		$idProductCategory = $this->parseNullToInt($parameters->getInt('idProductCategory', false));
+		$avaiable = $this->getProductCategoryControl()->avaiableName($name, $idProductCategory);
+
+		$result = new ApiResultSimpleValidation();
+		$result->setOkMessage($avaiable, 'nome "%s" %s', $name, $this->getMessageAvaiable($avaiable));
 
 		return $result;
 	}
