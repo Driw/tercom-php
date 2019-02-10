@@ -210,7 +210,7 @@ abstract class DefaultDashboardBoundary extends ApiTemplate
 	public function getConfigs(): DashboardConfigs
 	{
 		if ($this->configs === null)
-			$this->configs = new DashboardConfigs();
+			$this->configs = new DashboardConfigs($this->isLoginTercom());
 
 		return $this->configs;
 	}

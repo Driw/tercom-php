@@ -16,14 +16,19 @@ abstract class BoundaryConfigs
 	 * @var Config[]
 	 */
 	private $configs;
+	/**
+	 * @var bool
+	 */
+	protected $isLoginTercom;
 
 	/**
 	 *
 	 */
 
-	public function __construct()
+	public function __construct($isLoginTercom)
 	{
 		$this->configs = [];
+		$this->isLoginTercom = $isLoginTercom;
 	}
 
 	/**

@@ -58,7 +58,7 @@ class DashboardConfigs extends BoundaryConfigs
 
 	public function getNavSide(): Config
 	{
-		return $this->getConfigByName('dashboard-navside');
+		return $this->getConfigByName($this->isLoginTercom ? 'dashboard-navside' : 'dashboard-navside-customer');
 	}
 }
 

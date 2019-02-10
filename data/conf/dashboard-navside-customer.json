@@ -1,0 +1,141 @@
+[
+	{
+		"Item": {
+			"service": "home",
+			"Name": "Inicio",
+			"Icon": "fas fa-home",
+			"Url": "/dashboard",
+			"Class": ""
+		}
+	},
+	{
+		"Dropdown": {
+			"service": "productCategory",
+			"Name": "Categorias de Produto",
+			"Icon": "fas fa-layer-group",
+			"ID": "dropdown-product-categories",
+			"PermissionPacket": "productFamily",
+			"Class": "",
+			"Itens": [
+				{ "Name": "Famílias", "Icon": "fas fa-chess-king", "Url": "productFamily/list" },
+				{ "Name": "Grupos", "Icon": "fas fa-chess-queen", "Url": "productGroup/list" },
+				{ "Name": "Subgrupos", "Icon": "fas fa-chess-knight", "Url": "productSubgroup/list" },
+				{ "Name": "Setores", "Icon": "fas fa-chess-rook", "Url": "productSector/list" }
+			]
+		}
+	},
+	{
+		"Dropdown": {
+			"service": "productPackage",
+			"Name": "Embalagens de Produto",
+			"Icon": "fas fa-cube",
+			"ID": "dropdown-product-packages",
+			"PermissionPacket": "productPackage",
+			"Class": "",
+			"Itens": [
+				{ "Name": "Listar", "Icon": "fas fa-list-ul", "Url": "productPackage/list", "PermissionPacket": "productPackage", "PermissionAction": "getAll" },
+				{ "Name": "Adicionar", "Icon": "fas fa-plus", "Url": "productPackage/add", "PermissionPacket": "productPackage", "PermissionAction": "add" }
+			]
+		}
+	},
+	{
+		"Dropdown": {
+			"service": "productUnit",
+			"Name": "Unidades de Produto",
+			"Icon": "fas fa-ruler",
+			"ID": "dropdown-product-units",
+			"Class": "",
+			"Itens": [
+				{ "Name": "Listar", "Icon": "fas fa-list-ul", "Url": "productUnit/list", "PermissionPacket": "productUnit", "PermissionAction": "getAll" },
+				{ "Name": "Adicionar", "Icon": "fas fa-plus", "Url": "productUnit/add", "PermissionPacket": "productUnit", "PermissionAction": "add" }
+			]
+		}
+	},
+	{
+		"Dropdown": {
+			"service": "productType",
+			"Name": "Tipos de Produto",
+			"Icon": "fas fa-dolly",
+			"ID": "dropdown-product-types",
+			"PermissionPacket": "productType",
+			"Class": "",
+			"Itens": [
+				{ "Name": "Listar", "Icon": "fas fa-list-ul", "Url": "productType/list", "PermissionPacket": "productType", "PermissionAction": "getAll" },
+				{ "Name": "Adicionar", "Icon": "fas fa-plus", "Url": "productType/add", "PermissionPacket": "productType", "PermissionAction": "add" }
+			]
+		}
+	},
+	{
+		"Dropdown": {
+			"service": "product",
+			"Name": "Produtos",
+			"Icon": "fas fa-dolly-flatbed",
+			"ID": "dropdown-product",
+			"PermissionPacket": "product",
+			"Class": "",
+			"Itens": [
+				{ "Name": "Listar", "Icon": "fas fa-list-ul", "Url": "product/list", "PermissionPacket": "product", "PermissionAction": "getAll" },
+				{ "Name": "Procurar", "Icon": "fas fa-search", "Url": "product/search", "PermissionPacket": "product", "PermissionAction": "search" },
+				{ "Name": "Adicionar", "Icon": "fas fa-plus", "Url": "product/add", "PermissionPacket": "product", "PermissionAction": "add" }
+			]
+		}
+	},
+	{
+		"Dropdown": {
+			"service": "service",
+			"Name": "Serviços",
+			"Icon": "fas fa-dolly-flatbed",
+			"ID": "dropdown-service",
+			"PermissionPacket": "service",
+			"Class": "",
+			"Itens": [
+				{ "Name": "Listar", "Icon": "fas fa-list-ul", "Url": "service/list", "PermissionPacket": "service", "PermissionAction": "getAll" },
+				{ "Name": "Procurar", "Icon": "fas fa-search", "Url": "service/search", "PermissionPacket": "service", "PermissionAction": "search" },
+				{ "Name": "Adicionar", "Icon": "fas fa-plus", "Url": "service/add", "PermissionPacket": "service", "PermissionAction": "add" }
+			]
+		}
+	},
+	{
+		"Dropdown": {
+			"service": "customer",
+			"Name": "Clientes",
+			"Icon": "fas fa-hashtag",
+			"ID": "dropdown-customer",
+			"PermissionPacket": "customer",
+			"Class": "",
+			"Itens": [
+				{ "Name": "Listar", "Icon": "fas fa-list-ul", "Url": "customer/list", "PermissionPacket": "customer", "PermissionAction": "getAll" },
+				{ "Name": "Procurar", "Icon": "fas fa-search", "Url": "customer/search", "PermissionPacket": "customer", "PermissionAction": "search" },
+				{ "Name": "Adicionar", "Icon": "fas fa-plus", "Url": "customer/add", "PermissionPacket": "customer", "PermissionAction": "add" }
+			]
+		}
+	},
+	{
+		"Dropdown": {
+			"service": "customerProfile",
+			"Name": "Perfis de Cliente",
+			"Icon": "fas fa-hashtag",
+			"ID": "dropdown-customer-profile",
+			"PermissionPacket": "customerProfile",
+			"Class": "",
+			"Itens": [
+				{ "Name": "Listar", "Icon": "fas fa-list-ul", "Url": "customerProfile/list", "PermissionPacket": "customerProfile", "PermissionAction": "getAll" },
+				{ "Name": "Adicionar", "Icon": "fas fa-plus", "Url": "customerProfile/add", "PermissionPacket": "customerProfile", "PermissionAction": "add" }
+			]
+		}
+	},
+	{
+		"Dropdown": {
+			"service": "customerEmployee",
+			"Name": "Funcionários de Cliente",
+			"Icon": "fas fa-hashtag",
+			"ID": "dropdown-customer-employee",
+			"PermissionPacket": "customerEmployee",
+			"Class": "",
+			"Itens": [
+				{ "Name": "Listar", "Icon": "fas fa-list-ul", "Url": "customerEmployee/list", "PermissionPacket": "customer", "PermissionAction": "getAll" },
+				{ "Name": "Adicionar", "Icon": "fas fa-plus", "Url": "customerEmployee/add", "PermissionPacket": "customer", "PermissionAction": "add" }
+			]
+		}
+	}
+]
