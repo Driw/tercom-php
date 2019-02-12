@@ -20,6 +20,12 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+12.02.2018 - 0.3.5.232
+- Corrigido ProviderSearch que não limpava os resultados anteriores ao efetuar uma nova busca.
+- Ajustes na lista de fabricantes e procurar fabricantes trocando texto dos botões por ícones.
+	- Adicionado botão para listar produtos do fabricante (página não implementada).
+- Atualizado layouts para utilizar a nova divisão para exibição dos resultados de webservices.
+
 12.02.2018 - 0.3.5.231
 - Movido mensagem de alerta do resultado das ações executadas nas páginas para um 'div float' em 'Base.html'.
 - Ajustes na lista de fornecedores ao listar todos e procurar fornecedor trocando texto dos botões por ícones.

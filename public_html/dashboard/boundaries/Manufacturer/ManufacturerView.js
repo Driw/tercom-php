@@ -8,18 +8,19 @@ var ManufacturerView = ManufacturerView ||
 {
 	init: function()
 	{
-		this.form = $('#form-manufacturer-view');
-		this.idManufacturer = $(this.form[0].idManufacturer).val();
-		this.initForm();
-		this.loadManufacturer();
+		ManufacturerView.loaded = false;
+		ManufacturerView.form = $('#form-manufacturer-view');
+		ManufacturerView.idManufacturer = $(ManufacturerView.form[0].idManufacturer).val();
+		ManufacturerView.initForm();
+		ManufacturerView.loadManufacturer();
 	},
 	initForm: function()
 	{
-		ws.manufacturer_settings(this.form, this.onFormSettings);
+		ws.manufacturer_settings(ManufacturerView.form, ManufacturerView.onFormSettings);
 	},
 	loadManufacturer: function()
 	{
-		ws.manufacturer_get(this.idManufacturer, this.form, this.onManufacturerLoaded);
+		ws.manufacturer_get(ManufacturerView.idManufacturer, ManufacturerView.form, ManufacturerView.onManufacturerLoaded);
 	},
 	onFormSettings: function(settings)
 	{
@@ -40,17 +41,23 @@ var ManufacturerView = ManufacturerView ||
 				try {
 					ManufacturerView.submit($(form));
 				} catch (e) {
-					console.log(e.stack);
-					alert(e.message);
+					ManufacturerView.showError(e.stack);
 				}
 				return false;
 			},
 		});
 	},
-	onManufacturerLoaded: function(manufacturer)
+	onManufacturerLoaded: function(manufacturer, message)
 	{
 		var form = ManufacturerView.form[0];
 		$(form.fantasyName).val(manufacturer.fantasyName);
+
+		if (ManufacturerView.loaded)
+			Util.showInfo(message);
+		else
+			Util.showSuccess(message);
+
+		ManufacturerView.loaded = true;
 	},
 	submit: function(form)
 	{
@@ -58,11 +65,6 @@ var ManufacturerView = ManufacturerView ||
 	},
 	onSubmited: function(manufacturer, message)
 	{
-		ManufacturerView.onManufacturerLoaded(manufacturer);
-
-		$('#row-message').show('slow');
-		$('#row-message-span').html(message);
-
-		setTimeout(function() { $('#row-message').hide('slow'); }, 3000);
+		ManufacturerView.onManufacturerLoaded(manufacturer, message);
 	},
 }

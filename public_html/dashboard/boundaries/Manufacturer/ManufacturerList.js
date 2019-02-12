@@ -29,49 +29,38 @@ var ManufacturerList = ManufacturerList ||
 	addManufacturerRow: function(index, manufacturer)
 	{
 		var manufacturerRowData = ManufacturerList.newManufacturerRowData(index, manufacturer);
-		var row = ManufacturerList.datatables.row.add(manufacturerRowData).draw();
+		ManufacturerList.datatables.row.add(manufacturerRowData).draw();
 	},
 	newManufacturerRowData: function(index, manufacturer)
 	{
-		var id = manufacturer.id;
-		var btnView = '<button type="button" class="btn btn-info" data-index="' +index+ '" onclick="ManufacturerList.onButtonView(this)">Ver</button>';
-		var btnRemove = '<button type="button" class="btn btn-primary" data-index="' +index+ '" onclick="ManufacturerList.onButtonRemove(this)">Excluir</button>';
+		var btnTemplate = '<button type="button" class="btn {0} btn-sm" onclick="ManufacturerList.{1}({2})" title="{3}">{4}</button>';
+		var btnView = btnTemplate.format(BTN_CLASS_VIEW, 'onButtonView', index, 'Ver Fabricante', ICON_VIEW);
+		var btnProducts = btnTemplate.format(BTN_CLASS_VIEW, 'onButtonProducts', index, 'Produtos do Fabricante', ICON_PRODUCT);
+		var btnRemove = btnTemplate.format(BTN_CLASS_REMOVE, 'onButtonRemove', index, 'Excluir Fabricante', ICON_REMOVE);
 
 		return [
 			manufacturer.id,
 			manufacturer.fantasyName,
-			'<div class="btn-group">' + btnView + btnRemove + '</div>',
+			'<div class="btn-group">{0}{1}{2}</div>'.format(btnView, btnProducts, btnRemove),
 		];
 	},
-	setManufacturer: function(manufacturer)
+	onButtonView: function(index)
 	{
-		var index = ManufacturerList.lookManufacturerIndex(manufacturer.id);
-		ManufacturerList.manufacturers[index] = manufacturer;
-
-		return index;
-	},
-	lookManufacturerIndex: function(idManufacturer)
-	{
-		for (var i = 0; i < ManufacturerList.manufacturers.length; i++)
-			if (ManufacturerList.manufacturers[i].id === idManufacturer)
-				return i;
-
-		return -1;
-	},
-	onButtonView: function(button)
-	{
-		var index = button.dataset.index;
 		var manufacturer = ManufacturerList.manufacturers[index];
-
-		if (manufacturer !== undefined)
-			Util.redirect('manufacturer/view/{0}'.format(manufacturer.id), true);
+		Util.redirect('manufacturer/view/{0}'.format(manufacturer.id));
 	},
-	onButtonRemove: function(button)
+	onButtonProducts: function(index)
 	{
-		var index = button.dataset.index;
 		var manufacturer = ManufacturerList.manufacturers[index];
-
-		if (manufacturer !== undefined)
-			Util.redirect('manufacturer/remove/{0}'.format(manufacturer.id), true);
+		Util.redirect('product/manufacturer/{0}'.format(manufacturer.id));
+	},
+	onButtonRemove: function(index)
+	{
+		var manufacturer = ManufacturerList.manufacturers[index];
+		Util.redirect('manufacturer/remove/{0}'.format(manufacturer.id));
+	},
+	onButtonAdd: function()
+	{
+		Util.redirect('manufacturer/add');
 	},
 }

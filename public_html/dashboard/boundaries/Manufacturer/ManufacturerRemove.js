@@ -20,8 +20,7 @@ var ManufacturerRemove = ManufacturerRemove ||
 				try {
 					ManufacturerRemove.submit($(form));
 				} catch (e) {
-					console.log(e.stack);
-					alert(e.message);
+					Util.showError(e.stack);
 				}
 				return false;
 			},
@@ -43,11 +42,7 @@ var ManufacturerRemove = ManufacturerRemove ||
 	onSubmited: function(manufacturer, message)
 	{
 		ManufacturerRemove.onManufacturerLoaded(manufacturer);
-
-		$('#row-message').show('slow');
-		$('#row-message-span').html(message);
-		ManufacturerRemove.form.fadeOut();
-
-		setTimeout(function() { $('#row-message').hide('slow'); }, 3000);
+		ManufacturerRemove.form.fadeOut('DEFAULT_FADE');
+		Util.showSuccess(message);
 	},
 }

@@ -8,12 +8,12 @@ var ManufacturerAdd = ManufacturerAdd ||
 {
 	init: function()
 	{
-		this.form = $('#form-manufacturer-add');
-		this.initForm();
+		ManufacturerAdd.form = $('#form-manufacturer-add');
+		ManufacturerAdd.initForm();
 	},
 	initForm: function()
 	{
-		ws.manufacturer_settings(this.form, this.onFormSettings);
+		ws.manufacturer_settings(ManufacturerAdd.form, ManufacturerAdd.onFormSettings);
 	},
 	onFormSettings: function(settings)
 	{
@@ -44,11 +44,14 @@ var ManufacturerAdd = ManufacturerAdd ||
 	},
 	onSubmited: function(manufacturer, message)
 	{
-		$('#row-message').show('slow');
-		$('#row-message-span').html(message);
-
+		message += ' <button class="btn btn-info btn-sm" onclick="ManufacturerAdd.onViewLast()">{0} Ver Fabricante</button>'.format(ICON_VIEW);
+		ManufacturerAdd.lastAdded = manufacturer;
 		ManufacturerAdd.form.trigger('reset');
-
-		setTimeout(function() { $('#row-message').hide('slow'); }, 3000);
+		Util.showSuccess(message);
+	},
+	onViewLast: function()
+	{
+		if (ManufacturerAdd.lastAdded !== undefined)
+			Util.redirect('manufacturer/view/{0}'.format(ManufacturerAdd.lastAdded.id));
 	},
 }

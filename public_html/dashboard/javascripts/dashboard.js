@@ -21,6 +21,11 @@ const ICON_LINk = '<i class="fas fa-external-link-alt"></i>';
 
 const SHOW_CLASS_FORMAT = 'alert alert-{0} col-12 text-center';
 
+const BTN_CLASS_VIEW = 'btn-primary';
+const BTN_CLASS_REMOVE = 'btn-danger';
+const BTN_CLASS_ENABLE = 'btn-success';
+const BTN_CLASS_DISABLE = 'btn-secondary';
+
 $(document).ready(function()
 {
 	initSpoiler();

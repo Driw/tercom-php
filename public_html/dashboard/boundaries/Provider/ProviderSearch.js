@@ -26,6 +26,7 @@ var ProviderSearch = ProviderSearch ||
 	},
 	onSearchProvider: function(providers)
 	{
+		ProviderSearch.datatables.clear().draw();
 		ProviderSearch.providers = providers.elements;
 		ProviderSearch.providers.forEach(function(provider, index)
 		{
