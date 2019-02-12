@@ -20,6 +20,13 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+12.02.2018 - 0.3.5.231
+- Movido mensagem de alerta do resultado das ações executadas nas páginas para um 'div float' em 'Base.html'.
+- Ajustes na lista de fornecedores ao listar todos e procurar fornecedor trocando texto dos botões por ícones.
+	- Adicionado dois novos botões: listar produtos e listar serviços (páginas não implementadas).
+- Ajustes no layout dos formulários de fornecedores para melhor visualização no responsivo.
+- Adicionado mensagem para informar CNPJ inválido aos fornecedores, era tratado como indisponível.
+
 09.02.2018 - 0.3.5.230
 - Ajustes no menu de navegação para que tenha conteúdo diferente entre funcionário TERCOM e funcionário de cliente.
 	- Ainda continua verificando se há permissão para que estas sejam exibidas.

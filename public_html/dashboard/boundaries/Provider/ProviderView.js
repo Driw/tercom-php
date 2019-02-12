@@ -15,6 +15,7 @@ var ProviderView = ProviderView ||
 		ProviderView.formOtherphone = $('#form-otherphone');
 		ProviderView.idProvider = ProviderView.form[0].id.value;
 		ProviderView.provider = {};
+		ProviderView.loaded = false;
 
 		ProviderView.modalContact = $('#modal-contact');
 		ProviderView.formContact = $('#form-contact');
@@ -113,7 +114,7 @@ var ProviderView = ProviderView ||
 	{
 		ws.provider_set(ProviderView.idProvider, ProviderView.form, ProviderView.setProvider);
 	},
-	setProvider: function(provider)
+	setProvider: function(provider, message, loaded)
 	{
 		$(ProviderView.form[0].cnpj).val(provider.cnpj).trigger('input');
 		ProviderView.idProvider = provider.id;
@@ -124,6 +125,13 @@ var ProviderView = ProviderView ||
 		ProviderView.setCommercial(provider.commercial);
 		ProviderView.setOtherphone(provider.otherphone);
 		ProviderView.setContacts(provider.contacts);
+
+		if (!ProviderView.loaded)
+			Util.showInfo(message);
+		else
+			Util.showSuccess(message);
+
+		ProviderView.loaded = true;
 	},
 	setCommercial: function(phone)
 	{

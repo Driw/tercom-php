@@ -11,7 +11,7 @@ var ProviderList = ProviderList ||
 	{
 		ProviderList.table = $('#table-providers');
 		ProviderList.tbody = ProviderList.table.find('tbody');
-		ProviderList.dataTable = newDataTables(ProviderList.table);
+		ProviderList.datatables = newDataTables(ProviderList.table);
 	},
 	loadProviders: function()
 	{
@@ -23,13 +23,16 @@ var ProviderList = ProviderList ||
 		ProviderList.providers.forEach(function(provider, index)
 		{
 			var providerRowData = ProviderList.newProviderRowData(index, provider);
-			var row = ProviderList.dataTable.row.add(providerRowData).draw();
+			var row = ProviderList.datatables.row.add(providerRowData).draw();
 		});
 	},
 	newProviderRowData: function(index, provider)
 	{
-		var btnView = '<button type="button" class="btn btn-primary" data-index="' +index+ '" onclick="ProviderList.onButtonView(this)">Ver</button>';
-		var btnSite = '<button type="button" class="btn btn-info" data-index="' +index+ '" onclick="ProviderList.onButtonSite(this)">Site</button>';
+		var btnTemplate = '<button type="button" class="btn btn-sm btn-{0}" onclick="ProviderList.{1}({2})" title="{3}">{4}</button>';
+		var btnView = btnTemplate.format('primary', 'onButtonView', index, 'Ver', ICON_VIEW);
+		var btnSite = btnTemplate.format('info', 'onButtonSite', index, 'Site', ICON_LINk);
+		var btnProducts = btnTemplate.format('info', 'onButtonProducts', index, 'Produtos', ICON_PRODUCT);
+		var btnServices = btnTemplate.format('info', 'onButtonServices', index, 'Serviços', ICON_SERVICE);
 
 		return [
 			provider.id,
@@ -37,23 +40,27 @@ var ProviderList = ProviderList ||
 			provider.companyName,
 			provider.fantasyName,
 			provider.spokesman,
-			'<div class="btn-group">' +btnView+btnSite+ '</div>',
+			'<div class="btn-group">{0}{1}{2}{3}</div>'.format(btnView, btnSite, btnProducts, btnServices),
 		];
 	},
-	onButtonView: function(button)
+	onButtonView: function(index)
 	{
-		var index = button.dataset.index;
 		var provider = ProviderList.providers[index];
-
-		if (provider !== undefined)
-			Util.redirect('provider/view/' +provider.id, true);
+		Util.redirect('provider/view/' +provider.id);
 	},
-	onButtonSite: function(button)
+	onButtonSite: function(index)
 	{
-		var index = button.dataset.index;
 		var provider = ProviderList.providers[index];
-
-		if (provider !== undefined)
-			window.open('http://' +provider.site, '_blank');
+		window.open('http://' +provider.site, '_blank');
+	},
+	onButtonProducts: function(index)
+	{
+		var provider = ProviderList.providers[index];
+		Util.redirect('products/provider/' +provider.id);
+	},
+	onButtonServices: function(index)
+	{
+		var provider = ProviderList.providers[index];
+		Util.redirect('services/provider/' +provider.id);
 	},
 }

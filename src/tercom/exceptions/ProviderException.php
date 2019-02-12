@@ -83,5 +83,13 @@ class ProviderException extends ApiStatusException
 	{
 		return new ProviderException('CNPJ indisponível', ApiStatus::PROVIDER_CNPJ_UNAVAIABLE);
 	}
+
+	/**
+	 * @return ProviderException
+	 */
+	public static function newCnpjInvalid(): ProviderException
+	{
+		return new ProviderException('CNPJ inválido', ApiStatus::PROVIDER_CNPJ_INVALID);
+	}
 }
 

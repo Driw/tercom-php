@@ -4,12 +4,22 @@ const BASE_URL = window.location.protocol+ '//' +window.location.host+ '/';
 const API_STATUS_SUCCESS = 1;
 const NO_VALUE = '-';
 const DEFAULT_FADE = 'fast';
-const DEFAULT_TIMEOUT = 3000;
+const DEFAULT_TIMEOUT = 5000;
 
 const PRODUCT_FAMILY_TYPE = 1;
 const PRODUCT_GROUP_TYPE = 2;
 const PRODUCT_SUBGROUP_TYPE = 3;
 const PRODUCT_SECTOR_TYPE = 4;
+
+const ICON_VIEW = '<i class="fas fa-sign-in-alt"></i>';
+const ICON_ENABLE = '<i class="fas fa-eye"></i>';
+const ICON_DISABLE = '<i class="fas fa-eye-slash></i>';
+const ICON_REMOVE = '<i class="fas fa-trash"></i>';
+const ICON_PRODUCT = '<i class="fas fa-boxes"></i>';
+const ICON_SERVICE = '<i class="fas fa-file-contract"></i>';
+const ICON_LINk = '<i class="fas fa-external-link-alt"></i>';
+
+const SHOW_CLASS_FORMAT = 'alert alert-{0} col-12 text-center';
 
 $(document).ready(function()
 {
@@ -291,6 +301,46 @@ String.prototype.format = function()
 
 var Util = Util ||
 {
+	showMessage: function(type, message, timeout, fade)
+	{
+		if (timeout === undefined) timeout = DEFAULT_TIMEOUT;
+		if (fade === undefined) fade = DEFAULT_FADE;
+
+		var rowMessage = $('#row-message');
+		var rowMessageP = $('#row-message p');
+
+		rowMessage.fadeIn(fade);
+		rowMessageP.removeClass();
+		rowMessageP.addClass(SHOW_CLASS_FORMAT.format(type));
+		$('#row-message-span').html(message);
+
+		if (rowMessage.data('timeoutid') !== undefined)
+			rowMessage.clearTimeout(rowMessage.data('timeoutid'));
+
+		var tid = setTimeout(function()
+		{
+			rowMessage.fadeOut(fade);
+			rowMessage.removeData('timeout-id');
+		}, timeout);
+
+		rowMessage.data('timeout-id', tid);
+	},
+	showSuccess: function(message, timeout, fade)
+	{
+		Util.showMessage('success', message, timeout, fade);
+	},
+	showInfo: function(message, timeout, fade)
+	{
+		Util.showMessage('info', message, timeout, fade);
+	},
+	showWarning: function(message, timeout, fade)
+	{
+		Util.showMessage('warning', message, timeout, fade);
+	},
+	showError: function(message, timeout, fade)
+	{
+		Util.showMessage('danger', message, timeout, fade);
+	},
 	redirect: function(path, newTab)
 	{
 		if (!path.startsWith('/'))

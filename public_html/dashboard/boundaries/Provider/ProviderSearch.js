@@ -16,7 +16,7 @@ var ProviderSearch = ProviderSearch ||
 		ProviderSearch.form = $('#form-search');
 		ProviderSearch.table = $('#providers-table');
 		ProviderSearch.tbody = ProviderSearch.table.find('tbody');
-		ProviderSearch.dataTable = newDataTables(ProviderSearch.table);
+		ProviderSearch.datatables = newDataTables(ProviderSearch.table);
 	},
 	searchProvider: function()
 	{
@@ -26,33 +26,48 @@ var ProviderSearch = ProviderSearch ||
 	},
 	onSearchProvider: function(providers)
 	{
-		ProviderSearch.dataTable.clear();
 		ProviderSearch.providers = providers.elements;
 		ProviderSearch.providers.forEach(function(provider, index)
 		{
-			var id = provider.id;
-			ProviderSearch.providers[provider.id] = provider;
-
-			var siteButton = '<button type="button" class="btn btn-info btn-site" data-id="' +id+ '">Site</button>';
-			var openButton = '<button type="button" class="btn btn-primary btn-see" data-id="' +id+ '">Ver</button>';
-			ProviderSearch.dataTable.row.add([
-				provider.id,
-				provider.cnpj,
-				provider.companyName,
-				provider.fantasyName,
-				provider.spokesman,
-				'<div class="btn-group">{0}{1}</div>'.format(openButton, siteButton),
-			]).draw();
+			var providerRowData = ProviderSearch.newProviderRowData(index, provider);
+			var row = ProviderSearch.datatables.row.add(providerRowData).draw();
 		});
+	},
+	newProviderRowData: function(index, provider)
+	{
+		var btnTemplate = '<button type="button" class="btn btn-sm btn-{0}" onclick="ProviderSearch.{1}({2})" title="{3}">{4}</button>';
+		var btnView = btnTemplate.format('primary', 'onButtonView', index, 'Ver', ICON_VIEW);
+		var btnSite = btnTemplate.format('info', 'onButtonSite', index, 'Site', ICON_LINk);
+		var btnProducts = btnTemplate.format('info', 'onButtonProducts', index, 'Produtos', ICON_PRODUCT);
+		var btnServices = btnTemplate.format('info', 'onButtonServices', index, 'Serviรงos', ICON_SERVICE);
 
-		$('.btn-site').click(function() {
-			var provider = ProviderSearch.providers[this.dataset.id];
-			window.open('http://{0}'.format(provider.site), '_blank');
-		});
-
-		$('.btn-see').click(function() {
-			var provider = ProviderSearch.providers[this.dataset.id];
-			window.open('provider/view/{0}'.format(provider.id), '_blank');
-		});
+		return [
+			provider.id,
+			provider.cnpj,
+			provider.companyName,
+			provider.fantasyName,
+			provider.spokesman,
+			'<div class="btn-group">{0}{1}{2}{3}</div>'.format(btnView, btnSite, btnProducts, btnServices),
+		];
+	},
+	onButtonView: function(index)
+	{
+		var provider = ProviderSearch.providers[index];
+		Util.redirect('provider/view/' +provider.id);
+	},
+	onButtonSite: function(index)
+	{
+		var provider = ProviderSearch.providers[index];
+		window.open('http://' +provider.site, '_blank');
+	},
+	onButtonProducts: function(index)
+	{
+		var provider = ProviderSearch.providers[index];
+		Util.redirect('products/provider/' +provider.id);
+	},
+	onButtonServices: function(index)
+	{
+		var provider = ProviderSearch.providers[index];
+		Util.redirect('services/provider/' +provider.id);
 	},
 }

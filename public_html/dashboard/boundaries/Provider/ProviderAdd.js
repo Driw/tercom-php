@@ -61,10 +61,8 @@ var ProviderAdd = ProviderAdd ||
 	onSubmited: function(provider, message)
 	{
 		ProviderAdd.lastProvider = provider;
-		message = '<b>' +provider.fantasyName+ '</b> <button class="btn btn-info btn-sm" onclick="ProviderAdd.onViewProvider()">Ver Fornecedor</button>';
-
-		$('#row-message-span').html(message);
-		$('#row-message').show(DEFAULT_FADE);
+		message = '<b>{0}</b> <button class="btn btn-sm btn-info" onclick="ProviderAdd.onViewProvider()">Ver Fornecedor</button>'.format(provider.fantasyName);
+		Util.showSuccess(message, 15000);
 	},
 	onViewProvider: function()
 	{

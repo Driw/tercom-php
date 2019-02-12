@@ -203,7 +203,7 @@ class ProviderControl extends GenericControl
 	public function hasCnpj(string $cnpj, int $idProvider): bool
 	{
 		if (!Functions::validateCNPJ($cnpj))
-			throw ProviderException::newCnpjUnavaiable();
+			throw ProviderException::newCnpjInvalid();
 
 		return $this->providerDAO->existCnpj($cnpj, $idProvider);
 	}
