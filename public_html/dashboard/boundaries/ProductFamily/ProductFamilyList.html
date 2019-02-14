@@ -1,19 +1,17 @@
-					<!-- Lista de Categorias de Produto -->
+					<!-- Listar Famílias de Produto -->
 					<section class="dashboard-counts">
 						<div class="container-fluid">
 							<div class="row justify-content-center">
 								<div class="card col-6 pl-0 pr-0">
 									<div class="card-header d-flex align-items-center">
-										<h3 class="h4">Listar Categorias de Produto - Famílias</h3>
+										<h3 class="h4">Listar Famílias de Produto - Famílias</h3>
 									</div>
 									<div class="card-body">
-										<form>
-											<div class="form-group">
-												<div class="btn btn-group">
-													<button type="button" class="btn btn-info" onclick="Util.redirect('productFamily/add', true)">Nova Família</button>
-												</div>
+										<div class="row text-center col-12 justify-content-center">
+											<div class="btn btn-group">
+												<button type="button" class="btn btn-info" onclick="ProductFamilyList.onButtonAdd()">Nova Família</button>
 											</div>
-										</form>
+										</div>
 										<table class="table table-striped table-hover" id="table-product-families">
 											<thead>
 												<tr>

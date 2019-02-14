@@ -28,9 +28,6 @@ var ProductGroupAdd = ProductGroupAdd ||
 				'name': {
 					'required': true,
 					'rangelength': [ settings.minCategoryNameLen, settings.maxCategoryNameLen ],
-					'remoteapi': {
-						'webservice': 'productGroup/avaiable/name',
-					},
 				},
 				'idProductGroup': {
 					'required': true,
@@ -40,8 +37,7 @@ var ProductGroupAdd = ProductGroupAdd ||
 				try {
 					ProductGroupAdd.submit($(form));
 				} catch (e) {
-					console.log(e.stack);
-					alert(e.message);
+					Util.showError(e.stack);
 				}
 				return false;
 			},
@@ -64,11 +60,13 @@ var ProductGroupAdd = ProductGroupAdd ||
 	},
 	onSubmited: function(productCategory, message)
 	{
+		message += ' <button class="btn btn-sm btn-info" onclick="ProductGroupAdd.onButtonLast()">{0} Ver Subgrupos</button>'.format(ICON_PRODUCT_SUBGROUP);
+		ProductGroupAdd.lastAdded = productCategory;
 		ProductGroupAdd.form.trigger('reset');
-
-		$('#row-message').show('slow');
-		$('#row-message-span').html(message);
-
-		setTimeout(function() { $('#row-message').hide('slow'); }, 3000);
+		Util.showSuccess(message);
+	},
+	onButtonLast: function()
+	{
+		Util.redirect('productSubgroup/list/{0}'.format(ProductGroupAdd.lastAdded.id));
 	},
 }

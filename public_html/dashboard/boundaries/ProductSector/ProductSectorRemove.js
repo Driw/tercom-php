@@ -8,7 +8,7 @@ var ProductSectorView = ProductSectorView ||
 {
 	init: function()
 	{
-		ProductSectorView.form = $('#form-product-Sector-remove');
+		ProductSectorView.form = $('#form-product-sector-remove');
 		ProductSectorView.idProductSector = $('#idProductSector').val();
 		ProductSectorView.initForm();
 		ProductSectorView.loadSector();
@@ -48,10 +48,6 @@ var ProductSectorView = ProductSectorView ||
 	{
 		ProductSectorView.form.trigger('reset');
 		ProductSectorView.form.fadeOut('fast');
-
-		$('#row-message').show('slow');
-		$('#row-message-span').html(message);
-
-		setTimeout(function() { $('#row-message').hide('slow'); }, 3000);
+		Util.showSuccess(message);
 	},
 }

@@ -8,6 +8,7 @@ var ProductSubgroupView = ProductSubgroupView ||
 {
 	init: function()
 	{
+		ProductSubgroupView.loaded = false;
 		ProductSubgroupView.form = $('#form-product-group-view');
 		ProductSubgroupView.idProductSubgroup = $('#idProductSubgroup').val();
 		ProductSubgroupView.initForm();
@@ -54,18 +55,20 @@ var ProductSubgroupView = ProductSubgroupView ||
 	{
 		ws.productSubgroup_set(ProductSubgroupView.idProductSubgroup, form, ProductSubgroupView.onSubmited);
 	},
-	onSubgroupLoaded: function(productSubgroup)
+	onSubgroupLoaded: function(productSubgroup, message)
 	{
 		var form = ProductSubgroupView.form[0];
 		$(form.name).val(productSubgroup.name);
+
+		if (ProductSubgroupView.loaded)
+			Util.showSuccess(message);
+		else
+			Util.showInfo(message);
+
+		ProductSubgroupView.loaded = true;
 	},
 	onSubmited: function(productCategory, message)
 	{
-		ProductSubgroupView.onSubgroupLoaded(productCategory);
-
-		$('#row-message').show('slow');
-		$('#row-message-span').html(message);
-
-		setTimeout(function() { $('#row-message').hide('slow'); }, 3000);
+		ProductSubgroupView.onSubgroupLoaded(productCategory, message);
 	},
 }

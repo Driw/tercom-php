@@ -69,10 +69,10 @@ var ProductGroupList = ProductGroupList ||
 	},
 	newProductCategoryRowData: function(index, productCategory)
 	{
-		var btnTemplate = '<button type="button" class="btn btn-sm btn-{0}" onclick="ProductGroupList.{1}({2})">{3}</button>';
-		var btnView = btnTemplate.format('primary', 'onButtonView', index, 'Ver');
-		var btnGroup = btnTemplate.format('info', 'onButtonSubgrupos', index, 'Subgrupos');
-		var btnRemove = btnTemplate.format('danger', 'onButtonRemove', index, 'Remover');
+		var btnTemplate = '<button type="button" class="btn btn-sm {0}" onclick="ProductGroupList.{1}({2})" title="{3}">{4}</button>';
+		var btnView = btnTemplate.format(BTN_CLASS_VIEW, 'onButtonView', index, 'Ver Grupo', ICON_VIEW);
+		var btnGroup = btnTemplate.format(BTN_CLASS_VIEW, 'onButtonSubgrupos', index, 'Listar Subgrupos', ICON_PRODUCT_SUBGROUP);
+		var btnRemove = btnTemplate.format(BTN_CLASS_REMOVE, 'onButtonRemove', index, 'Excluir Grupo', ICON_REMOVE);
 
 		return [
 			productCategory.name,
@@ -81,27 +81,21 @@ var ProductGroupList = ProductGroupList ||
 	},
 	onButtonAdd: function()
 	{
-		Util.redirect('productGroup/add/{0}'.format(ProductGroupList.idProductFamily), true);
+		Util.redirect('productGroup/add/{0}'.format(ProductGroupList.idProductFamily));
 	},
 	onButtonView: function(index)
 	{
 		var productCategory = ProductGroupList.productCategories[index];
-
-		if (productCategory !== undefined)
-			Util.redirect('productGroup/view/{0}'.format(productCategory.id), true);
+		Util.redirect('productGroup/view/{0}'.format(productCategory.id));
 	},
 	onButtonSubgrupos: function(index)
 	{
 		var productCategory = ProductGroupList.productCategories[index];
-
-		if (productCategory !== undefined)
-			Util.redirect('productSubgroup/list/{0}'.format(productCategory.id), true);
+		Util.redirect('productSubgroup/list/{0}'.format(productCategory.id));
 	},
 	onButtonRemove: function(index)
 	{
 		var productCategory = ProductGroupList.productCategories[index];
-
-		if (productCategory !== undefined)
-			Util.redirect('productGroup/remove/{0}'.format(productCategory.id), true);
+		Util.redirect('productGroup/remove/{0}'.format(productCategory.id));
 	},
 }

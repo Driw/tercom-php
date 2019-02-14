@@ -64,7 +64,7 @@ class ProductGroupBoundary extends DefaultDashboardLoggedBoundary
 	{
 		$dashboardTemplate = $this->newBaseTemplate();
 		$dashboardTemplate = $this->prepareInclude(self::BASE_PATH. 'ProductGroupAdd');
-		$dashboardTemplate->idProductFamily = $content->getParameters()->getInt('idProductFamily');
+		$dashboardTemplate->idProductFamily = $content->getParameters()->getInt('idProductFamily', false);
 
 		$result = new ApiTemplateResult();
 		$result->add($dashboardTemplate);

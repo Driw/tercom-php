@@ -8,6 +8,7 @@ var ProductGroupView = ProductGroupView ||
 {
 	init: function()
 	{
+		ProductGroupView.loaded = false;
 		ProductGroupView.form = $('#form-product-group-view');
 		ProductGroupView.idProductGroup = $('#idProductGroup').val();
 		ProductGroupView.initForm();
@@ -43,8 +44,7 @@ var ProductGroupView = ProductGroupView ||
 				try {
 					ProductGroupView.submit($(form));
 				} catch (e) {
-					console.log(e.stack);
-					alert(e.message);
+					Util.showError(e.stack);
 				}
 				return false;
 			},
@@ -54,18 +54,20 @@ var ProductGroupView = ProductGroupView ||
 	{
 		ws.productGroup_set(ProductGroupView.idProductGroup, form, ProductGroupView.onSubmited);
 	},
-	onGroupLoaded: function(productGroup)
+	onGroupLoaded: function(productGroup, message)
 	{
 		var form = ProductGroupView.form[0];
 		$(form.name).val(productGroup.name);
+
+		if (ProductGroupView.loaded)
+			Util.showSuccess(message);
+		else
+			Util.showInfo(message);
+
+		ProductGroupView.loaded = true;
 	},
 	onSubmited: function(productCategory, message)
 	{
-		ProductGroupView.onGroupLoaded(productCategory);
-
-		$('#row-message').show('slow');
-		$('#row-message-span').html(message);
-
-		setTimeout(function() { $('#row-message').hide('slow'); }, 3000);
+		ProductGroupView.onGroupLoaded(productCategory, message);
 	},
 }

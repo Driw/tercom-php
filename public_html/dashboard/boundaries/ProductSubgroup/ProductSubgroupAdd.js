@@ -28,9 +28,6 @@ var ProductSubgroupAdd = ProductSubgroupAdd ||
 				'name': {
 					'required': true,
 					'rangelength': [ settings.minCategoryNameLen, settings.maxCategoryNameLen ],
-					'remoteapi': {
-						'webservice': 'productSubgroup/avaiable/name',
-					},
 				},
 				'idProductGroup': {
 					'required': true,
@@ -40,8 +37,7 @@ var ProductSubgroupAdd = ProductSubgroupAdd ||
 				try {
 					ProductSubgroupAdd.submit($(form));
 				} catch (e) {
-					console.log(e.stack);
-					alert(e.message);
+					Util.showError(e.stack);
 				}
 				return false;
 			},
@@ -68,11 +64,13 @@ var ProductSubgroupAdd = ProductSubgroupAdd ||
 	},
 	onSubmited: function(productCategory, message)
 	{
+		message += ' <button class="btn btn-sm {0}" onclick="ProductSubgroupAdd.onButtonLast()">{1} Ver Setores</button>'.format(BTN_CLASS_VIEW, ICON_VIEW);
+		ProductSubgroupAdd.lastAdded = productCategory;
 		ProductSubgroupAdd.form.trigger('reset');
-
-		$('#row-message').show('slow');
-		$('#row-message-span').html(message);
-
-		setTimeout(function() { $('#row-message').hide('slow'); }, 3000);
+		Util.showSuccess(message);
+	},
+	onButtonLast: function()
+	{
+		Util.redirect('productSector/list/{0}'.format(ProductSubgroupAdd.lastAdded.id));
 	},
 }

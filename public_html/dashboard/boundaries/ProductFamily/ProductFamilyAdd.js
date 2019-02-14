@@ -47,11 +47,13 @@ var ProductFamilyAdd = ProductFamilyAdd ||
 	},
 	onSubmited: function(productCategory, message)
 	{
+		message += ' <button class="btn btn-{0} btn-sm" onclick="ProductFamilyAdd.onButtonAdded()">{1} Ver Grupos</button>'.format(BTN_CLASS_VIEW, ICON_VIEW);
 		ProductFamilyAdd.form.trigger('reset');
-
-		$('#row-message').show('slow');
-		$('#row-message-span').html(message);
-
-		setTimeout(function() { $('#row-message').hide('slow'); }, 3000);
+		ProductFamilyAdd.lastAdded = productCategory;
+		Util.showSuccess(message);
+	},
+	onButtonAdded: function()
+	{
+		Util.redirect('productGroup/list/{0}'.format(ProductFamilyAdd.lastAdded.id));
 	},
 }

@@ -8,8 +8,9 @@ var ProductSectorAdd = ProductSectorAdd ||
 {
 	init: function()
 	{
-		ProductSectorAdd.form = $('#form-product-Sector-add');
-		ProductSectorAdd.selectSubgroup = $(ProductSectorAdd.form[0].idProductSubGroup);
+		ProductSectorAdd.form = $('#form-product-sector-add');
+		ProductSectorAdd.idProductSubgroup = $('#idProductSubgroup').val();
+		ProductSectorAdd.selectSubgroup = $(ProductSectorAdd.form[0].idProductSubgroup);
 		ProductSectorAdd.initForm();
 		ProductSectorAdd.loadProductSubgroups();
 	},
@@ -46,7 +47,8 @@ var ProductSectorAdd = ProductSectorAdd ||
 		ProductSectorAdd.productSubgroups = productSubgroups.elements;
 		ProductSectorAdd.productSubgroups.forEach(productSubgroup =>
 		{
-			var option = Util.createElementOption(productSubgroup.name, productSubgroup.id, ProductSectorAdd.selectSubgroup.val() == productSubgroup.id);
+			var selected = ProductSectorAdd.idProductSubgroup == productSubgroup.id;
+			var option = Util.createElementOption(productSubgroup.name, productSubgroup.id, selected);
 			ProductSectorAdd.selectSubgroup.append(option);
 		});
 		ProductSectorAdd.selectSubgroup.selectpicker('refresh');
@@ -57,11 +59,13 @@ var ProductSectorAdd = ProductSectorAdd ||
 	},
 	onSubmited: function(productCategory, message)
 	{
+		message += ' <button class="btn btn-sm {}" onclick="ProductSectorAdd.onButtonLast()">{1} Ver Setor</button>'.format(BTN_CLASS_VIEW, ICON_VIEW);
+		ProductSectorAdd.lastAdded = productCategory;
 		ProductSectorAdd.form.trigger('reset');
-
-		$('#row-message').show('slow');
-		$('#row-message-span').html(message);
-
-		setTimeout(function() { $('#row-message').hide('slow'); }, 3000);
+		Util.showSuccess(message);
 	},
+	onButtonLast: function()
+	{
+		Util.redirect('productSector/view/{0}'.format(ProductSectorAdd.lastAdded.id));
+	}
 }

@@ -68,10 +68,10 @@ var ProductSubgroupList = ProductSubgroupList ||
 	},
 	newProductCategoryRowData: function(index, productCategory)
 	{
-		var btnTemplate = '<button type="button" class="btn btn-sm btn-{0}" onclick="ProductSubgroupList.{1}({2})">{3}</button>';
-		var btnView = btnTemplate.format('primary', 'onButtonView', index, 'Ver');
-		var btnSubgroup = btnTemplate.format('info', 'onButtonSectores', index, 'Setores');
-		var btnRemove = btnTemplate.format('danger', 'onButtonRemove', index, 'Remover');
+		var btnTemplate = '<button type="button" class="btn btn-sm {0}" onclick="ProductSubgroupList.{1}({2})" title="{3}">{4}</button>';
+		var btnView = btnTemplate.format(BTN_CLASS_VIEW, 'onButtonView', index, 'Ver', ICON_VIEW);
+		var btnSubgroup = btnTemplate.format(BTN_CLASS_VIEW, 'onButtonSectores', index, 'Setores', ICON_PRODUCT_SECTOR);
+		var btnRemove = btnTemplate.format(BTN_CLASS_REMOVE, 'onButtonRemove', index, 'Remover', ICON_REMOVE);
 
 		return [
 			productCategory.name,
@@ -85,22 +85,16 @@ var ProductSubgroupList = ProductSubgroupList ||
 	onButtonView: function(index)
 	{
 		var productCategory = ProductSubgroupList.productCategories[index];
-
-		if (productCategory !== undefined)
-			Util.redirect('productSubgroup/view/{0}'.format(productCategory.id), true);
+		Util.redirect('productSubgroup/view/{0}'.format(productCategory.id), true);
 	},
 	onButtonSectores: function(index)
 	{
 		var productCategory = ProductSubgroupList.productCategories[index];
-
-		if (productCategory !== undefined)
-			Util.redirect('productSector/list/{0}'.format(productCategory.id), true);
+		Util.redirect('productSector/list/{0}'.format(productCategory.id), true);
 	},
 	onButtonRemove: function(index)
 	{
 		var productCategory = ProductSubgroupList.productCategories[index];
-
-		if (productCategory !== undefined)
-			Util.redirect('productSubgroup/remove/{0}'.format(productCategory.id), true);
+		Util.redirect('productSubgroup/remove/{0}'.format(productCategory.id), true);
 	},
 }

@@ -68,39 +68,27 @@ var ProductSectorList = ProductSectorList ||
 	},
 	newProductCategoryRowData: function(index, productCategory)
 	{
-		var btnTemplate = '<button type="button" class="btn btn-sm btn-{0}" onclick="ProductSectorList.{1}({2})">{3}</button>';
-		var btnView = btnTemplate.format('primary', 'onButtonView', index, 'Ver');
-		var btnSector = btnTemplate.format('info', 'onButtonSectores', index, 'Setores');
-		var btnRemove = btnTemplate.format('danger', 'onButtonRemove', index, 'Remover');
+		var btnTemplate = '<button type="button" class="btn btn-sm {0}" onclick="ProductSectorList.{1}({2})" title="{3}">{4}</button>';
+		var btnView = btnTemplate.format(BTN_CLASS_VIEW, 'onButtonView', index, 'Ver Setor', ICON_VIEW);
+		var btnRemove = btnTemplate.format(BTN_CLASS_REMOVE, 'onButtonRemove', index, 'Excluir Setor', ICON_REMOVE);
 
 		return [
 			productCategory.name,
-			'<div class="btn-group">{0}{1}{2}</div>'.format(btnView, btnSector, btnRemove),
+			'<div class="btn-group">{0}{1}</div>'.format(btnView, btnRemove),
 		];
 	},
 	onButtonAdd: function()
 	{
-		Util.redirect('productSector/add/{0}'.format(ProductSectorList.idProductSubgroup), true);
+		Util.redirect('productSector/add/{0}'.format(ProductSectorList.idProductSubgroup));
 	},
 	onButtonView: function(index)
 	{
 		var productCategory = ProductSectorList.productCategories[index];
-
-		if (productCategory !== undefined)
-			Util.redirect('productSector/view/{0}'.format(productCategory.id), true);
-	},
-	onButtonSectores: function(index)
-	{
-		var productCategory = ProductSectorList.productCategories[index];
-
-		if (productCategory !== undefined)
-			Util.redirect('productSectores/list/{0}'.format(productCategory.id), true);
+		Util.redirect('productSector/view/{0}'.format(productCategory.id));
 	},
 	onButtonRemove: function(index)
 	{
 		var productCategory = ProductSectorList.productCategories[index];
-
-		if (productCategory !== undefined)
-			Util.redirect('productSector/remove/{0}'.format(productCategory.id), true);
+		Util.redirect('productSector/remove/{0}'.format(productCategory.id));
 	},
 }

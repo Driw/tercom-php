@@ -187,19 +187,14 @@ class ProductCategoryDAO extends GenericDAO
 		$productCategoriesColumns = $this->buildQuery(self::ALL_COLUMNS, 'product_categories');
 
 		return "SELECT $productCategoriesColumns, 1 type
-				FROM product_category_relationships
-			    INNER JOIN product_categories ON product_categories.id = product_category_relationships.idCategoryParent
-			    INNER JOIN product_category_types ON product_category_types.id = product_category_relationships.idCategoryType
-				WHERE product_category_relationships.idCategoryType = 2
-				UNION
-				SELECT $productCategoriesColumns, 1 type
 				FROM product_categories
-				LEFT JOIN product_category_relationships ON (
-					product_category_relationships.idCategoryParent = product_categories.id OR
-					product_category_relationships.idCategory = product_categories.id
-				)
+				LEFT JOIN product_category_relationships ON product_category_relationships.idCategoryParent = product_categories.id
+				LEFT JOIN product_category_relationships chield ON chield.idCategory = product_categories.id
 				LEFT JOIN product_category_types ON product_category_types.id = product_category_relationships.idCategoryType
-				WHERE product_category_relationships.idCategoryType IS NULL";
+				WHERE (	(chield.idCategoryType IS NULL AND product_category_relationships.idCategoryType = 2) OR
+						(chield.idCategoryType IS NULL AND product_category_relationships.idCategoryType IS NULL) OR
+						(chield.idCategoryType IS NOT NULL AND product_category_relationships.idCategoryType = 2)
+					)";
 	}
 
 	/**
@@ -210,19 +205,27 @@ class ProductCategoryDAO extends GenericDAO
 	 */
 	public function select(int $idProductCategory, int $idProductCategoryType = ProductCategory::CATEGORY_NONE): ?ProductCategory
 	{
-		// Quando é família não vai possuir nenhuma relação de categoria parent, logo o tipo será nulo
+		// Quando é família não vai possuir nenhuma relação de categoria parent
 		if ($idProductCategoryType === ProductCategory::CATEGORY_NONE || $idProductCategoryType === ProductCategory::CATEGORY_FAMILY)
-			$idProductCategoryType = null;
+		{
+			$sqlSelect = $this->newSelectFamilies();
+			$sql = "$sqlSelect
+					AND product_categories.id = ?";
 
-		$sqlType = $idProductCategoryType === null ? 'IS NULL' : '= ?';
-		$sqlSelect = $this->newSelect();
-		$sql = "$sqlSelect
-				WHERE product_categories.id = ? AND product_category_types.id $sqlType";
+			$query = $this->createQuery($sql);
+			$query->setInteger(1, $idProductCategory);
+		}
 
-		$query = $this->createQuery($sql);
-		$query->setInteger(1, $idProductCategory);
-		if ($idProductCategoryType !== null)
-		$query->setInteger(2, $idProductCategoryType);
+		else
+		{
+			$sqlSelect = $this->newSelect();
+			$sql = "$sqlSelect
+					WHERE product_categories.id = ? AND product_category_types.id = ?";	
+
+			$query = $this->createQuery($sql);
+			$query->setInteger(1, $idProductCategory);
+			$query->setInteger(2, $idProductCategoryType);
+		}
 
 		$result = $query->execute();
 
@@ -313,7 +316,7 @@ class ProductCategoryDAO extends GenericDAO
 	{
 		$sqlSelect = $this->newSelect();
 		$sql = "$sqlSelect
-						WHERE product_category_relationships.idCategoryParent = ? AND product_category_relationships.idCategoryType = ?";
+				WHERE product_category_relationships.idCategoryParent = ? AND product_category_relationships.idCategoryType = ?";
 
 		$query = $this->createQuery($sql);
 		$query->setInteger(1, $productCategory->getId());

@@ -16,6 +16,10 @@ const ICON_ENABLE = '<i class="fas fa-eye"></i>';
 const ICON_DISABLE = '<i class="fas fa-eye-slash></i>';
 const ICON_REMOVE = '<i class="fas fa-trash"></i>';
 const ICON_PRODUCT = '<i class="fas fa-boxes"></i>';
+const ICON_PRODUCT_FAMILY = '<i class="fas fa-chess-king"></i>';
+const ICON_PRODUCT_GROUP = '<i class="fas fa-chess-queen"></i>';
+const ICON_PRODUCT_SUBGROUP = '<i class="fas fa-chess-knight"></i>';
+const ICON_PRODUCT_SECTOR = '<i class="fas fa-chess-rook"></i>';
 const ICON_SERVICE = '<i class="fas fa-file-contract"></i>';
 const ICON_LINk = '<i class="fas fa-external-link-alt"></i>';
 

@@ -28,8 +28,7 @@ var ProductFamilyView = ProductFamilyView ||
 				try {
 					ProductFamilyView.submit($(form));
 				} catch (e) {
-					console.log(e.stack);
-					alert(e.message);
+					Util.showError(e.stack);
 				}
 				return false;
 			},
@@ -39,19 +38,16 @@ var ProductFamilyView = ProductFamilyView ||
 	{
 		ws.productFamily_remove(ProductFamilyView.idProductFamily, form, ProductFamilyView.onSubmited);
 	},
-	onFamilyLoaded: function(productFamily)
+	onFamilyLoaded: function(productFamily, message)
 	{
 		var form = ProductFamilyView.form[0];
 		$(form.name).val(productFamily.name);
+		Util.showInfo(message);
 	},
 	onSubmited: function(productCategory, message)
 	{
 		ProductFamilyView.form.trigger('reset');
 		ProductFamilyView.form.fadeOut('fast');
-
-		$('#row-message').show('slow');
-		$('#row-message-span').html(message);
-
-		setTimeout(function() { $('#row-message').hide('slow'); }, 3000);
+		Util.showSuccess(message);
 	},
 }

@@ -28,8 +28,7 @@ var ProductGroupView = ProductGroupView ||
 				try {
 					ProductGroupView.submit($(form));
 				} catch (e) {
-					console.log(e.stack);
-					alert(e.message);
+					Util.showError(e.stack);
 				}
 				return false;
 			},
@@ -48,10 +47,6 @@ var ProductGroupView = ProductGroupView ||
 	{
 		ProductGroupView.form.trigger('reset');
 		ProductGroupView.form.fadeOut('fast');
-
-		$('#row-message').show('slow');
-		$('#row-message-span').html(message);
-
-		setTimeout(function() { $('#row-message').hide('slow'); }, 3000);
+		Util.showSuccess(message);
 	},
 }

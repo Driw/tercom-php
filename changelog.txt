@@ -20,6 +20,11 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+14.02.2018 - 0.3.5.233
+- Ajustes nas páginas para gerenciamento das categorias de produto trocando texto dos botões por ícones.
+- Corrigido problema onde ao adicionar grupo de produto era obrigatório ser definido uma família na URL.
+- Corrigido queries para selecionar dados de famílias para listar e obter uma em específico.
+
 12.02.2018 - 0.3.5.232
 - Corrigido ProviderSearch que não limpava os resultados anteriores ao efetuar uma nova busca.
 - Ajustes na lista de fabricantes e procurar fabricantes trocando texto dos botões por ícones.

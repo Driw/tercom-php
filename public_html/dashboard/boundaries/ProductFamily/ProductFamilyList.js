@@ -29,10 +29,10 @@ var ProductFamilyList = ProductFamilyList ||
 	},
 	newProductCategoryRowData: function(index, productCategory)
 	{
-		var btnTemplate = '<button type="button" class="btn btn-sm btn-{0}" onclick="ProductFamilyList.{1}({2})">{3}</button>';
-		var btnView = btnTemplate.format('primary', 'onButtonView', index, 'Ver');
-		var btnGroup = btnTemplate.format('info', 'onButtonGroups', index, 'Grupos');
-		var btnRemove = btnTemplate.format('danger', 'onButtonRemove', index, 'Remover');
+		var btnTemplate = '<button type="button" class="btn btn-sm {0}" onclick="ProductFamilyList.{1}({2})" title="{3}">{4}</button>';
+		var btnView = btnTemplate.format(BTN_CLASS_VIEW, 'onButtonView', index, 'Ver Família', ICON_VIEW);
+		var btnGroup = btnTemplate.format(BTN_CLASS_VIEW, 'onButtonGroups', index, 'Ver Grupos', ICON_PRODUCT_GROUP);
+		var btnRemove = btnTemplate.format(BTN_CLASS_REMOVE, 'onButtonRemove', index, 'Excluir Família', ICON_REMOVE);
 
 		return [
 			productCategory.name,
@@ -42,22 +42,20 @@ var ProductFamilyList = ProductFamilyList ||
 	onButtonView: function(index)
 	{
 		var productCategory = ProductFamilyList.productCategories[index];
-
-		if (productCategory !== undefined)
-			Util.redirect('productFamily/view/{0}'.format(productCategory.id), true);
+		Util.redirect('productFamily/view/{0}'.format(productCategory.id), true);
 	},
 	onButtonGroups: function(index)
 	{
 		var productCategory = ProductFamilyList.productCategories[index];
-
-		if (productCategory !== undefined)
-			Util.redirect('productGroup/list/{0}'.format(productCategory.id), true);
+		Util.redirect('productGroup/list/{0}'.format(productCategory.id), true);
 	},
 	onButtonRemove: function(index)
 	{
 		var productCategory = ProductFamilyList.productCategories[index];
-
-		if (productCategory !== undefined)
-			Util.redirect('productFamily/remove/{0}'.format(productCategory.id), true);
+		Util.redirect('productFamily/remove/{0}'.format(productCategory.id), true);
+	},
+	onButtonAdd: function(index)
+	{
+		Util.redirect('productFamily/add');
 	},
 }

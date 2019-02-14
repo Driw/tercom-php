@@ -8,6 +8,7 @@ var ProductSectorView = ProductSectorView ||
 {
 	init: function()
 	{
+		ProductSectorView.loaded = false;
 		ProductSectorView.form = $('#form-product-group-view');
 		ProductSectorView.idProductSector = $('#idProductSector').val();
 		ProductSectorView.initForm();
@@ -43,8 +44,7 @@ var ProductSectorView = ProductSectorView ||
 				try {
 					ProductSectorView.submit($(form));
 				} catch (e) {
-					console.log(e.stack);
-					alert(e.message);
+					Util.showErro(e.stack);
 				}
 				return false;
 			},
@@ -54,18 +54,20 @@ var ProductSectorView = ProductSectorView ||
 	{
 		ws.productSector_set(ProductSectorView.idProductSector, form, ProductSectorView.onSubmited);
 	},
-	onSectorLoaded: function(productSector)
+	onSectorLoaded: function(productSector, message)
 	{
 		var form = ProductSectorView.form[0];
 		$(form.name).val(productSector.name);
+
+		if (ProductSectorView.loaded)
+			Util.showSuccess(message);
+		else
+			Util.showInfo(message);
+
+		ProductSectorView.loaded = true;
 	},
 	onSubmited: function(productCategory, message)
 	{
-		ProductSectorView.onSectorLoaded(productCategory);
-
-		$('#row-message').show('slow');
-		$('#row-message-span').html(message);
-
-		setTimeout(function() { $('#row-message').hide('slow'); }, 3000);
+		ProductSectorView.onSectorLoaded(productCategory,message);
 	},
 }

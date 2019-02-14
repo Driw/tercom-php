@@ -8,6 +8,7 @@ var ProductFamilyView = ProductFamilyView ||
 {
 	init: function()
 	{
+		ProductFamilyView.loaded = false;
 		ProductFamilyView.form = $('#form-product-family-view');
 		ProductFamilyView.idProductFamily = $('#idProductFamily').val();
 		ProductFamilyView.initForm();
@@ -54,18 +55,21 @@ var ProductFamilyView = ProductFamilyView ||
 	{
 		ws.productFamily_set(ProductFamilyView.idProductFamily, form, ProductFamilyView.onSubmited);
 	},
-	onFamilyLoaded: function(productFamily)
+	onFamilyLoaded: function(productFamily, message)
 	{
 		var form = ProductFamilyView.form[0];
 		$(form.name).val(productFamily.name);
+
+		if (ProductFamilyView.loaded)
+			Util.showSuccess(message);
+		else
+			Util.showInfo(message);
+
+		ProductFamilyView.loaded = true;
 	},
 	onSubmited: function(productCategory, message)
 	{
 		ProductFamilyView.onFamilyLoaded(productCategory);
-
-		$('#row-message').show('slow');
-		$('#row-message-span').html(message);
-
-		setTimeout(function() { $('#row-message').hide('slow'); }, 3000);
+		Util.showSuccess(message);
 	},
 }
