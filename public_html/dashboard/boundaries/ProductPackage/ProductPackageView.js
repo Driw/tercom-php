@@ -8,10 +8,11 @@ var ProductPackageView = ProductPackageView ||
 {
 	init: function()
 	{
-		this.form = $('#form-product-package-view');
-		this.idProductPackage = $(this.form[0].idProductPackage).val();
-		this.initForm();
-		this.loadProductPackage();
+		ProductPackageView.loaded = false;
+		ProductPackageView.form = $('#form-product-package-view');
+		ProductPackageView.idProductPackage = $(ProductPackageView.form[0].idProductPackage).val();
+		ProductPackageView.initForm();
+		ProductPackageView.loadProductPackage();
 	},
 	initForm: function()
 	{
@@ -40,18 +41,23 @@ var ProductPackageView = ProductPackageView ||
 				try {
 					ProductPackageView.submit($(form));
 				} catch (e) {
-					console.log(e.stack);
-					alert(e.message);
+					Util.showError(e.stack);
 				}
 				return false;
 			},
 		});
 	},
-	onProductPackageLoaded: function(productPackage)
+	onProductPackageLoaded: function(productPackage, message)
 	{
-		console.log('oi');
 		var form = ProductPackageView.form[0];
 		$(form.name).val(productPackage.name);
+
+		if (ProductPackageView.loaded)
+			Util.showSuccess(message);
+		else
+			Util.showInfo(message);
+
+		ProductPackageView.loaded = true;
 	},
 	submit: function(form)
 	{
@@ -59,11 +65,6 @@ var ProductPackageView = ProductPackageView ||
 	},
 	onSubmited: function(productPackage, message)
 	{
-		ProductPackageView.onProductPackageLoaded(productPackage);
-
-		$('#row-message').show('slow');
-		$('#row-message-span').html(message);
-
-		setTimeout(function() { $('#row-message').hide('slow'); }, 3000);
+		ProductPackageView.onProductPackageLoaded(productPackage, message);
 	},
 }

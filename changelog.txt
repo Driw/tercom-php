@@ -20,6 +20,10 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+14.02.2018 - 0.3.5.234
+- Ajustes na lista de embalagens de produto trocando texto dos botões por ícones.
+- Ajustes nos layouts dos formulários responsivo e exibição de mensagens ao gerenciar embalagens de produto.
+
 14.02.2018 - 0.3.5.233
 - Ajustes nas páginas para gerenciamento das categorias de produto trocando texto dos botões por ícones.
 - Corrigido problema onde ao adicionar grupo de produto era obrigatório ser definido uma família na URL.

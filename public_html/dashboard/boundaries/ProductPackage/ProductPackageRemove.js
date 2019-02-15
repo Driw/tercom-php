@@ -20,8 +20,7 @@ var ProductPackageRemove = ProductPackageRemove ||
 				try {
 					ProductPackageRemove.submit($(form));
 				} catch (e) {
-					console.log(e.stack);
-					alert(e.message);
+					Util.showError(e.stack);
 				}
 				return false;
 			},
@@ -42,11 +41,8 @@ var ProductPackageRemove = ProductPackageRemove ||
 	},
 	onSubmited: function(productPackage, message)
 	{
-		ProductPackageRemove.onProductPackageLoaded(productPackage);
-
-		$('#row-message').show('slow');
-		$('#row-message-span').html(message);
-
-		setTimeout(function() { $('#row-message').hide('slow'); }, 3000);
+		ProductPackageRemove.form.trigger('reset');
+		ProductPackageRemove.form.fadeOut('fast');
+		Util.showSuccess(message);
 	},
 }

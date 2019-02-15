@@ -8,15 +8,15 @@ var ProductPackageList = ProductPackageList ||
 {
 	init: function()
 	{
-		this.productPackages = [];
-		this.table = $('#table-product-types');
-		this.tbody = this.table.children('tbody');
-		this.datatables = newDataTables(this.table);
-		this.loadProductPackages();
+		ProductPackageList.productPackages = [];
+		ProductPackageList.table = $('#table-product-types');
+		ProductPackageList.tbody = ProductPackageList.table.children('tbody');
+		ProductPackageList.datatables = newDataTables(ProductPackageList.table);
+		ProductPackageList.loadProductPackages();
 	},
 	loadProductPackages: function()
 	{
-		ws.productPackage_getAll(this.tbody, this.onProductPackagesLoaded);
+		ws.productPackage_getAll(ProductPackageList.tbody, ProductPackageList.onProductPackagesLoaded);
 	},
 	onProductPackagesLoaded: function(productPackages)
 	{
@@ -29,33 +29,31 @@ var ProductPackageList = ProductPackageList ||
 	addProductPackageRow: function(index, productPackage)
 	{
 		var rowData = ProductPackageList.newProductPackageRowData(index, productPackage);
-		var row = ProductPackageList.datatables.row.add(rowData).draw();
+		ProductPackageList.datatables.row.add(rowData).draw();
 	},
 	newProductPackageRowData: function(index, productPackage)
 	{
-		var id = productPackage.id;
-		var btnView = '<button type="button" class="btn btn-info" data-index="' +index+ '" onclick="ProductPackageList.onButtonView(this)">Ver</button>';
-		var btnRemove = '<button type="button" class="btn btn-primary" data-index="' +index+ '" onclick="ProductPackageList.onButtonRemove(this)">Excluir</button>';
+		var btnTemplate = '<button type="button" class="btn btn-sm {0}" onclick="ProductPackageList.{1}({2})" title="{3}">{4}</button>';
+		var btnView = btnTemplate.format(BTN_CLASS_VIEW, 'onButtonView', index, 'Ver Embalagem de Produto', ICON_VIEW);
+		var btnRemove = btnTemplate.format(BTN_CLASS_REMOVE, 'onButtonRemove', index, 'Excluir Embalagem de Produto', ICON_REMOVE);
 
 		return [
 			productPackage.name,
-			'<div class="btn-group">' + btnView + btnRemove + '</div>',
+			'<div class="btn-group">{0}{1}</div>'.format(btnView, btnRemove),
 		];
 	},
-	onButtonView: function(button)
+	onButtonView: function(index)
 	{
-		var index = button.dataset.index;
 		var productPackage = ProductPackageList.productPackages[index];
-
-		if (productPackage !== undefined)
-			Util.redirect('productPackage/view/' +productPackage.id, true);
+		Util.redirect('productPackage/view/' +productPackage.id);
 	},
-	onButtonRemove: function(button)
+	onButtonRemove: function(index)
 	{
-		var index = button.dataset.index;
 		var productPackage = ProductPackageList.productPackages[index];
-
-		if (productPackage !== undefined)
-			Util.redirect('productPackage/remove/' +productPackage.id, true);
+		Util.redirect('productPackage/remove/' +productPackage.id);
+	},
+	onButtonAdd: function(index)
+	{
+		Util.redirect('productPackage/add');
 	},
 }

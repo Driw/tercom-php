@@ -31,8 +31,7 @@ var ProductPackageAdd = ProductPackageAdd ||
 				try {
 					ProductPackageAdd.submit($(form));
 				} catch (e) {
-					console.log(e.stack);
-					alert(e.message);
+					Util.showError(e.stack);
 				}
 				return false;
 			},
@@ -44,11 +43,13 @@ var ProductPackageAdd = ProductPackageAdd ||
 	},
 	onSubmited: function(productPackage, message)
 	{
-		$('#row-message').show('slow');
-		$('#row-message-span').html(message);
-
+		message += ' <button class="btn btn-sm {0}" onclick="ProductPackageAdd.onButtonLast()">{1} Ver Embalgem de Produto</button>'.format(BTN_CLASS_VIEW, ICON_VIEW);
+		ProductPackageAdd.lastAdded = productPackage;
 		ProductPackageAdd.form.trigger('reset');
-
-		setTimeout(function() { $('#row-message').hide('slow'); }, 3000);
+		Util.showSuccess(message);
 	},
+	onButtonLast: function()
+	{
+		Util.redirect('productPackage/view/{0}'.format(ProductPackageAdd.lastAdded.id));
+	}
 }
