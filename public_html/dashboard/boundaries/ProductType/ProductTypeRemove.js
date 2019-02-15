@@ -1,17 +1,17 @@
 
 $(document).ready(function()
 {
-		ProductTypeRemove.init();
+	ProductTypeRemove.init();
 });
 
 var ProductTypeRemove = ProductTypeRemove ||
 {
 	init: function()
 	{
-		this.form = $('#form-product-type-remove');
-		this.idProductType = $(this.form[0].idProductType).val();
-		this.initForm();
-		this.loadProductType();
+		ProductTypeRemove.form = $('#form-product-type-remove');
+		ProductTypeRemove.idProductType = $(ProductTypeRemove.form[0].idProductType).val();
+		ProductTypeRemove.initForm();
+		ProductTypeRemove.loadProductType();
 	},
 	initForm: function()
 	{
@@ -20,8 +20,7 @@ var ProductTypeRemove = ProductTypeRemove ||
 				try {
 					ProductTypeRemove.submit($(form));
 				} catch (e) {
-					console.log(e.stack);
-					alert(e.message);
+					Util.showError(e.stack);
 				}
 				return false;
 			},
@@ -29,7 +28,7 @@ var ProductTypeRemove = ProductTypeRemove ||
 	},
 	loadProductType: function()
 	{
-		ws.productType_get(this.idProductType, this.form, this.onProductTypeLoaded);
+		ws.productType_get(ProductTypeRemove.idProductType, ProductTypeRemove.form, ProductTypeRemove.onProductTypeLoaded);
 	},
 	onProductTypeLoaded: function(productType)
 	{
@@ -42,11 +41,8 @@ var ProductTypeRemove = ProductTypeRemove ||
 	},
 	onSubmited: function(productType, message)
 	{
-		ProductTypeRemove.onProductTypeLoaded(productType);
-
-		$('#row-message').show('slow');
-		$('#row-message-span').html(message);
-
-		setTimeout(function() { $('#row-message').hide('slow'); }, 3000);
+		ProductTypeRemove.form.trigger('reset');
+		ProductTypeRemove.form.fadeOut('fast');
+		Util.showSuccess(message);
 	},
 }

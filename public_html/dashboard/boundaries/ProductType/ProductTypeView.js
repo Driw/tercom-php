@@ -1,25 +1,26 @@
 
 $(document).ready(function()
 {
-		ProductTypeView.init();
+	ProductTypeView.init();
 });
 
 var ProductTypeView = ProductTypeView ||
 {
 	init: function()
 	{
-		this.form = $('#form-product-type-view');
-		this.idProductType = $(this.form[0].idProductType).val();
-		this.initForm();
-		this.loadProductType();
+		ProductTypeView.loaded = false;
+		ProductTypeView.form = $('#form-product-type-view');
+		ProductTypeView.idProductType = $(ProductTypeView.form[0].idProductType).val();
+		ProductTypeView.initForm();
+		ProductTypeView.loadProductType();
 	},
 	initForm: function()
 	{
-		ws.productType_settings(this.form, this.onFormSettings);
+		ws.productType_settings(ProductTypeView.form, ProductTypeView.onFormSettings);
 	},
 	loadProductType: function()
 	{
-		ws.productType_get(this.idProductType, this.form, this.onProductTypeLoaded);
+		ws.productType_get(ProductTypeView.idProductType, ProductTypeView.form, ProductTypeView.onProductTypeLoaded);
 	},
 	onFormSettings: function(settings)
 	{
@@ -40,18 +41,23 @@ var ProductTypeView = ProductTypeView ||
 				try {
 					ProductTypeView.submit($(form));
 				} catch (e) {
-					console.log(e.stack);
-					alert(e.message);
+					Util.showError(e.stack);
 				}
 				return false;
 			},
 		});
 	},
-	onProductTypeLoaded: function(productType)
+	onProductTypeLoaded: function(productType, message)
 	{
-		console.log('oi');
 		var form = ProductTypeView.form[0];
 		$(form.name).val(productType.name);
+
+		if (ProductTypeView.loaded)
+			Util.showSuccess(message);
+		else
+			Util.showInfo(message);
+
+		ProductTypeView.loaded = true;
 	},
 	submit: function(form)
 	{
@@ -60,10 +66,5 @@ var ProductTypeView = ProductTypeView ||
 	onSubmited: function(productType, message)
 	{
 		ProductTypeView.onProductTypeLoaded(productType);
-
-		$('#row-message').show('slow');
-		$('#row-message-span').html(message);
-
-		setTimeout(function() { $('#row-message').hide('slow'); }, 3000);
 	},
 }

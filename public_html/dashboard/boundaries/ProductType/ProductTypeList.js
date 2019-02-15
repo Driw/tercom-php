@@ -8,15 +8,14 @@ var ProductTypeList = ProductTypeList ||
 {
 	init: function()
 	{
-		this.productTypes = [];
-		this.table = $('#table-product-types');
-		this.tbody = this.table.children('tbody');
-		this.datatables = newDataTables(this.table);
-		this.loadProductTypes();
+		ProductTypeList.table = $('#table-product-types');
+		ProductTypeList.tbody = ProductTypeList.table.children('tbody');
+		ProductTypeList.datatables = newDataTables(ProductTypeList.table);
+		ProductTypeList.loadProductTypes();
 	},
 	loadProductTypes: function()
 	{
-		ws.productType_getAll(this.tbody, this.onProductTypesLoaded);
+		ws.productType_getAll(ProductTypeList.tbody, ProductTypeList.onProductTypesLoaded);
 	},
 	onProductTypesLoaded: function(productTypes)
 	{
@@ -29,33 +28,31 @@ var ProductTypeList = ProductTypeList ||
 	addProductTypeRow: function(index, productType)
 	{
 		var rowData = ProductTypeList.newProductTypeRowData(index, productType);
-		var row = ProductTypeList.datatables.row.add(rowData).draw();
+		ProductTypeList.datatables.row.add(rowData).draw();
 	},
 	newProductTypeRowData: function(index, productType)
 	{
-		var id = productType.id;
-		var btnView = '<button type="button" class="btn btn-info" data-index="' +index+ '" onclick="ProductTypeList.onButtonView(this)">Ver</button>';
-		var btnRemove = '<button type="button" class="btn btn-primary" data-index="' +index+ '" onclick="ProductTypeList.onButtonRemove(this)">Excluir</button>';
+		var btnTemplate = '<button type="button" class="btn btn-sm {0}" onclick="ProductTypeList.{1}({2})" title="{3}">{4}</button>';
+		var btnView = btnTemplate.format(BTN_CLASS_VIEW, 'onButtonView', index, 'Ver Tipo de Produto', ICON_VIEW);
+		var btnRemove = btnTemplate.format(BTN_CLASS_REMOVE, 'onButtonRemove', index, 'Excluir Tipo de Produto', ICON_REMOVE);
 
 		return [
 			productType.name,
-			'<div class="btn-group">' + btnView + btnRemove + '</div>',
+			'<div class="btn-group">{0}{1}</div>'.format(btnView, btnRemove),
 		];
 	},
-	onButtonView: function(button)
+	onButtonView: function(index)
 	{
-		var index = button.dataset.index;
 		var productType = ProductTypeList.productTypes[index];
-
-		if (productType !== undefined)
-			Util.redirect('productType/view/' +productType.id, true);
+		Util.redirect('productType/view/' +productType.id);
 	},
-	onButtonRemove: function(button)
+	onButtonRemove: function(index)
 	{
-		var index = button.dataset.index;
 		var productType = ProductTypeList.productTypes[index];
-
-		if (productType !== undefined)
-			Util.redirect('productType/remove/' +productType.id, true);
+		Util.redirect('productType/remove/' +productType.id);
+	},
+	onButtonAdd: function()
+	{
+		Util.redirect('productType/add');
 	},
 }

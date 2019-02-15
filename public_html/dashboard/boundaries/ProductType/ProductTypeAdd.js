@@ -1,19 +1,19 @@
 
 $(document).ready(function()
 {
-		ProductTypeAdd.init();
+	ProductTypeAdd.init();
 });
 
 var ProductTypeAdd = ProductTypeAdd ||
 {
 	init: function()
 	{
-		this.form = $('#form-product-type-add');
-		this.initForm();
+		ProductTypeAdd.form = $('#form-product-type-add');
+		ProductTypeAdd.initForm();
 	},
 	initForm: function()
 	{
-		ws.productType_settings(this.form, this.onFormSettings);
+		ws.productType_settings(ProductTypeAdd.form, ProductTypeAdd.onFormSettings);
 	},
 	onFormSettings: function(settings)
 	{
@@ -31,8 +31,7 @@ var ProductTypeAdd = ProductTypeAdd ||
 				try {
 					ProductTypeAdd.submit($(form));
 				} catch (e) {
-					console.log(e.stack);
-					alert(e.message);
+					Util.showError(e.stack);
 				}
 				return false;
 			},
@@ -42,13 +41,15 @@ var ProductTypeAdd = ProductTypeAdd ||
 	{
 		ws.productType_add(ProductTypeAdd.form, ProductTypeAdd.onSubmited);
 	},
-	onSubmited: function(manufacturer, message)
+	onSubmited: function(productType, message)
 	{
-		$('#row-message').show('slow');
-		$('#row-message-span').html(message);
-
+		message += ' <button class="btn btn-sm {0}" onclick="ProductTypeAdd.onButtonLast()">{1} Ver Tipo de Produto</button>'.format(BTN_CLASS_VIEW, ICON_VIEW);
+		ProductTypeAdd.lastAdded = productType;
 		ProductTypeAdd.form.trigger('reset');
-
-		setTimeout(function() { $('#row-message').hide('slow'); }, 3000);
+		Util.showSuccess(message);
+	},
+	onButtonLast: function()
+	{
+		Util.redirect('productType/view/{0}'.format(ProductTypeAdd.lastAdded.id));
 	},
 }

@@ -59,7 +59,7 @@ var ProductSectorAdd = ProductSectorAdd ||
 	},
 	onSubmited: function(productCategory, message)
 	{
-		message += ' <button class="btn btn-sm {}" onclick="ProductSectorAdd.onButtonLast()">{1} Ver Setor</button>'.format(BTN_CLASS_VIEW, ICON_VIEW);
+		message += ' <button class="btn btn-sm {0}" onclick="ProductSectorAdd.onButtonLast()">{1} Ver Setor</button>'.format(BTN_CLASS_VIEW, ICON_VIEW);
 		ProductSectorAdd.lastAdded = productCategory;
 		ProductSectorAdd.form.trigger('reset');
 		Util.showSuccess(message);
