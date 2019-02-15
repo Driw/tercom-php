@@ -8,10 +8,10 @@ var ProductUnitRemove = ProductUnitRemove ||
 {
 	init: function()
 	{
-		this.form = $('#form-product-unit-remove');
-		this.idProductUnit = $(this.form[0].idProductUnit).val();
-		this.initForm();
-		this.loadProductUnit();
+		ProductUnitRemove.form = $('#form-product-unit-remove');
+		ProductUnitRemove.idProductUnit = $(ProductUnitRemove.form[0].idProductUnit).val();
+		ProductUnitRemove.initForm();
+		ProductUnitRemove.loadProductUnit();
 	},
 	initForm: function()
 	{
@@ -20,8 +20,7 @@ var ProductUnitRemove = ProductUnitRemove ||
 				try {
 					ProductUnitRemove.submit($(form));
 				} catch (e) {
-					console.log(e.stack);
-					alert(e.message);
+					Util.showError(e.stack);
 				}
 				return false;
 			},
@@ -29,7 +28,7 @@ var ProductUnitRemove = ProductUnitRemove ||
 	},
 	loadProductUnit: function()
 	{
-		ws.productUnit_get(this.idProductUnit, this.form, this.onProductUnitLoaded);
+		ws.productUnit_get(ProductUnitRemove.idProductUnit, ProductUnitRemove.form, ProductUnitRemove.onProductUnitLoaded);
 	},
 	onProductUnitLoaded: function(productUnit)
 	{
@@ -42,11 +41,8 @@ var ProductUnitRemove = ProductUnitRemove ||
 	},
 	onSubmited: function(productUnit, message)
 	{
-		ProductUnitRemove.onProductUnitLoaded(productUnit);
-
-		$('#row-message').show('slow');
-		$('#row-message-span').html(message);
-
-		setTimeout(function() { $('#row-message').hide('slow'); }, 3000);
+		ProductUnitRemove.form.trigger('reset');
+		ProductUnitRemove.form.fadeOut('fast');
+		Util.showSuccess(message);
 	},
 }

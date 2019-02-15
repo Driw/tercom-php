@@ -8,12 +8,12 @@ var ProductUnitAdd = ProductUnitAdd ||
 {
 	init: function()
 	{
-		this.form = $('#form-product-unit-add');
-		this.initForm();
+		ProductUnitAdd.form = $('#form-product-unit-add');
+		ProductUnitAdd.initForm();
 	},
 	initForm: function()
 	{
-		ws.productUnit_settings(this.form, this.onFormSettings);
+		ws.productUnit_settings(ProductUnitAdd.form, ProductUnitAdd.onFormSettings);
 	},
 	onFormSettings: function(settings)
 	{
@@ -38,8 +38,7 @@ var ProductUnitAdd = ProductUnitAdd ||
 				try {
 					ProductUnitAdd.submit($(form));
 				} catch (e) {
-					console.log(e.stack);
-					alert(e.message);
+					Util.showError(e.stack);
 				}
 				return false;
 			},
@@ -51,11 +50,13 @@ var ProductUnitAdd = ProductUnitAdd ||
 	},
 	onSubmited: function(productUnit, message)
 	{
-		$('#row-message').show('slow');
-		$('#row-message-span').html(message);
-
+		message += ' <button class="btn btn-sm {0}" onclick="ProductUnitAdd.onButtonLast()">{1} Ver Unidade de Produto</button>'.format(BTN_CLASS_VIEW, ICON_VIEW);
+		ProductUnitAdd.lastAdded = productUnit;
 		ProductUnitAdd.form.trigger('reset');
-
-		setTimeout(function() { $('#row-message').hide('slow'); }, 3000);
+		Util.showSuccess(message);
+	},
+	onButtonLast: function()
+	{
+		Util.redirect('productUnit/view/{0}'.format(ProductUnitAdd.lastAdded.id));
 	},
 }

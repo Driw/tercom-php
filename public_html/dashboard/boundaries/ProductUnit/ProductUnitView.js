@@ -8,18 +8,19 @@ var ProductUnitView = ProductUnitView ||
 {
 	init: function()
 	{
-		this.form = $('#form-product-unit-view');
-		this.idProductUnit = $(this.form[0].idProductUnit).val();
-		this.initForm();
-		this.loadProductUnit();
+		ProductUnitView.loaded = false;
+		ProductUnitView.form = $('#form-product-unit-view');
+		ProductUnitView.idProductUnit = $(ProductUnitView.form[0].idProductUnit).val();
+		ProductUnitView.initForm();
+		ProductUnitView.loadProductUnit();
 	},
 	initForm: function()
 	{
-		ws.productUnit_settings(this.form, this.onFormSettings);
+		ws.productUnit_settings(ProductUnitView.form, ProductUnitView.onFormSettings);
 	},
 	loadProductUnit: function()
 	{
-		ws.productUnit_get(this.idProductUnit, this.form, this.onProductUnitLoaded);
+		ws.productUnit_get(ProductUnitView.idProductUnit, ProductUnitView.form, ProductUnitView.onProductUnitLoaded);
 	},
 	onFormSettings: function(settings)
 	{
@@ -50,18 +51,24 @@ var ProductUnitView = ProductUnitView ||
 				try {
 					ProductUnitView.submit($(form));
 				} catch (e) {
-					console.log(e.stack);
-					alert(e.message);
+					Util.showError(e.stack);
 				}
 				return false;
 			},
 		});
 	},
-	onProductUnitLoaded: function(productUnit)
+	onProductUnitLoaded: function(productUnit, message)
 	{
 		var form = ProductUnitView.form[0];
 		$(form.name).val(productUnit.name);
 		$(form.shortName).val(productUnit.shortName);
+
+		if (ProductUnitView.loaded)
+			Util.showSuccess(message);
+		else
+			Util.showInfo(message);
+
+		ProductUnitView.loaded = true;
 	},
 	submit: function(form)
 	{
@@ -70,10 +77,5 @@ var ProductUnitView = ProductUnitView ||
 	onSubmited: function(productUnit, message)
 	{
 		ProductUnitView.onProductUnitLoaded(productUnit);
-
-		$('#row-message').show('slow');
-		$('#row-message-span').html(message);
-
-		setTimeout(function() { $('#row-message').hide('slow'); }, 3000);
 	},
 }

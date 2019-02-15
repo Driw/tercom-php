@@ -8,7 +8,6 @@ var ProductUnitList = ProductUnitList ||
 {
 	init: function()
 	{
-		ProductUnitList.productUnits = [];
 		ProductUnitList.table = $('#table-product-units');
 		ProductUnitList.tbody = ProductUnitList.table.children('tbody');
 		ProductUnitList.datatables = newDataTables(ProductUnitList.table);
@@ -29,13 +28,13 @@ var ProductUnitList = ProductUnitList ||
 	addProductUnitRow: function(index, productUnit)
 	{
 		var rowData = ProductUnitList.newProductUnitRowData(index, productUnit);
-		var row = ProductUnitList.datatables.row.add(rowData).draw();
+		ProductUnitList.datatables.row.add(rowData).draw();
 	},
 	newProductUnitRowData: function(index, productUnit)
 	{
-		var id = productUnit.id;
-		var btnView = '<button type="button" class="btn btn-primary" data-index="' +index+ '" onclick="ProductUnitList.onButtonView(this)">Ver</button>';
-		var btnRemove = '<button type="button" class="btn btn-danger" data-index="' +index+ '" onclick="ProductUnitList.onButtonRemove(this)">Excluir</button>';
+		var btnTemplate = '<button type="button" class="btn btn-sm {0}" onclick="ProductUnitList.{1}({2})" title="{3}">{4}</button>';
+		var btnView = btnTemplate.format(BTN_CLASS_VIEW, 'onButtonView', index, 'Ver Embalagem de Produto', ICON_VIEW);
+		var btnRemove = btnTemplate.format(BTN_CLASS_REMOVE, 'onButtonRemove', index, 'Excluir Embalagem de Produto', ICON_REMOVE);
 
 		return [
 			productUnit.shortName,
@@ -43,20 +42,18 @@ var ProductUnitList = ProductUnitList ||
 			'<div class="btn-group">{0}{1}</div>'.format(btnView, btnRemove),
 		];
 	},
-	onButtonView: function(button)
+	onButtonView: function(index)
 	{
-		var index = button.dataset.index;
 		var productUnit = ProductUnitList.productUnits[index];
-
-		if (productUnit !== undefined)
-			Util.redirect('productUnit/view/{0}'.format(productUnit.id), true);
+		Util.redirect('productUnit/view/{0}'.format(productUnit.id));
 	},
-	onButtonRemove: function(button)
+	onButtonRemove: function(index)
 	{
-		var index = button.dataset.index;
 		var productUnit = ProductUnitList.productUnits[index];
-
-		if (productUnit !== undefined)
-			Util.redirect('productUnit/remove/{0}'.format(productUnit.id), true);
+		Util.redirect('productUnit/remove/{0}'.format(productUnit.id));
+	},
+	onButtonAdd: function(index)
+	{
+		Util.redirect('productUnit/add');
 	},
 }
