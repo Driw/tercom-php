@@ -47,7 +47,7 @@ var ProductSectorView = ProductSectorView ||
 	onSubmited: function(productCategory, message)
 	{
 		ProductSectorView.form.trigger('reset');
-		ProductSectorView.form.fadeOut('fast');
+		ProductSectorView.form.hide('slow');
 		Util.showSuccess(message);
 	},
 }

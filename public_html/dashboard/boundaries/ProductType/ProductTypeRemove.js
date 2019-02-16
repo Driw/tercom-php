@@ -42,7 +42,7 @@ var ProductTypeRemove = ProductTypeRemove ||
 	onSubmited: function(productType, message)
 	{
 		ProductTypeRemove.form.trigger('reset');
-		ProductTypeRemove.form.fadeOut('fast');
+		ProductTypeRemove.form.hide('slow');
 		Util.showSuccess(message);
 	},
 }

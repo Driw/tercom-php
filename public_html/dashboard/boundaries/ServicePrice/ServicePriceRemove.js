@@ -44,11 +44,8 @@ var ServicePriceRemove = ServicePriceRemove ||
 	onSubmited: function(servicePrice, message)
 	{
 		ServicePriceRemove.form.trigger('reset');
-		ServicePriceRemove.form.fadeOut('fast');
-
-		$('#row-message').show(DEFAULT_FADE);
-		$('#row-message-span').html(message);
-		setTimeout(function() { $('#row-message').hide('slow'); }, 3000);
+		ServicePriceRemove.form.hide('slow');
+		Util.showSuccess(message);
 	}
 }
 

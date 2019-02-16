@@ -51,11 +51,8 @@ var AddressView = AddressView ||
 	onSubmited: function(address, message)
 	{
 		AddressView.form.trigger('reset');
-		AddressView.form.fadeOut('fast');
-
-		$('#row-message').show(DEFAULT_FADE);
-		$('#row-message-span').html(message);
-		setTimeout(function() { $('#row-message').hide('slow'); }, 3000);
+		AddressView.form.hide('slow');
+		Util.showSuccess(message);
 	}
 }
 

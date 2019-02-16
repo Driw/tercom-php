@@ -46,7 +46,7 @@ var ProductGroupView = ProductGroupView ||
 	onSubmited: function(productCategory, message)
 	{
 		ProductGroupView.form.trigger('reset');
-		ProductGroupView.form.fadeOut('fast');
+		ProductGroupView.form.hide('slow');
 		Util.showSuccess(message);
 	},
 }

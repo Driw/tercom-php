@@ -43,10 +43,7 @@ var TercomProfileRemove = TercomProfileRemove ||
 	onSubmited: function(tercomProfile, message)
 	{
 		TercomProfileRemove.form.trigger('reset');
-		TercomProfileRemove.form.fadeOut('fast');
-
-		$('#row-message').show(DEFAULT_FADE);
-		$('#row-message-span').html(message);
-		setTimeout(function() { $('#row-message').hide('slow'); }, 3000);
+		TercomProfileRemove.form.hide('slow');
+		Util.showSuccess(message);
 	}
 }

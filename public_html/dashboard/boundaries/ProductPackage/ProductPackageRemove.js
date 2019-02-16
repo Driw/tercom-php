@@ -42,7 +42,7 @@ var ProductPackageRemove = ProductPackageRemove ||
 	onSubmited: function(productPackage, message)
 	{
 		ProductPackageRemove.form.trigger('reset');
-		ProductPackageRemove.form.fadeOut('fast');
+		ProductPackageRemove.form.hide('slow');
 		Util.showSuccess(message);
 	},
 }

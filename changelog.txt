@@ -20,6 +20,9 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+14.02.2018 - 0.3.5.240
+- Atualizado o efeito de fade ao excluir dados usando 'hide'.
+
 14.02.2018 - 0.3.5.239
 - Ajustes na lista dos preços de produto trocando texto dos botões por ícones.
 - Ajustes nos layouts dos formulários responsivo e exibição de mensagens ao gerenciar preços de produto.

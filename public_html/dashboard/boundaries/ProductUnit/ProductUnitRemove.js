@@ -42,7 +42,7 @@ var ProductUnitRemove = ProductUnitRemove ||
 	onSubmited: function(productUnit, message)
 	{
 		ProductUnitRemove.form.trigger('reset');
-		ProductUnitRemove.form.fadeOut('fast');
+		ProductUnitRemove.form.hide('slow');
 		Util.showSuccess(message);
 	},
 }

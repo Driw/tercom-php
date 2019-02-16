@@ -41,8 +41,8 @@ var ManufacturerRemove = ManufacturerRemove ||
 	},
 	onSubmited: function(manufacturer, message)
 	{
-		ManufacturerRemove.onManufacturerLoaded(manufacturer);
-		ManufacturerRemove.form.fadeOut('DEFAULT_FADE');
+		ManufacturerRemove.form.trigger('reset');
+		ManufacturerRemove.form.hide('slow');
 		Util.showSuccess(message);
 	},
 }

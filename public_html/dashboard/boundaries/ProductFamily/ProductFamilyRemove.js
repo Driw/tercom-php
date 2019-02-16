@@ -47,7 +47,7 @@ var ProductFamilyView = ProductFamilyView ||
 	onSubmited: function(productCategory, message)
 	{
 		ProductFamilyView.form.trigger('reset');
-		ProductFamilyView.form.fadeOut('fast');
+		ProductFamilyView.form.hide('slow');
 		Util.showSuccess(message);
 	},
 }

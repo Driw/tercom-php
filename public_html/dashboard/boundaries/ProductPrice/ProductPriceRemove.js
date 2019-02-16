@@ -37,6 +37,7 @@ var ProductPriceRemove = ProductPriceRemove ||
 	},
 	onSubmited: function(productPrice, message)
 	{
+		ProductPriceRemove.form.trigger('reset');
 		ProductPriceRemove.form.hide('slow');
 		Util.showSuccess(message);
 	},

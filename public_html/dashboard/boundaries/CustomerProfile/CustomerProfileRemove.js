@@ -43,10 +43,7 @@ var CustomerProfileView = CustomerProfileView ||
 	onSubmited: function(customerProfile, message)
 	{
 		CustomerProfileView.form.trigger('reset');
-		CustomerProfileView.form.fadeOut('fast');
-
-		$('#row-message').show(DEFAULT_FADE);
-		$('#row-message-span').html(message);
-		setTimeout(function() { $('#row-message').hide('slow'); }, 3000);
+		CustomerProfileView.form.hide('slow');
+		Util.showSuccess(message);
 	}
 }
