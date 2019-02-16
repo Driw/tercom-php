@@ -117,6 +117,7 @@ class ManagePermissionsService extends RelationshipService
 	 */
 	protected function getAllCustomerPermission(ApiContent $content, int $idCustomerProfile): ApiResultObject
 	{
+		$this->setHeaderCache();
 		$customerProfile = $this->getCustomerProfileControl()->get($idCustomerProfile, false, $this->getCurrentAssignmentLevel());
 		$permissions = $this->getCustomerPermissionControl()->getRelationships($customerProfile);
 
@@ -213,6 +214,7 @@ class ManagePermissionsService extends RelationshipService
 	 */
 	protected function getAllTercomPermission(ApiContent $content, int $idTercomProfile): ApiResultObject
 	{
+		$this->setHeaderCache();
 		$tercomProfile = $this->getTercomProfileControl()->get($idTercomProfile);
 		$permissions = $this->getTercomPermissionControl()->getRelationships($tercomProfile);
 
@@ -221,6 +223,16 @@ class ManagePermissionsService extends RelationshipService
 		$result->setMessage('encontrado %d permissões no perfil', $permissions->size());
 
 		return $result;
+	}
+
+	private function setHeaderCache(): void
+	{
+		$seconds = 3600;
+		$ts = gmdate("D, d M Y H:i:s", time() + $seconds) . " GMT";
+
+		header("Expires: $ts");
+		header("Pragma: cache");
+		header("Cache-Control: max-age=$seconds");
 	}
 }
 

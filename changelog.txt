@@ -20,6 +20,9 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+14.02.2018 - 0.3.5.241
+- Adicionado cache de 15 minutos para obter lista com todas as permissões (funcionário TERCOM/cliente).
+
 14.02.2018 - 0.3.5.240
 - Atualizado o efeito de fade ao excluir dados usando 'hide'.
 
