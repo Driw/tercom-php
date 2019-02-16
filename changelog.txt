@@ -20,6 +20,9 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+16.02.2018 - 0.3.5.238
+- Ajustes no resposivo de layouts para que os formulários não fiquem tão grande e nem tão pequeno.
+
 16.02.2018 - 0.3.5.237
 - Ajustes na lista de produtos trocando texto dos botões por ícones.
 - Ajustes nos layouts dos formulários responsivo e exibição de mensagens ao gerenciar produtos.
