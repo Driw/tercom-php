@@ -8,7 +8,6 @@ var ProductSearch = ProductSearch ||
 {
 	init: function()
 	{
-		this.providers = [];
 		this.form = $('#form-search');
 		this.table = $('#table-products');
 		this.tbody = this.table.find('tbody');
@@ -27,7 +26,11 @@ var ProductSearch = ProductSearch ||
 				},
 			},
 			submitHandler: function(form) {
-				ProductSearch.onSearch($(form));
+				try {
+					ProductSearch.onSearch($(form));
+				} catch (e) {
+					Util.showError(e.stack);
+				}
 				return false;
 			},
 		});
@@ -46,32 +49,63 @@ var ProductSearch = ProductSearch ||
 		ProductSearch.products = products.elements;
 		ProductSearch.products.forEach(function(product, index)
 		{
-			var viewButton = '<button type="button" class="btn btn-info" data-index="' +index+ '" onclick="ProductSearch.onButtonSee(this)">Ver</button>';
-			var pricesButton = '<button type="button" class="btn btn-primary" data-index="' +index+ '" onclick="ProductSearch.onButtonPrices(this)">Preços</button>';
-			var row = ProductSearch.datatables.row.add([
-				product.id,
-				product.name,
-				product.description,
-				product.utility,
-				product.category.family.name,
-				'<div class="btn-group">' + viewButton + pricesButton + '</div>',
-			]).draw();
+			var productRowData = ProductSearch.newProductRowData(index, product);
+			ProductSearch.datatables.row.add(productRowData).draw();
 		});
 	},
-	onButtonSee: function(button)
+	newProductRowData: function(index, product)
 	{
-		var index = button.dataset.index;
-		var product = ProductSearch.products[index];
+		var btnTemplate = '<button type="button" class="btn btn-sm {0}" onclick="ProductSearch.{1}(this, {2})" title="{3}">{4}</button>';
+		var btnView = btnTemplate.format(BTN_CLASS_VIEW, 'onButtonView', index, 'Ver Produto', ICON_VIEW);
+		var btnViewPrices = btnTemplate.format(BTN_CLASS_VIEW, 'onButtonPrices', index, 'Ver Produto', ICON_VIEW);
+		var btnEnable = btnTemplate.format(BTN_CLASS_ENABLE, 'onButtonEnable', index, 'Habilitar/Mostrar Produto', ICON_ENABLE);
+		var btnDisable = btnTemplate.format(BTN_CLASS_DISABLE, 'onButtonDisable', index, 'Desabilitar/Esconder Produto', ICON_DISABLE);
 
-		if (product !== undefined)
-			Util.redirect('product/view/' +product.id, true);
+		return [
+			product.id,
+			product.name,
+			product.description,
+			product.productUnit === null ? '-' : product.productUnit.name,
+			product.productCategory === null ? '-' : product.productCategory.name,
+			'<div class="btn-group">{0}{1}{2}</div>'.format(btnView, btnViewPrices, product.inactive ? btnEnable : btnDisable),
+		];
 	},
-	onButtonPrices: function(button)
+	onButtonView: function(button, index)
 	{
-		var index = button.dataset.index;
 		var product = ProductSearch.products[index];
+		Util.redirect('product/view/{0}'.format(product.id));
+	},
+	onButtonPrices: function(button, index)
+	{
+		var product = ProductSearch.products[index];
+		Util.redirect('product/viewPrices/{0}'.format(product.id));
+	},
+	onButtonEnable: function(button, index)
+	{
+		var product = ProductSearch.products[index];
+		var tr = $(button).parents('tr');
 
-		if (product !== undefined)
-			Util.redirect('productPrices/view/' +product.id, true);
-	}
+		ws.product_setActive(product.id, tr, function(product, message)
+		{
+			ProductSearch.onChangeProduct(product, tr, index);
+			Util.showSuccess(message);
+		});
+	},
+	onButtonDisable: function(button, index)
+	{
+		var product = ProductSearch.products[index];
+		var tr = $(button).parents('tr');
+
+		ws.product_setInactive(product.id, tr, function(product, message)
+		{
+			ProductSearch.onChangeProduct(product, tr, index);
+			Util.showSuccess(message);
+		});
+	},
+	onChangeProduct: function(product, tr, index)
+	{
+		ProductSearch.products[index] = product;
+		var productRowData = ProductSearch.newProductRowData(index, product);
+		ProductSearch.datatables.row(tr).data(productRowData);
+	},
 }

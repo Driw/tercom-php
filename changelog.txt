@@ -20,6 +20,12 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+16.02.2018 - 0.3.5.237
+- Ajustes na lista de produtos trocando texto dos botões por ícones.
+- Ajustes nos layouts dos formulários responsivo e exibição de mensagens ao gerenciar produtos.
+- Corrigido caixas de seleção das categorias de produto que não estavam mais funcionando.
+	- O nome dos webservices foram alterados devido a mudanças anteiores no serviço das categorias.
+
 14.02.2018 - 0.3.5.236
 - Ajustes na lista de tipos de produto trocando texto dos botões por ícones.
 - Ajustes nos layouts dos formulários responsivo e exibição de mensagens ao gerenciar tipos de produto.

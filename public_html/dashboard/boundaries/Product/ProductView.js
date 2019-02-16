@@ -8,6 +8,7 @@ var ProductView = ProductView ||
 {
 	init: function()
 	{
+		ProductView.loaded = false;
 		ProductView.form = $('#form-product-view');
 		ProductView.idProduct = $(ProductView.form[0].idProduct).val();
 		ProductView.loadProduct();
@@ -45,17 +46,17 @@ var ProductView = ProductView ||
 	},
 	loadProductGroups: function(idProductFamily)
 	{
-		ws.productGroup_getAll(idProductFamily, ProductView.selectGroup, ProductView.onLoadProductGroups);
+		ws.productFamily_getCategories(idProductFamily, ProductView.selectGroup, ProductView.onLoadProductGroups);
 	},
 	loadProductSubgroups: function(idProductGroup)
 	{
-		ws.productSubgroup_getAll(idProductGroup, ProductView.selectSubgroup, ProductView.onLoadProductSubgroups);
+		ws.productGroup_getCategories(idProductGroup, ProductView.selectSubgroup, ProductView.onLoadProductSubgroups);
 	},
 	loadProductSector: function(idProductSubgroup)
 	{
-		ws.productSector_getAll(idProductSubgroup, ProductView.selectSector, ProductView.onLoadProductSectores);
+		ws.productSubgroup_getCategories(idProductSubgroup, ProductView.selectSector, ProductView.onLoadProductSectores);
 	},
-	onLoadProduct: function(product)
+	onLoadProduct: function(product, message)
 	{
 		ProductView.product = product;
 
@@ -66,6 +67,13 @@ var ProductView = ProductView ||
 
 		ProductView.setProductCategoryReset();
 		ProductView.initSelects();
+
+		if (ProductView.loaded)
+			Util.showSuccess(message);
+		else
+			Util.showInfo(message);
+
+		ProductView.loaded = true;
 	},
 	onLoadProductUnits: function(productUnities)
 	{
@@ -266,7 +274,7 @@ var ProductView = ProductView ||
 				try {
 					ProductView.submit();
 				} catch (e) {
-					console.log(e);
+					Util.showError(e.stack);
 				}
 				return false;
 			}
@@ -274,10 +282,6 @@ var ProductView = ProductView ||
 	},
 	onSubmited: function(product, message)
 	{
-		$('#product-view-name').html(product.name);
-		$('#product-view-message').html(message);
-		$('#product-view-paragraph').show('slow');
-
-		setTimeout(function() { $('#product-view-paragraph').hide('slow'); }, 3000);
+		ProductView.onLoadProduct(product, message);
 	}
 }
