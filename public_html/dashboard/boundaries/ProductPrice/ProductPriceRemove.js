@@ -8,10 +8,10 @@ var ProductPriceRemove = ProductPriceRemove ||
 {
 	init: function()
 	{
-		this.form = $('#form-product-price');
-		this.idProductPrice = $(this.form[0].idProductPrice).val();
-		this.initForm();
-		this.loadProductPrice();
+		ProductPriceRemove.form = $('#form-product-price');
+		ProductPriceRemove.idProductPrice = $(ProductPriceRemove.form[0].idProductPrice).val();
+		ProductPriceRemove.initForm();
+		ProductPriceRemove.loadProductPrice();
 	},
 	initForm: function()
 	{
@@ -29,7 +29,7 @@ var ProductPriceRemove = ProductPriceRemove ||
 	},
 	loadProductPrice: function()
 	{
-		ws.productPrice_get(this.idProductPrice, this.form, this.onLoadProductPrice);
+		ws.productPrice_get(ProductPriceRemove.idProductPrice, ProductPriceRemove.form, ProductPriceRemove.onLoadProductPrice);
 	},
 	submit: function(form)
 	{
@@ -38,9 +38,7 @@ var ProductPriceRemove = ProductPriceRemove ||
 	onSubmited: function(productPrice, message)
 	{
 		ProductPriceRemove.form.hide('slow');
-
-		$('#row-message').show('slow');
-		$('#row-message-span').html(message);
+		Util.showSuccess(message);
 	},
 	onLoadProductPrice: function(productPrice)
 	{

@@ -8,46 +8,47 @@ var ProductPriceAdd = ProductPriceAdd ||
 {
 	init: function()
 	{
-		this.formProduct = $('#form-product');
-		this.idProduct = $(this.formProduct[0].idProduct).val();
+		ProductPriceAdd.loaded = false;
+		ProductPriceAdd.formProduct = $('#form-product');
+		ProductPriceAdd.idProduct = $(ProductPriceAdd.formProduct[0].idProduct).val();
 
-		this.form = $('#form-product-price-add');
+		ProductPriceAdd.form = $('#form-product-price-add');
 		var form = this.form[0];
-		this.selectProvider = $(form.idProvider);
-		this.selectManufacturer = $(form.idManufacture);
-		this.selectProductPackage = $(form.idProductPackage);
-		this.selectProductType = $(form.idProductType);
+		ProductPriceAdd.selectProvider = $(form.idProvider);
+		ProductPriceAdd.selectManufacturer = $(form.idManufacturer);
+		ProductPriceAdd.selectProductPackage = $(form.idProductPackage);
+		ProductPriceAdd.selectProductType = $(form.idProductType);
 
-		this.initForm();
-		this.loadProduct();
-		this.loadProviders();
-		this.loadManufacturers();
-		this.loadProductPackages();
-		this.loadProductTypes();
+		ProductPriceAdd.initForm();
+		ProductPriceAdd.loadProduct();
+		ProductPriceAdd.loadProviders();
+		ProductPriceAdd.loadManufacturers();
+		ProductPriceAdd.loadProductPackages();
+		ProductPriceAdd.loadProductTypes();
 	},
 	initForm: function()
 	{
-		ws.productPrice_settings(this.form, this.onFormSettings);
+		ws.productPrice_settings(ProductPriceAdd.form, ProductPriceAdd.onFormSettings);
 	},
 	loadProduct: function()
 	{
-		ws.product_get(this.idProduct, this.formProduct, this.onLoadProduct);
+		ws.product_get(ProductPriceAdd.idProduct, ProductPriceAdd.formProduct, ProductPriceAdd.onLoadProduct);
 	},
 	loadProviders: function()
 	{
-		ws.provider_getAll(this.selectProvider, this.onLoadProviders);
+		ws.provider_getAll(ProductPriceAdd.selectProvider, ProductPriceAdd.onLoadProviders);
 	},
 	loadManufacturers: function()
 	{
-		ws.manufacturer_getAll(this.selectManufacturer, this.onLoadManufacturers);
+		ws.manufacturer_getAll(ProductPriceAdd.selectManufacturer, ProductPriceAdd.onLoadManufacturers);
 	},
 	loadProductPackages: function()
 	{
-		ws.productPackage_getAll(this.selectProductPackage, this.onLoadProductPackages);
+		ws.productPackage_getAll(ProductPriceAdd.selectProductPackage, ProductPriceAdd.onLoadProductPackages);
 	},
 	loadProductTypes: function()
 	{
-		ws.productType_getAll(this.selectProductType, this.onLoadProductTypes);
+		ws.productType_getAll(ProductPriceAdd.selectProductType, ProductPriceAdd.onLoadProductTypes);
 	},
 	onFormSettings: function(settings)
 	{
@@ -56,7 +57,7 @@ var ProductPriceAdd = ProductPriceAdd ||
 				'idProvider': {
 					'required': true,
 				},
-				'idManufacture': {
+				'idManufacturer': {
 					'required': false,
 				},
 				'idProductPackage': {
@@ -82,8 +83,7 @@ var ProductPriceAdd = ProductPriceAdd ||
 				try {
 					ProductPriceAdd.submit($(form));
 				} catch (e) {
-					console.log(e.stack);
-					alert(e.message);
+					Util.showError(e.stack);
 				}
 				return false;
 			},
@@ -95,22 +95,23 @@ var ProductPriceAdd = ProductPriceAdd ||
 	},
 	onSubmited: function(productPrice, message)
 	{
-		$('#row-message').show('slow');
-		$('#row-message-span').html(message);
-
+		message += ' <button class="btn btn-sm {0}" onclick="ProductPriceAdd.onButtonLast()">{1} Ver Preço de Produto</button>'.format(BTN_CLASS_VIEW, ICON_VIEW);
+		ProductPriceAdd.lastAdded = productPrice;
 		ProductPriceAdd.form.trigger('reset');
-		ProductPriceAdd.selectProvider.val('default');
-
-		setTimeout(function() { $('#row-message').hide('slow'); }, 3000);
+		Util.showSuccess(message);
 	},
-	onLoadProduct: function(product)
+	onLoadProduct: function(product, message)
 	{
 		var form = ProductPriceAdd.formProduct[0];
 		$(form.name).val(product.name);
 		$(form.unit).val(product.productUnit.name);
 		$(form.description).html(product.description);
-
 		$(ProductPriceAdd.form[0].name).val(product.name);
+
+		if (ProductPriceAdd.loaded)
+			Util.showSuccess(message);
+		else
+			Util.showInfo(message);
 	},
 	onLoadProviders: function(providers)
 	{
@@ -120,7 +121,7 @@ var ProductPriceAdd = ProductPriceAdd ||
 		ProductPriceAdd.providers = providers.elements;
 		ProductPriceAdd.providers.forEach(function(provider)
 		{
-			var option = Util.createElementOption(provider.fantasyName, provider.id);
+			var option = Util.createElementOption('{0} - {1}'.format(provider.fantasyName, Util.formatCnpj(provider.cnpj)), provider.id);
 			ProductPriceAdd.selectProvider.append(option);
 		});
 		ProductPriceAdd.selectProvider.selectpicker('refresh');
@@ -164,4 +165,8 @@ var ProductPriceAdd = ProductPriceAdd ||
 		});
 		ProductPriceAdd.selectProductType.selectpicker('refresh');
 	},
+	onButtonLast: function()
+	{
+		Util.redirect('product/viewPrice/{0}'.format(ProductPriceAdd.lastAdded.id));
+	}
 }

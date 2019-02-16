@@ -30,7 +30,7 @@ var ProductList = ProductList ||
 	{
 		var btnTemplate = '<button type="button" class="btn btn-sm {0}" onclick="ProductList.{1}(this, {2})" title="{3}">{4}</button>';
 		var btnView = btnTemplate.format(BTN_CLASS_VIEW, 'onButtonView', index, 'Ver Produto', ICON_VIEW);
-		var btnViewPrices = btnTemplate.format(BTN_CLASS_VIEW, 'onButtonPrices', index, 'Ver Produto', ICON_VIEW);
+		var btnViewPrices = btnTemplate.format(BTN_CLASS_VIEW, 'onButtonPrices', index, 'Ver Produto', ICON_PRICES);
 		var btnEnable = btnTemplate.format(BTN_CLASS_ENABLE, 'onButtonEnable', index, 'Habilitar/Mostrar Produto', ICON_ENABLE);
 		var btnDisable = btnTemplate.format(BTN_CLASS_DISABLE, 'onButtonDisable', index, 'Desabilitar/Esconder Produto', ICON_DISABLE);
 

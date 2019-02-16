@@ -8,45 +8,46 @@ var ProductPriceView = ProductPriceView ||
 {
 	init: function()
 	{
-		this.formProduct = $('#form-product');
-		this.form = $('#form-product-price-view');
-		var form = this.form[0];
-		this.selectProvider = $(form.idProvider);
-		this.selectManufacturer = $(form.idManufacture);
-		this.selectProductPackage = $(form.idProductPackage);
-		this.selectProductType = $(form.idProductType);
-		this.idProductPrice = $(form.idProductPrice).val();
+		ProductPriceView.loaded = false;
+		ProductPriceView.formProduct = $('#form-product');
+		ProductPriceView.form = $('#form-product-price-view');
+		var form = ProductPriceView.form[0];
+		ProductPriceView.selectProvider = $(form.idProvider);
+		ProductPriceView.selectManufacturer = $(form.idManufacturer);
+		ProductPriceView.selectProductPackage = $(form.idProductPackage);
+		ProductPriceView.selectProductType = $(form.idProductType);
+		ProductPriceView.idProductPrice = $(form.idProductPrice).val();
 
-		this.initForm();
-		this.loadProductPrice();
-		this.loadProviders();
-		this.loadManufacturers();
-		this.loadProductPackages();
-		this.loadProductTypes();
+		ProductPriceView.initForm();
+		ProductPriceView.loadProductPrice();
+		ProductPriceView.loadProviders();
+		ProductPriceView.loadManufacturers();
+		ProductPriceView.loadProductPackages();
+		ProductPriceView.loadProductTypes();
 	},
 	initForm: function()
 	{
-		ws.productPrice_settings(this.form, this.onFormSettings);
+		ws.productPrice_settings(ProductPriceView.form, ProductPriceView.onFormSettings);
 	},
 	loadProductPrice: function()
 	{
-		ws.productPrice_get(this.idProductPrice, this.form, this.onLoadProductPrice);
+		ws.productPrice_get(ProductPriceView.idProductPrice, ProductPriceView.form, ProductPriceView.onLoadProductPrice);
 	},
 	loadProviders: function()
 	{
-		ws.provider_getAll(this.selectProvider, this.onLoadProviders);
+		ws.provider_getAll(ProductPriceView.selectProvider, ProductPriceView.onLoadProviders);
 	},
 	loadManufacturers: function()
 	{
-		ws.manufacturer_getAll(this.selectManufacturer, this.onLoadManufacturers);
+		ws.manufacturer_getAll(ProductPriceView.selectManufacturer, ProductPriceView.onLoadManufacturers);
 	},
 	loadProductPackages: function()
 	{
-		ws.productPackage_getAll(this.selectProductPackage, this.onLoadProductPackages);
+		ws.productPackage_getAll(ProductPriceView.selectProductPackage, ProductPriceView.onLoadProductPackages);
 	},
 	loadProductTypes: function()
 	{
-		ws.productType_getAll(this.selectProductType, this.onLoadProductTypes);
+		ws.productType_getAll(ProductPriceView.selectProductType, ProductPriceView.onLoadProductTypes);
 	},
 	onFormSettings: function(settings)
 	{
@@ -55,7 +56,7 @@ var ProductPriceView = ProductPriceView ||
 				'idProvider': {
 					'required': true,
 				},
-				'idManufacture': {
+				'idManufacturer': {
 					'required': false,
 				},
 				'idProductPackage': {
@@ -94,14 +95,9 @@ var ProductPriceView = ProductPriceView ||
 	},
 	onSubmited: function(productPrice, message)
 	{
-		ProductPriceView.onLoadProductPrice(productPrice);
-
-		$('#row-message').show('slow');
-		$('#row-message-span').html(message);
-
-		setTimeout(function() { $('#row-message').hide('slow'); }, 3000);
+		ProductPriceView.onLoadProductPrice(productPrice, message);
 	},
-	onLoadProductPrice: function(productPrice)
+	onLoadProductPrice: function(productPrice, message)
 	{
 		ProductPriceView.productPrice = productPrice;
 
@@ -113,12 +109,19 @@ var ProductPriceView = ProductPriceView ||
 		$(form.idProductPackage).val(productPrice.productPackage.id).selectpicker('refresh');
 
 		if (productPrice.manufacturer !== null)
-			$(form.idManufacture).val(productPrice.manufacturer.id).selectpicker('refresh');
+			$(form.idManufacturer).val(productPrice.manufacturer.id).selectpicker('refresh');
 
 		if (productPrice.productType !== null)
 			$(form.idProductType).val(productPrice.productType.id).selectpicker('refresh');
 
 		ws.product_get(productPrice.product.id, ProductPriceView.formProduct, ProductPriceView.onLoadProduct);
+
+		if (ProductPriceView.loaded)
+			Util.showSuccess(message);
+		else
+			Util.showInfo(message);
+
+		ProductPriceView.loaded = true;
 	},
 	onLoadProduct: function(product)
 	{
@@ -126,10 +129,6 @@ var ProductPriceView = ProductPriceView ||
 		$(form.name).val(product.name);
 		$(form.unit).val(product.productUnit.name);
 		$(form.description).html(product.description);
-		$('#product-price-add').click(function()
-		{
-			Util.redirect('product/addPrice/{0}'.format(product.id), true);
-		});
 
 		if ($(ProductPriceView.form[0].name).val === '')
 			$(ProductPriceView.form[0].name).val(product.name);
@@ -143,7 +142,7 @@ var ProductPriceView = ProductPriceView ||
 		ProductPriceView.providers.forEach(function(provider)
 		{
 			var selected = ProductPriceView.productPrice !== undefined && ProductPriceView.productPrice.provider.id === provider.id;
-			var option = Util.createElementOption(provider.fantasyName, provider.id, selected);
+			var option = Util.createElementOption('{0} - {1}'.format(provider.fantasyName, Util.formatCnpj(provider.cnpj)), provider.id, selected);
 			ProductPriceView.selectProvider.append(option);
 		});
 		ProductPriceView.selectProvider.selectpicker('refresh');

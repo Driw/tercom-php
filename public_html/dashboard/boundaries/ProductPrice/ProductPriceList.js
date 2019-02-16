@@ -44,32 +44,33 @@ var ProductPriceList = ProductPriceList ||
 	},
 	newDataRow: function(index, productPrice)
 	{
-		var btnView = '<button class="btn btn-primary" data-index="{0}" onclick="ProductPriceList.onButtonView(this)">Ver</button>'.format(index);
-		var btnRemove = '<button class="btn btn-danger" data-index="{0}" onclick="ProductPriceList.onButtonRemove(this)">Excluir</button>'.format(index);
+		var btnTemplate = '<button class="btn btn-sm {0}" onclick="ProductPriceList.{1}({2})" title="{3}">{4}</button>';
+		var btnView = btnTemplate.format(BTN_CLASS_VIEW, 'onButtonView', index, 'Ver Preço de Produto', ICON_VIEW);
+		var btnRemove = btnTemplate.format(BTN_CLASS_REMOVE, 'onButtonRemove', index, 'Excluir Preço de Produto', ICON_REMOVE);
 
 		return [
 			productPrice.name,
+			productPrice.provider.fantasyName,
+			productPrice.manufacturer === null ? '-' : productPrice.manufacturer.fantasyName,
 			productPrice.amount,
 			productPrice.price,
 			productPrice.productPackage.name,
-			productPrice.productType.name,
+			productPrice.productType === null ? '-' : productPrice.productType.name,
 			'<div class="btn-group">{0}{1}</div>'.format(btnView, btnRemove),
 		];
 	},
-	onButtonView: function(button)
+	onButtonView: function(index)
 	{
-		var index = button.dataset.index;
 		var productPrice = ProductPriceList.productPrices[index];
-
-		if (productPrice !== undefined)
-			Util.redirect('product/viewPrice/{0}'.format(productPrice.id), true);
+		Util.redirect('product/viewPrice/{0}'.format(productPrice.id));
 	},
-	onButtonRemove: function(button)
+	onButtonRemove: function(index)
 	{
-		var index = button.dataset.index;
 		var productPrice = ProductPriceList.productPrices[index];
-
-		if (productPrice !== undefined)
-			Util.redirect('product/removePrice/{0}'.format(productPrice.id), true);
-	}
+		Util.redirect('product/removePrice/{0}'.format(productPrice.id));
+	},
+	onButtonAdd: function()
+	{
+		Util.redirect('product/addPrice/{0}'.format(ProductPriceList.idProduct), true);
+	},
 }

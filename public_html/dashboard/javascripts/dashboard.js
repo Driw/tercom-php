@@ -22,6 +22,7 @@ const ICON_PRODUCT_SUBGROUP = '<i class="fas fa-chess-knight"></i>';
 const ICON_PRODUCT_SECTOR = '<i class="fas fa-chess-rook"></i>';
 const ICON_SERVICE = '<i class="fas fa-file-contract"></i>';
 const ICON_LINk = '<i class="fas fa-external-link-alt"></i>';
+const ICON_PRICES = '<i class="fas fa-dollar-sign"></i>';
 
 const SHOW_CLASS_FORMAT = 'alert alert-{0} col-12 text-center';
 
@@ -400,7 +401,7 @@ var Util = Util ||
 	{
 		cnpj = Util.formatNull(cnpj);
 
-		return cpf.length !== 14 ? cnpj : cnpj.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, "$1.$2.$3/$4-$5");
+		return cnpj.length !== 14 ? cnpj : cnpj.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, "$1.$2.$3/$4-$5");
 	},
 	formatCep: function(cep)
 	{
