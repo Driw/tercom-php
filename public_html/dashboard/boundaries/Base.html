@@ -112,13 +112,25 @@
 						<!-- END NavSide_Item -->
 						<!-- BEGIN NavSide_Dropdown -->
 						<li class="{NavSide_Dropdown_Class} nav-item-packet-js" data-permission-packet="{NavSide_Dropdown_PermissionPacket}">
-							<a href="#{NavSide_Dropdown_ID}" aria-expanded="false" data-toggle="collapse"><i class="{NavSide_Dropdown_Icon}"></i>{NavSide_Dropdown_Name}</a>
-							<ul id="{NavSide_Dropdown_ID}" class="collapse list-unstyled ">
+							<a href="#{NavSide_Dropdown_ID}" aria-expanded="{NavSide_Dropdown_AriaExapanded}" data-toggle="collapse" class="{NavSide_Dropdown_ClassCollapse}"><i class="{NavSide_Dropdown_Icon}"></i>{NavSide_Dropdown_Name}</a>
+							<ul id="{NavSide_Dropdown_ID}" class="collapse list-unstyled {NavSide_Dropdown_Show}">
 								<!-- BEGIN NavSide_Dropdown_Itens -->
 								<li class="nav-item-action-js" data-permission-packet="{NavSide_Dropdown_Itens_PermissionPacket}" data-permission-action="{NavSide_Dropdown_Itens_PermissionAction}">
 									<a href="{NavSide_Dropdown_Itens_Url}"><i class="{NavSide_Dropdown_Itens_Icon}"></i>{NavSide_Dropdown_Itens_Name}</a>
 								</li>
 								<!-- END NavSide_Dropdown_Itens -->
+								<!-- BEGIN NavSide_Dropdown_SubItens -->
+								<li class="nav-item-action-js" data-permission-packet="{NavSide_Dropdown_SubItens_PermissionPacket}" data-permission-action="{NavSide_Dropdown_SubItens_PermissionAction}">
+									<a href="#{NavSide_Dropdown_SubItens_ID}" aria-expanded="{NavSide_Dropdown_SubItens_AriaExapanded}" data-toggle="collapse" class="{NavSide_Dropdown_SubItens_ClassCollapse}"><i class="{NavSide_Dropdown_SubItens_Icon}"></i>{NavSide_Dropdown_SubItens_Name}</a>
+									<ul id="{NavSide_Dropdown_SubItens_ID}" class="collapse list-unstyled {NavSide_Dropdown_SubItens_Show}">
+										<!-- BEGIN NavSide_Dropdown_SubItens_Itens -->
+										<li class="nav-item-action-js" data-permission-packet="{NavSide_Dropdown_SubItens_Itens_PermissionPacket}" data-permission-action="{NavSide_Dropdown_SubItens_Itens_PermissionAction}">
+											<a href="{NavSide_Dropdown_SubItens_Itens_Url}"><i class="{NavSide_Dropdown_SubItens_Itens_Icon}"></i>{NavSide_Dropdown_SubItens_Itens_Name}</a>
+										</li>
+										<!-- END NavSide_Dropdown_SubItens_Itens -->
+									</ul>
+								</li>
+								<!-- END NavSide_Dropdown_SubItens -->
 							</ul>
 						</li>
 						<!-- END NavSide_Dropdown -->

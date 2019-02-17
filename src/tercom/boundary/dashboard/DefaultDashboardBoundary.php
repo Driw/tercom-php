@@ -274,11 +274,20 @@ abstract class DefaultDashboardBoundary extends ApiTemplate
 				$item['Item']['Class'] = trim(sprintf('%s active', $item['Item']['Class']));
 				return true;
 			}
-
-			else if (isset($item['Dropdown']) && $item['Dropdown']['service'] === $serviceName)
+			
+			else if (isset($item['Dropdown']))
 			{
-				$item['Dropdown']['Class'] = trim(sprintf('%s active', $item['Dropdown']['Class']));
-				return true;
+				$item['Dropdown']['AriaExapanded'] = 'false';
+				$item['Dropdown']['Class'] = 'collapsed';
+				$item['Dropdown']['Show'] = '';
+
+				if ($item['Dropdown']['service'] === $serviceName)
+				{
+					$item['Dropdown']['Class'] = trim(sprintf('%s active', $item['Dropdown']['Class']));
+					$item['Dropdown']['AriaExapanded'] = 'true';
+					$item['Dropdown']['Class'] = '';
+					$item['Dropdown']['Show'] = 'show';
+				}
 			}
 		}
 

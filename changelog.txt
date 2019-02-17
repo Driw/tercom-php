@@ -20,6 +20,9 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+17.02.2018 - 0.3.5.244
+- Ajuste no menu lateral esquerdo para agrupar itens do menu como subitens dos itens já existentes (funcionário TERCOM).
+
 17.02.2018 - 0.3.5.243
 - Ajustes na lista dos preços de serviço trocando texto dos botões por ícones.
 - Ajustes nos layouts dos formulários responsivo e exibição de mensagens ao gerenciar preços de serviço.
