@@ -1,7 +1,7 @@
 
 $(document).ready(function()
 {
-		ServicePriceRemove.init();
+	ServicePriceRemove.init();
 });
 
 var ServicePriceRemove = ServicePriceRemove ||
@@ -20,7 +20,7 @@ var ServicePriceRemove = ServicePriceRemove ||
 				try {
 					ServicePriceRemove.submit($(form));
 				} catch (e) {
-					console.log(e);
+					Util.showError(e);
 				}
 				return false;
 			}

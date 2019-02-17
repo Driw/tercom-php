@@ -29,9 +29,9 @@ var ServicePriceList = ServicePriceList ||
 	},
 	newServicePriceRowData: function(index, servicePrice)
 	{
-		var btnTemplate = '<button type="button" class="btn btn-sm btn-{0}" onclick="ServicePriceList.{1}({2})">{3}</button>';
-		var btnView = btnTemplate.format('primary', 'onButtonView', index, 'Ver');
-		var btnRemove = btnTemplate.format('danger', 'onButtonRemove', index, 'Excluir');
+		var btnTemplate = '<button type="button" class="btn btn-sm {0}" onclick="ServicePriceList.{1}({2})" title="{3}">{4}</button>';
+		var btnView = btnTemplate.format(BTN_CLASS_VIEW, 'onButtonView', index, 'Ver Preço de Serviço', ICON_VIEW);
+		var btnRemove = btnTemplate.format(BTN_CLASS_REMOVE, 'onButtonRemove', index, 'Excluir Preço de Serviço', ICON_REMOVE);
 
 		return [
 			servicePrice.id,
@@ -45,16 +45,12 @@ var ServicePriceList = ServicePriceList ||
 	onButtonView: function(index)
 	{
 		var servicePrice = ServicePriceList.servicePrices[index];
-
-		if (servicePrice !== undefined)
-			Util.redirect('service/viewPrice/{0}'.format(servicePrice.id), true);
+		Util.redirect('service/viewPrice/{0}'.format(servicePrice.id));
 	},
 	onButtonRemove: function(index)
 	{
 		var servicePrice = ServicePriceList.servicePrices[index];
-
-		if (servicePrice !== undefined)
-			Util.redirect('service/removePrice/{0}'.format(servicePrice.id), true);
+		Util.redirect('service/removePrice/{0}'.format(servicePrice.id));
 	},
 	onButtonAdd: function()
 	{

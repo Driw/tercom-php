@@ -35,7 +35,7 @@ var ServicePriceAdd = ServicePriceAdd ||
 					'required': true,
 				},
 				'name': {
-					'required': true,
+					'required': false,
 					'rangelength': [ settings.minNameLen, settings.maxNameLen ],
 				},
 				'additionalDescription': {
@@ -51,7 +51,7 @@ var ServicePriceAdd = ServicePriceAdd ||
 				try {
 					ServicePriceAdd.submit($(form));
 				} catch (e) {
-					console.log(e);
+					Util.showError(e.stack);
 				}
 				return false;
 			}
@@ -66,6 +66,7 @@ var ServicePriceAdd = ServicePriceAdd ||
 		var form = ServicePriceAdd.form[0];
 		$(form.serviceName).val(service.name);
 		$(form.serviceDescription).html(service.description);
+		$(form.name).val(service.name);
 	},
 	onLoadProviders: function(providers)
 	{
@@ -82,12 +83,15 @@ var ServicePriceAdd = ServicePriceAdd ||
 	},
 	onSubmited: function(servicePrice, message)
 	{
+		message += ' <button class="btn btn-sm {0}" onclick="ServicePriceAdd.onButtonLast()">{1} Ver Preço de Serviço</button>'.format(BTN_CLASS_VIEW, ICON_VIEW);
+		ServicePriceAdd.lastAdded = servicePrice;
 		ServicePriceAdd.form.trigger('reset');
-
-		$('#row-message').show(DEFAULT_FADE);
-		$('#row-message-span').html(message);
-		setTimeout(function() { $('#row-message').hide('slow'); }, 3000);
-	}
+		Util.showSuccess(message);
+	},
+	onButtonLast: function()
+	{
+		Util.redirect('service/viewPrice/{0}'.format(ServicePriceAdd.lastAdded.id));
+	},
 }
 
 

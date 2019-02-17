@@ -1,13 +1,14 @@
 
 $(document).ready(function()
 {
-		ServicePriceView.init();
+	ServicePriceView.init();
 });
 
 var ServicePriceView = ServicePriceView ||
 {
 	init: function()
 	{
+		ServicePriceView.loaded = false;
 		ServicePriceView.form = $('#form-service-price-view');
 		ServicePriceView.id = $('#idServicePrice').val();
 		ServicePriceView.initFormSettings();
@@ -45,20 +46,27 @@ var ServicePriceView = ServicePriceView ||
 				try {
 					ServicePriceView.submit($(form));
 				} catch (e) {
-					console.log(e);
+					Util.showError(e);
 				}
 				return false;
 			}
 		});
 	},
-	onServicePriceLoaded: function(servicePrice)
+	onServicePriceLoaded: function(servicePrice, message)
 	{
 		var form = ServicePriceView.form[0];
 		$(form.name).val(servicePrice.name);
-		$(form.price).val(servicePrice.price);
+		$(form.price).val(Util.formatMoney(servicePrice.price));
 		$(form.additionalDescription).val(servicePrice.additionalDescription);
 		$(form.serviceName).val(servicePrice.service.name);
 		$(form.serviceDescription).val(servicePrice.service.description);
+
+		if (ServicePriceView.loaded)
+			Util.showSuccess(message);
+		else
+			Util.showInfo(message);
+
+		ServicePriceView.loaded = true;
 	},
 	submit: function(form)
 	{
@@ -66,11 +74,7 @@ var ServicePriceView = ServicePriceView ||
 	},
 	onSubmited: function(servicePrice, message)
 	{
-		ServicePriceView.onServicePriceLoaded(servicePrice);
-
-		$('#row-message').show(DEFAULT_FADE);
-		$('#row-message-span').html(message);
-		setTimeout(function() { $('#row-message').hide('slow'); }, 3000);
+		ServicePriceView.onServicePriceLoaded(servicePrice,message);
 	}
 }
 
