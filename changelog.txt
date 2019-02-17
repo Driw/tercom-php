@@ -20,6 +20,12 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+16.02.2018 - 0.3.5.242
+- Ajustes na lista dos serviços trocando texto dos botões por ícones.
+- Ajustes nos layouts dos formulários responsivo e exibição de mensagens ao gerenciar serviços.
+- Excluído cache da rev241 que não funcionou como esperado.
+- Corrigido onSearch() em ServiceBoundary.
+
 14.02.2018 - 0.3.5.241
 - Adicionado cache de 15 minutos para obter lista com todas as permissões (funcionário TERCOM/cliente).
 

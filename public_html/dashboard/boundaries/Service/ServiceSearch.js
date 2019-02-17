@@ -8,16 +8,16 @@ var ServiceSearch = ServiceSearch ||
 {
 	init: function()
 	{
-		this.services = [];
-		this.form = $('#form-search');
-		this.table = $('#table-services');
-		this.tbody = this.table.find('tbody');
-		this.datatables = newDataTables(this.table);
-		this.initFormtSettings();
+		ServiceSearch.services = [];
+		ServiceSearch.form = $('#form-search');
+		ServiceSearch.table = $('#table-services');
+		ServiceSearch.tbody = ServiceSearch.table.find('tbody');
+		ServiceSearch.datatables = newDataTables(ServiceSearch.table);
+		ServiceSearch.initFormtSettings();
 	},
 	initFormtSettings: function()
 	{
-		this.form.validate({
+		ServiceSearch.form.validate({
 			'rules': {
 				'filter': {
 					'required': true,
@@ -38,39 +38,67 @@ var ServiceSearch = ServiceSearch ||
 		var value = $(form.value).val();
 		var filter = $(form.filter).val();
 
-		ws.service_search(filter, value, ServiceSearch.form, ServiceSearch.searchServices);
+		ws.service_search(filter, value, ServiceSearch.form, ServiceSearch.onServicesLoaded);
 	},
-	searchServices: function(services)
+	onServicesLoaded: function(services)
 	{
-		ServiceSearch.datatables.rows().remove();
+		ServiceSearch.datatables.clear().draw();
 		ServiceSearch.services = services.elements;
-		ServiceSearch.services.forEach(function(service, index)
+		ServiceSearch.services.forEach((service, index) =>
 		{
-			var viewButton = '<button type="button" class="btn btn-info" data-index="' +index+ '" onclick="ServiceSearch.onButtonSee(this)">Ver</button>';
-			var pricesButton = '<button type="button" class="btn btn-primary" data-index="' +index+ '" onclick="ServiceSearch.onButtonPrices(this)">Preços</button>';
-			var row = ServiceSearch.datatables.row.add([
-				service.id,
-				service.name,
-				service.description,
-				service.tags,
-				'<div class="btn-group">' + viewButton + pricesButton + '</div>',
-			]).draw();
+			var serviceRowData = ServiceSearch.newServiceRowData(index, service);
+			ServiceSearch.datatables.row.add(serviceRowData).draw();
 		});
 	},
-	onButtonSee: function(button)
+	newServiceRowData: function(index, service)
 	{
-		var index = button.dataset.index;
-		var service = ServiceSearch.services[index];
+		var btnTemplate = '<button type="button" class="btn btn-sm {0}" onclick="ServiceSearch.{1}(this, {2})" title="{3}">{4}</button>';
+		var btnView = btnTemplate.format(BTN_CLASS_VIEW, 'onButtonView', index, 'Ver', ICON_VIEW);
+		var btnPrices = btnTemplate.format(BTN_CLASS_VIEW, 'onButtonPrices', index, 'Preços', ICON_PRICES);
+		var btnEnable = btnTemplate.format(BTN_CLASS_ENABLE, 'onButtonEnable', index, 'Ativar', ICON_ENABLE);
+		var btnDisable = btnTemplate.format(BTN_CLASS_DISABLE, 'onButtonDisable', index, 'Desativar', ICON_DISABLE);
 
-		if (service !== undefined)
-			Util.redirect('service/view/' + service.id, true);
+		return [
+			service.id,
+			service.name,
+			service.description,
+			service.tags.elements.join(', '),
+			'<div class="btn-group">{0}{1}{2}</div>'.format(btnView, btnPrices, service.inactive ? btnEnable : btnDisable),
+		];
 	},
-	onButtonPrices: function(button)
+	onButtonView: function(button, index)
 	{
-		var index = button.dataset.index;
 		var service = ServiceSearch.services[index];
-
-		if (service !== undefined)
-			Util.redirect('servicePrices/view/' + service.id, true);
-	}
+		Util.redirect('service/view/{0}'.format(service.id));
+	},
+	onButtonPrices: function(button, index)
+	{
+		var service = ServiceSearch.services[index];
+		Util.redirect('service/viewPrices/{0}'.format(service.id));
+	},
+	onButtonEnable: function(button, index)
+	{
+		var tr = $(button).parents('tr');
+		var service = ServiceSearch.services[index];
+		ws.service_setInactive(service.id, false, tr, function(service, message)
+		{
+			ServiceSearch.onChangeEnable(tr, index, service);
+			Util.showSuccess(message);
+		});
+	},
+	onButtonDisable: function(button, index)
+	{
+		var tr = $(button).parents('tr');
+		var service = ServiceSearch.services[index];
+		ws.service_setInactive(service.id, true, tr, function(service, message)
+		{
+			ServiceSearch.onChangeEnable(tr, index, service);
+			Util.showSuccess(message);
+		});
+	},
+	onChangeEnable: function(tr, index, service)
+	{
+		var serviceRowData = ServiceSearch.newServiceRowData(index, service);
+		ServiceSearch.datatables.row(tr).data(serviceRowData);
+	},
 }

@@ -8,6 +8,7 @@ var ServiceView = ServiceView ||
 {
 	init: function()
 	{
+		ServiceView.loaded = false;
 		ServiceView.form = $('#form-service-view');
 		ServiceView.id = $(ServiceView.form[0].idService).val();
 		ServiceView.initFormSettings();
@@ -38,13 +39,13 @@ var ServiceView = ServiceView ||
 				try {
 					ServiceView.submit($(form));
 				} catch (e) {
-					console.log(e);
+					Util.showError(e.stack);
 				}
 				return false;
 			}
 		});
 	},
-	onServiceLoaded: function(service)
+	onServiceLoaded: function(service, message)
 	{
 		var form = ServiceView.form[0];
 		$(form.id).val(service.id);
@@ -53,6 +54,13 @@ var ServiceView = ServiceView ||
 		service.tags.elements.forEach(element => {
 			$(form.tags).tagsinput('add', element);
 		});
+
+		if (ServiceView.loaded)
+			Util.showSuccess(message);
+		else
+			Util.showInfo(message);
+
+		ServiceView.loaded = true;
 	},
 	submit: function(form)
 	{
@@ -61,9 +69,5 @@ var ServiceView = ServiceView ||
 	onSubmited: function(service, message)
 	{
 		ServiceView.onServiceLoaded(service);
-
-		$('#row-message').show(DEFAULT_FADE);
-		$('#row-message-span').html(message);
-		setTimeout(function() { $('#row-message').hide('slow'); }, 3000);
 	}
 }

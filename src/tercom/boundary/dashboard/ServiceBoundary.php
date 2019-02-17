@@ -62,7 +62,7 @@ class ServiceBoundary extends DefaultDashboardLoggedBoundary
 	 */
 	public function onSearch(ApiContent $content)
 	{
-		$filterOptions = self::parseOptions(ServiceControl::getFilters());
+		$filterOptions = DashboardService::parseOptions(ServiceControl::getFilters());
 		$dashboardTemplate = $this->newBaseTemplate();
 		$dashboardTemplate = $this->prepareInclude(self::BASE_PATH. 'ServiceSearch');
 		$dashboardTemplate->setDataArray('FilterOption', $filterOptions);

@@ -1,7 +1,7 @@
 
 $(document).ready(function()
 {
-		ServiceAdd.init();
+	ServiceAdd.init();
 });
 
 var ServiceAdd = ServiceAdd ||
@@ -32,7 +32,7 @@ var ServiceAdd = ServiceAdd ||
 				try {
 					ServiceAdd.submit($(form));
 				} catch (e) {
-					console.log(e);
+					Util.showError(e.stack);
 				}
 				return false;
 			}
@@ -40,16 +40,20 @@ var ServiceAdd = ServiceAdd ||
 	},
 	submit: function(form)
 	{
-		ws.service_add(ServiceAdd.form, ServiceAdd.onSubmited);
+		ws.service_add(form, ServiceAdd.onSubmited);
 	},
 	onSubmited: function(service, message)
 	{
-		ServiceAdd.form.trigger('reset');
 		$(ServiceAdd.form[0].tags).tagsinput('removeAll');
 
-		$('#row-message').show(DEFAULT_FADE);
-		$('#row-message-span').html(message);
-		setTimeout(function() { $('#row-message').hide('slow'); }, 3000);
+		message += ' <button class="btn btn-sm {0}" onclick="ServiceAdd.onButtonLast()">{1} Ver Serviço</button>'.format(BTN_CLASS_VIEW, ICON_VIEW);
+		ServiceAdd.lastAdded = service;
+		ServiceAdd.form.trigger('reset');
+		Util.showSuccess(message);
+	},
+	onButtonLast: function()
+	{
+		Util.redirect('service/view/{0}'.format(ServiceAdd.lastAdded.id));
 	}
 }
 

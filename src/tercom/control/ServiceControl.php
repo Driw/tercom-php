@@ -85,5 +85,12 @@ class ServiceControl extends GenericControl
 	{
 		return !$this->serviceDAO->existName($name, $idService);
 	}
+
+	public static function getFilters(): array
+	{
+		return [
+			'name' => 'Nome',
+		];
+	}
 }
 
