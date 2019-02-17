@@ -134,7 +134,7 @@
 			"SubItens": [
 				{
 					"service": "customerProfile",
-					"Name": "Perfis de Cliente",
+					"Name": "Perfis",
 					"Icon": "fas fa-users",
 					"ID": "dropdown-customer-profile",
 					"PermissionPacket": "customerProfile",
@@ -145,7 +145,7 @@
 					]
 				},{
 					"service": "customerEmployee",
-					"Name": "Funcionários de Cliente",
+					"Name": "Funcionários",
 					"Icon": "fas fa-users-cog",
 					"ID": "dropdown-customer-employee",
 					"PermissionPacket": "customerEmployee",
@@ -170,7 +170,7 @@
 			"SubItens": [
 				{
 					"service": "tercomProfile",
-					"Name": "Perfis TERCOM",
+					"Name": "Perfis",
 					"Icon": "fas fa-users",
 					"ID": "dropdown-tercom-profile",
 					"PermissionPacket": "tercomProfile",
@@ -181,7 +181,7 @@
 					]
 				},{
 					"service": "tercomEmployee",
-					"Name": "Funcionários TERCOM",
+					"Name": "Funcionários",
 					"Icon": "fas fa-users-cog",
 					"ID": "dropdown-tercom-employee",
 					"PermissionPacket": "tercomEmployee",
