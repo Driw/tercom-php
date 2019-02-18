@@ -20,6 +20,11 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+18.02.2018 - 0.3.5.245
+- Ajustes na lista dos perfis de cliente trocando texto dos botões por ícones.
+- Ajustes nos layouts dos formulários responsivo e exibição de mensagens ao gerenciar perfis de cliente.
+- Corrigido erro ao visualizar perfil de cliente devido a parametrização incorreta de do REST.
+
 17.02.2018 - 0.3.5.244
 - Ajustes na lista dos clientes trocando texto dos botões por ícones.
 - Ajustes nos layouts dos formulários responsivo e exibição de mensagens ao gerenciar clientes.

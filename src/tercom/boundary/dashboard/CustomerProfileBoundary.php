@@ -62,7 +62,7 @@ class CustomerProfileBoundary extends DefaultDashboardLoggedBoundary
 	}
 
 	/**
-	 * @ApiAnnotation({"params"["idCustomer"]})
+	 * @ApiAnnotation({"params":["idCustomer"]})
 	 * @param ApiContent $content
 	 * @return ApiTemplateResult
 	 */

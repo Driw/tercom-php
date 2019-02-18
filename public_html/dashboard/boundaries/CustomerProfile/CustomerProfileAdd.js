@@ -1,7 +1,7 @@
 
 $(document).ready(function()
 {
-		CustomerProfileAdd.init();
+	CustomerProfileAdd.init();
 });
 
 var CustomerProfileAdd = CustomerProfileAdd ||
@@ -45,10 +45,13 @@ var CustomerProfileAdd = CustomerProfileAdd ||
 	},
 	onSubmited: function(customerProfile, message)
 	{
+		message += ' <button class="btn btn-sm {0}" onclick="CustomerProfileAdd.onButtonLast()">{1} Ver Cliente</button>'.format(BTN_CLASS_VIEW, ICON_VIEW);
+		CustomerProfileAdd.lastAdded = customerProfile;
 		CustomerProfileAdd.form.trigger('reset');
-
-		$('#row-message').show(DEFAULT_FADE);
-		$('#row-message-span').html(message);
-		setTimeout(function() { $('#row-message').hide('slow'); }, 3000);
-	}
+		Util.showSuccess(message);
+	},
+	onButtonLast: function()
+	{
+		Util.redirect('customerProfile/view/{0}/{1}'.format(CustomerProfileAdd.lastAdded.id, CustomerProfileAdd.idCustomer));
+	},
 }

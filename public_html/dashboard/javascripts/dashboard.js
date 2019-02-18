@@ -24,7 +24,9 @@ const ICON_SERVICE = '<i class="fas fa-file-contract"></i>';
 const ICON_LINk = '<i class="fas fa-external-link-alt"></i>';
 const ICON_PRICES = '<i class="fas fa-dollar-sign"></i>';
 const ICON_ADDRESSES = '<i class="fas fa-map-marker-alt"></i>';
-const ICON_PROFILES = '<i class="fas fa-user"></i>';
+const ICON_PROFILES = '<i class="fas fa-users"></i>';
+const ICON_PERMISSIONS = '<i class="fas fa-user-lock"></i>';
+const ICON_EMPLOYEES = '<i class="fas fa-users-cog"></i>';
 
 const SHOW_CLASS_FORMAT = 'alert alert-{0} col-12 text-center';
 

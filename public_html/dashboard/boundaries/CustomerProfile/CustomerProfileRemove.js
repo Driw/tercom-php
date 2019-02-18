@@ -21,7 +21,7 @@ var CustomerProfileView = CustomerProfileView ||
 				try {
 					CustomerProfileView.submit($(form));
 				} catch (e) {
-					console.log(e);
+					Util.showError(e);
 				}
 				return false;
 			}

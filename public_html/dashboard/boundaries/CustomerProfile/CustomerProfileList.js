@@ -11,7 +11,7 @@ var CustomerProfileList = CustomerProfileList ||
 		CustomerProfileList.idCustomer = $('#idCustomer').val();
 		CustomerProfileList.table = $('#table-customer-profiles');
 		CustomerProfileList.tbody = CustomerProfileList.table.find('tbody');
-		CustomerProfileList.dataTable = newDataTables(CustomerProfileList.table);
+		CustomerProfileList.datatables = newDataTables(CustomerProfileList.table);
 		CustomerProfileList.loadCustomerProfiles();
 	},
 	loadCustomerProfiles: function()
@@ -24,42 +24,46 @@ var CustomerProfileList = CustomerProfileList ||
 		CustomerProfileList.customerProfiles.forEach((customerProfile, index) =>
 		{
 			var customerProfileRowData = CustomerProfileList.newAddressRowData(index, customerProfile);
-			var row = CustomerProfileList.dataTable.row.add(customerProfileRowData).draw();
+			var row = CustomerProfileList.datatables.row.add(customerProfileRowData).draw();
 		});
 	},
 	newAddressRowData: function(index, customerProfile)
 	{
-		var btnTemplate = '<button type="button" class="btn btn-sm btn-{0}" onclick="CustomerProfileList.{1}({2})">{3}</button>';
-		var btnView = btnTemplate.format('info', 'onBtnView', index, 'Ver');
-		var btnPermissions = btnTemplate.format('info', 'onBtnPermissions', index, 'Permissões');
-		var btnRemove = btnTemplate.format('danger', 'onBtnRemove', index, 'Excluir');
+		var btnTemplate = '<button type="button" class="btn btn-sm {0}" onclick="CustomerProfileList.{1}({2})" title="{3}">{4}</button>';
+		var btnView = btnTemplate.format(BTN_CLASS_VIEW, 'onButtonView', index, 'Ver Dados do Perfil', ICON_VIEW);
+		var btnPermissions = btnTemplate.format(BTN_CLASS_VIEW, 'onButtonPermissions', index, 'Listar Permissões do Perfil', ICON_PERMISSIONS);
+		var btnEmployees = btnTemplate.format(BTN_CLASS_VIEW, 'onButtonEmployees', index, 'Listar Funcionários no Perfil', ICON_EMPLOYEES);
+		var btnRemove = btnTemplate.format(BTN_CLASS_REMOVE, 'onButtonRemove', index, 'Excluir Perfil', ICON_REMOVE);
 
 		return [
 			customerProfile.id,
 			customerProfile.name,
 			customerProfile.assignmentLevel,
-			'<div class="btn-group">{0}{1}{2}</div>'.format(btnView, btnPermissions, btnRemove),
+			'<div class="btn-group">{0}{1}{2}{3}</div>'.format(btnView, btnPermissions, btnEmployees, btnRemove),
 		];
 	},
-	onBtnView: function(index)
+	onButtonView: function(index)
 	{
 		var customerProfile = CustomerProfileList.customerProfiles[index];
-
-		if (customerProfile !== undefined)
-			Util.redirect('customerProfile/view/{0}/{1}'.format(customerProfile.id, CustomerProfileList.idCustomer), true);
+		Util.redirect('customerProfile/view/{0}/{1}'.format(customerProfile.id, CustomerProfileList.idCustomer));
 	},
-	onBtnPermissions: function(index)
+	onButtonPermissions: function(index)
 	{
 		var customerProfile = CustomerProfileList.customerProfiles[index];
-
-		if (customerProfile !== undefined)
-			Util.redirect('customerProfile/permissions/{0}'.format(customerProfile.id), true);
+		Util.redirect('customerProfile/permissions/{0}'.format(customerProfile.id));
 	},
-	onBtnRemove: function(index)
+	onButtonEmployees: function(index)
 	{
 		var customerProfile = CustomerProfileList.customerProfiles[index];
-
-		if (customerProfile !== undefined)
-			Util.redirect('customerProfile/remove/{0}/{1}'.format(customerProfile.id, CustomerProfileList.idCustomer), true);
+		Util.redirect('customerEmployee/list/{0}/{1}'.format(customerProfile.id, CustomerProfileList.idCustomer));
 	},
+	onButtonRemove: function(index)
+	{
+		var customerProfile = CustomerProfileList.customerProfiles[index];
+		Util.redirect('customerProfile/remove/{0}/{1}'.format(customerProfile.id, CustomerProfileList.idCustomer));
+	},
+	onButtonAdd: function()
+	{
+		Util.redirect('customerProfile/add/{0}'.format(CustomerProfileList.idCustomer));
+	}
 }

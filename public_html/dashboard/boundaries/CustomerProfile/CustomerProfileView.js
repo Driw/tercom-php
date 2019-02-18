@@ -8,6 +8,7 @@ var CustomerProfileView = CustomerProfileView ||
 {
 	init: function()
 	{
+		CustomerProfileView.loaded = false;
 		CustomerProfileView.form = $('#form-customer-profile-view');
 		CustomerProfileView.id = $(CustomerProfileView.form[0].idCustomerProfile).val();
 		CustomerProfileView.idCustomer = $(CustomerProfileView.form[0].idCustomer).val();
@@ -45,11 +46,18 @@ var CustomerProfileView = CustomerProfileView ||
 			}
 		});
 	},
-	onCustomerProfileLoaded: function(customerProfile)
+	onCustomerProfileLoaded: function(customerProfile, message)
 	{
 		var form = CustomerProfileView.form[0];
 		$(form.name).val(customerProfile.name);
 		$(form.assignmentLevel).val(customerProfile.assignmentLevel);
+
+		if (CustomerProfileView.loaded)
+			Util.showSuccess(message);
+		else
+			Util.showInfo(message);
+
+		CustomerProfileView.loaded = true;
 	},
 	submit: function(form)
 	{
@@ -57,10 +65,6 @@ var CustomerProfileView = CustomerProfileView ||
 	},
 	onSubmited: function(customerProfile, message)
 	{
-		CustomerProfileView.onCustomerProfileLoaded(customerProfile);
-
-		$('#row-message').show(DEFAULT_FADE);
-		$('#row-message-span').html(message);
-		setTimeout(function() { $('#row-message').hide('slow'); }, 3000);
+		CustomerProfileView.onCustomerProfileLoaded(customerProfile, message);
 	}
 }
