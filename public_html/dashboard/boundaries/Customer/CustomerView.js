@@ -8,6 +8,7 @@ var CustomerView = CustomerView ||
 {
 	init: function()
 	{
+		CustomerView.loaded = false;
 		CustomerView.form = $('#form-customer-view');
 		CustomerView.id = $(CustomerView.form[0].idCustomer).val();
 		CustomerView.initFormSettings();
@@ -68,15 +69,22 @@ var CustomerView = CustomerView ||
 			}
 		});
 	},
-	onCustomerLoaded: function(customer)
+	onCustomerLoaded: function(customer, message)
 	{
-		let form = CustomerView.form[0];
+		var form = CustomerView.form[0];
 		$(form.id).val(customer.id);
 		$(form.stateRegistry).val(customer.stateRegistry);
 		$(form.cnpj).val(customer.cnpj).trigger('input');
 		$(form.companyName).val(customer.companyName);
 		$(form.fantasyName).val(customer.fantasyName);
 		$(form.email).val(customer.email);
+
+		if (CustomerView.loaded)
+			Util.showSuccess(message);
+		else
+			Util.showInfo(message);
+
+		CustomerView.loaded = true;
 	},
 	submit: function(form)
 	{
@@ -84,10 +92,6 @@ var CustomerView = CustomerView ||
 	},
 	onSubmited: function(customer, message)
 	{
-		CustomerView.onCustomerLoaded(customer);
-
-		$('#row-message').show(DEFAULT_FADE);
-		$('#row-message-span').html(message);
-		setTimeout(function() { $('#row-message').hide('slow'); }, 3000);
+		CustomerView.onCustomerLoaded(customer, message);
 	}
 }

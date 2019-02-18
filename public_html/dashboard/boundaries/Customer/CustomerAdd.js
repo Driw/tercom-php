@@ -50,7 +50,7 @@ var CustomerAdd = CustomerAdd ||
 				try {
 					CustomerAdd.submit($(form));
 				} catch (e) {
-					console.log(e);
+					Util.show(e.stack);
 				}
 				return false;
 			}
@@ -62,10 +62,13 @@ var CustomerAdd = CustomerAdd ||
 	},
 	onSubmited: function(customer, message)
 	{
+		message += ' <button class="btn btn-sm {0}" onclick="CustomerAdd.onButtonLast()">{1} Ver Cliente</button>'.format(BTN_CLASS_VIEW, ICON_VIEW);
+		CustomerAdd.lastAdded = customer;
 		CustomerAdd.form.trigger('reset');
-
-		$('#row-message').show(DEFAULT_FADE);
-		$('#row-message-span').html(message);
-		setTimeout(function() { $('#row-message').hide('slow'); }, 3000);
-	}
+		Util.showSuccess(message);
+	},
+	onButtonLast: function()
+	{
+		Util.redirect('customer/view/{0}'.format(CustomerAdd.lastAdded.id));
+	},
 }

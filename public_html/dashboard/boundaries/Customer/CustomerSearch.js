@@ -47,26 +47,72 @@ var CustomerSearch = CustomerSearch ||
 	},
 	searchCustomers: function(customers)
 	{
-		CustomerSearch.datatables.rows().remove();
+		CustomerSearch.datatables.clear();
 		CustomerSearch.customers = customers.elements;
 		CustomerSearch.customers.forEach(function(customer, index)
 		{
-			var viewButton = '<button type="button" class="btn btn-info" data-index="{0}" onclick="CustomerSearch.onButtonSee(this)">Ver</button>'.format(index);
-			var row = CustomerSearch.datatables.row.add([
-				customer.id,
-				customer.cnpj,
-				customer.fantasyName,
-				customer.email,
-				'<div class="btn-group">{0}</div>'.format(viewButton),
-			]).draw();
+			var customerRowData = CustomerSearch.newCustomerRowData(index, customer);
+			CustomerSearch.datatables.row.add(customerRowData).draw();
 		});
 	},
-	onButtonSee: function(button)
+	newCustomerRowData: function(index, customer)
 	{
-		var index = button.dataset.index;
-		var customer = CustomerSearch.customers[index];
+		var btnTemplate = '<button type="button" class="btn btn-sm {0}" onclick="CustomerSearch.{1}({2}, this)" title="{3}">{4}</button>';
+		var btnView = btnTemplate.format(BTN_CLASS_VIEW, 'onButtonView', index, 'Ver Dados do Cliente', ICON_VIEW);
+		var btnAddresses = btnTemplate.format(BTN_CLASS_VIEW, 'onButtonAddresses', index, 'Ver Endereรงos do Cliente', ICON_ADDRESSES);
+		var btnProfiles = btnTemplate.format(BTN_CLASS_VIEW, 'onButtonProfiles', index, 'Ver Perfis do Cliente', ICON_PROFILES);
+		var btnEnable = btnTemplate.format(BTN_CLASS_ENABLE, 'onButtonEnable', index, 'Ativar Cliente', ICON_ENABLE);
+		var btnDisable = btnTemplate.format(BTN_CLASS_DISABLE, 'onButtonDisable', index, 'Desativar Cliente', ICON_DISABLE);
 
-		if (customer !== undefined)
-			Util.redirect('customer/view/{0}'.format(customer.id), true);
+		return [
+			customer.id,
+			customer.stateRegistry,
+			customer.cnpj,
+			customer.fantasyName,
+			customer.email,
+			'<div class="btn-group">{1}{2}{3}{4}</div>'.format(customer.id, btnView, btnProfiles, btnAddresses, customer.inactive ? btnEnable : btnDisable),
+		];
+	},
+	onButtonView: function(index)
+	{
+		var customer = CustomerSearch.customers[index];
+		Util.redirect('customer/view/{0}'.format(customer.id));
+	},
+	onButtonAddresses: function(index)
+	{
+		var customer = CustomerSearch.customers[index];
+		Util.redirect('customer/viewAddresses/{0}'.format(customer.id));
+	},
+	onButtonProfiles: function(index)
+	{
+		var customer = CustomerSearch.customers[index];
+		Util.redirect('customerProfile/list/{0}'.format(customer.id));
+	},
+	onButtonEnable: function(index, button)
+	{
+		var customer = CustomerSearch.customers[index];
+		var tr = $(button).parents('tr');
+
+		ws.customer_setActive(customer.id, tr, function(customer, message)
+		{
+			CustomerSearch.onCustomerChange(index, customer, message, tr);
+		});
+	},
+	onButtonDisable: function(index, button)
+	{
+		var customer = CustomerSearch.customers[index];
+		var tr = $(button).parents('tr');
+
+		ws.customer_setInactive(customer.id, tr, function(customer, message)
+		{
+			CustomerSearch.onCustomerChange(index, customer, message, tr);
+		});
+	},
+	onCustomerChange: function(index, customer, message, tr)
+	{
+		var customerRowData = CustomerSearch.newCustomerRowData(index, customer);
+		CustomerSearch.datatables.row(tr).data(customerRowData);
+		CustomerSearch.customers[index] = customer;
+		Util.showSuccess(message);
 	},
 }
