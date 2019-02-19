@@ -8,6 +8,7 @@ var TercomEmployeeView = TercomEmployeeView ||
 {
 	init: function()
 	{
+		TercomEmployeeView.loaded = false;
 		TercomEmployeeView.form = $('#form-tercom-employee-view');
 		TercomEmployeeView.formPhone = $('#form-tercom-employee-phone');
 		TercomEmployeeView.formCellphone = $('#form-tercom-employee-cellphone');
@@ -128,7 +129,7 @@ var TercomEmployeeView = TercomEmployeeView ||
 			},
 		});
 	},
-	onTercomEmployeeLoaded: function(tercomEmployee)
+	onTercomEmployeeLoaded: function(tercomEmployee, message)
 	{
 		TercomEmployeeView.tercomEmployee = tercomEmployee;
 		var form = TercomEmployeeView.form[0];
@@ -171,6 +172,13 @@ var TercomEmployeeView = TercomEmployeeView ||
 			$('#phone-group-add').fadeIn('fast');
 			$('#phone-group-exist').fadeOut('fast');
 		}
+
+		if (TercomEmployeeView.loaded)
+			Util.showSuccess(message);
+		else
+			Util.showInfo(message);
+
+		TercomEmployeeView.loaded = true;
 	},
 	onLoadProfiles: function(tercomProfiles)
 	{
@@ -220,10 +228,6 @@ var TercomEmployeeView = TercomEmployeeView ||
 	},
 	onSubmited: function(tercomEmployee, message)
 	{
-		TercomEmployeeView.onTercomEmployeeLoaded(tercomEmployee);
-
-		$('#row-message').show(DEFAULT_FADE);
-		$('#row-message-span').html(message);
-		setTimeout(function() { $('#row-message').hide('slow'); }, 3000);
+		TercomEmployeeView.onTercomEmployeeLoaded(tercomEmployee, message);
 	}
 }

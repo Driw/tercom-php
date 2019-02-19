@@ -32,10 +32,10 @@ var TercomEmployeeList = TercomEmployeeList ||
 	},
 	newTercomEmployeeRowData: function(index, tercomEmployee)
 	{
-		var btnTemplate = '<button type="button" class="btn btn-{0}" onclick="TercomEmployeeList.{1}(this, {2})">{3}</button>';
-		var btnView = btnTemplate.format('primary', 'onButtonClickView', index, 'Ver');
-		var btnEnable = btnTemplate.format('primary', 'onButtonClickEnable', index, 'Habilitar');
-		var btnDisable = btnTemplate.format('secondary', 'onButtonClickDisable', index, 'Desabilitar');
+		var btnTemplate = '<button type="button" class="btn btn-sm {0}" onclick="TercomEmployeeList.{1}(this, {2})" title="{3}">{4}</button>';
+		var btnView = btnTemplate.format(BTN_CLASS_VIEW, 'onButtonClickView', index, 'Ver Dados do Funcionário', ICON_VIEW);
+		var btnEnable = btnTemplate.format(BTN_CLASS_ENABLE, 'onButtonClickEnable', index, 'Habilitar Funcionário', ICON_ENABLE);
+		var btnDisable = btnTemplate.format(BTN_CLASS_DISABLE, 'onButtonClickDisable', index, 'Desabilitar Funcionário', ICON_DISABLE);
 
 		return [
 			tercomEmployee.id,
@@ -48,28 +48,33 @@ var TercomEmployeeList = TercomEmployeeList ||
 	onButtonClickView: function(button, index)
 	{
 		var tercomEmployee = TercomEmployeeList.tercomEmployees[index];
-
-		if (tercomEmployee !== undefined)
-			Util.redirect('tercomEmployee/view/{0}'.format(tercomEmployee.id), true);
+		Util.redirect('tercomEmployee/view/{0}'.format(tercomEmployee.id));
 	},
 	onButtonClickEnable: function(button, index)
 	{
 		var tercomEmployee = TercomEmployeeList.tercomEmployees[index];
 		var tr = $(button).parents('tr');
 
-		ws.tercomEmployee_enable(tercomEmployee.id, true, tr, function(tercomEmployee) { TercomEmployeeList.onEnabled(tercomEmployee, index); });
+		ws.tercomEmployee_enable(tercomEmployee.id, true, tr, function(tercomEmployee, message)
+		{
+			TercomEmployeeList.onEnabled(tercomEmployee, index, message);
+		});
 	},
 	onButtonClickDisable: function(button, index)
 	{
 		var tercomEmployee = TercomEmployeeList.tercomEmployees[index];
 		var tr = $(button).parents('tr');
 
-		ws.tercomEmployee_enable(tercomEmployee.id, false, tr, function(tercomEmployee) { TercomEmployeeList.onEnabled(tercomEmployee, index); });
+		ws.tercomEmployee_enable(tercomEmployee.id, false, tr, function(tercomEmployee, message)
+		{
+			TercomEmployeeList.onEnabled(tercomEmployee, index, message);
+		});
 	},
-	onEnabled: function(tercomEmployee, index)
+	onEnabled: function(tercomEmployee, index, message)
 	{
 		TercomEmployeeList.tercomEmployees[index] = tercomEmployee;
 		var tercomEmployeeRowData = TercomEmployeeList.newTercomEmployeeRowData(index, tercomEmployee);
 		TercomEmployeeList.datatables.row(index).data(tercomEmployeeRowData);
+		Util.showSuccess(message);
 	},
 }

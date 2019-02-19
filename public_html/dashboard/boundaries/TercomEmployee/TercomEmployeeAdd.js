@@ -1,7 +1,7 @@
 
 $(document).ready(function()
 {
-		TercomEmployeeAdd.init();
+	TercomEmployeeAdd.init();
 });
 
 var TercomEmployeeAdd = TercomEmployeeAdd ||
@@ -83,10 +83,13 @@ var TercomEmployeeAdd = TercomEmployeeAdd ||
 	},
 	onSubmited: function(tercomEmployee, message)
 	{
+		message += ' <button class="btn btn-sm {0}" onclick="TercomEmployeeAdd.onButtonLast()">{1} Ver Funcionário</button>'.format(BTN_CLASS_VIEW, ICON_VIEW);
+		TercomEmployeeAdd.lastAdded = tercomEmployee;
 		TercomEmployeeAdd.form.trigger('reset');
-
-		$('#row-message').show(DEFAULT_FADE);
-		$('#row-message-span').html(message);
-		setTimeout(function() { $('#row-message').hide('slow'); }, 3000);
-	}
+		Util.showSuccess(message);
+	},
+	onButtonLast: function()
+	{
+		Util.redirect('tercomEmployee/view/{0}'.format(TercomEmployeeAdd.lastAdded.id));
+	},
 }
