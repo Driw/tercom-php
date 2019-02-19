@@ -20,7 +20,7 @@ var TercomProfileRemove = TercomProfileRemove ||
 				try {
 					TercomProfileRemove.submit($(form));
 				} catch (e) {
-					console.log(e);
+					Util.showError(e.stack);
 				}
 				return false;
 			}

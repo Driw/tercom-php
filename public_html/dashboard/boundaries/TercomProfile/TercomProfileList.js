@@ -28,11 +28,11 @@ var TercomProfileList = TercomProfileList ||
 	},
 	newTercomProfileRowData: function(index, tercomProfile)
 	{
-		var btnTemplate = '<button type="button" class="btn btn-sm btn-{0}" onclick="TercomProfileList.{1}({2})">{3}</button>';
-		var btnView = btnTemplate.format('primary', 'onButtonView', index, 'Ver');
-		var btnRemove = btnTemplate.format('danger', 'onButtonRemove', index, 'Remover');
-		var btnEmployees = btnTemplate.format('info', 'onButtonEmployees', index, 'Funcionários');
-		var btnPermissions = btnTemplate.format('info', 'onButtonPermissions', index, 'Permissões');
+		var btnTemplate = '<button type="button" class="btn btn-sm {0}" onclick="TercomProfileList.{1}({2})" title="{3}">{4}</button>';
+		var btnView = btnTemplate.format(BTN_CLASS_VIEW, 'onButtonView', index, 'Ver Dados do Perfil', ICON_VIEW);
+		var btnEmployees = btnTemplate.format(BTN_CLASS_VIEW, 'onButtonEmployees', index, 'Listar Funcionários no Perfil', ICON_EMPLOYEES);
+		var btnPermissions = btnTemplate.format(BTN_CLASS_VIEW, 'onButtonPermissions', index, 'Listar Permissões do Perfil', ICON_PROFILES);
+		var btnRemove = btnTemplate.format(BTN_CLASS_REMOVE, 'onButtonRemove', index, 'Excluir Perfil TERCOM', ICON_REMOVE);
 
 		return [
 			tercomProfile.id,
@@ -44,29 +44,21 @@ var TercomProfileList = TercomProfileList ||
 	onButtonView: function(index)
 	{
 		var tercomProfile = TercomProfileList.tercomProfiles[index];
-
-		if (tercomProfile !== undefined)
-			Util.redirect('tercomProfile/view/{0}'.format(tercomProfile.id), true);
+		Util.redirect('tercomProfile/view/{0}'.format(tercomProfile.id));
 	},
 	onButtonRemove: function(index)
 	{
 		var tercomProfile = TercomProfileList.tercomProfiles[index];
-
-		if (tercomProfile !== undefined)
-			Util.redirect('tercomProfile/remove/{0}'.format(tercomProfile.id), true);
+		Util.redirect('tercomProfile/remove/{0}'.format(tercomProfile.id));
 	},
 	onButtonEmployees: function(index)
 	{
 		var tercomProfile = TercomProfileList.tercomProfiles[index];
-
-		if (tercomProfile !== undefined)
-			Util.redirect('tercomEmployee/listByProfile/{0}'.format(tercomProfile.id), true);
+		Util.redirect('tercomEmployee/listByProfile/{0}'.format(tercomProfile.id));
 	},
 	onButtonPermissions: function(index)
 	{
 		var tercomProfile = TercomProfileList.tercomProfiles[index];
-
-		if (tercomProfile !== undefined)
-			Util.redirect('tercomProfile/permissions/{0}'.format(tercomProfile.id), true);
+		Util.redirect('tercomProfile/permissions/{0}'.format(tercomProfile.id));
 	},
 }

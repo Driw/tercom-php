@@ -1,7 +1,7 @@
 
 $(document).ready(function()
 {
-		TercomProfileAdd.init();
+	TercomProfileAdd.init();
 });
 
 var TercomProfileAdd = TercomProfileAdd ||
@@ -32,7 +32,7 @@ var TercomProfileAdd = TercomProfileAdd ||
 				try {
 					TercomProfileAdd.submit($(form));
 				} catch (e) {
-					console.log(e);
+					Util.showError(e.stack);
 				}
 				return false;
 			}
@@ -44,10 +44,13 @@ var TercomProfileAdd = TercomProfileAdd ||
 	},
 	onSubmited: function(tercomProfile, message)
 	{
+		message += ' <button class="btn btn-sm {0}" onclick="TercomProfileAdd.onButtonLast()">{1} Ver Serviço</button>'.format(BTN_CLASS_VIEW, ICON_VIEW);
+		TercomProfileAdd.lastAdded = tercomProfile;
 		TercomProfileAdd.form.trigger('reset');
-
-		$('#row-message').show(DEFAULT_FADE);
-		$('#row-message-span').html(message);
-		setTimeout(function() { $('#row-message').hide('slow'); }, 3000);
-	}
+		Util.showSuccess(message);
+	},
+	onButtonLast: function()
+	{
+		Util.redirect('tercomProfile/view/{0}'.format(TercomProfileAdd.lastAdded.id));
+	},
 }

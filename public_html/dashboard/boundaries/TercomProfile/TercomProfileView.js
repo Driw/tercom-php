@@ -8,6 +8,7 @@ var TercomProfileView = TercomProfileView ||
 {
 	init: function()
 	{
+		TercomProfileView.loaded = false;
 		TercomProfileView.form = $('#form-tercom-profile-view');
 		TercomProfileView.id = $(this.form[0].idTercomProfile).val();
 		TercomProfileView.initFormSettings();
@@ -38,17 +39,24 @@ var TercomProfileView = TercomProfileView ||
 				try {
 					TercomProfileView.submit($(form));
 				} catch (e) {
-					console.log(e);
+					Util.showError(e.stack);
 				}
 				return false;
 			}
 		});
 	},
-	onTercomProfileLoaded: function(tercomProfile)
+	onTercomProfileLoaded: function(tercomProfile, message)
 	{
 		var form = TercomProfileView.form[0];
 		$(form.name).val(tercomProfile.name);
 		$(form.assignmentLevel).val(tercomProfile.assignmentLevel);
+
+		if (TercomProfileView.loaded)
+			Util.showSuccess(message);
+		else
+			Util.showInfo(message);
+
+		TercomProfileView.loaded = true;
 	},
 	submit: function(form)
 	{
@@ -56,10 +64,6 @@ var TercomProfileView = TercomProfileView ||
 	},
 	onSubmited: function(tercomProfile, message)
 	{
-		TercomProfileView.onTercomProfileLoaded(tercomProfile);
-
-		$('#row-message').show(DEFAULT_FADE);
-		$('#row-message-span').html(message);
-		setTimeout(function() { $('#row-message').hide('slow'); }, 3000);
+		TercomProfileView.onTercomProfileLoaded(tercomProfile, message);
 	}
 }
