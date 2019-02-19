@@ -1342,15 +1342,6 @@ Webservice.prototype.customerEmployee_enabled = function(idCustomerEmployee, ena
 		'errorMessage': this.newBaseErrorMessage('{0} funcionário de cliente'.format(enable ? 'ativar' : 'desativar')),
 	});
 };
-Webservice.prototype.customerEmployee_getAll = function(target, listener)
-{
-	this.setOptionsAndExecute({
-		'webservice': 'customerEmployee/getAll',
-		'target': target,
-		'listener': listener,
-		'errorMessage': this.newBaseErrorMessage('obter todos funcionários de cliente'),
-	});
-};
 Webservice.prototype.customerEmployee_get = function(idCustomerEmployee, target, listener)
 {
 	this.setOptionsAndExecute({
@@ -1358,6 +1349,33 @@ Webservice.prototype.customerEmployee_get = function(idCustomerEmployee, target,
 		'target': target,
 		'listener': listener,
 		'errorMessage': this.newBaseErrorMessage('obter funcionário de cliente'),
+	});
+};
+Webservice.prototype.customerEmployee_getByCustomer = function(idCustomerProfile, target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'customerEmployee/getByCustomer/{0}'.format(idCustomerProfile),
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter todos funcionários do cliente'),
+	});
+};
+Webservice.prototype.customerEmployee_getByProfile = function(idCustomerProfile, target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'customerEmployee/getByProfile/{0}'.format(idCustomerProfile),
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter todos funcionários de cliente'),
+	});
+};
+Webservice.prototype.customerEmployee_getAll = function(target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'customerEmployee/getAll',
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter todos funcionários de cliente'),
 	});
 };
 

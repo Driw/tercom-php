@@ -98,7 +98,7 @@ var CustomerEmployeeAdd = CustomerEmployeeAdd ||
 				try {
 					CustomerEmployeeAdd.submit($(form));
 				} catch (e) {
-					console.log(e);
+					Util.showError(e.stack);
 				}
 				return false;
 			}
@@ -110,11 +110,14 @@ var CustomerEmployeeAdd = CustomerEmployeeAdd ||
 	},
 	onSubmited: function(customerEmployee, message)
 	{
-		CustomerEmployeeAdd.selectProfiles.empty();
+		var idCustomer = CustomerEmployeeAdd.selectCustomer.val();
+		message += ' <button class="btn btn-sm {0}" onclick="CustomerEmployeeAdd.onButtonLast({2})">{1} Ver Cliente</button>'.format(BTN_CLASS_VIEW, ICON_VIEW, idCustomer);
+		CustomerEmployeeAdd.lastAdded = customerEmployee;
 		CustomerEmployeeAdd.form.trigger('reset');
-
-		$('#row-message').show(DEFAULT_FADE);
-		$('#row-message-span').html(message);
-		setTimeout(function() { $('#row-message').hide('slow'); }, 3000);
-	}
+		Util.showSuccess(message);
+	},
+	onButtonLast: function(idCustomer)
+	{
+		Util.redirect('customerEmployee/view/{0}/{1}'.format(CustomerEmployeeAdd.lastAdded.id, idCustomer));
+	},
 }

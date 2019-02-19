@@ -8,6 +8,7 @@ var CustomerEmployeeView = CustomerEmployeeView ||
 {
 	init: function()
 	{
+		CustomerEmployeeView.loaded = false;
 		CustomerEmployeeView.form = $('#form-customer-employee-view');
 		CustomerEmployeeView.formPhone = $('#form-customer-employee-phone');
 		CustomerEmployeeView.formCellphone = $('#form-customer-employee-cellphone');
@@ -24,7 +25,7 @@ var CustomerEmployeeView = CustomerEmployeeView ||
 	},
 	loadCustomerProfiles: function()
 	{
-		ws.customerProfile_getAll(CustomerEmployeeView.idCustomer, CustomerEmployeeView.form, CustomerEmployeeView.onLoadCustomerProfiles);
+		ws.customerProfile_getByCustomer(CustomerEmployeeView.idCustomer, CustomerEmployeeView.form, CustomerEmployeeView.onLoadCustomerProfiles);
 	},
 	loadCustomerEmployee: function()
 	{
@@ -69,7 +70,7 @@ var CustomerEmployeeView = CustomerEmployeeView ||
 				try {
 					CustomerEmployeeView.submit($(form));
 				} catch (e) {
-					console.log(e);
+					Util.showError(e.stack);
 				}
 				return false;
 			}
@@ -122,7 +123,7 @@ var CustomerEmployeeView = CustomerEmployeeView ||
 			},
 		});
 	},
-	onCustomerEmployeeLoaded: function(customerEmployee)
+	onCustomerEmployeeLoaded: function(customerEmployee, mesasge)
 	{
 		CustomerEmployeeView.customerEmployee = customerEmployee;
 		var form = CustomerEmployeeView.form[0];
@@ -163,6 +164,13 @@ var CustomerEmployeeView = CustomerEmployeeView ||
 			$('#phone-group-add').fadeIn('fast');
 			$('#phone-group-exist').fadeOut('fast');
 		}
+
+		if (CustomerEmployeeView.loaded)
+			Util.showSuccess(mesasge);
+		else
+			Util.showInfo(mesasge);
+
+		CustomerEmployeeView.loaded = true;
 	},
 	onLoadCustomerProfiles: function(customerProfiles)
 	{
@@ -179,7 +187,7 @@ var CustomerEmployeeView = CustomerEmployeeView ||
 	},
 	submit: function(form)
 	{
-		ws.customerEmployee_set(CustomerEmployeeView.customerEmployee.id, CustomerEmployeeView.form, CustomerEmployeeView.onSubmited);
+		ws.customerEmployee_set(CustomerEmployeeView.customerEmployee.id, form, CustomerEmployeeView.onSubmited);
 	},
 	addPhone: function()
 	{
@@ -211,10 +219,6 @@ var CustomerEmployeeView = CustomerEmployeeView ||
 	},
 	onSubmited: function(customerEmployee, message)
 	{
-		CustomerEmployeeView.customerEmployee = customerEmployee;
-
-		$('#row-message').show(DEFAULT_FADE);
-		$('#row-message-span').html(message);
-		setTimeout(function() { $('#row-message').hide('slow'); }, 3000);
+		CustomerEmployeeView.onCustomerEmployeeLoaded(customerEmployee, message);
 	},
 }

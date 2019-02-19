@@ -37,6 +37,7 @@ var CustomerList = CustomerList ||
 		var btnView = btnTemplate.format(BTN_CLASS_VIEW, 'onButtonView', index, 'Ver Dados do Cliente', ICON_VIEW);
 		var btnAddresses = btnTemplate.format(BTN_CLASS_VIEW, 'onButtonAddresses', index, 'Ver Endereços do Cliente', ICON_ADDRESSES);
 		var btnProfiles = btnTemplate.format(BTN_CLASS_VIEW, 'onButtonProfiles', index, 'Ver Perfis do Cliente', ICON_PROFILES);
+		var btnEmployees = btnTemplate.format(BTN_CLASS_VIEW, 'onButtonEmployees', index, 'Ver Funcionários do Cliente', ICON_EMPLOYEES);
 		var btnEnable = btnTemplate.format(BTN_CLASS_ENABLE, 'onButtonEnable', index, 'Ativar Cliente', ICON_ENABLE);
 		var btnDisable = btnTemplate.format(BTN_CLASS_DISABLE, 'onButtonDisable', index, 'Desativar Cliente', ICON_DISABLE);
 
@@ -46,13 +47,18 @@ var CustomerList = CustomerList ||
 			customer.cnpj,
 			customer.fantasyName,
 			customer.email,
-			'<div class="btn-group">{1}{2}{3}{4}</div>'.format(customer.id, btnView, btnProfiles, btnAddresses, customer.inactive ? btnEnable : btnDisable),
+			'<div class="btn-group">{1}{2}{3}{4}{5}</div>'.format(customer.id, btnView, btnEmployees, btnProfiles, btnAddresses, customer.inactive ? btnEnable : btnDisable),
 		];
 	},
 	onButtonView: function(index)
 	{
 		var customer = CustomerList.customers[index];
 		Util.redirect('customer/view/{0}'.format(customer.id));
+	},
+	onButtonEmployees: function(index)
+	{
+		var customer = CustomerList.customers[index];
+		Util.redirect('customerEmployee/list/0/{0}'.format(customer.id));
 	},
 	onButtonAddresses: function(index)
 	{

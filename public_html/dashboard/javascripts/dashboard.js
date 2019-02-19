@@ -27,6 +27,7 @@ const ICON_ADDRESSES = '<i class="fas fa-map-marker-alt"></i>';
 const ICON_PROFILES = '<i class="fas fa-users"></i>';
 const ICON_PERMISSIONS = '<i class="fas fa-user-lock"></i>';
 const ICON_EMPLOYEES = '<i class="fas fa-users-cog"></i>';
+const ICON_PHONE = '<i class="fas fa-phone"></i>';
 
 const SHOW_CLASS_FORMAT = 'alert alert-{0} col-12 text-center';
 

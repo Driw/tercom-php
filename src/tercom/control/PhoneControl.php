@@ -2,6 +2,7 @@
 
 namespace tercom\control;
 
+use dProject\Primitive\StringUtil;
 use tercom\dao\PhoneDAO;
 use tercom\entities\Phone;
 use tercom\entities\lists\Phones;
@@ -206,13 +207,13 @@ class PhoneControl extends GenericControl
 
 	public function keepPhone(Phone $phone):bool
 	{
-		if ($phone->getId() === 0 && !empty($phone->getNumber()))
+		if ($phone->getId() === 0 && !StringUtil::isEmpty($phone->getNumber()))
 			return $this->addPhone($phone);
 
 		else if ($phone->getId() !== 0)
 			return $this->setPhone($phone);
 
-		return false;
+		return true;
 	}
 
 	/**

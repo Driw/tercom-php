@@ -60,14 +60,18 @@ class CustomerEmployeeBoundary extends DefaultDashboardLoggedBoundary
 	}
 
 	/**
-	 * @ApiAnnotation({"params"["idCustomer"]})
+	 * @ApiAnnotation({"params":["idCustomerProfile","idCustomer"]})
 	 * @param ApiContent $content
 	 * @return ApiTemplateResult
 	 */
 	public function onList(ApiContent $content): ApiTemplateResult
 	{
+		$parameters = $content->getParameters();
 		$dashboardTemplate = $this->newBaseTemplate();
 		$dashboardTemplate = $this->prepareInclude(self::BASE_PATH. 'CustomerEmployeeList');
+		$dashboardTemplate->idCustomerProfile = $parameters->getInt('idCustomerProfile', false);
+		$dashboardTemplate->idCustomer = $parameters->getInt('idCustomer', false);
+		$dashboardTemplate->block($this->isLoginTercom() ? 'LoginTercom' : 'LoginCustomer');
 		$this->prepare($dashboardTemplate, $content);
 
 		$result = new ApiTemplateResult();
@@ -77,7 +81,7 @@ class CustomerEmployeeBoundary extends DefaultDashboardLoggedBoundary
 	}
 
 	/**
-	 * @ApiAnnotation({"params"["idCustomer"]})
+	 * @ApiAnnotation({"params":["idCustomer"]})
 	 * @param ApiContent $content
 	 * @return ApiTemplateResult
 	 */

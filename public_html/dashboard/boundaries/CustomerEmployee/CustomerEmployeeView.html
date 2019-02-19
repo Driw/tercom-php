@@ -2,7 +2,7 @@
 					<section class="dashboard-counts">
 						<div class="container-fluid">
 							<div class="row justify-content-center">
-								<div class="card col-8 pl-0 pr-0">
+								<div class="card pl-0 pr-0">
 									<div class="card-header d-flex align-items-center">
 										<h3 class="h4">Atualizar Funcionário de Cliente</h3>
 									</div>
@@ -19,9 +19,7 @@
 														<div class="input-group-prepend">
 															<span class="input-group-text">Perfil</span>
 														</div>
-														<select class="form-control" name="idCustomerProfile">
-															<option value="">Selecione um Perfil</option>
-														</select>
+														<select class="form-control" name="idCustomerProfile"></select>
 													</div>
 												</div>
 												<div class="form-group">
@@ -67,17 +65,16 @@
 												</div>
 											</fieldset>
 										</form>
-										<div class="row" style="display: none;" id="row-message">
-											<p class="alert alert-success col-12">Resultado: <span id="row-message-span"></span></p>
-										</div>
 									</div>
 								</div>
+							</div>
+							<div class="row justify-content-center">
 								<div class="card col-4 ml-1 pl-0 pr-0">
 									<div class="card-header d-flex align-items-center">
-										<h3 class="h4">Telefone</h3>
+										<h3 class="h4">Telefone Principal</h3>
 									</div>
 									<div class="card-body">
-										<form id="form-customer-employee-phone" class="tercom-form tercom-form-md form-horizontal">
+										<form id="form-customer-employee-phone" class="tercom-form tercom-form-sm form-horizontal">
 											<input type="hidden" name="idPhone">
 											<fieldset>
 												<div class="form-group">
@@ -124,10 +121,10 @@
 								</div>
 								<div class="card col-4 mr-1 pl-0 pr-0">
 									<div class="card-header d-flex align-items-center">
-										<h3 class="h4">Telefone Celular</h3>
+										<h3 class="h4">Segundo Telefone</h3>
 									</div>
 									<div class="card-body">
-										<form id="form-customer-employee-cellphone" class="tercom-form tercom-form-md form-horizontal">
+										<form id="form-customer-employee-cellphone" class="tercom-form tercom-form-sm form-horizontal">
 											<input type="hidden" name="idPhone">
 											<fieldset>
 												<div class="form-group">

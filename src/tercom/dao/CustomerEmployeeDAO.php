@@ -164,12 +164,14 @@ class CustomerEmployeeDAO extends GenericDAO
 	{
 		$customerEmployeeColumns = $this->buildQuery(self::ALL_COLUMNS, 'customer_employees');
 		$customerProfileColumns = $this->buildQuery(CustomerProfileDAO::ALL_COLUMNS, 'customer_profiles', 'customerProfile');
+		$customerColumns = $this->buildQuery(CustomerDAO::ALL_COLUMNS, 'customers', 'customerProfile_customer');
 		$cellPhoneColumns = $this->buildQuery(PhoneDAO::ALL_COLUMNS, 'cellphone', 'cellphone');
 		$phoneColumns = $this->buildQuery(PhoneDAO::ALL_COLUMNS, 'phone', 'phone');
 
-		return "SELECT $customerEmployeeColumns, $customerProfileColumns, $cellPhoneColumns, $phoneColumns
+		return "SELECT $customerEmployeeColumns, $customerProfileColumns, $customerColumns, $cellPhoneColumns, $phoneColumns
 				FROM customer_employees
 				INNER JOIN customer_profiles ON customer_profiles.id = customer_employees.idCustomerProfile
+				INNER JOIN customers ON customers.id = customer_profiles.idCustomer
 				LEFT JOIN phones phone ON phone.id = customer_employees.idPhone
 				LEFT JOIN phones cellphone ON cellphone.id = customer_employees.idCellPhone";
 	}
@@ -326,6 +328,7 @@ class CustomerEmployeeDAO extends GenericDAO
 	private function newCustomerEmployee(array $entry): CustomerEmployee
 	{
 		$this->parseEntry($entry, 'customerProfile', 'phone', 'cellphone');
+		$this->parseEntry($entry['customerProfile'], 'customer');
 
 		$customerEmployee = new CustomerEmployee();
 		$customerEmployee->fromArray($entry);
