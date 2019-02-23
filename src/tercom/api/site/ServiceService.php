@@ -37,10 +37,9 @@ class ServiceService extends DefaultSiteService
 		$post = $content->getPost();
 
 		$service = new Service();
-		$service
-		->setName($post->getString('name'))
-		->setDescription($post->getString('description'))
-		->setInactive(false);
+		$service->setName($post->getString('name'));
+		$service->setDescription($post->getString('description'));
+		$service->setInactive(false);
 
 		if ($post->isSetted('tags')) $service->getTags()->parseString($post->getString('tags'));
 		if ($post->isSetted('inactive')) $service->setInactive($post->getString('inactive'));
@@ -97,6 +96,27 @@ class ServiceService extends DefaultSiteService
 	}
 
 	/**
+	 * Define um código de identificação personalizado exclusivo para um cliente.
+	 * Considera o cliente em acesso, portanto somente clientes podem usar.
+	 * @ApiPermissionAnnotation({"params":["idService","idServiceCustomer"]})
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @return ApiResultObject aquisição do resultado com os dados definidos.
+	 */
+	public function actionSetCustomerId(ApiContent $content): ApiResultObject
+	{
+		$idService = $content->getParameters()->getInt('idService');
+		$idServiceCustomer = $content->getParameters()->getString('idServiceCustomer');
+		$service = $this->getServiceControl()->get($idService);
+		$service->setIdServiceCustomer($idServiceCustomer);
+		$this->getServiceControl()->setCustomerId($service);
+
+		$result = new ApiResultObject();
+		$result->setResult($service, 'código "%s" definido para o cliente no serviço "%s"', $idServiceCustomer, $service->getName());
+
+		return $result;
+	}
+
+	/**
 	 * @ApiPermissionAnnotation({"params":["idService"]})
 	 * @param ApiContent $content
 	 * @return ApiResultObject
@@ -113,6 +133,7 @@ class ServiceService extends DefaultSiteService
 	}
 
 	/**
+	 * @ApiPermissionAnnotation({})
 	 * @param ApiContent $content
 	 * @return ApiResultObject
 	 */

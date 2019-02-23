@@ -51,5 +51,21 @@ class ServiceException extends ApiStatusException
 	{
 		return new ServiceException('campo não encontrado', ApiStatus::SERVICE_FIELD);
 	}
+
+	/**
+	 * @return ServiceException
+	 */
+	public static function newCustomerIdExist(): ServiceException
+	{
+		return new ServiceException('não foi possível definir o código de serviço exclusivo', ApiStatus::SERVICE_CUSTOMER_ID_EXIST);
+	}
+
+	/**
+	 * @return ServiceException
+	 */
+	public static function newCustomerId(): ServiceException
+	{
+		return new ServiceException('não foi possível definir o código de serviço exclusivo', ApiStatus::SERVICE_CUSTOMER_ID);
+	}
 }
 

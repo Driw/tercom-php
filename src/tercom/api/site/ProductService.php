@@ -135,6 +135,27 @@ class ProductService extends DefaultSiteService
 	}
 
 	/**
+	 * Define um código de identificação personalizado exclusivo para um cliente.
+	 * Considera o cliente em acesso, portanto somente clientes podem usar.
+	 * @ApiPermissionAnnotation({"params":["idProduct","idProductCustomer"]})
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @return ApiResultObject aquisição do resultado com os dados definidos.
+	 */
+	public function actionSetCustomerId(ApiContent $content): ApiResultObject
+	{
+		$idProduct = $content->getParameters()->getInt('idProduct');
+		$idProductCustomer = $content->getParameters()->getString('idProductCustomer');
+		$product = $this->getProductControl()->get($idProduct);
+		$product->setIdProductCustomer($idProductCustomer);
+		$this->getProductControl()->setCustomerId($product);
+
+		$result = new ApiResultObject();
+		$result->setResult($product, 'código "%s" definido para o cliente no produto "%s"', $idProductCustomer, $product->getName());
+
+		return $result;
+	}
+
+	/**
 	 * Obtém os dados de um determinado produto através do seu código de identificação.
 	 * @ApiPermissionAnnotation({"params":["idProduct"]})
 	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.

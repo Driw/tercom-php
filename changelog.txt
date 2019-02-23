@@ -20,6 +20,15 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+23.02.2018 - 0.3.6.254
+- Adicionado id exclusivo por cliente para produtos e serviços.
+- Adicionado ações que permitem definir o id personalizado por cliente para serviços e produtos.
+- Modificado lista completa de produtos e serviços para exibir somete produtos e serviços que possuam id personalizado pelo cliente.
+
+19.02.2018 - 0.3.5.253
+- Adicionado ID personalizável para produto e serviço por cliente.
+- Adicionado consulta de produto e serviço pelo ID de cliente nos serviços respectivos.
+
 19.02.2018 - 0.3.5.249
 - Corrigido estilo do card ao listar perfis TERCOM.
 

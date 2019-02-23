@@ -48,6 +48,15 @@ class ServiceControl extends GenericControl
 	}
 
 	/**
+	 * @param Service $service
+	 */
+	public function setCustomerId(Service $service): void
+	{
+		if (!$this->serviceDAO->replaceCustomerId($this->getCustomerLogged(), $service))
+			throw ServiceException::newCustomerId();
+	}
+
+	/**
 	 * @param int $idService
 	 * @return Service
 	 */
@@ -64,7 +73,7 @@ class ServiceControl extends GenericControl
 	 */
 	public function getAll(): Services
 	{
-		return $this->serviceDAO->selectAll();
+		return $this->isTercomManagement() ? $this->serviceDAO->selectAll() : $this->serviceDAO->selectAllWithCustomer($this->getCustomerLogged());
 	}
 
 	/**

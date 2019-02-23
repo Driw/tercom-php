@@ -4,6 +4,7 @@ namespace tercom\dao;
 
 use dProject\MySQL\Result;
 use dProject\Primitive\StringUtil;
+use tercom\entities\Customer;
 use tercom\entities\Product;
 use tercom\entities\ProductCategory;
 use tercom\entities\lists\Products;
@@ -51,6 +52,22 @@ class ProductDAO extends GenericDAO
 	}
 
 	/**
+	 * Procedimento interno para centralizar e agilizar a manutenção de queries.
+	 * @return string aquisição da string de consulta simples para SELECT.
+	 */
+	private function newSelectCustomer(): string
+	{
+		$productQuery = $this->buildQuery(self::ALL_COLUMNS, 'products');
+		$productUnitQuery = $this->buildQuery(ProductUnitDAO::ALL_COLUMNS, 'product_units', 'productUnit');
+		$productCategoryQuery = $this->buildQuery(ProductCategoryDAO::ALL_COLUMNS, 'product_categories', 'productCategory');
+
+		return "SELECT $productQuery, $productUnitQuery, $productCategoryQuery, product_customer.idCustom idProductCustomer
+				FROM products
+				LEFT JOIN product_units ON products.idProductUnit = product_units.id
+				LEFT JOIN product_categories ON products.idProductCategory = product_categories.id";
+	}
+
+	/**
 	 * Procedimento interno para validação dos dados de um produto ao inserir e/ou atualizar.
 	 * Produtos não podem ter nome, descrição, unidade de produto não informadas.
 	 * Nome deve ser único; Categoria de produto e unidade de produto devem existir.
@@ -81,6 +98,26 @@ class ProductDAO extends GenericDAO
 
 		// UNIQUE KEY
 		if ($this->existName($product->getName(), $product->getId())) throw ProductException::newNameUnavaiable();
+	}
+
+	/**
+	 * Verifica se um código de identificação de produto personalizado por cliente já exite.
+	 * @param Customer $customer objeto do tipo cliente à verificar.
+	 * @param Product $product objeto do tipo produto à verificar.
+	 */
+	public function validateCustomId(Customer $customer, Product $product): void
+	{
+		$sql = "SELECT COUNT(*) qty
+				FROM product_customer
+				WHERE idCustomer = ? AND idCustom = ? AND idProduct <> ?";
+
+		$query = $this->createQuery($sql);
+		$query->setInteger(1, $customer->getId());
+		$query->setString(2, $product->getIdProductCustomer());
+		$query->setInteger(3, $product->getId());
+
+		if ($this->parseQueryExist($query))
+			throw ProductException::newCustomerIdExist();
 	}
 
 	/**
@@ -140,6 +177,29 @@ class ProductDAO extends GenericDAO
 	}
 
 	/**
+	 * Substitui o código personalizado de um cliente para um produto específico.
+	 * @param Customer $customer cliente à vincular a identificação do serviço.
+	 * @param Product $product objeto do tipo produto à atualizar.
+	 * @return bool true se substituir ou false caso contrário.
+	 */
+	public function replaceCustomerId(Customer $customer, Product $product): bool
+	{
+		$this->validate($product, true);
+		$this->validateCustomId($customer, $product);
+
+		$sql = "REPLACE product_customer (idProduct, idCustomer, idCustom) VALUES (?, ?, ?)";
+
+		$query = $this->createQuery($sql);
+		$query->setInteger(1, $product->getId());
+		$query->setInteger(2, $customer->getId());
+		$query->setString(3, $product->getIdProductCustomer());
+
+		$result = $query->execute();
+
+		return $result->isSuccessful();
+	}
+
+	/**
 	 * Selecione os dados de um produto através do seu código de identificação único.
 	 * @param int $idProduct código de identificação único do produto.
 	 * @return Product|NULL produto com os dados carregados ou NULL se não encontrado.
@@ -156,6 +216,27 @@ class ProductDAO extends GenericDAO
 		$result = $query->execute();
 
 		return $this->parseProduct($result);
+	}
+
+	/**
+	 * Seleciona os dados de todos os produtos registrados no banco de dados sem ordenação.
+	 * Filtra os produtos para que somente os com código personalizado do cliente.
+	 * @return Products aquisição da lista de produtos atualmente registrados.
+	 */
+	public function selectWithCustomer(Customer $customer): Products
+	{
+		$sqlSELECT = $this->newSelectCustomer();
+		$sql = "$sqlSELECT
+				INNER JOIN product_customer ON product_customer.idProduct = products.id
+				WHERE product_customer.idCustomer = ?
+				ORDER BY products.name";
+
+		$query = $this->createQuery($sql);
+		$query->setInteger(1, $customer->getId());
+
+		$result = $query->execute();
+
+		return $this->parseProducts($result);
 	}
 
 	/**

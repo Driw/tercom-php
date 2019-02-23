@@ -38,6 +38,10 @@ class Service extends AdvancedObject
 	 */
 	private $id;
 	/**
+	 * @var string código de identificação personalizado do cliente.
+	 */
+	private $idServiceCustomer;
+	/**
 	 * @var string nome do serviço.
 	 */
 	private $name;
@@ -75,12 +79,26 @@ class Service extends AdvancedObject
 
 	/**
 	 * @param int $id código de identificação único do serviço.
-	 * @return Service aquisição do objeto de serviço usado.
 	 */
-	public function setId(int $id): Service
+	public function setId(int $id): void
 	{
 		$this->id = $id;
-		return $this;
+	}
+
+	/**
+	 * @return string código de identificação personalizado do cliente.
+	 */
+	public function getIdServiceCustomer(): ?string
+	{
+		return $this->idServiceCustomer;
+	}
+
+	/**
+	 * @param int $id código de identificação único do serviço.
+	 */
+	public function setIdServiceCustomer(?string $idServiceCustomer): void
+	{
+		$this->idServiceCustomer = $idServiceCustomer;
 	}
 
 	/**
@@ -93,12 +111,10 @@ class Service extends AdvancedObject
 
 	/**
 	 * @param string $name nome do serviço.
-	 * @return Service aquisição do objeto de serviço usado.
 	 */
-	public function setName(string $name): Service
+	public function setName(string $name): void
 	{
 		$this->name = $name;
-		return $this;
 	}
 
 	/**
@@ -111,12 +127,10 @@ class Service extends AdvancedObject
 
 	/**
 	 * @param string $description descrição que deve incluir <b>TODOS</b> os detalhes do serviço.
-	 * @return Service aquisição do objeto de serviço usado.
 	 */
-	public function setDescription(string $description): Service
+	public function setDescription(string $description): void
 	{
 		$this->description = $description;
-		return $this;
 	}
 
 	/**
@@ -129,12 +143,10 @@ class Service extends AdvancedObject
 
 	/**
 	 * @param Tags $tags objeto com a lista de tag do serivço.
-	 * @return Service aquisição do objeto de serviço usado.
 	 */
-	public function setTags(Tags $tags): Service
+	public function setTags(Tags $tags): void
 	{
 		$this->tags = $tags;
-		return $this;
 	}
 
 	/**
@@ -147,12 +159,10 @@ class Service extends AdvancedObject
 
 	/**
 	 * @param bool $inactive ativar ou desativar serviço para cotações.
-	 * @return Service aquisição do objeto de serviço usado.
 	 */
-	public function setInactive(bool $inactive): Service
+	public function setInactive(bool $inactive): void
 	{
 		$this->inactive = $inactive;
-		return $this;
 	}
 
 	/**
@@ -163,6 +173,7 @@ class Service extends AdvancedObject
 	{
 		return [
 			'id' => ObjectUtil::TYPE_INTEGER,
+			'idServiceString' => ObjectUtil::TYPE_STRING,
 			'name' => ObjectUtil::TYPE_STRING,
 			'description' => ObjectUtil::TYPE_STRING,
 			'tags' => Tags::class,

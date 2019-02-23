@@ -101,6 +101,8 @@ class ApiStatus
 	public const PRODUCT_NOT_INSERTED = 359;
 	public const PRODUCT_NOT_UPDATED = 360;
 	public const PRODUCT_NOT_SELECTED = 361;
+	public const PRODUCT_CUSTOMER_ID_EXIST = 362;
+	public const PRODUCT_CUSTOMER_ID = 363;
 
 	public const PRODUCT_TYPE_IDENTIFIED = 401;
 	public const PRODUCT_TYPE_NOT_IDENTIFIED = 402;
@@ -147,6 +149,8 @@ class ApiStatus
 	public const SERVICE_NOT_FOUND = 503;
 	public const SERVICE_FILTER = 504;
 	public const SERVICE_FIELD = 505;
+	public const SERVICE_CUSTOMER_ID_EXIST = 506;
+	public const SERVICE_CUSTOMER_ID = 507;
 
 	public const SERVICE_PRICE_SERVICE = 551;
 	public const SERVICE_PRICE_PROVIDER = 552;

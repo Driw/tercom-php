@@ -4,7 +4,9 @@ namespace tercom\dao;
 
 use dProject\MySQL\Result;
 use dProject\Primitive\StringUtil;
+use tercom\api\exceptions\ServiceException;
 use tercom\dao\exceptions\DAOException;
+use tercom\entities\Customer;
 use tercom\entities\Service;
 use tercom\entities\lists\Services;
 
@@ -58,6 +60,26 @@ class ServiceDAO extends GenericDAO
 	}
 
 	/**
+	 * Verifica se um código de identificação de serviço personalizado por cliente já exite.
+	 * @param Customer $customer objeto do tipo cliente à verificar.
+	 * @param Service $service objeto do tipo serviço à verificar.
+	 */
+	public function validateCustomId(Customer $customer, Service $service): void
+	{
+		$sql = "SELECT COUNT(*) qty
+				FROM service_customer
+				WHERE idCustomer = ? AND idCustom = ? AND idService <> ?";
+
+		$query = $this->createQuery($sql);
+		$query->setInteger(1, $customer->getId());
+		$query->setString(2, $service->getIdServiceCustomer());
+		$query->setInteger(3, $service->getId());
+
+		if ($this->parseQueryExist($query))
+			throw ServiceException::newCustomerIdExist();
+	}
+
+	/**
 	 * Insere um novo serviço no banco de dados e atualiza o mesmo com o identificador gerado.
 	 * @param Service $service objeto do tipo serviço à adicionar.
 	 * @return bool true se conseguir inserir ou false caso contrário.
@@ -105,12 +127,45 @@ class ServiceDAO extends GenericDAO
 	}
 
 	/**
+	 * Substitui o código personalizado de um cliente para um serviço específico.
+	 * @param Customer $customer cliente à vincular a identificação do serviço.
+	 * @param Service $service objeto do tipo serviço à atualizar.
+	 * @return bool true se substituir ou false caso contrário.
+	 */
+	public function replaceCustomerId(Customer $customer, Service $service): bool
+	{
+		$this->validate($service, true);
+		$this->validateCustomId($customer, $service);
+
+		$sql = "REPLACE service_customer (idService, idCustomer, idCustom) VALUES (?, ?, ?)";
+
+		$query = $this->createQuery($sql);
+		$query->setInteger(1, $service->getId());
+		$query->setInteger(2, $customer->getId());
+		$query->setString(3, $service->getIdServiceCustomer());
+
+		$result = $query->execute();
+
+		return $result->isSuccessful();
+	}
+
+	/**
 	 * Procedimento interno para centralizar e agilizar a manutenção de queries.
 	 * @return string aquisição da string de consulta simples para SELECT.
 	 */
 	private function newSelect(): string
 	{
 		return "SELECT id, name, description, tags, inactive
+				FROM services";
+	}
+
+	/**
+	 * Procedimento interno para centralizar e agilizar a manutenção de queries.
+	 * @return string aquisição da string de consulta simples para SELECT.
+	 */
+	private function newSelectCustomer(): string
+	{
+		return "SELECT id, name, description, tags, inactive, service_customer.idCustom idServiceCustomer
 				FROM services";
 	}
 
@@ -144,6 +199,27 @@ class ServiceDAO extends GenericDAO
 				ORDER BY name";
 
 		$query = $this->createQuery($sql);
+		$result = $query->execute();
+
+		return $this->parseServices($result);
+	}
+
+	/**
+	 * Seleciona os dados de todos os serviços registrados no banco de dados sem ordenação.
+	 * Filtra os serviços para que somente os com código personalizado do cliente.
+	 * @return Services aquisição da lista de serviços atualmente registrados.
+	 */
+	public function selectAllWithCustomer(Customer $customer): Services
+	{
+		$sqlSELECT = $this->newSelectCustomer();
+		$sql = "$sqlSELECT
+				INNER JOIN service_customer ON service_customer.idService = services.id
+				WHERE service_customer.idCustomer = ?
+				ORDER BY services.name";
+
+		$query = $this->createQuery($sql);
+		$query->setInteger(1, $customer->getId());
+
 		$result = $query->execute();
 
 		return $this->parseServices($result);

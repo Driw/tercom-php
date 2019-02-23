@@ -45,6 +45,12 @@ class ProductControl extends GenericControl
 			throw ProductException::newNotUpdated();
 	}
 
+	public function setCustomerId(Product $product): void
+	{
+		if (!$this->productDAO->replaceCustomerId($this->getCustomerLogged(), $product))
+			throw ProductException::newCustomerId();
+	}
+
 	public function get(int $idProduct): Product
 	{
 		if (($product = $this->productDAO->select($idProduct)) === null)
@@ -55,7 +61,7 @@ class ProductControl extends GenericControl
 
 	public function getAll(): Products
 	{
-		return $this->productDAO->selectAll();
+		return $this->isTercomManagement() ? $this->productDAO->selectAll() : $this->productDAO->selectWithCustomer($this->getCustomerLogged());
 	}
 
 	public function searchByName(string $name): Products

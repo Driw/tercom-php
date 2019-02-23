@@ -8,6 +8,7 @@ use tercom\api\site\results\ApiResultObject;
 use tercom\api\site\results\ApiResultSimpleValidation;
 use tercom\api\exceptions\FilterException;
 use tercom\entities\Customer;
+use tercom\entities\ServiceCustomer;
 
 /**
  * @author andrews
@@ -98,6 +99,32 @@ class CustomerService extends DefaultSiteService
 
 		return $result;
 	}
+
+	/**
+	 * Define um código de identificação personalizado exclusivo para um cliente.
+	 * Considera o cliente em acesso, portanto somente clientes podem usar.
+	 * @ApiPermissionAnnotation({"params":["idService","idServiceCustomer"]})
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @return ApiResultObject aquisição do resultado com os dados definidos.
+	 */
+	public function actionSetCustomerId(ApiContent $content): ApiResultObject
+	{
+		$idService = $content->getParameters()->getInt('idService');
+		$idServiceCustomer = $content->getParameters()->getString('idServiceCustomer');
+		$service = $this->getServiceControl()->get($idService);
+
+		$productCustomer = new ServiceCustomer();
+		$productCustomer->setId($idServiceCustomer);
+		$productCustomer->setService($service);
+		$productCustomer->setCustomer($this->getCustomerEmployee()->getCustomerProfile()->getCustomer());
+		$this->getServiceControl()->setCustomerId($productCustomer);
+
+		$result = new ApiResultObject();
+		$result->setResult($service, 'código "%s" definido para o cliente no produto "%s"', $idServiceCustomer, $service->getName());
+
+		return $result;
+	}
+
 
 	/**
 	 *

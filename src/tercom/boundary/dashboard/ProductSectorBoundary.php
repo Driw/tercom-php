@@ -5,7 +5,6 @@ namespace tercom\boundary\dashboard;
 use dProject\restful\ApiContent;
 use dProject\restful\template\ApiTemplateResult;
 use tercom\core\System;
-use tercom\entities\ProductCategory;
 
 /**
  * @see BoundaryManager

@@ -6,6 +6,7 @@ use dProject\Primitive\PostService;
 use dProject\restful\ApiContent;
 use dProject\restful\ApiResult;
 use dProject\restful\exception\ApiException;
+use tercom\api\exceptions\FilterException;
 use tercom\api\site\results\ApiResultObject;
 use tercom\api\site\results\ApiResultSimpleValidation;
 use tercom\entities\ProductCategory;

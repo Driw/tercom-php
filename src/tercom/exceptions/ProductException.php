@@ -98,5 +98,21 @@ class ProductException extends ApiStatusException
 	{
 		return new ProductException('produto não encontrado', ApiStatus::PRODUCT_NOT_SELECTED);
 	}
+
+	/**
+	 * @return ProductException
+	 */
+	public static function newCustomerIdExist(): ProductException
+	{
+		return new ProductException('código de produto personalizado já utilizado', ApiStatus::PRODUCT_CUSTOMER_ID_EXIST);
+	}
+
+	/**
+	 * @return ProductException
+	 */
+	public static function newCustomerId(): ProductException
+	{
+		return new ProductException('não foi possível definir um código de produto exclusivo', ApiStatus::PRODUCT_CUSTOMER_ID);
+	}
 }
 

@@ -49,6 +49,10 @@ class Product extends AdvancedObject
 	 */
 	private $id;
 	/**
+	 * @var string código de identificação personalizado do cliente.
+	 */
+	private $idProductCustomer;
+	/**
 	 * @var string nome do produto.
 	 */
 	private $name;
@@ -103,6 +107,22 @@ class Product extends AdvancedObject
 	public function setId(int $id): void
 	{
 		$this->id = $id;
+	}
+
+	/**
+	 * @return string código de identificação personalizado do cliente.
+	 */
+	public function getIdProductCustomer(): ?string
+	{
+		return $this->idProductCustomer;
+	}
+
+	/**
+	 * @param int $id código de identificação único do serviço.
+	 */
+	public function setIdProductCustomer(?string $idProductCustomer): void
+	{
+		$this->idProductCustomer = $idProductCustomer;
 	}
 
 	/**
