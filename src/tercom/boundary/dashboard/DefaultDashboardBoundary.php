@@ -143,6 +143,8 @@ abstract class DefaultDashboardBoundary extends ApiTemplate
 
 		$configs->getHead()->set('BaseURL', sprintf('%sdashboard/', DOMAIN), true, true);
 		$dashboardTemplate->ImportTimestamp = sprintf('?%d', time());
+		$dashboardTemplate->LoginName = $this->getLoginName();
+		$dashboardTemplate->LoginProfile = $this->getLoginProfile();
 		$dashboardTemplate->setDataArray('JsConstants', $this->javaScriptConstants);
 		$dashboardTemplate->setDataConfig('Head', $configs->getHead());
 		$dashboardTemplate->setDataConfig('Fonts', $configs->getFonts());
@@ -155,6 +157,20 @@ abstract class DefaultDashboardBoundary extends ApiTemplate
 		$dashboardTemplate->CurrentYear = ($currentYear = date('Y')) == $dashboardTemplate->StartYear ? '' : "-$currentYear";
 
 		return $dashboardTemplate;
+	}
+
+	private function getLoginName(): string
+	{
+		return	$this->isLoginTercom() ?
+					$this->getLoginTercom()->getTercomEmployee()->getName() :
+					$this->getLoginCustomer()->getCustomerEmployee()->getName();
+	}
+
+	private function getLoginProfile(): string
+	{
+		return 	$this->isLoginTercom() ?
+					$this->getLoginTercom()->getTercomEmployee()->getTercomProfile()->getName() :
+					$this->getLoginCustomer()->getCustomerEmployee()->getCustomerProfile()->getName();
 	}
 
 	/**

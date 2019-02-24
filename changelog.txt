@@ -20,6 +20,9 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+23.02.2018 - 0.3.6.256
+- Exibir nome do funcionário TERCOM/cliente e nome do perfil TERCOM/cliente acima do menu lateral esquerdo.
+
 23.02.2018 - 0.3.6.255
 - Adicionado script de teste para definir id personalizado por cliente para serviços e produtos.
 
