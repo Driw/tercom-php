@@ -4,11 +4,10 @@ namespace tercom\dao;
 
 use dProject\MySQL\Result;
 use dProject\Primitive\StringUtil;
-use tercom\api\exceptions\ServiceException;
-use tercom\dao\exceptions\DAOException;
 use tercom\entities\Customer;
 use tercom\entities\Service;
 use tercom\entities\lists\Services;
+use tercom\exceptions\ServiceException;
 
 /**
  * DAO para Serviço
@@ -45,18 +44,18 @@ class ServiceDAO extends GenericDAO
 		// PRIMARY KEY
 		if ($validateId) {
 			if ($service->getId() === 0)
-				throw new DAOException('serviço não identificado');
+				throw ServiceException::newNotIdentified();
 		} else {
 			if ($service->getId() !== 0)
-				throw new DAOException('serviço já identificado');
+				throw ServiceException::newIdentified();
 		}
 
 		// NOT NULL
-		if (StringUtil::isEmpty($service->getName())) throw new DAOException('nome não informado');
-		if (StringUtil::isEmpty($service->getDescription())) throw new DAOException('descrição não informada');
+		if (StringUtil::isEmpty($service->getName())) throw ServiceException::newEmptyName();
+		if (StringUtil::isEmpty($service->getDescription())) throw ServiceException::newEmptyDescription();
 
 		// UNIQUE KEYS
-		if ($this->existName($service->getName(), $service->getId())) throw new DAOException('nome já utilizado');
+		if ($this->existName($service->getName(), $service->getId())) throw ServiceException::newNameExist();
 	}
 
 	/**
@@ -190,22 +189,6 @@ class ServiceDAO extends GenericDAO
 
 	/**
 	 * Seleciona os dados de todos os serviços registrados no banco de dados sem ordenação.
-	 * @return Services aquisição da lista de serviços atualmente registrados.
-	 */
-	public function selectAll(): Services
-	{
-		$sqlSELECT = $this->newSelect();
-		$sql = "$sqlSELECT
-				ORDER BY name";
-
-		$query = $this->createQuery($sql);
-		$result = $query->execute();
-
-		return $this->parseServices($result);
-	}
-
-	/**
-	 * Seleciona os dados de todos os serviços registrados no banco de dados sem ordenação.
 	 * Filtra os serviços para que somente os com código personalizado do cliente.
 	 * @return Services aquisição da lista de serviços atualmente registrados.
 	 */
@@ -220,6 +203,22 @@ class ServiceDAO extends GenericDAO
 		$query = $this->createQuery($sql);
 		$query->setInteger(1, $customer->getId());
 
+		$result = $query->execute();
+
+		return $this->parseServices($result);
+	}
+
+	/**
+	 * Seleciona os dados de todos os serviços registrados no banco de dados sem ordenação.
+	 * @return Services aquisição da lista de serviços atualmente registrados.
+	 */
+	public function selectAll(): Services
+	{
+		$sqlSELECT = $this->newSelect();
+		$sql = "$sqlSELECT
+				ORDER BY name";
+
+		$query = $this->createQuery($sql);
 		$result = $query->execute();
 
 		return $this->parseServices($result);
@@ -245,6 +244,28 @@ class ServiceDAO extends GenericDAO
 	}
 
 	/**
+	 * Seleciona os dados dos serviços no banco de dados filtrados pelo nome.
+	 * @param string $idServiceCustomer cliente serviço ID à filtrar.
+	 * @param Customer $customer objeto do tipo cliente à filtrar.
+	 * @return Services aquisição da lista de serviços conforme filtro.
+	 */
+	public function selectLikeIdCustom(string $idServiceCustomer, Customer $customer): Services
+	{
+		$sqlSELECT = $this->newSelect();
+		$sql = "$sqlSELECT
+				INNER JOIN service_customer ON service_customer.idCustomer = ? AND service_customer.idService = services.id
+				WHERE service_customer.idCustom LIKE ?";
+
+		$query = $this->createQuery($sql);
+		$query->setInteger(1, $customer->getId());
+		$query->setString(2, "%$idServiceCustomer%");
+
+		$result = $query->execute();
+
+		return $this->parseServices($result);
+	}
+
+	/**
 	 * Verifica se um determinado nome de serviço está disponível para um serviço.
 	 * @param string $name nome do serviço à verificar.
 	 * @param int $idService código de identificação do serviço à desconsiderar
@@ -260,6 +281,26 @@ class ServiceDAO extends GenericDAO
 		$query = $this->createQuery($sql);
 		$query->setString(1, $name);
 		$query->setInteger(2, $idService);
+
+		return $this->parseQueryExist($query);
+	}
+
+	/**
+	 * Verifica se um cliente serviço ID já está sendo usado por outro serviço.
+	 * @param Service $service objeto do tipo serviço à verificar.
+	 * @param Customer $customer objeto do tipo cliente à verificar.
+	 * @return bool true se existir ou false caso contrário.
+	 */
+	public function existIdServiceCustomer(Service $service, Customer $customer): bool
+	{
+		$sql = "SELECT COUNT(*) qty
+				FROM service_customer
+				WHERE idCustomer = ? AND idCustom = ? AND idService <> ?";
+
+		$query = $this->createQuery($sql);
+		$query->setInteger(1, $customer->getId());
+		$query->setString(2, $service->getIdServiceCustomer());
+		$query->setInteger(3, $service->getId());
 
 		return $this->parseQueryExist($query);
 	}

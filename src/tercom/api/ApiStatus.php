@@ -146,19 +146,31 @@ class ApiStatus
 	public const PRODUCT_PRICE_PRODUCT_PACKAGE_INVALID = 518;
 	public const PRODUCT_PRICE_PRODUCT_TYPE_INVALID = 519;
 
-	public const SERVICE_NOT_ADD = 501;
-	public const SERVICE_NOT_SET = 502;
-	public const SERVICE_NOT_FOUND = 503;
-	public const SERVICE_FILTER = 504;
-	public const SERVICE_FIELD = 505;
-	public const SERVICE_CUSTOMER_ID_EXIST = 506;
-	public const SERVICE_CUSTOMER_ID = 507;
+	public const SERVICE_IDENTIFIED = 501;
+	public const SERVICE_NOT_IDENTIFIED = 502;
+	public const SERVICE_NOT_ADD = 503;
+	public const SERVICE_NOT_SET = 504;
+	public const SERVICE_NOT_FOUND = 505;
+	public const SERVICE_FILTER = 506;
+	public const SERVICE_FIELD = 507;
+	public const SERVICE_CUSTOMER_ID_EXIST = 508;
+	public const SERVICE_CUSTOMER_ID = 509;
+	public const SERVICE_EMPTY_NAME = 510;
+	public const SERVICE_EMPTY_DESCRIPTION = 511;
+	public const SERVICE_NAME_EXIST = 512;
 
-	public const SERVICE_PRICE_SERVICE = 551;
-	public const SERVICE_PRICE_PROVIDER = 552;
-	public const SERVICE_PRICE_NOT_ADD = 553;
-	public const SERVICE_PRICE_NOT_SET = 554;
-	public const SERVICE_PRICE_NOT_FOUND = 555;
+	public const SERVICE_PRICE_IDENTIFIED = 551;
+	public const SERVICE_PRICE_NOT_IDENTIFIED = 552;
+	public const SERVICE_PRICE_SERVICE = 553;
+	public const SERVICE_PRICE_PROVIDER = 554;
+	public const SERVICE_PRICE_NOT_ADD = 555;
+	public const SERVICE_PRICE_NOT_SET = 556;
+	public const SERVICE_PRICE_NOT_FOUND = 557;
+	public const SERVICE_PRICE_EMPTY_NAME = 558;
+	public const SERVICE_PRICE_EMPTY_PRICE = 559;
+	public const SERVICE_PRICE_EMPTY_PROVIDER = 560;
+	public const SERVICE_PRICE_SERVICE_INVALID = 561;
+	public const SERVICE_PRICE_PROVIDER_INVALID = 562;
 
 	public const ADDRESS_IDENTIFIED = 601;
 	public const ADDRESS_NOT_IDENTIFIED = 602;

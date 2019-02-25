@@ -20,6 +20,12 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+25.02.2018 - 0.3.6.260
+- Adicionado ações que permitem definir o id personalizado por cliente para serviços.
+- Modificado lista completa de serviços para exibir somete serviços que possuam id personalizado pelo cliente.
+- Atualizado ServicePriceDAO para utilização completa de ServicePriceException.
+- Realocado ServiceException e ServicePriceException para onde devem estar.
+
 25.02.2018 - 0.3.6.259
 - Atualização de 'tabelas.sql'.
 

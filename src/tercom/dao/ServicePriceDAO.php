@@ -4,11 +4,11 @@ namespace tercom\dao;
 
 use dProject\MySQL\Result;
 use dProject\Primitive\StringUtil;
-use tercom\dao\exceptions\DAOException;
 use tercom\entities\OrderItemService;
 use tercom\entities\Provider;
 use tercom\entities\ServicePrice;
 use tercom\entities\lists\ServicePrices;
+use tercom\exceptions\ServicePriceException;
 
 /**
  * DAO para Preço de Serviço
@@ -42,13 +42,21 @@ class ServicePriceDAO extends GenericDAO
 	 */
 	private function validate(ServicePrice $servicePrice, bool $validateId): void
 	{
+		if ($validateId) {
+			if ($servicePrice->getId() === 0)
+				throw ServicePriceException::newNotIdentified();
+		} else {
+			if ($servicePrice->getId() !== 0)
+				throw ServicePriceException::newIdentified();
+		}
+
 		// NOT NULL
-		if ($servicePrice->getPrice() === 0) throw new DAOException('preço do serviço não informado');
-		if ($servicePrice->getIdProvider() === 0) throw new DAOException('fornecedor não informado');
-		if (StringUtil::isEmpty($servicePrice->getName())) throw new DAOException('nome não informado');
+		if ($servicePrice->getPrice() === 0) throw ServicePriceException::newEmptyPrice();
+		if ($servicePrice->getIdProvider() === 0) throw ServicePriceException::newEmptyProvider();
+		if (StringUtil::isEmpty($servicePrice->getName())) ServicePriceException::newEmptyName();
 
 		// FOREIGN KEY
-		if (!$this->existProvider($servicePrice->getProvider())) throw new DAOException('fornecedor desconhecido');
+		if (!$this->existProvider($servicePrice->getProvider())) ServicePriceException::newProviderInvalid();
 	}
 
 	/**

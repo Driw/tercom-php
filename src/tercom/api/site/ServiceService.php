@@ -46,6 +46,18 @@ class ServiceService extends DefaultSiteService
 
 		$this->getServiceControl()->add($service);
 
+		if ($post->isSetted('idServiceCustomer'))
+		{
+			if ($this->getCustomerEmployeeNull() === null)
+				$customer = $this->getCustomerControl()->get($post->getInt('idCustomer'));
+			else
+				$customer = null;
+
+			$idServiceCustomer = $post->getString('idServiceCustomer');
+			$service->setIdServiceCustomer($idServiceCustomer);
+			$this->getServiceControl()->setCustomerId($service, $customer);
+		}
+
 		$result = new ApiResultObject();
 		$result->setResult($service, 'serviço %s adicionado com êxito', $service->getName());
 
@@ -69,6 +81,18 @@ class ServiceService extends DefaultSiteService
 		if ($post->isSetted('inactive')) $service->setInactive($post->getString('inactive'));
 
 		$this->getServiceControl()->set($service);
+
+		if ($post->isSetted('idServiceCustomer'))
+		{
+			if ($this->getCustomerEmployeeNull() === null)
+				$customer = $this->getCustomerControl()->get($post->getInt('idCustomer'));
+			else
+				$customer = null;
+
+			$idServiceCustomer = $post->getString('idServiceCustomer');
+			$service->setIdServiceCustomer($idServiceCustomer);
+			$this->getServiceControl()->setCustomerId($service, $customer);
+		}
 
 		$result = new ApiResultObject();
 		$result->setResult($service, 'serviço %s atualizado com êxito', $service->getName());
@@ -159,10 +183,27 @@ class ServiceService extends DefaultSiteService
 
 		switch ($filter)
 		{
+			case 'idServiceCustomer': return $this->searchByIdCustom($content);
 			case 'name': return $this->searchByName($content);
 		}
 
-		throw new FilterException();
+		throw new FilterException($filter);
+	}
+
+	/**
+	 * Procedimento interno usado para especificar a procura por serviços através do cliente serviço ID.
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @return ApiResultObject aquisição do resultado com os dados dos serviços filtrados.
+	 */
+	private function searchByIdCustom(ApiContent $content): ApiResultObject
+	{
+		$idServiceCustomer = $content->getParameters()->getString('value');
+		$services = $this->getServiceControl()->searchByCustomId($idServiceCustomer);
+
+		$result = new ApiResultObject();
+		$result->setResult($services, 'encontrado %d serviços com ID "%s"', $services->size(), $idServiceCustomer);
+
+		return $result;
 	}
 
 	/**
@@ -184,18 +225,19 @@ class ServiceService extends DefaultSiteService
 	 * @ApiPermissionAnnotation({"params":["field","value"]})
 	 * @param ApiContent $content
 	 * @throws FilterException
-	 * @return ApiResultObject
+	 * @return ApiResultSimpleValidation
 	 */
-	public function actionAvaiable(ApiContent $content): ApiResultObject
+	public function actionAvaiable(ApiContent $content): ApiResultSimpleValidation
 	{
 		$field = $content->getParameters()->getString('field');
 
 		switch ($field)
 		{
 			case 'name': return $this->avaiableName($content);
+			case 'idServiceCustomer': return $this->avaiableIdServiceCustomer($content);
 		}
 
-		throw new FilterException();
+		throw new FilterException($field);
 	}
 
 	/**
@@ -209,6 +251,26 @@ class ServiceService extends DefaultSiteService
 
 		$result = new ApiResultSimpleValidation();
 		$result->setOkMessage($avaiable, $avaiable ? 'nome de serviço disponível' : 'nome de serviço indisponível');
+
+		return $result;
+	}
+
+	/**
+	 * Procedimento interno usado para verificar a disponibilidade de um cliente serviço ID.
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @return ApiResultSimpleValidation aquisição do resultado com a validação da disponibilidade do dado.
+	 */
+	private function avaiableIdServiceCustomer(ApiContent $content): ApiResultSimpleValidation
+	{
+		$parameters = $content->getParameters();
+		$idServiceCustomer = $parameters->getString('value');
+		$idService = $this->parseNullToInt($parameters->getInt('idService', false));
+		$service = $this->getServiceControl()->get($idService);
+		$service->setIdServiceCustomer($idServiceCustomer);
+		$avaiable = !$this->getServiceControl()->hasIdServiceCustomer($service);
+
+		$result = new ApiResultSimpleValidation();
+		$result->setOkMessage($avaiable, 'cliente produto ID "%s" %s', $idServiceCustomer, $this->getMessageAvaiable($avaiable));
 
 		return $result;
 	}

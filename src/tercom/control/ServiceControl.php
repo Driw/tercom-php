@@ -3,6 +3,7 @@
 namespace tercom\control;
 
 use tercom\dao\ServiceDAO;
+use tercom\entities\Customer;
 use tercom\entities\Service;
 use tercom\entities\lists\Services;
 use dProject\MySQL\MySQL;
@@ -50,9 +51,12 @@ class ServiceControl extends GenericControl
 	/**
 	 * @param Service $service
 	 */
-	public function setCustomerId(Service $service): void
+	public function setCustomerId(Service $service, ?Customer $customer = null): void
 	{
-		if (!$this->serviceDAO->replaceCustomerId($this->getCustomerLogged(), $service))
+		if ($customer === null)
+			$customer = $this->getCustomerLogged();
+
+		if (!$this->serviceDAO->replaceCustomerId($customer, $service))
 			throw ServiceException::newCustomerId();
 	}
 
@@ -85,6 +89,13 @@ class ServiceControl extends GenericControl
 		return $this->serviceDAO->selectByName($name);
 	}
 
+	public function searchByCustomId(string $idServiceCustomer): Services
+	{
+		$customer = $this->getCustomerLogged();
+
+		return $this->serviceDAO->selectLikeIdCustom($idServiceCustomer, $customer);
+	}
+
 	/**
 	 * @param string $name
 	 * @param int $idService
@@ -95,9 +106,17 @@ class ServiceControl extends GenericControl
 		return !$this->serviceDAO->existName($name, $idService);
 	}
 
+	public function hasIdServiceCustomer(Service $service): bool
+	{
+		$customer = $this->getCustomerLogged();
+
+		return $this->serviceDAO->existIdServiceCustomer($service, $customer);
+	}
+
 	public static function getFilters(): array
 	{
 		return [
+			'idServiceCustomer' => 'Cliente Serviço ID',
 			'name' => 'Nome',
 		];
 	}
