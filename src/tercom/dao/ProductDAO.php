@@ -272,6 +272,28 @@ class ProductDAO extends GenericDAO
 	}
 
 	/**
+	 * Seleciona os dados dos produtos no banco de dados filtrados pelo nome.
+	 * @param string $idProductCutomer cliente produto ID à filtrar.
+	 * @param Customer $customer objeto do tipo cliente à filtrar.
+	 * @return Products aquisição da lista de produtos conforme filtro.
+	 */
+	public function selectLikeIdCustom(string $idProductCutomer, Customer $customer): Products
+	{
+		$sqlSELECT = $this->newSelect();
+		$sql = "$sqlSELECT
+				INNER JOIN product_customer ON product_customer.idCustomer = ? AND product_customer.idProduct = products.id
+				WHERE product_customer.idCustom LIKE ?";
+
+		$query = $this->createQuery($sql);
+		$query->setInteger(1, $customer->getId());
+		$query->setString(2, "%$idProductCutomer%");
+
+		$result = $query->execute();
+
+		return $this->parseProducts($result);
+	}
+
+	/**
 	 * Seleciona os dados dos produtos no banco de dados filtrados pela categoria de produto.
 	 * @param int $idProductCategory código de identificação único da categoria de produto à filtrar.
 	 * @return Products aquisição da lista de produtos conforme filtro.
@@ -417,6 +439,26 @@ class ProductDAO extends GenericDAO
 		$query = $this->createQuery($sql);
 		$query->setString(1, $name);
 		$query->setInteger(2, $idProduct);
+
+		return $this->parseQueryExist($query);
+	}
+
+	/**
+	 * Verifica se um cliente produto ID já está sendo usado por outro produto.
+	 * @param Product $product objeto do tipo produto à verificar.
+	 * @param Customer $customer objeto do tipo cliente à verificar.
+	 * @return bool true se existir ou false caso contrário.
+	 */
+	public function existIdProductCustomer(Product $product, Customer $customer): bool
+	{
+		$sql = "SELECT COUNT(*) qty
+				FROM product_customer
+				WHERE idCustomer = ? AND idCustom = ? AND idProduct <> ?";
+
+		$query = $this->createQuery($sql);
+		$query->setInteger(1, $customer->getId());
+		$query->setString(2, $product->getIdProductCustomer());
+		$query->setInteger(3, $product->getId());
 
 		return $this->parseQueryExist($query);
 	}

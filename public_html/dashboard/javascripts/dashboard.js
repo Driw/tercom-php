@@ -11,7 +11,7 @@ const PRODUCT_GROUP_TYPE = 2;
 const PRODUCT_SUBGROUP_TYPE = 3;
 const PRODUCT_SECTOR_TYPE = 4;
 
-const ICON_VIEW = '<i class="fas fa-sign-in-alt"></i>';
+const ICON_VIEW = '<i class="fas fa-pencil-alt"></i>';
 const ICON_ENABLE = '<i class="fas fa-eye"></i>';
 const ICON_DISABLE = '<i class="fas fa-eye-slash"></i>';
 const ICON_REMOVE = '<i class="fas fa-trash"></i>';
@@ -28,10 +28,12 @@ const ICON_PROFILES = '<i class="fas fa-users"></i>';
 const ICON_PERMISSIONS = '<i class="fas fa-user-lock"></i>';
 const ICON_EMPLOYEES = '<i class="fas fa-users-cog"></i>';
 const ICON_PHONE = '<i class="fas fa-phone"></i>';
+const ICON_OPEN = '<i class="fas fa-sign-in-alt"></i>';
 
 const SHOW_CLASS_FORMAT = 'alert alert-{0} col-12 text-center';
 
 const BTN_CLASS_VIEW = 'btn-primary';
+const BTN_CLASS_OPEN = 'btn-info';
 const BTN_CLASS_REMOVE = 'btn-danger';
 const BTN_CLASS_ENABLE = 'btn-success';
 const BTN_CLASS_DISABLE = 'btn-secondary';

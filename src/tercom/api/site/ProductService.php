@@ -69,6 +69,18 @@ class ProductService extends DefaultSiteService
 
 		$this->getProductControl()->add($product);
 
+		if ($post->isSetted('idProductCustomer'))
+		{
+			if ($this->getCustomerEmployeeNull() === null)
+				$customer = $this->getCustomerControl()->get($post->getInt('idCustomer'));
+			else
+				$customer = null;
+
+			$idProductCustomer = $post->getString('idProductCustomer');
+			$product->setIdProductCustomer($idProductCustomer);
+			$this->getProductControl()->setCustomerId($product, $customer);
+		}
+
 		$result = new ApiResultObject();
 		$result->setResult($product, 'produto "%s" adicionado com êxito', $product->getName());
 
@@ -104,6 +116,18 @@ class ProductService extends DefaultSiteService
 			$idProductCategoryType = $this->parseNullToInt($post->getInt('idProductCategoryType', false));
 			$productCategory = $this->getProductCategoryControl()->get($idProductCategory, $idProductCategoryType);
 			$product->setProductCategory($productCategory);
+		}
+
+		if ($post->isSetted('idProductCustomer'))
+		{
+			if ($this->getCustomerEmployeeNull() === null)
+				$customer = $this->getCustomerControl()->get($post->getInt('idCustomer'));
+			else
+				$customer = null;
+
+			$idProductCustomer = $post->getString('idProductCustomer');
+			$product->setIdProductCustomer($idProductCustomer);
+			$this->getProductControl()->setCustomerId($product, $customer);
 		}
 
 		$this->getProductControl()->set($product);
@@ -200,6 +224,7 @@ class ProductService extends DefaultSiteService
 
 		switch ($filter)
 		{
+			case 'idProductCustomer': return $this->searchByIdCustom($content);
 			case 'name': return $this->searchByName($content);
 			case 'category': return $this->searchByCategory($content);
 			case 'family': return $this->searchByFamily($content);
@@ -209,6 +234,22 @@ class ProductService extends DefaultSiteService
 		}
 
 		throw new FilterException($filter);
+	}
+
+	/**
+	 * Procedimento interno usado para especificar a procura por produtos através do cliente produto ID.
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @return ApiResultObject aquisição do resultado com os dados dos produtos filtrados.
+	 */
+	private function searchByIdCustom(ApiContent $content): ApiResultObject
+	{
+		$idProductCustomer = $content->getParameters()->getString('value');
+		$products = $this->getProductControl()->searchByCustomId($idProductCustomer);
+
+		$result = new ApiResultObject();
+		$result->setResult($products, 'encontrado %d produtos com ID "%s"', $products->size(), $idProductCustomer);
+
+		return $result;
 	}
 
 	/**
@@ -325,6 +366,7 @@ class ProductService extends DefaultSiteService
 		switch ($filter)
 		{
 			case 'name': return $this->avaiableName($content);
+			case 'idProductCustomer': return $this->avaiableIdProductCustomer($content);
 		}
 
 		throw new FilterException($filter);
@@ -344,6 +386,26 @@ class ProductService extends DefaultSiteService
 
 		$result = new ApiResultSimpleValidation();
 		$result->setOkMessage($avaiable, 'nome de produto "%s" %s', $name, $this->getMessageAvaiable($avaiable));
+
+		return $result;
+	}
+
+	/**
+	 * Procedimento interno usado para verificar a disponibilidade de um cliente produto ID.
+	 * @param ApiContent $content conteúdo fornecedido pelo cliente no chamado.
+	 * @return ApiResultSimpleValidation aquisição do resultado com a validação da disponibilidade do dado.
+	 */
+	private function avaiableIdProductCustomer(ApiContent $content): ApiResultSimpleValidation
+	{
+		$parameters = $content->getParameters();
+		$idProductCustomer = $parameters->getString('value');
+		$idProduct = $this->parseNullToInt($parameters->getInt('idProduct', false));
+		$product = $this->getProductControl()->get($idProduct);
+		$product->setIdProductCustomer($idProductCustomer);
+		$avaiable = !$this->getProductControl()->hasIdProductCustomer($product);
+
+		$result = new ApiResultSimpleValidation();
+		$result->setOkMessage($avaiable, 'cliente produto ID "%s" %s', $idProductCustomer, $this->getMessageAvaiable($avaiable));
 
 		return $result;
 	}

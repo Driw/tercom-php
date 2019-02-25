@@ -186,7 +186,7 @@ var ProductAdd = ProductAdd ||
 		var idProductSector = option.value;
 
 		if (idProductSector != 0)
-		ProductAdd.setProductCategory($(option).html(), $(option).val(), option.dataset.type);
+			ProductAdd.setProductCategory($(option).html(), $(option).val(), option.dataset.type);
 		else
 		{
 			var option = ProductAdd.selectSubgroup.find(':selected');
@@ -233,20 +233,14 @@ var ProductAdd = ProductAdd ||
 			}
 		});
 	},
-	onSubmited: function(product, response) {
+	onSubmited: function(product, message) {
+		message += ' <button class="btn btn-sm {0}" onclick="ProductAdd.onButtonLast()">{1} Ver Produto</button>'.format(BTN_CLASS_VIEW, ICON_VIEW);
 		ProductAdd.lastProduct = product;
 		ProductAdd.form.trigger('reset');
-
-		$('#product-add-message').html(product.name);
-		$('#product-add-paragraph').show('slow');
-
-		$('#modal-product-add-label').html(product.name);
-		$('#modal-product-add-message').html(response.message);
-		$('#modal-product-add').modal('show');
+		Util.showSuccess(message);
 	},
-	onProductView: function()
+	onButtonLast: function()
 	{
-		if (ProductAdd.lastProduct !== undefined)
-			Util.redirect('product/view/{0}'.format(ProductAdd.lastProduct.id));
-	}
+		Util.redirect('product/view/{0}'.format(ProductAdd.lastProduct.id));
+	},
 };

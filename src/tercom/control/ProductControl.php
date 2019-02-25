@@ -45,9 +45,12 @@ class ProductControl extends GenericControl
 			throw ProductException::newNotUpdated();
 	}
 
-	public function setCustomerId(Product $product): void
+	public function setCustomerId(Product $product, ?Customer $customer = null): void
 	{
-		if (!$this->productDAO->replaceCustomerId($this->getCustomerLogged(), $product))
+		if ($customer === null)
+			$customer = $this->getCustomerLogged();
+
+		if (!$this->productDAO->replaceCustomerId($customer, $product))
 			throw ProductException::newCustomerId();
 	}
 
@@ -67,6 +70,13 @@ class ProductControl extends GenericControl
 	public function searchByName(string $name): Products
 	{
 		return $this->productDAO->selectLikeName($name);
+	}
+
+	public function searchByCustomId(string $idProductCustomer): Products
+	{
+		$customer = $this->getCustomerLogged();
+
+		return $this->productDAO->selectLikeIdCustom($idProductCustomer, $customer);
 	}
 
 	public function searchByProductCategory(int $idProductCategory): Products
@@ -104,9 +114,17 @@ class ProductControl extends GenericControl
 		return $this->productDAO->existName($name, $idProduct);
 	}
 
+	public function hasIdProductCustomer(Product $product): bool
+	{
+		$customer = $this->getCustomerLogged();
+
+		return $this->productDAO->existIdProductCustomer($product, $customer);
+	}
+
 	public static function getFilters(): array
 	{
 		return [
+			'idProductCustomer' => 'Cliente Produto ID',
 			'name' => 'Nome',
 			'family' => 'Família',
 			'group' => 'Grupo',

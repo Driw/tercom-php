@@ -143,6 +143,7 @@ abstract class DefaultDashboardBoundary extends ApiTemplate
 
 		$configs->getHead()->set('BaseURL', sprintf('%sdashboard/', DOMAIN), true, true);
 		$dashboardTemplate->ImportTimestamp = sprintf('?%d', time());
+		$dashboardTemplate->LoginTercom = $this->isLoginTercom();
 		$dashboardTemplate->LoginName = $this->getLoginName();
 		$dashboardTemplate->LoginProfile = $this->getLoginProfile();
 		$dashboardTemplate->setDataArray('JsConstants', $this->javaScriptConstants);

@@ -781,7 +781,7 @@ Webservice.prototype.product_setActive = function(idProduct, target, listener)
 		'webservice': 'product/setInactive/{0}/no'.format(idProduct),
 		'target': target,
 		'listener': listener,
-		'errorMessage': this.newBaseErrorMessage('atualizar produto'),
+		'errorMessage': this.newBaseErrorMessage('desabilitar produto'),
 	});
 };
 Webservice.prototype.product_setInactive = function(idProduct, target, listener)
@@ -790,7 +790,17 @@ Webservice.prototype.product_setInactive = function(idProduct, target, listener)
 		'webservice': 'product/setInactive/{0}/yes'.format(idProduct),
 		'target': target,
 		'listener': listener,
-		'errorMessage': this.newBaseErrorMessage('atualizar produto'),
+		'errorMessage': this.newBaseErrorMessage('habilitar produto'),
+	});
+};
+Webservice.prototype.product_setCustomerId = function(idProduct, idProductCustomer, form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'product/setCustomerId/{0}/{1}'.format(idProduct, idProductCustomer),
+		'form': form,
+		'target': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('atualizar cliente produto ID'),
 	});
 };
 Webservice.prototype.product_get = function(idProduct, target, listener)

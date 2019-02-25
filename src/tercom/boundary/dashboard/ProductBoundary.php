@@ -182,7 +182,7 @@ class ProductBoundary extends DefaultDashboardLoggedBoundary
 		foreach ($providerFilters as $value => $option)
 			$filterOptions[] = [ 'Value' => $value, 'Option' => $option ];
 
-			return $filterOptions;
+		return $filterOptions;
 	}
 }
 
