@@ -452,7 +452,34 @@ CREATE TABLE IF NOT EXISTS quoted_order_products
 	CONSTRAINT order_quotes_products_price_fk FOREIGN KEY (idQuotedProductPrice) REFERENCES quoted_product_prices(id)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_general_ci;
 
-CREATE TABLE order_acceptances
+CREATE TABLE IF NOT EXISTS quoted_service_prices
+(
+	id INT AUTO_INCREMENT,
+	idService INT NOT NULL,
+	idProvider INT NOT NULL,
+	name VARCHAR(48) NULL DEFAULT NULL,
+	additionalDescription VARCHAR(256) NULL DEFAULT NULL,
+	price DECIMAL(10, 2) NOT NULL,
+	lastUpdate DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+
+	CONSTRAINT quoted_service_prices_pk PRIMARY KEY (id),
+	CONSTRAINT quoted_service_prices_product_fk FOREIGN KEY (idService) REFERENCES services(id) ON DELETE RESTRICT,
+	CONSTRAINT quoted_service_prices_provider_fk FOREIGN KEY (idProvider) REFERENCES providers(id) ON DELETE CASCADE
+) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_general_ci;
+
+CREATE TABLE IF NOT EXISTS quoted_order_services
+(
+	id INT NOT NULL AUTO_INCREMENT,
+	idOrderItemService INT NOT NULL,
+	idQuotedServicePrice INT NOT NULL,
+	observations VARCHAR(128) DEFAULT NULL NULL,
+
+	CONSTRAINT quoted_order_services_pk PRIMARY KEY (id),
+	CONSTRAINT quoted_order_services_item_fk FOREIGN KEY (idOrderItemService) REFERENCES order_item_services(id),
+	CONSTRAINT quoted_order_services_price_fk FOREIGN KEY (idQuotedServicePrice) REFERENCES quoted_service_prices(id)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_general_ci;
+
+CREATE TABLE IF NOT EXISTS order_acceptances
 (
 	id INT NOT NULL AUTO_INCREMENT,
 	idOrderQuote INT NOT NULL,
@@ -471,7 +498,7 @@ CREATE TABLE order_acceptances
 	CONSTRAINT order_acceptances_address_fk FOREIGN KEY (idAddress) REFERENCES addresses(id)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_general_ci;
 
-CREATE TABLE order_acceptance_products
+CREATE TABLE IF NOT EXISTS order_acceptance_products
 (
 	id INT NOT NULL AUTO_INCREMENT,
 	idOrderAcceptance INT NOT NULL,
@@ -500,7 +527,7 @@ CREATE TABLE order_acceptance_products
 	CONSTRAINT order_acceptance_products_type_fk FOREIGN KEY (idProductType) REFERENCES product_types(id) ON DELETE RESTRICT
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_general_ci;
 
-CREATE TABLE order_acceptance_services
+CREATE TABLE IF NOT EXISTS order_acceptance_services
 (
 	id INT NOT NULL AUTO_INCREMENT,
 	idOrderAcceptance INT NOT NULL,
@@ -521,4 +548,28 @@ CREATE TABLE order_acceptance_services
 	CONSTRAINT order_acceptance_services_quoted_fk FOREIGN KEY (idQuotedServicePrice) REFERENCES quoted_service_prices(id) ON DELETE RESTRICT,
 	CONSTRAINT order_acceptance_services_service_fk FOREIGN KEY (idService) REFERENCES services(id) ON DELETE RESTRICT,
 	CONSTRAINT order_acceptance_services_provider_fk FOREIGN KEY (idProvider) REFERENCES providers(id) ON DELETE CASCADE
+) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_general_ci;
+
+CREATE TABLE IF NOT EXISTS product_customer
+(
+	idProduct INT NOT NULL,
+	idCustomer INT NOT NULL,
+	idCustom VARCHAR(32) NOT NULL,
+
+	CONSTRAINT UNIQUE KEY (idCustomer, idCustom),
+	CONSTRAINT PRIMARY KEY (idProduct, idCustomer),
+	CONSTRAINT product_customer_product_fk FOREIGN KEY (idProduct) REFERENCES products(id) ON DELETE RESTRICT,
+	CONSTRAINT product_customer_customer_fk FOREIGN KEY (idCustomer) REFERENCES customers(id) ON DELETE RESTRICT
+) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_general_ci;
+
+CREATE TABLE IF NOT EXISTS service_customer
+(
+	idService INT NOT NULL,
+	idCustomer INT NOT NULL,
+	idCustom VARCHAR(32) NOT NULL,
+
+	CONSTRAINT UNIQUE KEY (idCustomer, idCustom),
+	CONSTRAINT PRIMARY KEY (idService, idCustomer),
+	CONSTRAINT service_customer_service_fk FOREIGN KEY (idService) REFERENCES services(id) ON DELETE RESTRICT,
+	CONSTRAINT service_customer_customer_fk FOREIGN KEY (idCustomer) REFERENCES customers(id) ON DELETE RESTRICT
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_general_ci;

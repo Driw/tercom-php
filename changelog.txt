@@ -20,6 +20,12 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+25.02.2018 - 0.3.6.259
+- Atualização de 'tabelas.sql'.
+
+25.02.2018 - 0.3.6.258
+- Corrigido nome de diretório de 'product-services' para 'product-service'.
+
 25.02.2018 - 0.3.6.257
 - Implementação nas páginas para uso dos Cliente Produto ID incluso busca.
 
