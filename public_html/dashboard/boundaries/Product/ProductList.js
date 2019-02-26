@@ -31,11 +31,6 @@ var ProductList = ProductList ||
 				},
 			},
 			submitHandler: function(form) {
-				try {
-					ProductList.submitIdProductCustomer(form);
-				} catch (e) {
-					Util.showError(e.stack);
-				}
 				return false;
 			},
 		});
@@ -70,10 +65,6 @@ var ProductList = ProductList ||
 			product.productCategory === null ? '-' : product.productCategory.name,
 			'<div class="btn-group">{0}{1}{2}{3}</div>'.format(btnView, btnViewPrices, btnIdProductCustomer, product.inactive ? btnEnable : btnDisable),
 		];
-	},
-	submitIdProductCustomer: function(form)
-	{
-		ws.product_setIdProductCustomer(ProductList.product.id, form);
 	},
 	onButtonView: function(button, index)
 	{

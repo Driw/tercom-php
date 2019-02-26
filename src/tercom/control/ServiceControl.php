@@ -2,12 +2,12 @@
 
 namespace tercom\control;
 
+use dProject\MySQL\MySQL;
 use tercom\dao\ServiceDAO;
 use tercom\entities\Customer;
 use tercom\entities\Service;
 use tercom\entities\lists\Services;
-use dProject\MySQL\MySQL;
-use tercom\api\exceptions\ServiceException;
+use tercom\exceptions\ServiceException;
 
 /**
  * @see GenericControl
@@ -66,7 +66,11 @@ class ServiceControl extends GenericControl
 	 */
 	public function get(int $idService): Service
 	{
-		if (($service = $this->serviceDAO->select($idService)) === null)
+		if (($service = (
+			$this->isTercomManagement() ?
+				$this->serviceDAO->select($idService) : 
+				$this->serviceDAO->select($idService, $this->getCustomerLogged())
+		)) === null)
 			throw ServiceException::newNotFound();
 
 		return $service;

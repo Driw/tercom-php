@@ -25,3 +25,50 @@
 							</div>
 						</div>
 					</section>
+
+					<!-- Modal ID Service Customer -->
+					<div class="modal fade" id="service-customer-modal" tabindex="-1" role="dialog" aria-labelledby="service-customer-modal-label" aria-hidden="true">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="service-customer-modal-label">Alterar Cliente Serviço ID</h5>
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body">
+									<form class="tercom-form form-horizontal" id="form-service-customer-view">
+										<input type="hidden" name="idService">
+										<fieldset>
+											<!-- BEGIN LoginTercom -->
+											<div class="form-group">
+												<div class="input-group">
+													<div class="input-group-prepend">
+														<span class="input-group-text">Cliente</span>
+													</div>
+													<select class="form-control selectpicker" name="idCusotmer">
+												</div>
+											</div>
+											<!-- END LoginTercom -->
+											<div class="form-group">
+												<div class="input-group">
+													<div class="input-group-prepend">
+														<span class="input-group-text">Cliente Serviço ID</span>
+													</div>
+													<input type="text" class="form-control" name="idServiceCustomer">
+												</div>
+											</div>
+											<div class="form-group text-center">
+												<div class="btn-group">
+													<button type="button" class="btn btn-primary" onclick="ServiceList.onButtonIdUpdate()">Atualizar ID</button>
+												</div>
+											</div>
+										</fieldset>
+									</form>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+								</div>
+							</div>
+						</div>
+					</div>

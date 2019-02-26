@@ -26,6 +26,15 @@ var ServiceView = ServiceView ||
 	{
 		ServiceView.form.validate({
 			'rules': {
+				'idServiceCustomer': {
+					'required': true,
+					'remoteapi': {
+						'webservice': 'service/avaiable/idServiceCustomer/{value}/{idService}',
+						'parameters': {
+							'idService': function() { return ServiceView.id; },
+						},
+					},
+				},
 				'name': {
 					'required': true,
 					'rangelength': [ settings.minNameLen, settings.maxNameLen ],
@@ -49,6 +58,7 @@ var ServiceView = ServiceView ||
 	{
 		var form = ServiceView.form[0];
 		$(form.id).val(service.id);
+		$(form.idServiceCustomer).val(service.idServiceCustomer);
 		$(form.name).val(service.name);
 		$(form.description).val(service.description);
 		service.tags.elements.forEach(element => {

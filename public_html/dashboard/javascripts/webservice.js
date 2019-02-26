@@ -930,6 +930,16 @@ Webservice.prototype.service_setInactive = function(idService, inactive, target,
 		'errorMessage': this.newBaseErrorMessage('atualizar serviço para {0}'.format(inactive ? 'inativo' : 'ativo')),
 	});
 };
+Webservice.prototype.service_setCustomerId = function(idService, idServiceCustomer, form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'service/setCustomerId/{0}/{1}'.format(idService, idServiceCustomer),
+		'form': form,
+		'target': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('atualizar cliente serviço ID'),
+	});
+};
 Webservice.prototype.service_get = function(idService, target, listener)
 {
 	this.setOptionsAndExecute({

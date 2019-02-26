@@ -64,7 +64,8 @@ class ProductDAO extends GenericDAO
 		return "SELECT $productQuery, $productUnitQuery, $productCategoryQuery, product_customer.idCustom idProductCustomer
 				FROM products
 				LEFT JOIN product_units ON products.idProductUnit = product_units.id
-				LEFT JOIN product_categories ON products.idProductCategory = product_categories.id";
+				LEFT JOIN product_categories ON products.idProductCategory = product_categories.id
+				INNER JOIN product_customer ON product_customer.idProduct = products.id";
 	}
 
 	/**
@@ -202,16 +203,31 @@ class ProductDAO extends GenericDAO
 	/**
 	 * Selecione os dados de um produto através do seu código de identificação único.
 	 * @param int $idProduct código de identificação único do produto.
+	 * @param Customer $customer objeto do tipo cliente à considerar.
 	 * @return Product|NULL produto com os dados carregados ou NULL se não encontrado.
 	 */
-	public function select(int $idProduct): ?Product
+	public function select(int $idProduct, ?Customer $customer = null): ?Product
 	{
-		$sqlSELECT = $this->newSelect();
-		$sql = "$sqlSELECT
-				WHERE products.id = ?";
+		if (is_null($customer))
+		{
+			$sqlSELECT = $this->newSelect();
+			$sql = "$sqlSELECT
+					WHERE products.id = ?";
+	
+			$query = $this->createQuery($sql);
+			$query->setInteger(1, $idProduct);
+		}
 
-		$query = $this->createQuery($sql);
-		$query->setInteger(1, $idProduct);
+		else
+		{
+			$sqlSELECT = $this->newSelectCustomer();
+			$sql = "$sqlSELECT
+					WHERE products.id = ? AND product_customer.idCustomer = ?";
+	
+			$query = $this->createQuery($sql);
+			$query->setInteger(1, $idProduct);
+			$query->setInteger(2, $customer->getId());
+		}
 
 		$result = $query->execute();
 
@@ -227,7 +243,6 @@ class ProductDAO extends GenericDAO
 	{
 		$sqlSELECT = $this->newSelectCustomer();
 		$sql = "$sqlSELECT
-				INNER JOIN product_customer ON product_customer.idProduct = products.id
 				WHERE product_customer.idCustomer = ?
 				ORDER BY products.name";
 

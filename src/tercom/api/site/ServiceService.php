@@ -222,7 +222,7 @@ class ServiceService extends DefaultSiteService
 	}
 
 	/**
-	 * @ApiPermissionAnnotation({"params":["field","value"]})
+	 * @ApiPermissionAnnotation({"params":["field","value","idService"]})
 	 * @param ApiContent $content
 	 * @throws FilterException
 	 * @return ApiResultSimpleValidation

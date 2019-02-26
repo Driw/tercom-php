@@ -56,7 +56,11 @@ class ProductControl extends GenericControl
 
 	public function get(int $idProduct): Product
 	{
-		if (($product = $this->productDAO->select($idProduct)) === null)
+		if (($product = (
+			$this->isTercomManagement() ?
+				$this->productDAO->select($idProduct) :
+				$this->productDAO->select($idProduct, $this->getCustomerLogged())
+		)) === null)
 			throw ProductException::newNotSelected();
 
 		return $product;

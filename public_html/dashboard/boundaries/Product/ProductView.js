@@ -61,6 +61,7 @@ var ProductView = ProductView ||
 		ProductView.product = product;
 
 		var form = ProductView.form[0];
+		$(form.idProductCustomer).val(product.idProductCustomer);
 		$(form.name).val(product.name);
 		$(form.description).html(product.description);
 		$(form.utility).html(product.utility);
@@ -248,6 +249,15 @@ var ProductView = ProductView ||
 	{
 		ProductView.form.validate({
 			'rules': {
+				'idProductCustomer': {
+					'required': true,
+					'remoteapi': {
+						'webservice': 'product/avaiable/idProductCustomer/{value}/{idProduct}',
+						'parameters': {
+							'idProduct': function() { return ProductView.product.id; },
+						},
+					},
+				},
 				'name': {
 					'required': true,
 					'rangelength': [ settings.minNameLen, settings.maxNameLen ],

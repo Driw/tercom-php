@@ -162,6 +162,20 @@ class ServiceDAO extends GenericDAO
 	 * Procedimento interno para centralizar e agilizar a manutenção de queries.
 	 * @return string aquisição da string de consulta simples para SELECT.
 	 */
+	private function newSelectCustomerId(): string
+	{
+		$serviceColumns = $this->buildQuery(self::ALL_COLUMNS, 'services');
+		$serviceCustomerColumns = $this->buildQuery(['idCustom idServiceCustomer'], 'service_customer');
+
+		return "SELECT $serviceColumns, $serviceCustomerColumns
+				FROM services
+				INNER JOIN service_customer ON service_customer.idService = services.id";
+	}
+
+	/**
+	 * Procedimento interno para centralizar e agilizar a manutenção de queries.
+	 * @return string aquisição da string de consulta simples para SELECT.
+	 */
 	private function newSelectCustomer(): string
 	{
 		return "SELECT id, name, description, tags, inactive, service_customer.idCustom idServiceCustomer
@@ -171,16 +185,31 @@ class ServiceDAO extends GenericDAO
 	/**
 	 * Selecione os dados de um serviço através do seu código de identificação único.
 	 * @param int $idService código de identificação único do serviço.
+	 * @param Customer $customer objeto do tipo cliente à considerar.
 	 * @return Service|NULL serviço com os dados carregados ou NULL se não encontrado.
 	 */
-	public function select(int $idService): ?Service
+	public function select(int $idService, ?Customer $customer = null): ?Service
 	{
-		$sqlSELECT = $this->newSelect();
-		$sql = "$sqlSELECT
-				WHERE id = ?";
+		if (is_null($customer))
+		{
+			$sqlSELECT = $this->newSelect();
+			$sql = "$sqlSELECT
+					WHERE id = ?";
 
-		$query = $this->createQuery($sql);
-		$query->setInteger(1, $idService);
+			$query = $this->createQuery($sql);
+			$query->setInteger(1, $idService);
+		}
+
+		else
+		{
+			$sqlSELECT = $this->newSelectCustomerId();
+			$sql = "$sqlSELECT
+					WHERE services.id = ? AND service_customer.idCustomer = ?";
+
+			$query = $this->createQuery($sql);
+			$query->setInteger(1, $idService);
+			$query->setInteger(2, $customer->getId());
+		}
 
 		$result = $query->execute();
 
