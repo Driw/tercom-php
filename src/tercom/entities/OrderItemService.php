@@ -113,9 +113,9 @@ class OrderItemService extends AdvancedObject
 	}
 
 	/**
-	 * @param Provider $provider preferência de fornecedor.
+	 * @param NULL|Provider $provider preferência de fornecedor.
 	 */
-	public function setProvider(Provider $provider): void
+	public function setProvider(?Provider $provider): void
 	{
 		$this->provider = $provider;
 	}

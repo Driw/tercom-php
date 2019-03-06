@@ -207,7 +207,7 @@ class ProductService extends DefaultSiteService
 		$products = $this->getProductControl()->getAll();
 
 		$result = new ApiResultObject();
-		$result->setResult($products, 'há %d produtos no banco de dados', $products->size());
+		$result->setResult($products, 'encontrado %d produtos registrados', $products->size());
 
 		return $result;
 	}

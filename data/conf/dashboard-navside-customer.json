@@ -7,8 +7,7 @@
 			"Url": "/dashboard",
 			"Class": ""
 		}
-	},
-	{
+	},{
 		"Dropdown": {
 			"service": "product",
 			"Name": "Produtos",
@@ -73,8 +72,7 @@
 				}
 			]
 		}
-	},
-	{
+	},{
 		"Dropdown": {
 			"service": "service",
 			"Name": "Serviços",
@@ -88,11 +86,34 @@
 				{ "Name": "Adicionar", "Icon": "fas fa-plus", "Url": "service/add", "PermissionPacket": "service", "PermissionAction": "add" }
 			]
 		}
-	},
-	{
+	},{
+		"Dropdown": {
+			"service": "quotes",
+			"Name": "Cotação",
+			"Icon": "fas fa-file-invoice-dollar",
+			"ID": "dropdown-quotes",
+			"Class": "",
+			"Itens": [
+			],
+			"SubItens": [
+				{
+					"service": "orderRequest",
+					"Name": "Pedidos",
+					"Icon": "",
+					"ID": "dropdown-order-request",
+					"PermissionPacket": "orderRequest",
+					"Class": "",
+					"Itens": [
+						{ "Name": "Listar", "Icon": "fas fa-list-ul", "Url": "orderRequest/list", "PermissionPacket": "orderRequest", "PermissionAction": "getAll" },
+						{ "Name": "Novo", "Icon": "fas fa-plus", "Url": "orderRequest/add", "PermissionPacket": "orderRequest", "PermissionAction": "add" }
+					]
+				}
+			]
+		}
+	},{
 		"Dropdown": {
 			"service": "customer",
-			"Name": "Clientes",
+			"Name": "Admin",
 			"Icon": "fas fa-user-tie",
 			"ID": "dropdown-customer",
 			"PermissionPacket": "customer",

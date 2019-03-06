@@ -117,6 +117,24 @@ Webservice.prototype.provider_get = function(idProvider, form, listener)
 		'errorMessage': this.newBaseErrorMessage('obter fornecedor'),
 	});
 };
+Webservice.prototype.provider_getByProduct = function(idProduct, target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'provider/getByProduct/{0}'.format(idProduct),
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter fornecedores do produto'),
+	});
+};
+Webservice.prototype.provider_getByService = function(idService, form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'provider/getByService/{0}'.format(idService),
+		'target': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter fornecedores do serviço'),
+	});
+};
 Webservice.prototype.provider_getAll = function(target, listener)
 {
 	this.setOptionsAndExecute({
@@ -255,6 +273,15 @@ Webservice.prototype.manufacturer_get = function(idManufacturer, form, listener)
 		'webservice': 'manufacturer/get/{0}'.format(idManufacturer),
 		'form': form,
 		'target': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter fabricante'),
+	});
+};
+Webservice.prototype.manufacturer_getByProduct = function(idProduct, target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'manufacturer/getByProduct/{0}'.format(idProduct),
+		'target': target,
 		'listener': listener,
 		'errorMessage': this.newBaseErrorMessage('obter fabricante'),
 	});
@@ -1543,6 +1570,159 @@ Webservice.prototype.tercomEmployee_getAll = function(target, listener)
 		'target': target,
 		'listener': listener,
 		'errorMessage': this.newBaseErrorMessage('obter todos funcionários TERCOM'),
+	});
+};
+
+// Order Requests
+
+Webservice.prototype.orderRequest_settings = function(target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'orderRequest/settings',
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter configurações para pedido de cotação'),
+	});
+};
+Webservice.prototype.orderRequest_add = function(form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'orderRequest/add',
+		'form': form,
+		'target': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('adicionar pedido de cotação'),
+	});
+};
+Webservice.prototype.orderRequest_set = function(idOrderRequest, form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'orderRequest/set/{0}'.format(idOrderRequest),
+		'form': form,
+		'target': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('atualizar pedido de cotação'),
+	});
+};
+Webservice.prototype.orderRequest_setQueued = function(idOrderRequest, form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'orderRequest/setQueued/{0}'.format(idOrderRequest),
+		'form': form,
+		'target': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('atualizar pedido de cotação para "em fila"'),
+	});
+};
+Webservice.prototype.orderRequest_cancelByCustomer = function(idOrderRequest, target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'orderRequest/cancelByCustomer/{0}'.format(idOrderRequest),
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('cancelar pedido de cotação'),
+	});
+};
+Webservice.prototype.orderRequest_get = function(idOrderRequest, target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'orderRequest/get/{0}'.format(idOrderRequest),
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('atualizar pedido de cotação'),
+	});
+};
+Webservice.prototype.orderRequest_getAll = function(target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'orderRequest/getAll',
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter pedidos de cotação'),
+	});
+};
+
+// OrderItemProduct
+
+Webservice.prototype.orderItemProduct_add = function(idOrderRequest, form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'orderItemProduct/add/{0}'.format(idOrderRequest),
+		'form': form,
+		'target': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('adicionar produto ao pedido'),
+	});
+};
+Webservice.prototype.orderItemProduct_set = function(idOrderRequest, idOrderItemProduct, form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'orderItemProduct/set/{0}/{1}'.format(idOrderRequest, idOrderItemProduct),
+		'form': form,
+		'target': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('atualizar produto do pedido'),
+	});
+};
+Webservice.prototype.orderItemProduct_remove = function(idOrderRequest, idOrderItemProduct, target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'orderItemProduct/remove/{0}/{1}'.format(idOrderRequest, idOrderItemProduct),
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('excluir produto do pedido'),
+	});
+};
+Webservice.prototype.orderItemProduct_getAll = function(idOrderRequest, form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'orderItemProduct/getAll/{0}'.format(idOrderRequest),
+		'form': form,
+		'target': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter lista dos produtos do pedido'),
+	});
+};
+
+// OrderItemService
+
+Webservice.prototype.orderItemService_add = function(idOrderRequest, form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'orderItemService/add/{0}'.format(idOrderRequest),
+		'form': form,
+		'target': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('adicionar serviço ao pedido'),
+	});
+};
+Webservice.prototype.orderItemService_set = function(idOrderRequest, idOrderItemService, form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'orderItemService/set/{0}/{1}'.format(idOrderRequest, idOrderItemService),
+		'form': form,
+		'target': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('atualizar serviço do pedido'),
+	});
+};
+Webservice.prototype.orderItemService_remove = function(idOrderRequest, idOrderItemService, target, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'orderItemService/remove/{0}/{1}'.format(idOrderRequest, idOrderItemService),
+		'target': target,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('excluir serviço do pedido'),
+	});
+};
+Webservice.prototype.orderItemService_getAll = function(idOrderRequest, form, listener)
+{
+	this.setOptionsAndExecute({
+		'webservice': 'orderItemService/getAll/{0}'.format(idOrderRequest),
+		'form': form,
+		'target': form,
+		'listener': listener,
+		'errorMessage': this.newBaseErrorMessage('obter lista dos serviços do pedido'),
 	});
 };
 

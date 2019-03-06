@@ -7,3 +7,5 @@
 /composer.lock
 /composer.phar
 /data/conf/system_prod.php
+/public_html/dashboard/stylesheets/constants.css
+/.vscode/launch.json

@@ -1,0 +1,193 @@
+					<!-- Ver Pedido de Cotação -->
+					<section class="dashboard-counts" id="order-request-section">
+						<div class="container-fluid">
+							<div class="row justify-content-center">
+								<div class="card pl-0 pr-0">
+									<div class="card-header d-flex align-items-center">
+										<h3 class="h4">Ver Pedido de Cotação</h3>
+									</div>
+									<div class="card-body">
+										<input type="hidden" id="idOrderRequest" value="{idOrderRequest}">
+										<form class="tercom-form tercom-form-sm form-horizontal" id="form-order-request-view">
+											<fieldset>
+												<div class="form-group">
+													<div class="input-group">
+														<div class="input-group-prepend">
+															<span class="input-group-text">Situação</span>
+														</div>
+														<input class="form-control" type="text" name="statusDescription" disabled>
+													</div>
+												</div>
+												<div class="form-group">
+													<div class="input-group">
+														<div class="input-group-prepend">
+															<span class="input-group-text">Detalhes</span>
+														</div>
+														<input class="form-control" type="text" name="statusMessage" disabled>
+													</div>
+												</div>
+												<div class="form-group">
+													<div class="input-group">
+														<div class="input-group-prepend">
+															<span class="input-group-text">Data Limite</span>
+														</div>
+                                                        <input class="form-control date-timer-picker" type="text" name="expiration">
+													</div>
+												</div>
+												<div class="form-group">
+													<div class="input-group">
+														<div class="input-group-prepend">
+															<span class="input-group-text">Orçamento</span>
+														</div>
+														<input class="form-control money" type="text" name="budget">
+													</div>
+												</div>
+												<div class="form-group text-center">
+													<div class="btn-group">
+														<button type="button" class="btn btn-info" id="order-request-btn-item-product-add" onclick="OrderRequestView.openItemProductModal()">Adicionar Produto</button>
+														<button type="button" class="btn btn-info" id="order-request-btn-item-service-add" onclick="OrderRequestView.openItemServiceModal()">Adicionar Serviço</button>
+													</div>
+												</div>
+												<div class="form-group text-center">
+													<div class="btn-group">
+														<button type="submit" class="btn btn-primary" id="order-request-btn-update">Atualizar</button>
+														<button type="button" class="btn btn-success" id="order-request-btn-queue" onclick="OrderRequestView.onButtonQueue()">Concluir Pedido</button>
+														<button type="button" class="btn btn-info" id="order-request-btn-next" onclick="OrderRequestView.onButtonNext()">Criar Aceite</button>
+													</div>
+												</div>
+											</fieldset>
+										</form>
+									</div>
+								</div>
+							</div>
+							<div class="row justify-content-center">
+								<div class="card col-lg-8 col-md-10 col-sm-12 pl-0 pr-0">
+									<div class="card-header d-flex align-items-center">
+										<h3 class="h4">Lista dos Produtos Solicitados</h3>
+									</div>
+									<div class="card-body">
+											<table class="table table-striped table-hover" id="table-itens-product">
+												<thead>
+													<tr>
+														<td>ID</td>
+														<td>Produto</td>
+														<td>Fornecedor</td>
+														<td>Fabricante</td>
+														<td>M. Preço</td>
+														<td>Ações</td>
+													</tr>
+												</thead>
+											</table>
+									</div>
+								</div>
+								<div class="card col-lg-8 col-md-10 col-sm-12 pr-0">
+									<div class="card-header d-flex align-items-center">
+										<h3 class="h4">Lista dos Serviços Solicitados</h3>
+									</div>
+									<div class="card-body">
+										<table class="table table-striped table-hover" id="table-itens-service">
+											<thead>
+												<tr>
+													<td>ID</td>
+													<td>Serviço</td>
+													<td>Fornecedor</td>
+													<td>M. Preço</td>
+													<td>Ações</td>
+												</tr>
+											</thead>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</section>
+
+					<!-- Modal Item Product -->
+					<div class="modal fade" id="modal-item-product" tabindex="-1" role="dialog" aria-labelledby="modal-item-product-label" aria-hidden="true">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="modal-item-product-label"></h5>
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body">
+									<input type="hidden" id="idOrderItemProduct">
+									<form class="tercom-form tercom-form-xs form-horizontal" id="form-order-item-product">
+										<fieldset>
+											<div class="form-group">
+												<label class="col-12" for="idProduct">Produto</label>
+												<select class="form-contorl col-12 select-picker" name="idProduct" id="idProduct"></select>
+											</div>
+											<div class="form-group">
+												<label class="col-12" for="idProvider">Fornecedor</label>
+												<select class="form-contorl col-12 select-picker" name="idProvider" id="idProvider"></select>
+											</div>
+											<div class="form-group">
+												<label class="col-12" for="idManufacturer">Fabricante</label>
+												<select class="form-contorl col-12 select-picker" name="idManufacturer" id="idManufacturer"></select>
+											</div>
+											<div class="form-group">
+												<div class="input-group">
+													<input type="hidden" name="betterPrice" value="0">
+													<input class="checkbox-template" type="checkbox" id="checkboxCustom2" name="betterPrice" value="1">
+													<label for="checkboxCustom2">Melhor Preço</label>
+												</div>
+											</div>
+										</fieldset>
+									</form>
+								</div>
+								<div class="modal-footer">
+									<div class="btn-group">
+										<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+										<button type="button" class="btn btn-primary" id="btn-item-product-add" onclick="OrderRequestView.onAddItemProduct()">Adicionar</button>
+										<button type="button" class="btn btn-success" id="btn-item-product-set" onclick="OrderRequestView.onSetItemProduct()">Atualizar</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- Modal Item Service -->
+					<div class="modal fade" id="modal-item-service" tabindex="-1" role="dialog" aria-labelledby="modal-item-service-label" aria-hidden="true">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="modal-item-service-label"></h5>
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body">
+									<input type="hidden" id="idOrderItemService">
+									<form class="tercom-form tercom-form-xs form-horizontal" id="form-order-item-service">
+										<fieldset>
+											<div class="form-group">
+												<label class="col-12" for="idService">Serviço</label>
+												<select class="form-contorl col-12 select-picker" name="idService" id="idService"></select>
+											</div>
+											<div class="form-group">
+												<label class="col-12" for="idProvider">Fornecedor</label>
+												<select class="form-contorl col-12 select-picker" name="idProvider" id="idProvider"></select>
+											</div>
+											<div class="form-group">
+												<div class="input-group">
+													<input type="hidden" name="betterPrice" value="0">
+													<input class="checkbox-template" id="checkboxCustom2" name="betterPrice" value="1" type="checkbox">
+													<label for="checkboxCustom2">Melhor Preço</label>
+												</div>
+											</div>
+										</fieldset>
+									</form>
+								</div>
+								<div class="modal-footer">
+									<div class="btn-group">
+										<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+										<button type="button" class="btn btn-primary" id="btn-item-service-add" onclick="OrderRequestView.onAddItemService()">Adicionar</button>
+										<button type="button" class="btn btn-success" id="btn-item-service-set" onclick="OrderRequestView.onSetItemService()">Atualizar</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>

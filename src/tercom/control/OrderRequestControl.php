@@ -64,7 +64,7 @@ class OrderRequestControl extends GenericControl
 
 		$customer = $this->getCustomerLogged();
 
-		if ($customer->getId() !== $orderRequest->getCustomerEmployeeId())
+		if ($customer->getId() !== $orderRequest->getCustomerEmployee()->getCustomerProfile()->getCustomerId())
 			throw OrderRequestException::newCustomerEmployeeError();
 
 		$orderRequest->setCustomerEmployee($customerEmployee);

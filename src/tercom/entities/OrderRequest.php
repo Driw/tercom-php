@@ -71,6 +71,10 @@ class OrderRequest extends AdvancedObject
 	 */
 	private $status;
 	/**
+	 * @var string descrição do estado.
+	 */
+	private $statusDescription;
+	/**
 	 * @var string mensagem adicional referente ao estado atual.
 	 */
 	private $statusMessage;
@@ -155,7 +159,15 @@ class OrderRequest extends AdvancedObject
 			throw EntityParseException::new('estado desconhecido (status: %d)', $status);
 
 		$this->status = $status;
-		$this->setStatusMessage(self::getStatusMessageDescription($status));
+		$this->updateStatusDescription();
+	}
+
+	/**
+	 *
+	 */
+	public function updateStatusDescription(): void
+	{
+		$this->statusDescription = self::getStatusMessageDescription($this->status);
 	}
 
 	/**
@@ -278,6 +290,9 @@ class OrderRequest extends AdvancedObject
 			'budget' => ObjectUtil::TYPE_FLOAT,
 			'register' => ObjectUtil::TYPE_DATE,
 			'expiration' => ObjectUtil::TYPE_DATE,
+			'status' => ObjectUtil::TYPE_INTEGER,
+			'statusDescription' => ObjectUtil::TYPE_STRING,
+			'statusMessage' => ObjectUtil::TYPE_STRING,
 			'customerEmployee' => CustomerEmployee::class,
 			'tercomEmployee' => TercomEmployee::class,
 		];

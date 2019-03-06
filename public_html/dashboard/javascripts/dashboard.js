@@ -11,7 +11,16 @@ const PRODUCT_GROUP_TYPE = 2;
 const PRODUCT_SUBGROUP_TYPE = 3;
 const PRODUCT_SECTOR_TYPE = 4;
 
+const ORS_NONE = 0;
+const ORS_CANCEL_BY_CUSTOMER = 1;
+const ORS_CANCEL_BY_TERCOM = 2;
+const ORS_QUEUED = 3;
+const ORS_QUOTING = 4;
+const ORS_QUOTED = 5;
+const ORS_DONE = 6;
+
 const ICON_VIEW = '<i class="fas fa-pencil-alt"></i>';
+const ICON_EDIT = '<i class="fas fa-pencil-alt"></i>';
 const ICON_ENABLE = '<i class="fas fa-eye"></i>';
 const ICON_DISABLE = '<i class="fas fa-eye-slash"></i>';
 const ICON_REMOVE = '<i class="fas fa-trash"></i>';
@@ -29,6 +38,7 @@ const ICON_PERMISSIONS = '<i class="fas fa-user-lock"></i>';
 const ICON_EMPLOYEES = '<i class="fas fa-users-cog"></i>';
 const ICON_PHONE = '<i class="fas fa-phone"></i>';
 const ICON_OPEN = '<i class="fas fa-sign-in-alt"></i>';
+const ICON_CANCEL = '<i class="fas fa-ban"></i>';
 
 const SHOW_CLASS_FORMAT = 'alert alert-{0} col-12 text-center';
 
@@ -46,6 +56,7 @@ $(document).ready(function()
 	initDateTimePicker();
 	initJQueryValidators();
 	initJQueryLoadingOverlay();
+	initModalConfirm();
 	Dashboard.init();
 });
 
@@ -65,7 +76,7 @@ function initMasks()
 	$('.mask-cpf').mask('000.000.000-00', {reverse: false});
 	$('.mask-cnpj').mask('00.000.000/0000-00', {reverse: false});
 	// FIXME: arrumar getFloat() para que aceite $('.mask-money').mask('#.##0,00', { reverse: true });
-	$('.mask-money').mask('#0.00', { reverse: true });
+	$('.mask-money').mask('99990.00', { reverse: true });
 	$('.mask-percent').mask('00,00%', { reverse: true });
 	$('.mask-integer').mask('#0', { reverse: true });
 	$('.mask-simple-date').mask('0000-00-00', { reverse: false });
@@ -238,6 +249,22 @@ function initJQueryLoadingOverlay()
 	});
 }
 
+function initModalConfirm()
+{
+	$('#modal-confirm-btn-cancel').click(function()
+	{
+		if (Util.modalConfirmListener !== undefined && Util.modalConfirmListener !== null)
+			if (Util.modalConfirmListener(false, this))
+				$('#modal-confirm').modal('hide');
+	});
+	$('#modal-confirm-btn-proceed').click(function()
+	{
+		if (Util.modalConfirmListener !== undefined && Util.modalConfirmListener !== null)
+			if (Util.modalConfirmListener(true, this))
+				$('#modal-confirm').modal('hide');
+	});
+}
+
 function newDataTables(table)
 {
 	return table.DataTable({
@@ -264,6 +291,7 @@ function newDataTables(table)
 
 function showModalApiError(message, title)
 {
+	Util.onApiError();
 	$('#api-error-modal-label').html(title === undefined ? 'Erro de API' : title);
 	$('#api-error-modal-message').html(message);
 	$('#api-error-modal').modal('show');
@@ -318,6 +346,25 @@ String.prototype.format = function()
 
 var Util = Util ||
 {
+	onApiError: function()
+	{
+		Util.closeConfirmModal();
+	},
+	getModalConfirm: function()
+	{
+		return $('#modal-confirm');
+	},
+	showConfirm: function(label, message, listener)
+	{
+		$('#modal-confirm-message').html(message);
+		$('#modal-confirm-label').html(label);
+		$('#modal-confirm').modal('show');
+		Util.modalConfirmListener = listener;
+	},
+	closeConfirmModal: function()
+	{
+		$('#modal-confirm').modal('hide');
+	},
 	showMessage: function(type, message, timeout, fade)
 	{
 		if (timeout === undefined) timeout = DEFAULT_TIMEOUT;
@@ -378,7 +425,7 @@ var Util = Util ||
 	},
 	showChecked: function(bool)
 	{
-		return bool === true ? '<i class="fas fa-check-square"></i>' : '<i class="fas fa-uncheck-square"></i>';
+		return bool === true ? '<i class="fas fa-check-square"></i>' : '<i class="fas fa-square"></i>';
 	},
 	createElementOption: function(html, value, selected)
 	{

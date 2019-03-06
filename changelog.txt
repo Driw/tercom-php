@@ -20,6 +20,20 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+06.03.2018 - 0.3.6.262
+- Adicionado novo domínimo para ambiente de teste 'dev.tercom.com.br'.
+- Adicionado permissões no SQL para cancelar pedidos de cotação por funcionário de cliente e funcionário TERCOM.
+- Adicionado nova modal na base do sistema para realizar confirmações de operações.
+- Corrigido ícone usado no javascript com Util.showChecked() do qual está indisponível.
+- Modificado ao informar idProvider ou idManufacturer como 0 (zero) será considero 'não informado', OrderItemProductService.
+- Modificado ao informar idProvider como 0 (zero) será considero 'não informado', OrderItemServiceService.
+- Corrigido actionCancelByCustomer() do qual informava customer ao invés de customerEmployee, OrderRequestService.
+- Corrigido getWithCustomerEmployee() passando o id do funcionário de cliente ao invés do cliente, OrderRequestControl.
+	- Corrigido query utilizada com selectAllByCustomer() em OrderRequestDAO.
+- Ajustes em OrderItemProduct e OrderItemService para aceitar Provider e Manufacturer como nulos.
+- Adicionado a OrderRequest 'statusDescription' descrevendo o código de 'status'.
+- Implementação das páginas para listar pedidos de cotação, adicionar pedido de cotação, ver pedido de cotação.
+
 26.02.2018 - 0.3.6.261
 - Implementação para definir o cliente serviço ID ao listar serviços, buscar serviços e ver serviço.
 - Corrigido visualização de produto por cliente que não carregava o cliente produto ID.

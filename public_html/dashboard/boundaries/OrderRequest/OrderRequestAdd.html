@@ -1,0 +1,40 @@
+					<!-- Novo Pedido de Cotação -->
+					<section class="dashboard-counts">
+						<div class="container-fluid">
+							<div class="row justify-content-center">
+								<div class="card pl-0 pr-0">
+									<div class="card-header d-flex align-items-center">
+										<h3 class="h4">Novo Pedido de Cotação</h3>
+									</div>
+									<div class="card-body">
+										<input type="hidden" id="idCustomer" value="{idCustomer}">
+										<form class="tercom-form tercom-form-sm form-horizontal" id="form-order-request-add">
+											<fieldset>
+												<div class="form-group">
+													<div class="input-group">
+														<div class="input-group-prepend">
+															<span class="input-group-text">Data Limite</span>
+														</div>
+                                                        <input class="form-control date-timer-picker" type="text" name="expiration">
+													</div>
+												</div>
+												<div class="form-group">
+													<div class="input-group">
+														<div class="input-group-prepend">
+															<span class="input-group-text">Orçamento</span>
+														</div>
+														<input class="form-control mask-money" type="text" name="budget" placeholder="0.00">
+													</div>
+												</div>
+												<div class="form-group text-center">
+													<div class="btn-group">
+														<button type="submit" class="btn btn-primary">Adicionar</button>
+													</div>
+												</div>
+											</fieldset>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</section>

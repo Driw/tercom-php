@@ -118,9 +118,9 @@ class OrderItemProduct extends AdvancedObject
 	}
 
 	/**
-	 * @param Provider $provider preferência de fornecedor.
+	 * @param NULL|Provider $provider preferência de fornecedor.
 	 */
-	public function setProvider(Provider $provider): void
+	public function setProvider(?Provider $provider): void
 	{
 		$this->provider = $provider;
 	}
@@ -142,9 +142,9 @@ class OrderItemProduct extends AdvancedObject
 	}
 
 	/**
-	 * @param Manufacturer $manufacturer preferência de fabricante.
+	 * @param NULL|Manufacturer $manufacturer preferência de fabricante.
 	 */
-	public function setManufacturer(Manufacturer $manufacturer): void
+	public function setManufacturer(?Manufacturer $manufacturer): void
 	{
 		$this->manufacturer = $manufacturer;
 	}

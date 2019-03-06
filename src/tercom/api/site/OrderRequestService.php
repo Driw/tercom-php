@@ -160,7 +160,7 @@ class OrderRequestService extends DefaultSiteService
 	{
 		$customerEmployee = $this->getCustomerEmployee();
 		$idOrderRequest = $content->getParameters()->getInt('idOrderRequest');
-		$orderRequest = $this->getOrderRequestControl()->get($idOrderRequest, $customerEmployee);
+		$orderRequest = $this->getOrderRequestControl()->get($idOrderRequest, false);
 		$this->getOrderRequestControl()->cancelByCustomer($customerEmployee, $orderRequest);
 
 		$result = new ApiResultObject();

@@ -164,6 +164,7 @@ Ajax.prototype.defaultSuccess = function(response)
 
 	if (response.status !== API_STATUS_SUCCESSFUL)
 	{
+		Util.onApiError();
 		this.ajax.modalError('Erro de API', response.message);
 
 		if (this.errorListener !== undefined)

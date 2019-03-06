@@ -51,16 +51,10 @@ class OrderItemServiceService extends DefaultSiteService
 		$orderItemService->setBetterPrice($post->getBoolean('betterPrice'));
 		$orderItemService->setObservations($post->getString('observations', false));
 
-		if (($idProvider = $post->getInt('idProvider', false)) !== null)
+		if (($idProvider = $post->getInt('idProvider', false)) !== null && $idProvider !== 0)
 		{
 			$provider = $this->getProviderControl()->get($idProvider);
 			$orderItemService->setProvider($provider);
-		}
-
-		if (($idManufacturer = $post->getInt('idManufacturer', false)) !== null)
-		{
-			$manufacturer = $this->getManufacturerControl()->get($idManufacturer);
-			$orderItemService->setManufacturer($manufacturer);
 		}
 
 		$this->getOrderItemServiceControl()->add($orderRequest, $orderItemService);
@@ -91,14 +85,13 @@ class OrderItemServiceService extends DefaultSiteService
 
 		if (($idProvider = $post->getInt('idProvider', false)) !== null)
 		{
-			$provider = $this->getProviderControl()->get($idProvider);
-			$orderItemService->setProvider($provider);
-		}
-
-		if (($idManufacturer = $post->getInt('idManufacturer', false)) !== null)
-		{
-			$manufacturer = $this->getManufacturerControl()->get($idManufacturer);
-			$orderItemService->setManufacturer($manufacturer);
+			if ($idProvider === 0)
+				$orderItemService->setProvider(null);
+			else
+			{
+				$provider = $this->getProviderControl()->get($idProvider);
+				$orderItemService->setProvider($provider);
+			}
 		}
 
 		$this->getOrderItemServiceControl()->set($orderRequest, $orderItemService);

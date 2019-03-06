@@ -4,7 +4,8 @@ function onEnviromentDevelop()
 {
 	$development =	$_SERVER['REMOTE_ADDR'] === '127.0.0.1' ||
 					$_SERVER['REMOTE_ADDR'] === '::1' ||
-					$_SERVER['SERVER_NAME'] === 'tercom.diverproject.org';
+					$_SERVER['SERVER_NAME'] === 'tercom.diverproject.org' ||
+					$_SERVER['SERVER_NAME'] === 'dev.tercom.com.br';
 
 	return	$development && !isset($_REQUEST['nodev']);
 }

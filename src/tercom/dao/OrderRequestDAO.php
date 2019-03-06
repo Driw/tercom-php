@@ -156,7 +156,9 @@ class OrderRequestDAO extends GenericDAO
 		$sqlSelect = $this->newSelect();
 		$sqlAndStatus = $this->newAndStatus($mode);
 		$sql = "$sqlSelect
-				WHERE customer_employees.id = ? AND $sqlAndStatus";
+				INNER JOIN customer_profiles ON customer_profiles.id = customer_employees.idCustomerProfile
+				INNER JOIN customers ON customers.id = customer_profiles.idCustomer
+				WHERE customers.id = ? AND $sqlAndStatus";
 
 		$query = $this->createQuery($sql);
 		$query->setInteger(1, $idCustomer);
@@ -248,6 +250,7 @@ class OrderRequestDAO extends GenericDAO
 
 		$orderRequest = new OrderRequest();
 		$orderRequest->fromArray($entry);
+		$orderRequest->updateStatusDescription();
 
 		return $orderRequest;
 	}
