@@ -20,6 +20,14 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+06.03.2018 - 0.3.6.263
+0.3.6.263
+- Adicionado lógica para manter subitens abertos no menu lateral esquerdo dependendo do menu selecionado.
+- Corrigido configuração 'PermissionPacket' dos itens do menu para funcionários de cliente.
+- Atualizado CustomerEmployeeBoundary e CustomerProfileBoundary para se encaixar como submenu.
+- Ajuste para listar funcionários de cliente forçando 'idCustomer' conforme o funcionário de cliente acessado.
+- Corrigido getByCustomer() que deve aceitar desde que o cliente informado seja o do funcionário de cliente acessado, CustomerProfileControl.
+
 06.03.2018 - 0.3.6.262
 - Adicionado novo domínimo para ambiente de teste 'dev.tercom.com.br'.
 - Adicionado permissões no SQL para cancelar pedidos de cotação por funcionário de cliente e funcionário TERCOM.

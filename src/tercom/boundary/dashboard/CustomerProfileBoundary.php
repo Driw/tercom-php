@@ -29,7 +29,7 @@ class CustomerProfileBoundary extends DefaultDashboardLoggedBoundary
 	{
 		parent::init();
 
-		$this->setNavSideActive('customerProfile');
+		$this->setNavSideActive('customer', 'customerProfile');
 	}
 
 	/**
@@ -49,7 +49,12 @@ class CustomerProfileBoundary extends DefaultDashboardLoggedBoundary
 	public function onList(ApiContent $content): ApiTemplateResult
 	{
 		if (!$content->getParameters()->isSetted('idCustomer'))
-			$this->redirectRelative('customer/list');
+		{
+			if ($this->isLoginTercom())
+				$this->redirectRelative('customer/list');
+			else
+				$content->getParameters()->setInt('idCustomer', $this->getCustomerLogged()->getId());
+		}
 
 		$dashboardTemplate = $this->newBaseTemplate();
 		$dashboardTemplate = $this->prepareInclude(self::BASE_PATH. 'CustomerProfileList');

@@ -26,7 +26,7 @@ class CustomerEmployeeBoundary extends DefaultDashboardLoggedBoundary
 	{
 		parent::init();
 
-		$this->setNavSideActive('customerEmployee');
+		$this->setNavSideActive('customer', 'customerEmployee');
 	}
 
 	/**

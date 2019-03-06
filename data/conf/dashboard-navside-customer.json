@@ -143,8 +143,8 @@
 					"PermissionPacket": "customerEmployee",
 					"Class": "",
 					"Itens": [
-						{ "Name": "Listar", "Icon": "fas fa-list-ul", "Url": "customerEmployee/list", "PermissionPacket": "customer", "PermissionAction": "getAll" },
-						{ "Name": "Adicionar", "Icon": "fas fa-plus", "Url": "customerEmployee/add", "PermissionPacket": "customer", "PermissionAction": "add" }
+						{ "Name": "Listar", "Icon": "fas fa-list-ul", "Url": "customerEmployee/list", "PermissionPacket": "customerEmployee", "PermissionAction": "getAll" },
+						{ "Name": "Adicionar", "Icon": "fas fa-plus", "Url": "customerEmployee/add", "PermissionPacket": "customerEmployee", "PermissionAction": "add" }
 					]
 				}
 			]

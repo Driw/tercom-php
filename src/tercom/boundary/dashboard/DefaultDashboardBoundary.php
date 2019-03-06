@@ -277,9 +277,10 @@ abstract class DefaultDashboardBoundary extends ApiTemplate
 
 	/**
 	 * @param string $serviceName
+	 * @param string $subServiceName
 	 * @return bool
 	 */
-	protected function setNavSideActive(string $serviceName): bool
+	protected function setNavSideActive(string $serviceName, ?string $subServiceName = null): bool
 	{
 		$navSide = $this->getConfigs()->getNavSide();
 		$items = &$navSide->toArray();
@@ -291,14 +292,42 @@ abstract class DefaultDashboardBoundary extends ApiTemplate
 				$item['Item']['Class'] = trim(sprintf('%s active', $item['Item']['Class']));
 				return true;
 			}
-			
+
 			else if (isset($item['Dropdown']))
 			{
 				$item['Dropdown']['AriaExapanded'] = 'false';
 				$item['Dropdown']['Class'] = 'collapsed';
 				$item['Dropdown']['Show'] = '';
 
-				if ($item['Dropdown']['service'] === $serviceName)
+				$itemSelected = $item['Dropdown']['service'] === $serviceName;
+
+				if (isset($item['Dropdown']['SubItens']))
+				{
+					$found = false;
+
+					foreach ($item['Dropdown']['SubItens'] as &$subItem)
+					{
+						$subItem['Class'] = '';
+						$subItem['AriaExapanded'] = 'false';
+						$subItem['Show'] = '';
+
+						if ($found)
+							break;
+
+						foreach ($subItem['Itens'] as $subMenu)
+							if (isset($subMenu['PermissionPacket']) && $subMenu['PermissionPacket'] === $subServiceName)
+							{
+								$itemSelected = true;
+								$subItem['Class'] = trim(sprintf('%s active', $subItem['Class']));
+								$subItem['AriaExapanded'] = 'true';
+								$subItem['Show'] = 'show';
+								$found = true;
+								break;
+							}
+					}
+				}
+
+				if ($itemSelected)
 				{
 					$item['Dropdown']['Class'] = trim(sprintf('%s active', $item['Dropdown']['Class']));
 					$item['Dropdown']['AriaExapanded'] = 'true';

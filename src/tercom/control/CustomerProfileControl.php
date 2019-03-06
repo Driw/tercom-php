@@ -133,7 +133,7 @@ class CustomerProfileControl extends GenericControl
 	 */
 	public function getByCustomer(Customer $customer): CustomerProfiles
 	{
-		if (!$this->isTercomManagement())
+		if (!$this->isTercomManagement() && $this->getCustomerLoggedId() !== $customer->getId())
 			throw TercomException::newPermissionRestrict();
 
 		return $this->customerProfileDAO->selectByCustomer($customer);
