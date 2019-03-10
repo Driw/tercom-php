@@ -46,7 +46,7 @@ var ServiceView = ServiceView ||
 			},
 			submitHandler: function(form) {
 				try {
-					ServiceView.submit($(form));
+					ServiceView.confirm();
 				} catch (e) {
 					Util.showError(e.stack);
 				}
@@ -72,12 +72,23 @@ var ServiceView = ServiceView ||
 
 		ServiceView.loaded = true;
 	},
-	submit: function(form)
+	confirm: function()
 	{
-		ws.service_set(ServiceView.id, ServiceView.form, ServiceView.onSubmited);
+		var message = 'Uma vez que os dados do serviço sejam atualizados não poderão ser revertidos. Deseja continuar?';
+		Util.showConfirm('Atualizar dados do serviço', message, ServiceView.submit);
+	},
+	submit: function(confirm)
+	{
+		if (confirm)
+			ws.service_set(ServiceView.id, ServiceView.form, ServiceView.onSubmited);
+		return true;
 	},
 	onSubmited: function(service, message)
 	{
 		ServiceView.onServiceLoaded(service);
-	}
+	},
+	onButtonPrices: function()
+	{
+		Util.redirect('service/viewPrices/{0}'.format(ServiceView.id));
+	},
 }

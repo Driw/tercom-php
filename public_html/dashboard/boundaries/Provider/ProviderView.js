@@ -112,7 +112,14 @@ var ProviderView = ProviderView ||
 	},
 	saveProvider: function()
 	{
-		ws.provider_set(ProviderView.idProvider, ProviderView.form, ProviderView.setProvider);
+		var message = 'Uma vez que os dados do fornecedor tenham sido atualizados os dados antigos não poderão ser recuperados. Deseja continuar?';
+		Util.showConfirm('Atualizar dados do fornecedor', message, ProviderView.submitProvider);
+	},
+	submitProvider: function(confirm)
+	{
+		if (confirm)
+			ws.provider_set(ProviderView.idProvider, ProviderView.form, ProviderView.setProvider);
+		return true;
 	},
 	setProvider: function(provider, message, loaded)
 	{

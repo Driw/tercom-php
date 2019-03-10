@@ -34,7 +34,7 @@ var ServicePriceView = ServicePriceView ||
 					'rangelength': [ settings.minNameLen, settings.maxNameLen ],
 				},
 				'additionalDescription': {
-					'required': true,
+					'required': false,
 					'maxlength': settings.maxAdditionalDescriptionLen,
 				},
 				'price': {
@@ -44,7 +44,7 @@ var ServicePriceView = ServicePriceView ||
 			},
 			submitHandler: function(form) {
 				try {
-					ServicePriceView.submit($(form));
+					ServicePriceView.confirm();
 				} catch (e) {
 					Util.showError(e);
 				}
@@ -68,9 +68,16 @@ var ServicePriceView = ServicePriceView ||
 
 		ServicePriceView.loaded = true;
 	},
-	submit: function(form)
+	confirm: function()
 	{
-		ws.servicePrice_set(ServicePriceView.id, ServicePriceView.form, ServicePriceView.onSubmited);
+		var message = 'Uma vez que os dados do preço de serviço sejam atualizados não poderão ser revertidos. Deseja continuar?';
+		Util.showConfirm('Atualizar dados do preço de serviço', message, ServicePriceView.submit);
+	},
+	submit: function(confirm)
+	{
+		if (confirm)
+			ws.servicePrice_set(ServicePriceView.id, ServicePriceView.form, ServicePriceView.onSubmited);
+		return true;
 	},
 	onSubmited: function(servicePrice, message)
 	{

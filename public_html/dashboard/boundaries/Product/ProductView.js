@@ -239,18 +239,14 @@ var ProductView = ProductView ||
 	},
 	onButtonViewPrices: function()
 	{
-		Util.redirect('product/viewPrices/{0}'.format(ProductView.idProduct), true);
-	},
-	submit: function()
-	{
-		ws.product_set(ProductView.idProduct, ProductView.form, ProductView.onSubmited);
+		Util.redirect('product/viewPrices/{0}'.format(ProductView.idProduct));
 	},
 	onSettings: function(settings)
 	{
 		ProductView.form.validate({
 			'rules': {
 				'idProductCustomer': {
-					'required': true,
+					'required': IS_LOGIN_TERCOM,
 					'remoteapi': {
 						'webservice': 'product/avaiable/idProductCustomer/{value}/{idProduct}',
 						'parameters': {
@@ -282,13 +278,24 @@ var ProductView = ProductView ||
 			},
 			submitHandler: function(form) {
 				try {
-					ProductView.submit();
+					ProductView.confirm();
 				} catch (e) {
 					Util.showError(e.stack);
 				}
 				return false;
 			}
 		});
+	},
+	confirm: function()
+	{
+		var message = 'Uma vez que os dados do produto tenha sido atualizados não poderão ser revertidos. Deseja continuar?';
+		Util.showConfirm('Atualizar dados do produto', message, ProductView.submit);
+	},
+	submit: function(confirm)
+	{
+		if (confirm)
+			ws.product_set(ProductView.idProduct, ProductView.form, ProductView.onSubmited);
+		return true;
 	},
 	onSubmited: function(product, message)
 	{

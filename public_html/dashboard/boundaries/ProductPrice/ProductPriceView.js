@@ -80,7 +80,7 @@ var ProductPriceView = ProductPriceView ||
 			},
 			submitHandler: function(form) {
 				try {
-					ProductPriceView.submit($(form));
+					ProductPriceView.confirm();
 				} catch (e) {
 					console.log(e.stack);
 					alert(e.message);
@@ -89,9 +89,16 @@ var ProductPriceView = ProductPriceView ||
 			},
 		});
 	},
-	submit: function(form)
+	confirm: function()
 	{
-		ws.productPrice_set(ProductPriceView.idProductPrice, form, ProductPriceView.onSubmited)
+		var message = 'Uma vez que os dados do preço de produto sejam atualizados não poderão ser revertidos. Deseja continuar?';
+		Util.showConfirm('Atualizar dados do preço de produto', message, ProductPriceView.submit)
+	},
+	submit: function(confirm)
+	{
+		if (confirm)
+			ws.productPrice_set(ProductPriceView.idProductPrice, ProductPriceView.form, ProductPriceView.onSubmited);
+		return true;
 	},
 	onSubmited: function(productPrice, message)
 	{

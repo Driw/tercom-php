@@ -39,7 +39,7 @@ var ManufacturerView = ManufacturerView ||
 			},
 			submitHandler: function(form) {
 				try {
-					ManufacturerView.submit($(form));
+					ManufacturerView.confirm($(form));
 				} catch (e) {
 					ManufacturerView.showError(e.stack);
 				}
@@ -59,9 +59,16 @@ var ManufacturerView = ManufacturerView ||
 
 		ManufacturerView.loaded = true;
 	},
-	submit: function(form)
+	confirm: function()
 	{
-		ws.manufacturer_set(ManufacturerView.idManufacturer, form, ManufacturerView.onSubmited);
+		var message = 'Uma vez que os dados do fabricante tenham sido atualizados não poderão ser revertidos. Deseja continuar?';
+		Util.showConfirm('Atualizar dados do fabricante', message, ManufacturerView.submit);
+	},
+	submit: function(confirm)
+	{
+		if (confirm)
+			ws.manufacturer_set(ManufacturerView.idManufacturer, ManufacturerView.form, ManufacturerView.onSubmited);
+		return true;
 	},
 	onSubmited: function(manufacturer, message)
 	{

@@ -7,8 +7,7 @@
 			"Url": "/dashboard",
 			"Class": ""
 		}
-	},
-	{
+	},{
 		"Dropdown": {
 			"service": "provider",
 			"Name": "Fornecedores",
@@ -22,8 +21,7 @@
 				{ "Name": "Adicionar", "Icon": "fas fa-plus", "Url": "provider/add", "PermissionPacket": "provider", "PermissionAction": "add" }
 			]
 		}
-	},
-	{
+	},{
 		"Dropdown": {
 			"service": "manufacturer",
 			"Name": "Fabricantes",
@@ -37,8 +35,7 @@
 				{ "Name": "Adicionar", "Icon": "fas fa-plus", "Url": "manufacturer/add", "PermissionPacket": "manufacturer", "PermissionAction": "add" }
 			]
 		}
-	},
-	{
+	},{
 		"Dropdown": {
 			"service": "product",
 			"Name": "Produtos",
@@ -102,8 +99,7 @@
 				}
 			]
 		}
-	},
-	{
+	},{
 		"Dropdown": {
 			"service": "service",
 			"Name": "Serviços",
@@ -117,8 +113,7 @@
 				{ "Name": "Adicionar", "Icon": "fas fa-plus", "Url": "service/add", "PermissionPacket": "service", "PermissionAction": "add" }
 			]
 		}
-	},
-	{
+	},{
 		"Dropdown": {
 			"service": "customer",
 			"Name": "Clientes",
@@ -157,8 +152,19 @@
 				}
 			]
 		}
-	},
-	{
+	},{
+		"Dropdown": {
+			"service": "quotes",
+			"Name": "Cotação",
+			"Icon": "fas fa-file-invoice-dollar",
+			"ID": "dropdown-quotes",
+			"Class": "",
+			"Itens": [
+			],
+			"SubItens": [
+			]
+		}
+	},{
 		"Dropdown": {
 			"service": "admin",
 			"Name": "TERCOM",

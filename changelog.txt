@@ -20,8 +20,10 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+10.03.2018 - 0.3.6.264
+- Adicionado confirmação nas ações para atualizar dados de fornecedor, fabricante, produto, preço de produto, serviço e preço de serviço.
+
 06.03.2018 - 0.3.6.263
-0.3.6.263
 - Adicionado lógica para manter subitens abertos no menu lateral esquerdo dependendo do menu selecionado.
 - Corrigido configuração 'PermissionPacket' dos itens do menu para funcionários de cliente.
 - Atualizado CustomerEmployeeBoundary e CustomerProfileBoundary para se encaixar como submenu.

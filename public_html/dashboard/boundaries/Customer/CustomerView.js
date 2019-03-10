@@ -86,12 +86,22 @@ var CustomerView = CustomerView ||
 
 		CustomerView.loaded = true;
 	},
-	submit: function(form)
+	submit: function()
 	{
+		var message = 'Uma vez alterado não será possível recuperar os dados antigos. Você tem certeza que deseja atualizar os dados do cliente?';
+		Util.showConfirm('Atualizar dados do Cliente #{0}'.format(CustomerView.idCustomer), message, CustomerView.onSubmitConfirm);
+	},
+	onSubmitConfirm: function(confirm)
+	{
+		if (!confirm)
+			return true;
+
 		ws.customer_set(CustomerView.id, CustomerView.form, CustomerView.onSubmited);
+		return false;
 	},
 	onSubmited: function(customer, message)
 	{
 		CustomerView.onCustomerLoaded(customer, message);
+		Util.closeConfirmModal();
 	}
 }
