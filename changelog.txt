@@ -20,6 +20,9 @@
 //			- MENSAGEM: Breve parágrafo para explicar as alterações feitas.
 //==================================================================================================
 
+11.04.2018 - 0.3.6.265
+- Corrigido OrderQuoteDAO ao listar cotações de pedido.
+
 10.03.2018 - 0.3.6.264
 - Adicionado confirmação nas ações para atualizar dados de fornecedor, fabricante, produto, preço de produto, serviço e preço de serviço.
 

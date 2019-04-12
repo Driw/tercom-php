@@ -5,11 +5,11 @@ namespace tercom\dao;
 use dProject\MySQL\Result;
 use tercom\entities\Customer;
 use tercom\entities\CustomerEmployee;
-use tercom\entities\OrderQuote;
-use tercom\entities\TercomEmployee;
 use tercom\entities\lists\OrderQuotes;
-use tercom\exceptions\OrderQuoteException;
+use tercom\entities\OrderQuote;
 use tercom\entities\OrderRequest;
+use tercom\entities\TercomEmployee;
+use tercom\exceptions\OrderQuoteException;
 
 /**
  * DAO para Cotação de Pedido
@@ -308,8 +308,14 @@ class OrderQuoteDAO extends GenericDAO
 	{
 		$this->parseEntry($entry, 'orderRequest');
 		$this->parseEntry($entry['orderRequest'], 'customerEmployee', 'tercomEmployee');
-		$this->parseEntry($entry['orderRequest']['customerEmployee'], 'customerProfile');
-		$this->parseEntry($entry['orderRequest']['customerEmployee']['customerProfile'], 'customer');
+
+		if (isset($entry['orderRequest']['customerEmployee']))
+		{
+			$this->parseEntry($entry['orderRequest']['customerEmployee'], 'customerProfile');
+
+			if (isset($entry['orderRequest']['customerEmployee']['customerProfile']))
+				$this->parseEntry($entry['orderRequest']['customerEmployee']['customerProfile'], 'customer');
+		}
 
 		$orderQuote = new OrderQuote();
 		$orderQuote->fromArray($entry);
